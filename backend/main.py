@@ -9,6 +9,23 @@ from typing import Dict, Any, List
 from datetime import datetime
 import json
 import asyncio
+import logging
+import prometheus_client
+from prometheus_client import Counter, Histogram, Gauge
+import time
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+# Initialize Prometheus metrics
+REQUEST_COUNT = Counter('http_requests_total', 'Total HTTP requests')
+REQUEST_LATENCY = Histogram('http_request_duration_seconds', 'HTTP request latency')
+ACTIVE_USERS = Gauge('active_users', 'Number of active users')
+ERROR_COUNT = Counter('error_count', 'Number of errors')
 
 app = FastAPI(title="Fraud Detection API")
 detector = EnsembleDetector()
@@ -58,7 +75,51 @@ async def websocket_endpoint(websocket: WebSocket):
             active_connections.remove(websocket)
         await websocket.close()
 
-# Update the predict endpoint to notify WebSocket clients
+@app.get("/api/v1/health")
+async def health_check():
+    """Check system health status"""
+    try:
+        health_status = {
+            "status": "healthy",
+            "api": True,
+            "database": True,  # Placeholder for actual database check
+            "cache": True       # Placeholder for actual cache check
+        }
+        return health_status
+    except Exception as e:
+        logger.error(f"Health check failed: {str(e)}")
+        ERROR_COUNT.inc()
+        return {
+            "status": "unhealthy",
+            "error": str(e)
+        }
+
+@app.get("/api/v1/errors")
+async def get_errors():
+    """Get recent error logs"""
+    try:
+        return []  # Placeholder for fetching actual cached errors
+    except Exception as e:
+        logger.error(f"Error fetching error logs: {str(e)}")
+        return []
+
+@app.get("/api/v1/performance")
+async def get_performance():
+    """Get performance metrics"""
+    try:
+        metrics = {
+            "data": [],  # Placeholder for actual performance data
+            "summary": {
+                "avgResponseTime": REQUEST_LATENCY._observe(),  # Placeholder for average response time calculation
+                "requestCount": REQUEST_COUNT._value.get(),
+                "errorRate": (ERROR_COUNT._value.get() / REQUEST_COUNT._value.get()) if REQUEST_COUNT._value.get() > 0 else 0
+            }
+        }
+        return metrics
+    except Exception as e:
+        logger.error(f"Error fetching performance metrics: {str(e)}")
+        return {"data": [], "summary": {}}
+
 @app.post("/api/v1/predict")
 async def predict_fraud(
     features: Dict[str, Any],
@@ -93,14 +154,6 @@ async def submit_feedback(
         return {"status": "success", "message": "Feedback recorded successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-@app.on_event("startup")
-async def startup_event():
-    await init_kafka()
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    await close_kafka()
 
 @app.get("/api/v1/metrics", response_model=FraudMetrics)
 async def get_metrics(_: str = Depends(verify_api_key)):
@@ -188,7 +241,22 @@ async def anonymize_response_data(request, call_next):
         response.body = anonymize_data(response.body)
     return response
 
+@app.middleware("http")
+async def monitor_requests(request, call_next):
+    """Middleware to monitor request metrics"""
+    REQUEST_COUNT.inc()
+    start_time = time.time()
+    
+    try:
+        response = await call_next(request)
+        return response
+    except Exception as e:
+        ERROR_COUNT.inc()
+        logger.error(f"Request failed: {str(e)}")
+        raise
+    finally:
+        REQUEST_LATENCY.observe(time.time() - start_time)
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
-

@@ -1,11 +1,14 @@
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import { Activity, AlertTriangle, Shield, Users, Clock, Target, Zap, Network } from "lucide-react";
-import { useEffect } from "react";
+import { Activity, Shield, Users, Clock, Target, Zap, Network } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getFraudMetrics, getRecentActivity } from "@/services/api";
 import { wsClient } from "@/utils/websocket";
+import { useEffect } from "react";
+import { HealthStatus } from "@/components/monitoring/HealthStatus";
+import { ErrorLog } from "@/components/monitoring/ErrorLog";
+import { PerformanceMetrics } from "@/components/monitoring/PerformanceMetrics";
 
 const Index = () => {
   const { toast } = useToast();
@@ -23,7 +26,6 @@ const Index = () => {
   });
 
   useEffect(() => {
-    // Connect to WebSocket and handle real-time updates
     wsClient.connect();
     
     const handleWebSocketMessage = (data: any) => {
@@ -64,139 +66,63 @@ const Index = () => {
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card className="glass-card p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-foreground">Risk Score</h3>
-            <Shield className="text-secondary w-5 h-5" />
-          </div>
-          <div className="space-y-2">
-            <Progress value={metrics?.riskScore ?? 0} className="h-2" />
-            <p className="text-2xl font-bold">{metrics?.riskScore?.toFixed(1) ?? 0}%</p>
-          </div>
-        </Card>
-
-        <Card className="glass-card p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-foreground">Active Users</h3>
-            <Users className="text-secondary w-5 h-5" />
-          </div>
-          <p className="text-2xl font-bold">{metrics?.activeUsers?.toLocaleString() ?? 0}</p>
-          <p className="text-sm text-muted-foreground">Currently monitoring</p>
-        </Card>
-
-        <Card className="glass-card p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-foreground">Alerts</h3>
-            <AlertTriangle className="text-warning w-5 h-5" />
-          </div>
-          <p className="text-2xl font-bold">{metrics?.alertCount ?? 0}</p>
-          <p className="text-sm text-muted-foreground">Last 24 hours</p>
-        </Card>
-
-        <Card className="glass-card p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-foreground">API Calls</h3>
-            <Activity className="text-secondary w-5 h-5" />
-          </div>
-          <p className="text-2xl font-bold">{(metrics?.apiCalls ?? 0).toLocaleString()}</p>
-          <p className="text-sm text-muted-foreground">Today's requests</p>
-        </Card>
-
-        <Card className="glass-card p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-foreground">Accuracy</h3>
-            <Target className="text-success w-5 h-5" />
-          </div>
-          <p className="text-2xl font-bold">{metrics?.accuracy?.toFixed(1)}%</p>
-          <p className="text-sm text-muted-foreground">Fraud detection rate</p>
-        </Card>
-
-        <Card className="glass-card p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-foreground">False Positives</h3>
-            <AlertTriangle className="text-warning w-5 h-5" />
-          </div>
-          <p className="text-2xl font-bold">{metrics?.falsePositiveRate?.toFixed(1)}%</p>
-          <p className="text-sm text-muted-foreground">Error rate</p>
-        </Card>
-
-        <Card className="glass-card p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-foreground">Processing Time</h3>
-            <Clock className="text-secondary w-5 h-5" />
-          </div>
-          <p className="text-2xl font-bold">{metrics?.avgProcessingTime ?? 0}ms</p>
-          <p className="text-sm text-muted-foreground">Average response time</p>
-        </Card>
-
-        <Card className="glass-card p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-foreground">Concurrent Calls</h3>
-            <Network className="text-primary w-5 h-5" />
-          </div>
-          <p className="text-2xl font-bold">{(metrics?.concurrentCalls ?? 0).toLocaleString()}</p>
-          <p className="text-sm text-muted-foreground">Active API requests</p>
-        </Card>
+        <MetricCard
+          title="Risk Score"
+          value={metrics?.riskScore}
+          icon={Shield}
+          showProgress
+        />
+        <MetricCard
+          title="Active Users"
+          value={metrics?.activeUsers}
+          icon={Users}
+        />
+        <MetricCard
+          title="Processing Time"
+          value={`${metrics?.avgProcessingTime}ms`}
+          icon={Clock}
+        />
+        <MetricCard
+          title="Concurrent Calls"
+          value={metrics?.concurrentCalls}
+          icon={Network}
+        />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="glass-card p-6">
-          <h3 className="font-semibold text-foreground mb-4">Recent Activity</h3>
-          <div className="space-y-4">
-            {(activities ?? []).map((activity) => (
-              <div key={activity.id} className="flex items-center space-x-4 p-3 rounded-md bg-background/50">
-                <div 
-                  className="w-2 h-2 rounded-full animate-pulse-slow"
-                  style={{ 
-                    backgroundColor: activity.type === "suspicious" ? '#ff9800' : '#4caf50' 
-                  }} 
-                />
-                <div>
-                  <p className="text-sm font-medium">{activity.description}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {new Date(activity.timestamp).toLocaleTimeString()}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <HealthStatus />
+        <ErrorLog />
+      </div>
 
-        <Card className="glass-card p-6">
-          <h3 className="font-semibold text-foreground mb-4">API Documentation</h3>
-          <div className="space-y-4">
-            <div className="p-3 rounded-md bg-background/50">
-              <p className="text-sm font-medium mb-1">Track User Interaction</p>
-              <code className="text-xs text-muted-foreground block">
-                POST /api/v1/track
-              </code>
-              <p className="text-xs text-muted-foreground mt-1">
-                Send user interaction data for fraud analysis
-              </p>
-            </div>
-            <div className="p-3 rounded-md bg-background/50">
-              <p className="text-sm font-medium mb-1">Get Risk Score</p>
-              <code className="text-xs text-muted-foreground block">
-                GET /api/v1/metrics
-              </code>
-              <p className="text-xs text-muted-foreground mt-1">
-                Retrieve current risk metrics and statistics
-              </p>
-            </div>
-            <div className="p-3 rounded-md bg-background/50">
-              <p className="text-sm font-medium mb-1">Recent Activity</p>
-              <code className="text-xs text-muted-foreground block">
-                GET /api/v1/activity
-              </code>
-              <p className="text-xs text-muted-foreground mt-1">
-                Get latest fraud detection events and alerts
-              </p>
-            </div>
-          </div>
-        </Card>
+      <div className="grid grid-cols-1 gap-6">
+        <PerformanceMetrics />
       </div>
     </div>
   );
 };
+
+interface MetricCardProps {
+  title: string;
+  value: number | string;
+  icon: React.ElementType;
+  showProgress?: boolean;
+}
+
+const MetricCard = ({ title, value, icon: Icon, showProgress }: MetricCardProps) => (
+  <Card className="p-6">
+    <div className="flex items-center justify-between mb-4">
+      <h3 className="font-semibold text-foreground">{title}</h3>
+      <Icon className="text-secondary w-5 h-5" />
+    </div>
+    {showProgress ? (
+      <div className="space-y-2">
+        <Progress value={Number(value)} className="h-2" />
+        <p className="text-2xl font-bold">{value}%</p>
+      </div>
+    ) : (
+      <p className="text-2xl font-bold">{value}</p>
+    )}
+  </Card>
+);
 
 export default Index;
