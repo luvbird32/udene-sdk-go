@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useToast } from "@/components/ui/use-toast";
+import { api } from '@/services/api';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -33,15 +34,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string) => {
     try {
-      // In a real app, validate credentials against your backend
-      const mockUser = {
-        id: '1',
+      // In production, this would make a real API call
+      const response = await api.post('/auth/login', {
         email,
-        name: email.split('@')[0],
-      };
-      
-      setUser(mockUser);
-      localStorage.setItem('user', JSON.stringify(mockUser));
+        password,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      const userData = response.data;
+      setUser(userData);
+      localStorage.setItem('user', JSON.stringify(userData));
       
       toast({
         title: "Success",
@@ -60,6 +65,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('auth_token');
+    
     toast({
       title: "Logged out",
       description: "You have been successfully logged out",

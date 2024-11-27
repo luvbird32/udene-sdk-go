@@ -8,6 +8,7 @@ from prometheus_fastapi_instrumentator import Instrumentator
 from .routes import health, metrics, fraud, privacy
 from .middleware.monitoring import monitor_requests
 from .middleware.privacy import anonymize_response_data
+from .middleware.security import SecurityHeadersMiddleware
 
 app = FastAPI(title="Udene - Fraud Detection API")
 
@@ -23,7 +24,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Add custom middleware for request monitoring and data anonymization
+# Add custom middleware for security, monitoring and data anonymization
+app.add_middleware(SecurityHeadersMiddleware)
 app.middleware("http")(anonymize_response_data)
 app.middleware("http")(monitor_requests)
 

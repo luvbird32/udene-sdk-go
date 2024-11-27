@@ -32,8 +32,9 @@ export const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
   },
-  // Add timeout and better error handling
+  withCredentials: true, // Enable sending cookies in cross-origin requests
   timeout: 10000,
   validateStatus: (status) => status >= 200 && status < 500,
 });
@@ -44,6 +45,13 @@ api.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+  
+  // Add CSRF token if available
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+  if (csrfToken) {
+    config.headers['X-CSRF-Token'] = csrfToken;
+  }
+  
   return config;
 });
 
@@ -56,6 +64,11 @@ api.interceptors.response.use(
     }
     if (!error.response) {
       throw new Error('Network error. Please check your connection.');
+    }
+    if (error.response.status === 401) {
+      // Handle unauthorized access
+      localStorage.removeItem('auth_token');
+      window.location.href = '/signin';
     }
     throw error;
   }
