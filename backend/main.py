@@ -8,6 +8,10 @@ from pydantic import BaseModel
 from typing import Optional
 import jwt
 from datetime import datetime, timedelta
+from routes import health, metrics, fraud, privacy
+from middleware.monitoring import monitor_requests
+from middleware.privacy import anonymize_response_data
+from middleware.security import SecurityHeadersMiddleware
 
 app = FastAPI(title="Udene - Fraud Detection API")
 
@@ -19,6 +23,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Add custom middleware
+app.add_middleware(SecurityHeadersMiddleware)
+app.middleware("http")(anonymize_response_data)
+app.middleware("http")(monitor_requests)
 
 # Secret key for JWT tokens
 SECRET_KEY = "your-secret-key-here"  # In production, use environment variable
@@ -65,8 +74,11 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-# Keep existing routes
-# ... keep existing code (health, metrics, fraud, and privacy routes)
+# Include route handlers
+app.include_router(health.router)
+app.include_router(metrics.router)
+app.include_router(fraud.router)
+app.include_router(privacy.router)
 
 if __name__ == "__main__":
     import uvicorn
