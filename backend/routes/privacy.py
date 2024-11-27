@@ -2,7 +2,7 @@ from fastapi import APIRouter, Security, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials
 from ..auth.dependencies import security, verify_api_key
 from ..models.privacy import PrivacyRequest, RetentionPolicy
-from ..services.privacy import gdpr_handler, ccpa_handler, retention_manager
+from ..services.privacy import privacy_handler
 
 router = APIRouter(prefix="/api/v1/privacy")
 
@@ -12,13 +12,7 @@ async def handle_privacy_request(
     credentials: HTTPAuthorizationCredentials = Security(security)
 ):
     verify_api_key(credentials)
-    
-    if request.region == "EU":
-        return await gdpr_handler.process_request(request)
-    elif request.region == "California":
-        return await ccpa_handler.process_request(request)
-    else:
-        return await gdpr_handler.process_request(request)
+    return await privacy_handler.process_privacy_request(request.requestType, request.userId, request.region)
 
 @router.put("/retention-policy")
 async def update_retention_policy(
@@ -26,4 +20,4 @@ async def update_retention_policy(
     credentials: HTTPAuthorizationCredentials = Security(security)
 ):
     verify_api_key(credentials)
-    return await retention_manager.update_policy(policy)
+    return await privacy_handler.update_retention_policy(policy.dict())
