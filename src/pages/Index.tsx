@@ -9,13 +9,13 @@ import { getFraudMetrics, getRecentActivity } from "@/services/api";
 const Index = () => {
   const { toast } = useToast();
 
-  const { data: metrics, isLoading: metricsLoading } = useQuery({
+  const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
     queryKey: ["metrics"],
     queryFn: getFraudMetrics,
     refetchInterval: 3000,
   });
 
-  const { data: activities } = useQuery({
+  const { data: activities, isLoading: activitiesLoading, error: activitiesError } = useQuery({
     queryKey: ["activities"],
     queryFn: getRecentActivity,
     refetchInterval: 3000,
@@ -25,14 +25,22 @@ const Index = () => {
     if (metrics?.alertCount && metrics.alertCount > 0) {
       toast({
         title: "Potential Fraud Detected",
-        description: "Unusual activity detected from IP 192.168.1.1",
+        description: "Unusual activity detected in the system",
         variant: "destructive",
       });
     }
   }, [metrics?.alertCount, toast]);
 
-  if (metricsLoading) {
+  if (metricsLoading || activitiesLoading) {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
+  if (metricsError || activitiesError) {
+    return (
+      <div className="flex items-center justify-center min-h-screen text-destructive">
+        Error loading data. Please try again later.
+      </div>
+    );
   }
 
   return (
