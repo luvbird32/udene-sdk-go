@@ -73,13 +73,26 @@ async def predict_fraud(
             **prediction
         }
         await publish_event("fraud_alerts", event_data)
-        # Notify WebSocket clients
         await notify_clients({
             "type": "fraud_alert",
             "data": event_data
         })
     
     return prediction
+
+@app.post("/api/v1/feedback")
+async def submit_feedback(
+    prediction_id: str,
+    actual_outcome: bool,
+    features: Dict[str, Any],
+    _: str = Depends(verify_api_key)
+):
+    """Submit feedback for model improvement"""
+    try:
+        detector.record_feedback(prediction_id, actual_outcome, features)
+        return {"status": "success", "message": "Feedback recorded successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.on_event("startup")
 async def startup_event():
@@ -178,3 +191,4 @@ async def anonymize_response_data(request, call_next):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
