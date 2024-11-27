@@ -23,7 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { LogIn, Key } from "lucide-react"
+import { LogIn, Key, Loader2 } from "lucide-react"
 
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -47,17 +47,23 @@ export default function SignIn() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
     try {
-      await login(values.email, values.password);
+      await login(values.email, values.password)
+      
       toast({
         title: "Success",
         description: "You have successfully signed in.",
       })
+      
       navigate("/")
-    } catch (error) {
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || 
+                          error.message || 
+                          "Invalid email or password."
+      
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Invalid email or password.",
+        description: errorMessage,
       })
     } finally {
       setIsLoading(false)
@@ -86,7 +92,12 @@ export default function SignIn() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your email" {...field} />
+                      <Input 
+                        type="email"
+                        placeholder="Enter your email" 
+                        {...field} 
+                        disabled={isLoading}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -99,7 +110,12 @@ export default function SignIn() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="Enter your password" {...field} />
+                      <Input 
+                        type="password" 
+                        placeholder="Enter your password" 
+                        {...field} 
+                        disabled={isLoading}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -107,7 +123,10 @@ export default function SignIn() {
               />
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (
-                  "Signing in..."
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Signing in...
+                  </>
                 ) : (
                   <>
                     <Key className="mr-2 h-4 w-4" /> Sign in
