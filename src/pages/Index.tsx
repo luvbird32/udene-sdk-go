@@ -1,18 +1,22 @@
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import { Activity, Shield, Users, Clock, Target, Zap, Network } from "lucide-react";
+import { Activity, Shield, Users, Clock, Target, Zap, Network, BookOpen, Tool, Terminal } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getFraudMetrics, getRecentActivity } from "@/services/api";
 import { wsClient } from "@/utils/websocket";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { HealthStatus } from "@/components/monitoring/HealthStatus";
 import { ErrorLog } from "@/components/monitoring/ErrorLog";
 import { PerformanceMetrics } from "@/components/monitoring/PerformanceMetrics";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ApiDocs } from "@/components/documentation/ApiDocs";
+import { DevTools } from "@/components/developer/DevTools";
 
 const Index = () => {
   const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState("dashboard");
 
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
     queryKey: ["metrics"],
@@ -54,46 +58,64 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background p-6" role="main">
       <header className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2" tabIndex={0}>Fraud Detection Dashboard</h1>
-        <p className="text-muted-foreground" tabIndex={0}>Real-time monitoring and analysis</p>
+        <h1 className="text-3xl font-bold text-foreground mb-2" tabIndex={0}>Fraud Detection System</h1>
+        <p className="text-muted-foreground" tabIndex={0}>Comprehensive monitoring, analysis, and documentation</p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" role="region" aria-label="Key Metrics">
-        <MetricCard
-          title="Risk Score"
-          value={metrics?.riskScore}
-          icon={Shield}
-          showProgress
-          isLoading={metricsLoading}
-        />
-        <MetricCard
-          title="Active Users"
-          value={metrics?.activeUsers}
-          icon={Users}
-          isLoading={metricsLoading}
-        />
-        <MetricCard
-          title="Processing Time"
-          value={`${metrics?.avgProcessingTime}ms`}
-          icon={Clock}
-          isLoading={metricsLoading}
-        />
-        <MetricCard
-          title="Concurrent Calls"
-          value={metrics?.concurrentCalls}
-          icon={Network}
-          isLoading={metricsLoading}
-        />
-      </div>
+      <Tabs defaultValue="dashboard" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+          <TabsTrigger value="docs">API Documentation</TabsTrigger>
+          <TabsTrigger value="devtools">Developer Tools</TabsTrigger>
+        </TabsList>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <HealthStatus />
-        <ErrorLog />
-      </div>
+        <TabsContent value="dashboard" className="space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" role="region" aria-label="Key Metrics">
+            <MetricCard
+              title="Risk Score"
+              value={metrics?.riskScore}
+              icon={Shield}
+              showProgress
+              isLoading={metricsLoading}
+            />
+            <MetricCard
+              title="Active Users"
+              value={metrics?.activeUsers}
+              icon={Users}
+              isLoading={metricsLoading}
+            />
+            <MetricCard
+              title="Processing Time"
+              value={`${metrics?.avgProcessingTime}ms`}
+              icon={Clock}
+              isLoading={metricsLoading}
+            />
+            <MetricCard
+              title="Concurrent Calls"
+              value={metrics?.concurrentCalls}
+              icon={Network}
+              isLoading={metricsLoading}
+            />
+          </div>
 
-      <div className="grid grid-cols-1 gap-6">
-        <PerformanceMetrics />
-      </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <HealthStatus />
+            <ErrorLog />
+          </div>
+
+          <div className="grid grid-cols-1 gap-6">
+            <PerformanceMetrics />
+          </div>
+        </TabsContent>
+
+        <TabsContent value="docs">
+          <ApiDocs />
+        </TabsContent>
+
+        <TabsContent value="devtools">
+          <DevTools />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
