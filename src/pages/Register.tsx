@@ -61,24 +61,36 @@ export default function Register() {
         password: values.password,
       });
 
-      if (!response.data) {
-        throw new Error('Registration failed');
+      if (response.data?.error) {
+        throw new Error(response.data.error);
       }
 
-      // Automatically log in the user after successful registration
-      await login(values.email, values.password);
-      
-      toast({
-        title: "Success",
-        description: "Your account has been created and you're now logged in.",
-      })
-      navigate("/")
+      // Try to log in the user after successful registration
+      try {
+        await login(values.email, values.password);
+        toast({
+          title: "Success",
+          description: "Your account has been created and you're now logged in.",
+        });
+        navigate("/");
+      } catch (loginError) {
+        toast({
+          title: "Account created",
+          description: "Your account was created but we couldn't log you in automatically. Please try signing in.",
+          variant: "default"
+        });
+        navigate("/signin");
+      }
     } catch (error: any) {
+      const errorMessage = error.response?.data?.message || 
+                          error.message || 
+                          "Something went wrong. Please try again.";
+      
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.response?.data?.message || "Something went wrong. Please try again.",
-      })
+        description: errorMessage,
+      });
     } finally {
       setIsLoading(false)
     }
@@ -119,7 +131,7 @@ export default function Register() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your email" {...field} />
+                      <Input type="email" placeholder="Enter your email" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
