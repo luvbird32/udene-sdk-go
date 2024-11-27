@@ -1,28 +1,19 @@
 from fastapi import FastAPI, HTTPException, Depends, Security
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.middleware.cors import CORSMiddleware
-from typing import List, Dict, Any
-import random
-from datetime import datetime
-from pydantic import BaseModel
 from prometheus_fastapi_instrumentator import Instrumentator
-from config.messaging import (
-    cache_metrics, get_cached_metrics,
-    cache_activity, get_cached_activity,
-    publish_event, init_kafka, close_kafka
-)
-from ml.fraud_detector import detector
+from ml.ensemble_detector import EnsembleDetector
+from config.messaging import cache_metrics, get_cached_metrics, cache_activity, get_cached_activity, publish_event
 from privacy.anonymizer import anonymize_data
-from privacy.retention import RetentionManager
-from privacy.gdpr import GDPRHandler
-from privacy.ccpa import CCPAHandler
+from typing import Dict, Any
 
 app = FastAPI(title="Fraud Detection API")
+detector = EnsembleDetector()
 
 # Initialize Prometheus metrics
 Instrumentator().instrument(app).expose(app)
 
-# CORS configuration
+# CORS and security configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -31,49 +22,29 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# TLS 1.3 configuration
-ssl_context = {
-    "ssl_version": "TLSv1_3",
-    "ciphers": "TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256"
-}
-
 security = HTTPBearer()
-retention_manager = RetentionManager()
-gdpr_handler = GDPRHandler()
-ccpa_handler = CCPAHandler()
-
-# Mock database (replace with real database in production)
 API_KEYS = {"your_api_key_here"}
-
-class FraudMetrics(BaseModel):
-    riskScore: float
-    activeUsers: int
-    alertCount: int
-    apiCalls: int
-    accuracy: float
-    falsePositiveRate: float
-    avgProcessingTime: float
-    concurrentCalls: int
-
-class Activity(BaseModel):
-    id: str
-    type: str
-    description: str
-    timestamp: str
-
-class TrackRequest(BaseModel):
-    userId: str
-    action: str
-    timestamp: str
-    metadata: dict
 
 def verify_api_key(credentials: HTTPAuthorizationCredentials = Security(security)):
     if credentials.credentials not in API_KEYS:
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid API key"
-        )
+        raise HTTPException(status_code=401, detail="Invalid API key")
     return credentials.credentials
+
+@app.post("/api/v1/predict")
+async def predict_fraud(
+    features: Dict[str, Any],
+    _: str = Depends(verify_api_key)
+):
+    """Predict fraud probability for a transaction"""
+    prediction = detector.predict_fraud_probability(features)
+    
+    if prediction['is_fraudulent']:
+        await publish_event("fraud_alerts", {
+            **features,
+            **prediction
+        })
+    
+    return prediction
 
 @app.on_event("startup")
 async def startup_event():
@@ -127,46 +98,6 @@ async def get_activity(_: str = Depends(verify_api_key)):
     cache_activity(activities)
     return activities
 
-class FraudPredictionRequest(BaseModel):
-    transaction_amount: float
-    merchant_id: str
-    customer_id: str
-    timestamp: str
-    location: str
-    device_id: str
-    ip_address: str
-    transaction_type: str
-    card_present: bool
-    recurring: bool
-
-@app.post("/api/v1/predict")
-async def predict_fraud(
-    request: FraudPredictionRequest,
-    _: str = Depends(verify_api_key)
-):
-    """Predict fraud probability for a transaction"""
-    features = request.dict()
-    prediction = detector.predict_fraud_probability(features)
-    
-    # Track high-risk predictions
-    if prediction['is_fraudulent']:
-        await publish_event("fraud_alerts", {
-            **features,
-            **prediction
-        })
-    
-    return prediction
-
-@app.post("/api/v1/track")
-async def track_interaction(request: TrackRequest, _: str = Depends(verify_api_key)):
-    # Publish the interaction event to Kafka
-    await publish_event("user_interactions", request.dict())
-    return {"status": "success"}
-
-@app.get("/api/v1/validate")
-async def validate_key(_: str = Depends(verify_api_key)):
-    return {"status": "valid"}
-
 class PrivacyRequest(BaseModel):
     requestType: str
     userId: str
@@ -211,4 +142,4 @@ async def anonymize_response_data(request, call_next):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000, ssl_context=ssl_context)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
