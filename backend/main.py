@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends, Security
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.middleware.cors import CORSMiddleware
-from typing import List
+from typing import List, Dict, Any
 import random
 from datetime import datetime
 from pydantic import BaseModel
@@ -10,6 +10,7 @@ from config.messaging import (
     cache_activity, get_cached_activity,
     publish_event, init_kafka, close_kafka
 )
+from ml.fraud_detector import detector
 
 app = FastAPI(title="Fraud Detection API")
 
@@ -108,6 +109,36 @@ async def get_activity(_: str = Depends(verify_api_key)):
     # Cache the activity
     cache_activity(activities)
     return activities
+
+class FraudPredictionRequest(BaseModel):
+    transaction_amount: float
+    merchant_id: str
+    customer_id: str
+    timestamp: str
+    location: str
+    device_id: str
+    ip_address: str
+    transaction_type: str
+    card_present: bool
+    recurring: bool
+
+@app.post("/api/v1/predict")
+async def predict_fraud(
+    request: FraudPredictionRequest,
+    _: str = Depends(verify_api_key)
+):
+    """Predict fraud probability for a transaction"""
+    features = request.dict()
+    prediction = detector.predict_fraud_probability(features)
+    
+    # Track high-risk predictions
+    if prediction['is_fraudulent']:
+        await publish_event("fraud_alerts", {
+            **features,
+            **prediction
+        })
+    
+    return prediction
 
 @app.post("/api/v1/track")
 async def track_interaction(request: TrackRequest, _: str = Depends(verify_api_key)):
