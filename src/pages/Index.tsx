@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
 import { DevTools } from "@/components/developer/DevTools";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const { toast } = useToast();
@@ -63,13 +64,17 @@ const Index = () => {
           <h1 className="text-3xl font-bold text-foreground mb-2" tabIndex={0}>Fraud Detection System</h1>
           <p className="text-muted-foreground" tabIndex={0}>Comprehensive monitoring, analysis, and documentation</p>
         </div>
-        <Link 
-          to="/settings" 
-          className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent"
-        >
-          <Settings className="h-5 w-5" />
-          <span>Settings</span>
-        </Link>
+        <div className="flex gap-4">
+          <Link to="/auth/reset-password">
+            <Button variant="outline">Reset Password</Button>
+          </Link>
+          <Link to="/settings">
+            <Button className="flex items-center gap-2">
+              <Settings className="h-5 w-5" />
+              <span>Settings</span>
+            </Button>
+          </Link>
+        </div>
       </header>
 
       <Tabs defaultValue="dashboard" className="space-y-4">

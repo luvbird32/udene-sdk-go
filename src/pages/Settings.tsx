@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
-import { User, Settings as SettingsIcon, Lock } from "lucide-react";
+import { User, Settings as SettingsIcon, Lock, Shield } from "lucide-react";
+import { MFASetup } from "@/components/auth/MFASetup";
 
 const Settings = () => {
   const { toast } = useToast();
@@ -63,6 +64,10 @@ const Settings = () => {
           <TabsTrigger value="security" className="space-x-2">
             <Lock className="h-4 w-4" />
             <span>Security</span>
+          </TabsTrigger>
+          <TabsTrigger value="mfa" className="space-x-2">
+            <Shield className="h-4 w-4" />
+            <span>Two-Factor Auth</span>
           </TabsTrigger>
         </TabsList>
 
@@ -149,6 +154,10 @@ const Settings = () => {
               <Button type="submit">Change Password</Button>
             </form>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="mfa">
+          <MFASetup />
         </TabsContent>
       </Tabs>
     </div>
