@@ -78,6 +78,53 @@ api.interceptors.response.use(
   }
 );
 
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: "admin" | "user" | "analyst";
+  lastActive: string;
+  status: "active" | "inactive";
+}
+
+export const getUsers = async (): Promise<User[]> => {
+  try {
+    const response = await api.get("/users");
+    return response.data;
+  } catch (error) {
+    if (import.meta.env.DEV) {
+      // Return mock data in development
+      return [
+        {
+          id: "1",
+          name: "John Doe",
+          email: "john@example.com",
+          role: "admin",
+          lastActive: "2024-02-20T10:00:00",
+          status: "active",
+        },
+        {
+          id: "2",
+          name: "Jane Smith",
+          email: "jane@example.com",
+          role: "analyst",
+          lastActive: "2024-02-19T15:30:00",
+          status: "active",
+        },
+      ];
+    }
+    throw error;
+  }
+};
+
+export const updateUserRole = async (userId: string, role: User["role"]): Promise<void> => {
+  await api.put(`/users/${userId}/role`, { role });
+};
+
+export const updateUserStatus = async (userId: string, status: User["status"]): Promise<void> => {
+  await api.put(`/users/${userId}/status`, { status });
+};
+
 export const getFraudMetrics = async (): Promise<FraudMetrics> => {
   try {
     const response = await api.get("/metrics");
