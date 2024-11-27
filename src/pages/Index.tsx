@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import { Activity, Shield, Users, Clock, Settings } from "lucide-react";
+import { Activity, Shield, Users, Clock, Settings, Network } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getFraudMetrics, getRecentActivity } from "@/services/api";
 import { wsClient } from "@/utils/websocket";
