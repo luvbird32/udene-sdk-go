@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "Fraud Detection API"
 authors = ["Your Name <your.email@example.com>"]
 readme = "README.md"
-packages = [{include = "backend"}]
 
 [tool.poetry.dependencies]
 python = ">=3.12,<3.13"
@@ -28,12 +27,12 @@ prometheus-fastapi-instrumentator = "^6.1.0"
 cryptography = "^41.0.7"
 python-dateutil = "^2.8.2"
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.0"
 black = "^24.1.1"
 isort = "^5.13.2"
 flake8 = "^7.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
