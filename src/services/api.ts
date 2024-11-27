@@ -1,126 +1,46 @@
-/**
- * API Service Module
- * Handles all API communication with comprehensive error handling and type safety.
- * Includes authentication, response interceptors, and standardized error handling.
- */
-import axios, { AxiosError } from "axios";
+import axios from 'axios';
 
-// API configuration
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1";
+const API_URL = 'http://localhost:8000';
 
-// Type definitions for API responses
-export interface APIError {
-  detail: string;
-  status_code: number;
-}
-
-export interface FraudMetrics {
-  riskScore: number;
-  activeUsers: number;
-  alertCount: number;
-  apiCalls: number;
-  accuracy: number;
-  falsePositiveRate: number;
-  avgProcessingTime: number;
-  concurrentCalls: number;
-}
-
-export interface Activity {
-  id: string;
-  type: string;
-  description: string;
-  timestamp: string;
-}
-
-/**
- * Initialize axios instance with default configuration
- * Includes base URL, headers, and timeout settings
- */
-export const api = axios.create({
-  baseURL: API_BASE_URL,
+const api = axios.create({
+  baseURL: API_URL,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
-  timeout: 60000,
 });
 
-/**
- * Authentication request interceptor
- * Automatically adds authentication token to requests if available
- */
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("fraud_api_key");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-/**
- * Response and error handling interceptor
- * Handles common error scenarios and logs API performance metrics
- */
-api.interceptors.response.use(
-  (response) => {
-    // Log API processing time if available
-    const processingTime = response.headers["x-process-time"];
-    if (processingTime) {
-      console.log(`API call processed in ${processingTime}ms`);
-    }
-    return response;
-  },
-  (error: AxiosError<APIError>) => {
-    if (error.response) {
-      const errorDetail = error.response.data.detail;
-      
-      // Handle different error scenarios
-      switch (error.response.status) {
-        case 401:
-          localStorage.removeItem("fraud_api_key");
-          window.location.href = "/login";
-          break;
-        case 422:
-          console.error("Validation Error:", errorDetail);
-          break;
-        case 429:
-          console.error("Rate limit exceeded:", errorDetail);
-          break;
-      }
-    }
-    return Promise.reject(error);
-  }
-);
-
-/**
- * Validates an API key against the server
- * @param apiKey - The API key to validate
- * @returns Promise<boolean> - Whether the key is valid
- */
-export const validateApiKey = async (apiKey: string): Promise<boolean> => {
+export const validateApiKey = async (apiKey: string) => {
   try {
-    const response = await api.post('/validate-key', { apiKey });
-    return response.status === 200;
+    const response = await api.post('/api/v1/validate-key', { apiKey });
+    return response.data.valid;
   } catch (error) {
+    console.error('API Key validation failed:', error);
     return false;
   }
 };
 
-/**
- * Fetches fraud metrics from the server
- * @returns Promise<FraudMetrics> - Current fraud metrics
- */
-export const getFraudMetrics = async (): Promise<FraudMetrics> => {
-  const response = await api.get('/metrics');
+export const getApiKeys = async () => {
+  const response = await api.get('/api/v1/api-keys');
   return response.data;
 };
 
-/**
- * Fetches recent activity data
- * @returns Promise<Activity[]> - List of recent activities
- */
-export const getRecentActivity = async (): Promise<Activity[]> => {
-  const response = await api.get('/activity');
+export const createApiKey = async ({ name }: { name: string }) => {
+  const response = await api.post('/api/v1/api-keys', { name });
   return response.data;
 };
 
-export * from './apiKeys';
+export const deleteApiKey = async (id: string) => {
+  await api.delete(`/api/v1/api-keys/${id}`);
+};
+
+export const getMetrics = async () => {
+  const response = await api.get('/api/v1/metrics');
+  return response.data;
+};
+
+export const getActivity = async () => {
+  const response = await api.get('/api/v1/activity');
+  return response.data;
+};
+
+export default api;

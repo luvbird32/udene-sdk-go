@@ -49,4 +49,4 @@ class WebSocketClient {
   }
 }
 
-export const wsClient = new WebSocketClient(`ws://${window.location.hostname}:8000/ws`);
+export const wsClient = new WebSocketClient('ws://localhost:8000/ws');
