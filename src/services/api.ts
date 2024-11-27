@@ -190,3 +190,19 @@ export const validateApiKey = async (): Promise<boolean> => {
     return false;
   }
 };
+
+export const sendPasswordResetLink = async (email: string): Promise<void> => {
+  await api.post("/auth/password-reset", { email });
+};
+
+export const verifyEmail = async (code: string): Promise<void> => {
+  await api.post("/auth/verify-email", { code });
+};
+
+export const setupMFA = async (method: string): Promise<void> => {
+  await api.post("/auth/mfa/setup", { method });
+};
+
+export const verifyMFA = async (code: string): Promise<void> => {
+  await api.post("/auth/mfa/verify", { code });
+};
