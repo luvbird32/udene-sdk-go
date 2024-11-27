@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "udene"
+version = "0.1.0"
+description = "Fraud Detection API"
+authors = ["Your Name <your.email@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.109.2"
+uvicorn = "^0.27.1"
+pydantic = "^2.6.1"
+python-multipart = "^0.0.9"
+python-jose = "^3.3.0"
+bcrypt = "^4.0.1"
+redis = "^5.0.1"
+pymongo = "^4.6.1"
+cassandra-driver = "^3.28.0"
+aiokafka = "^0.10.0"
+tensorflow = "^2.16.1"
+torch = "^2.2.0"
+scikit-learn = "^1.4.0"
+numpy = "^1.26.0"
+pandas = "^2.2.0"
+xgboost = "^2.0.3"
+prometheus-fastapi-instrumentator = "^6.1.0"
+cryptography = "^41.0.7"
+python-dateutil = "^2.8.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
