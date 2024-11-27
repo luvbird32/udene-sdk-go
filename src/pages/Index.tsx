@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { HealthStatus } from "@/components/monitoring/HealthStatus";
 import { ErrorLog } from "@/components/monitoring/ErrorLog";
 import { PerformanceMetrics } from "@/components/monitoring/PerformanceMetrics";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Index = () => {
   const { toast } = useToast();
@@ -46,46 +47,42 @@ const Index = () => {
     };
   }, [toast]);
 
-  if (metricsLoading || activitiesLoading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
-  }
-
   if (metricsError || activitiesError) {
-    return (
-      <div className="flex items-center justify-center min-h-screen text-destructive">
-        Error loading data. Please try again later.
-      </div>
-    );
+    throw new Error("Failed to load dashboard data");
   }
 
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div className="min-h-screen bg-background p-6" role="main">
       <header className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">Fraud Detection Dashboard</h1>
-        <p className="text-muted-foreground">Real-time monitoring and analysis</p>
+        <h1 className="text-3xl font-bold text-foreground mb-2" tabIndex={0}>Fraud Detection Dashboard</h1>
+        <p className="text-muted-foreground" tabIndex={0}>Real-time monitoring and analysis</p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" role="region" aria-label="Key Metrics">
         <MetricCard
           title="Risk Score"
           value={metrics?.riskScore}
           icon={Shield}
           showProgress
+          isLoading={metricsLoading}
         />
         <MetricCard
           title="Active Users"
           value={metrics?.activeUsers}
           icon={Users}
+          isLoading={metricsLoading}
         />
         <MetricCard
           title="Processing Time"
           value={`${metrics?.avgProcessingTime}ms`}
           icon={Clock}
+          isLoading={metricsLoading}
         />
         <MetricCard
           title="Concurrent Calls"
           value={metrics?.concurrentCalls}
           icon={Network}
+          isLoading={metricsLoading}
         />
       </div>
 
@@ -103,24 +100,27 @@ const Index = () => {
 
 interface MetricCardProps {
   title: string;
-  value: number | string;
+  value?: number | string;
   icon: React.ElementType;
   showProgress?: boolean;
+  isLoading?: boolean;
 }
 
-const MetricCard = ({ title, value, icon: Icon, showProgress }: MetricCardProps) => (
-  <Card className="p-6">
+const MetricCard = ({ title, value, icon: Icon, showProgress, isLoading }: MetricCardProps) => (
+  <Card className="p-6" role="article" aria-label={title}>
     <div className="flex items-center justify-between mb-4">
       <h3 className="font-semibold text-foreground">{title}</h3>
-      <Icon className="text-secondary w-5 h-5" />
+      <Icon className="text-secondary w-5 h-5" aria-hidden="true" />
     </div>
-    {showProgress ? (
+    {isLoading ? (
+      <Skeleton className="h-8 w-24" />
+    ) : showProgress ? (
       <div className="space-y-2">
-        <Progress value={Number(value)} className="h-2" />
-        <p className="text-2xl font-bold">{value}%</p>
+        <Progress value={Number(value)} className="h-2" aria-label={`${title} Progress`} />
+        <p className="text-2xl font-bold" aria-live="polite">{value}%</p>
       </div>
     ) : (
-      <p className="text-2xl font-bold">{value}</p>
+      <p className="text-2xl font-bold" aria-live="polite">{value}</p>
     )}
   </Card>
 );
