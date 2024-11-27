@@ -60,3 +60,4 @@ Once the server is running, visit:
 - Handles user interaction events
 - Enables asynchronous processing
 - Provides reliable event streaming
+```
