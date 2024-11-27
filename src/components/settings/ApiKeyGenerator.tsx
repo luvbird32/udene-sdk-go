@@ -3,23 +3,17 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { Copy, Trash2 } from "lucide-react";
+import { Copy, Trash2, Loader2 } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createApiKey, deleteApiKey, getApiKeys } from "@/services/api";
-
-interface ApiKey {
-  id: string;
-  key: string;
-  createdAt: string;
-  name: string;
-}
+import type { ApiKey } from "@/services/api";
 
 export const ApiKeyGenerator = () => {
   const [newKeyName, setNewKeyName] = useState("");
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: apiKeys = [], isLoading } = useQuery({
+  const { data: apiKeys = [], isLoading: isLoadingKeys, error: keysError } = useQuery({
     queryKey: ['api-keys'],
     queryFn: getApiKeys,
     meta: {
@@ -39,14 +33,14 @@ export const ApiKeyGenerator = () => {
       queryClient.invalidateQueries({ queryKey: ['api-keys'] });
       setNewKeyName("");
       toast({
-        title: "API Key Generated",
-        description: "Your new API key has been generated successfully.",
+        title: "Success",
+        description: "API key generated successfully",
       });
     },
     onError: (error: Error) => {
       toast({
-        title: "Error Generating API Key",
-        description: error.message,
+        title: "Error",
+        description: "Failed to generate API key: " + error.message,
         variant: "destructive",
       });
     },
@@ -57,14 +51,14 @@ export const ApiKeyGenerator = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['api-keys'] });
       toast({
-        title: "API Key Deleted",
-        description: "The API key has been deleted successfully.",
+        title: "Success",
+        description: "API key deleted successfully",
       });
     },
     onError: (error: Error) => {
       toast({
-        title: "Error Deleting API Key",
-        description: error.message,
+        title: "Error",
+        description: "Failed to delete API key: " + error.message,
         variant: "destructive",
       });
     },
@@ -85,7 +79,7 @@ export const ApiKeyGenerator = () => {
   const copyToClipboard = (key: string) => {
     navigator.clipboard.writeText(key);
     toast({
-      title: "Copied!",
+      title: "Copied",
       description: "API key copied to clipboard",
     });
   };
@@ -94,11 +88,23 @@ export const ApiKeyGenerator = () => {
     deleteKeyMutation.mutate(id);
   };
 
-  if (isLoading) {
+  if (isLoadingKeys) {
     return (
       <Card className="p-6">
-        <div className="flex items-center justify-center h-32">
+        <div className="flex items-center justify-center h-32 space-x-2">
+          <Loader2 className="h-6 w-6 animate-spin" />
           <p className="text-muted-foreground">Loading API keys...</p>
+        </div>
+      </Card>
+    );
+  }
+
+  if (keysError) {
+    return (
+      <Card className="p-6">
+        <div className="text-center text-destructive">
+          <p>Failed to load API keys</p>
+          <p className="text-sm">{keysError instanceof Error ? keysError.message : 'Unknown error'}</p>
         </div>
       </Card>
     );
@@ -114,12 +120,20 @@ export const ApiKeyGenerator = () => {
               placeholder="API Key Name"
               value={newKeyName}
               onChange={(e) => setNewKeyName(e.target.value)}
+              disabled={createKeyMutation.isPending}
             />
             <Button 
               onClick={generateApiKey}
               disabled={createKeyMutation.isPending}
             >
-              Generate New API Key
+              {createKeyMutation.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                'Generate New API Key'
+              )}
             </Button>
           </div>
         </div>
@@ -149,7 +163,11 @@ export const ApiKeyGenerator = () => {
                         onClick={() => handleDeleteKey(apiKey.id)}
                         disabled={deleteKeyMutation.isPending}
                       >
-                        <Trash2 className="h-4 w-4 text-destructive" />
+                        {deleteKeyMutation.isPending ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        )}
                       </Button>
                     </div>
                   </div>

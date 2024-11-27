@@ -21,6 +21,13 @@ export interface Activity {
   timestamp: string;
 }
 
+export interface ApiKey {
+  id: string;
+  key: string;
+  createdAt: string;
+  name: string;
+}
+
 export const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -30,25 +37,26 @@ export const api = axios.create({
 
 export const validateApiKey = async (apiKey: string): Promise<boolean> => {
   try {
-    const response = await api.post('/api/v1/validate-key', { apiKey });
+    const response = await api.post('/validate-key', { apiKey });
     return response.data.valid;
   } catch (error) {
+    console.error('API key validation error:', error);
     return false;
   }
 };
 
-export const getApiKeys = async () => {
-  const response = await api.get('/api/v1/api-keys');
+export const getApiKeys = async (): Promise<ApiKey[]> => {
+  const response = await api.get('/api-keys');
   return response.data;
 };
 
-export const createApiKey = async (data: { name: string }) => {
-  const response = await api.post('/api/v1/api-keys', data);
+export const createApiKey = async (data: { name: string }): Promise<ApiKey> => {
+  const response = await api.post('/api-keys', data);
   return response.data;
 };
 
-export const deleteApiKey = async (id: string) => {
-  await api.delete(`/api/v1/api-keys/${id}`);
+export const deleteApiKey = async (id: string): Promise<void> => {
+  await api.delete(`/api-keys/${id}`);
 };
 
 export const getFraudMetrics = async (): Promise<FraudMetrics> => {
@@ -60,5 +68,3 @@ export const getRecentActivity = async (): Promise<Activity[]> => {
   const response = await api.get('/api/v1/activity');
   return response.data;
 };
-
-export default api;
