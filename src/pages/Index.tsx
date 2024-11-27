@@ -2,30 +2,38 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { Activity, AlertTriangle, Shield, Users } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getFraudMetrics, getRecentActivity } from "@/services/api";
 
 const Index = () => {
   const { toast } = useToast();
-  const [riskScore, setRiskScore] = useState(42);
-  const [activeUsers, setActiveUsers] = useState(1234);
+
+  const { data: metrics, isLoading: metricsLoading } = useQuery({
+    queryKey: ["metrics"],
+    queryFn: getFraudMetrics,
+    refetchInterval: 3000,
+  });
+
+  const { data: activities } = useQuery({
+    queryKey: ["activities"],
+    queryFn: getRecentActivity,
+    refetchInterval: 3000,
+  });
 
   useEffect(() => {
-    // Simulate real-time updates
-    const interval = setInterval(() => {
-      setRiskScore(prev => Math.min(100, Math.max(0, prev + (Math.random() - 0.5) * 10)));
-      setActiveUsers(prev => Math.max(0, prev + Math.floor((Math.random() - 0.5) * 10)));
-      
-      if (Math.random() > 0.8) {
-        toast({
-          title: "Potential Fraud Detected",
-          description: "Unusual activity detected from IP 192.168.1.1",
-          variant: "destructive",
-        });
-      }
-    }, 3000);
+    if (metrics?.alertCount && metrics.alertCount > 0) {
+      toast({
+        title: "Potential Fraud Detected",
+        description: "Unusual activity detected from IP 192.168.1.1",
+        variant: "destructive",
+      });
+    }
+  }, [metrics?.alertCount, toast]);
 
-    return () => clearInterval(interval);
-  }, [toast]);
+  if (metricsLoading) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -41,8 +49,8 @@ const Index = () => {
             <Shield className="text-secondary w-5 h-5" />
           </div>
           <div className="space-y-2">
-            <Progress value={riskScore} className="h-2" />
-            <p className="text-2xl font-bold">{riskScore.toFixed(1)}%</p>
+            <Progress value={metrics?.riskScore ?? 0} className="h-2" />
+            <p className="text-2xl font-bold">{metrics?.riskScore?.toFixed(1) ?? 0}%</p>
           </div>
         </Card>
 
@@ -51,7 +59,7 @@ const Index = () => {
             <h3 className="font-semibold text-foreground">Active Users</h3>
             <Users className="text-secondary w-5 h-5" />
           </div>
-          <p className="text-2xl font-bold">{activeUsers.toLocaleString()}</p>
+          <p className="text-2xl font-bold">{metrics?.activeUsers?.toLocaleString() ?? 0}</p>
           <p className="text-sm text-muted-foreground">Currently monitoring</p>
         </Card>
 
@@ -60,7 +68,7 @@ const Index = () => {
             <h3 className="font-semibold text-foreground">Alerts</h3>
             <AlertTriangle className="text-warning w-5 h-5" />
           </div>
-          <p className="text-2xl font-bold">7</p>
+          <p className="text-2xl font-bold">{metrics?.alertCount ?? 0}</p>
           <p className="text-sm text-muted-foreground">Last 24 hours</p>
         </Card>
 
@@ -69,7 +77,7 @@ const Index = () => {
             <h3 className="font-semibold text-foreground">API Calls</h3>
             <Activity className="text-secondary w-5 h-5" />
           </div>
-          <p className="text-2xl font-bold">1.2M</p>
+          <p className="text-2xl font-bold">{(metrics?.apiCalls ?? 0).toLocaleString()}</p>
           <p className="text-sm text-muted-foreground">Today's requests</p>
         </Card>
       </div>
@@ -78,16 +86,18 @@ const Index = () => {
         <Card className="glass-card p-6">
           <h3 className="font-semibold text-foreground mb-4">Recent Activity</h3>
           <div className="space-y-4">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="flex items-center space-x-4 p-3 rounded-md bg-background/50">
-                <div className="w-2 h-2 rounded-full animate-pulse-slow" 
-                     style={{ backgroundColor: i % 3 === 0 ? '#ff9800' : '#4caf50' }} />
+            {(activities ?? []).map((activity) => (
+              <div key={activity.id} className="flex items-center space-x-4 p-3 rounded-md bg-background/50">
+                <div 
+                  className="w-2 h-2 rounded-full animate-pulse-slow"
+                  style={{ 
+                    backgroundColor: activity.type === "suspicious" ? '#ff9800' : '#4caf50' 
+                  }} 
+                />
                 <div>
-                  <p className="text-sm font-medium">
-                    {i % 3 === 0 ? 'Suspicious login attempt' : 'Normal user activity'}
-                  </p>
+                  <p className="text-sm font-medium">{activity.description}</p>
                   <p className="text-xs text-muted-foreground">
-                    {new Date(Date.now() - i * 1000 * 60 * 5).toLocaleTimeString()}
+                    {new Date(activity.timestamp).toLocaleTimeString()}
                   </p>
                 </div>
               </div>
@@ -96,25 +106,34 @@ const Index = () => {
         </Card>
 
         <Card className="glass-card p-6">
-          <h3 className="font-semibold text-foreground mb-4">Quick API Reference</h3>
+          <h3 className="font-semibold text-foreground mb-4">API Documentation</h3>
           <div className="space-y-4">
             <div className="p-3 rounded-md bg-background/50">
               <p className="text-sm font-medium mb-1">Track User Interaction</p>
               <code className="text-xs text-muted-foreground block">
                 POST /api/v1/track
               </code>
+              <p className="text-xs text-muted-foreground mt-1">
+                Send user interaction data for fraud analysis
+              </p>
             </div>
             <div className="p-3 rounded-md bg-background/50">
               <p className="text-sm font-medium mb-1">Get Risk Score</p>
               <code className="text-xs text-muted-foreground block">
-                GET /api/v1/risk/:userId
+                GET /api/v1/metrics
               </code>
+              <p className="text-xs text-muted-foreground mt-1">
+                Retrieve current risk metrics and statistics
+              </p>
             </div>
             <div className="p-3 rounded-md bg-background/50">
-              <p className="text-sm font-medium mb-1">Configure Webhooks</p>
+              <p className="text-sm font-medium mb-1">Recent Activity</p>
               <code className="text-xs text-muted-foreground block">
-                PUT /api/v1/webhooks
+                GET /api/v1/activity
               </code>
+              <p className="text-xs text-muted-foreground mt-1">
+                Get latest fraud detection events and alerts
+              </p>
             </div>
           </div>
         </Card>
