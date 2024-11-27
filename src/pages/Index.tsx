@@ -23,12 +23,14 @@ const Index = () => {
     queryFn: getFraudMetrics,
     refetchInterval: 3000,
     retry: 3,
-    onError: (error) => {
-      toast({
-        title: "Error Loading Metrics",
-        description: error instanceof Error ? error.message : "Failed to load metrics data",
-        variant: "destructive",
-      });
+    meta: {
+      onError: (error: Error) => {
+        toast({
+          title: "Error Loading Metrics",
+          description: error.message || "Failed to load metrics data",
+          variant: "destructive",
+        });
+      },
     },
   });
 
@@ -37,12 +39,14 @@ const Index = () => {
     queryFn: getRecentActivity,
     refetchInterval: 3000,
     retry: 3,
-    onError: (error) => {
-      toast({
-        title: "Error Loading Activities",
-        description: error instanceof Error ? error.message : "Failed to load activity data",
-        variant: "destructive",
-      });
+    meta: {
+      onError: (error: Error) => {
+        toast({
+          title: "Error Loading Activities",
+          description: error.message || "Failed to load activity data",
+          variant: "destructive",
+        });
+      },
     },
   });
 
