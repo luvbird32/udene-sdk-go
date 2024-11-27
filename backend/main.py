@@ -5,10 +5,10 @@ Configures and initializes the FastAPI application with middleware, CORS, and ro
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
-from .routes import health, metrics, fraud, privacy
-from .middleware.monitoring import monitor_requests
-from .middleware.privacy import anonymize_response_data
-from .middleware.security import SecurityHeadersMiddleware
+from routes import health, metrics, fraud, privacy
+from middleware.monitoring import monitor_requests
+from middleware.privacy import anonymize_response_data
+from middleware.security import SecurityHeadersMiddleware
 
 app = FastAPI(title="Udene - Fraud Detection API")
 
