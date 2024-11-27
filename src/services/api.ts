@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.VITE_API_URL || 'https://api.udene.com/v1';
+const API_URL = import.meta.env.VITE_API_URL || 'https://api.udene.com/v1';
 
 // Type definitions
 export interface FraudMetrics {
