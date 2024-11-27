@@ -22,12 +22,28 @@ const Index = () => {
     queryKey: ["metrics"],
     queryFn: getFraudMetrics,
     refetchInterval: 3000,
+    retry: 3,
+    onError: (error) => {
+      toast({
+        title: "Error Loading Metrics",
+        description: error instanceof Error ? error.message : "Failed to load metrics data",
+        variant: "destructive",
+      });
+    },
   });
 
   const { data: activities, isLoading: activitiesLoading, error: activitiesError } = useQuery({
     queryKey: ["activities"],
     queryFn: getRecentActivity,
     refetchInterval: 3000,
+    retry: 3,
+    onError: (error) => {
+      toast({
+        title: "Error Loading Activities",
+        description: error instanceof Error ? error.message : "Failed to load activity data",
+        variant: "destructive",
+      });
+    },
   });
 
   useEffect(() => {
@@ -56,8 +72,9 @@ const Index = () => {
       <Alert variant="destructive">
         <AlertTitle>Error Loading Dashboard</AlertTitle>
         <AlertDescription>
-          {metricsError ? "Failed to load metrics data" : "Failed to load activity data"}. 
-          Please try refreshing the page.
+          {metricsError instanceof Error ? metricsError.message : "Failed to load metrics data"}
+          {activitiesError instanceof Error && <br />}
+          {activitiesError instanceof Error && activitiesError.message}
         </AlertDescription>
       </Alert>
     );
@@ -94,7 +111,8 @@ const Index = () => {
             />
             <MetricCard
               title="Processing Time"
-              value={`${metrics?.avgProcessingTime}ms`}
+              value={metrics?.avgProcessingTime}
+              suffix="ms"
               icon={Clock}
               isLoading={metricsLoading}
             />
@@ -134,25 +152,34 @@ interface MetricCardProps {
   icon: React.ElementType;
   showProgress?: boolean;
   isLoading?: boolean;
+  suffix?: string;
 }
 
-const MetricCard = ({ title, value, icon: Icon, showProgress, isLoading }: MetricCardProps) => (
-  <Card className="p-6" role="article" aria-label={title}>
-    <div className="flex items-center justify-between mb-4">
-      <h3 className="font-semibold text-foreground">{title}</h3>
-      <Icon className="text-secondary w-5 h-5" aria-hidden="true" />
-    </div>
-    {isLoading ? (
-      <Skeleton className="h-8 w-24" />
-    ) : showProgress ? (
-      <div className="space-y-2">
-        <Progress value={Number(value)} className="h-2" aria-label={`${title} Progress`} />
-        <p className="text-2xl font-bold" aria-live="polite">{value}%</p>
+const MetricCard = ({ title, value, icon: Icon, showProgress, isLoading, suffix = "" }: MetricCardProps) => {
+  const displayValue = value !== undefined ? `${value}${suffix}` : "N/A";
+  
+  return (
+    <Card className="p-6" role="article" aria-label={title}>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="font-semibold text-foreground">{title}</h3>
+        <Icon className="text-secondary w-5 h-5" aria-hidden="true" />
       </div>
-    ) : (
-      <p className="text-2xl font-bold" aria-live="polite">{value}</p>
-    )}
-  </Card>
-);
+      {isLoading ? (
+        <Skeleton className="h-8 w-24" />
+      ) : showProgress ? (
+        <div className="space-y-2">
+          <Progress 
+            value={typeof value === 'number' ? value : 0} 
+            className="h-2" 
+            aria-label={`${title} Progress`} 
+          />
+          <p className="text-2xl font-bold" aria-live="polite">{displayValue}</p>
+        </div>
+      ) : (
+        <p className="text-2xl font-bold" aria-live="polite">{displayValue}</p>
+      )}
+    </Card>
+  );
+};
 
 export default Index;
