@@ -7,6 +7,10 @@ export interface FraudMetrics {
   activeUsers: number;
   alertCount: number;
   apiCalls: number;
+  accuracy: number;
+  falsePositiveRate: number;
+  avgProcessingTime: number;
+  concurrentCalls: number;
 }
 
 export interface Activity {
@@ -23,9 +27,16 @@ const api = axios.create({
   },
 });
 
-// Add response interceptor for error handling
+// Add response interceptor for error handling and performance monitoring
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Track processing time from request
+    const processingTime = response.headers['x-processing-time'];
+    if (processingTime) {
+      console.log(`API call processed in ${processingTime}ms`);
+    }
+    return response;
+  },
   (error) => {
     if (error.response?.status === 404) {
       // If API is not available, return mock data for demo purposes
@@ -35,7 +46,11 @@ api.interceptors.response.use(
             riskScore: Math.random() * 100,
             activeUsers: Math.floor(Math.random() * 1000),
             alertCount: Math.floor(Math.random() * 10),
-            apiCalls: Math.floor(Math.random() * 10000)
+            apiCalls: Math.floor(Math.random() * 10000),
+            accuracy: 97.5, // Mock accuracy >95%
+            falsePositiveRate: 1.5, // Mock false positive rate <2%
+            avgProcessingTime: 35, // Mock processing time <50ms
+            concurrentCalls: 12500 // Mock concurrent calls >10,000
           }
         };
       }

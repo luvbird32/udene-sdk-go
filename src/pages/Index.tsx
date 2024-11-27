@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import { Activity, AlertTriangle, Shield, Users } from "lucide-react";
+import { Activity, AlertTriangle, Shield, Users, Clock, Target, Zap, Network } from "lucide-react";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getFraudMetrics, getRecentActivity } from "@/services/api";
@@ -87,6 +87,42 @@ const Index = () => {
           </div>
           <p className="text-2xl font-bold">{(metrics?.apiCalls ?? 0).toLocaleString()}</p>
           <p className="text-sm text-muted-foreground">Today's requests</p>
+        </Card>
+
+        <Card className="glass-card p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold text-foreground">Accuracy</h3>
+            <Target className="text-success w-5 h-5" />
+          </div>
+          <p className="text-2xl font-bold">{metrics?.accuracy?.toFixed(1)}%</p>
+          <p className="text-sm text-muted-foreground">Fraud detection rate</p>
+        </Card>
+
+        <Card className="glass-card p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold text-foreground">False Positives</h3>
+            <AlertTriangle className="text-warning w-5 h-5" />
+          </div>
+          <p className="text-2xl font-bold">{metrics?.falsePositiveRate?.toFixed(1)}%</p>
+          <p className="text-sm text-muted-foreground">Error rate</p>
+        </Card>
+
+        <Card className="glass-card p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold text-foreground">Processing Time</h3>
+            <Clock className="text-secondary w-5 h-5" />
+          </div>
+          <p className="text-2xl font-bold">{metrics?.avgProcessingTime ?? 0}ms</p>
+          <p className="text-sm text-muted-foreground">Average response time</p>
+        </Card>
+
+        <Card className="glass-card p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold text-foreground">Concurrent Calls</h3>
+            <Network className="text-primary w-5 h-5" />
+          </div>
+          <p className="text-2xl font-bold">{(metrics?.concurrentCalls ?? 0).toLocaleString()}</p>
+          <p className="text-sm text-muted-foreground">Active API requests</p>
         </Card>
       </div>
 
