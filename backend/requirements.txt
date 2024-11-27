@@ -1,14 +1,11 @@
 # Core Web Framework
 fastapi==0.109.2
 uvicorn==0.27.1
+python-multipart==0.0.9
+pyjwt==2.8.0
 
 # Data Validation
 pydantic==2.6.1
-python-multipart==0.0.9
-
-# Authentication
-python-jose==3.3.0
-bcrypt==4.0.1
 
 # Database Drivers
 redis==5.0.1
@@ -24,9 +21,8 @@ prometheus-fastapi-instrumentator==6.1.0
 
 # Cryptography and Security
 cryptography==41.0.7
+python-jose==3.3.0
+bcrypt==4.0.1
 
 # Utility Libraries
 python-dateutil==2.8.2
-
-# Note: Removed heavy ML libraries to save space
-# They can be installed separately if needed
