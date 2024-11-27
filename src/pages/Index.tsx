@@ -1,10 +1,4 @@
-/**
- * Main application component that handles routing and global providers.
- * Wraps the entire application with QueryClientProvider for data fetching
- * and Router for navigation.
- */
 import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { Activity, Shield, Users, Clock, Network } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -14,11 +8,11 @@ import { useEffect } from "react";
 import { HealthStatus } from "@/components/monitoring/HealthStatus";
 import { ErrorLog } from "@/components/monitoring/ErrorLog";
 import { PerformanceMetrics } from "@/components/monitoring/PerformanceMetrics";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
 import { DevTools } from "@/components/developer/DevTools";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { MetricCard } from "@/components/dashboard/MetricCard";
 
 const Index = () => {
   const { toast } = useToast();
@@ -79,23 +73,8 @@ const Index = () => {
   // Show loading state when both queries are loading
   if (metricsLoading || activitiesLoading) {
     return (
-      <div className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[...Array(4)].map((_, i) => (
-            <Card key={i} className="p-6">
-              <Skeleton className="h-4 w-24 mb-4" />
-              <Skeleton className="h-8 w-32" />
-            </Card>
-          ))}
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="p-6">
-            <Skeleton className="h-[200px]" />
-          </Card>
-          <Card className="p-6">
-            <Skeleton className="h-[200px]" />
-          </Card>
-        </div>
+      <div className="flex items-center justify-center h-[50vh]">
+        <p className="text-muted-foreground">Loading dashboard data...</p>
       </div>
     );
   }
@@ -135,26 +114,22 @@ const Index = () => {
               value={metrics?.riskScore}
               icon={Shield}
               showProgress
-              isLoading={metricsLoading}
             />
             <MetricCard
               title="Active Users"
               value={metrics?.activeUsers}
               icon={Users}
-              isLoading={metricsLoading}
             />
             <MetricCard
               title="Processing Time"
               value={metrics?.avgProcessingTime}
               suffix="ms"
               icon={Clock}
-              isLoading={metricsLoading}
             />
             <MetricCard
               title="Concurrent Calls"
               value={metrics?.concurrentCalls}
               icon={Network}
-              isLoading={metricsLoading}
             />
           </div>
 
@@ -177,42 +152,6 @@ const Index = () => {
         </TabsContent>
       </Tabs>
     </div>
-  );
-};
-
-interface MetricCardProps {
-  title: string;
-  value?: number | string;
-  icon: React.ElementType;
-  showProgress?: boolean;
-  isLoading?: boolean;
-  suffix?: string;
-}
-
-const MetricCard = ({ title, value, icon: Icon, showProgress, isLoading, suffix = "" }: MetricCardProps) => {
-  const displayValue = value !== undefined ? `${value}${suffix}` : "N/A";
-  
-  return (
-    <Card className="p-6" role="article" aria-label={title}>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-foreground">{title}</h3>
-        <Icon className="text-secondary w-5 h-5" aria-hidden="true" />
-      </div>
-      {isLoading ? (
-        <Skeleton className="h-8 w-24" />
-      ) : showProgress ? (
-        <div className="space-y-2">
-          <Progress 
-            value={typeof value === 'number' ? value : 0} 
-            className="h-2" 
-            aria-label={`${title} Progress`} 
-          />
-          <p className="text-2xl font-bold" aria-live="polite">{displayValue}</p>
-        </div>
-      ) : (
-        <p className="text-2xl font-bold" aria-live="polite">{displayValue}</p>
-      )}
-    </Card>
   );
 };
 
