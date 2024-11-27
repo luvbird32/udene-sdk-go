@@ -7,6 +7,10 @@ pyjwt==2.8.0
 # Data Validation
 pydantic==2.6.1
 
+# Database and Migrations
+SQLAlchemy==2.0.27
+alembic==1.13.1
+
 # Database Drivers
 redis==5.0.1
 pymongo==4.6.1
