@@ -1,9 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Settings, Shield, Users, Home, LogIn, UserPlus } from "lucide-react";
+import { Settings, Shield, Users, Home, LogIn, UserPlus, LogOut } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function Navbar() {
   const location = useLocation();
+  const { isAuthenticated, user, logout } = useAuth();
   
   const isActive = (path: string) => location.pathname === path;
   
@@ -51,24 +53,42 @@ export function Navbar() {
             </Button>
           </Link>
           <div className="border-l pl-4 ml-4 flex items-center gap-4">
-            <Link to="/signin">
-              <Button 
-                variant={isActive("/signin") ? "default" : "ghost"}
-                className="flex items-center gap-2"
-              >
-                <LogIn className="h-4 w-4" />
-                <span>Sign In</span>
-              </Button>
-            </Link>
-            <Link to="/register">
-              <Button 
-                variant={isActive("/register") ? "default" : "ghost"}
-                className="flex items-center gap-2"
-              >
-                <UserPlus className="h-4 w-4" />
-                <span>Register</span>
-              </Button>
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <span className="text-sm text-muted-foreground">
+                  {user?.email}
+                </span>
+                <Button 
+                  variant="ghost"
+                  className="flex items-center gap-2"
+                  onClick={logout}
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>Logout</span>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link to="/signin">
+                  <Button 
+                    variant={isActive("/signin") ? "default" : "ghost"}
+                    className="flex items-center gap-2"
+                  >
+                    <LogIn className="h-4 w-4" />
+                    <span>Sign In</span>
+                  </Button>
+                </Link>
+                <Link to="/register">
+                  <Button 
+                    variant={isActive("/register") ? "default" : "ghost"}
+                    className="flex items-center gap-2"
+                  >
+                    <UserPlus className="h-4 w-4" />
+                    <span>Register</span>
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
