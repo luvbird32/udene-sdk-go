@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
 import { useAuth } from "@/contexts/AuthContext"
+import { api } from "@/services/api"
 import {
   Card,
   CardContent,
@@ -54,24 +55,16 @@ export default function Register() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: values.name,
-          email: values.email,
-          password: values.password,
-        }),
+      const response = await api.post('/auth/register', {
+        name: values.name,
+        email: values.email,
+        password: values.password,
       });
 
-      if (!response.ok) {
+      if (!response.data) {
         throw new Error('Registration failed');
       }
 
-      const data = await response.json();
-      
       // Automatically log in the user after successful registration
       await login(values.email, values.password);
       
@@ -80,11 +73,11 @@ export default function Register() {
         description: "Your account has been created and you're now logged in.",
       })
       navigate("/")
-    } catch (error) {
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Something went wrong. Please try again.",
+        description: error.response?.data?.message || "Something went wrong. Please try again.",
       })
     } finally {
       setIsLoading(false)

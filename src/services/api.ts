@@ -1,32 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://api.udene.com/v1';
-
-// Type definitions
-export interface FraudMetrics {
-  riskScore: number;
-  activeUsers: number;
-  alertCount: number;
-  apiCalls: number;
-  accuracy: number;
-  falsePositiveRate: number;
-  avgProcessingTime: number;
-  concurrentCalls: number;
-}
-
-export interface Activity {
-  id: string;
-  type: string;
-  description: string;
-  timestamp: string;
-}
-
-export interface ApiKey {
-  id: string;
-  key: string;
-  createdAt: string;
-  name: string;
-}
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -34,9 +8,8 @@ export const api = axios.create({
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
   },
-  withCredentials: true, // Enable sending cookies in cross-origin requests
+  withCredentials: true,
   timeout: 10000,
-  validateStatus: (status) => status >= 200 && status < 500,
 });
 
 // Add request interceptor for auth
