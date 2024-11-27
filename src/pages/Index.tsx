@@ -5,6 +5,7 @@ import { Activity, AlertTriangle, Shield, Users, Clock, Target, Zap, Network } f
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getFraudMetrics, getRecentActivity } from "@/services/api";
+import { wsClient } from "@/utils/websocket";
 
 const Index = () => {
   const { toast } = useToast();
@@ -22,14 +23,26 @@ const Index = () => {
   });
 
   useEffect(() => {
-    if (metrics?.alertCount && metrics.alertCount > 0) {
-      toast({
-        title: "Potential Fraud Detected",
-        description: "Unusual activity detected in the system",
-        variant: "destructive",
-      });
-    }
-  }, [metrics?.alertCount, toast]);
+    // Connect to WebSocket and handle real-time updates
+    wsClient.connect();
+    
+    const handleWebSocketMessage = (data: any) => {
+      if (data.type === 'fraud_alert') {
+        toast({
+          title: "Real-time Fraud Alert",
+          description: "New fraudulent activity detected",
+          variant: "destructive",
+        });
+      }
+    };
+
+    wsClient.subscribe(handleWebSocketMessage);
+
+    return () => {
+      wsClient.unsubscribe(handleWebSocketMessage);
+      wsClient.disconnect();
+    };
+  }, [toast]);
 
   if (metricsLoading || activitiesLoading) {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;

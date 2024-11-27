@@ -1,11 +1,14 @@
-from fastapi import FastAPI, HTTPException, Depends, Security
+from fastapi import FastAPI, HTTPException, Depends, Security, WebSocket, WebSocketDisconnect
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 from ml.ensemble_detector import EnsembleDetector
 from config.messaging import cache_metrics, get_cached_metrics, cache_activity, get_cached_activity, publish_event
 from privacy.anonymizer import anonymize_data
-from typing import Dict, Any
+from typing import Dict, Any, List
+from datetime import datetime
+import json
+import asyncio
 
 app = FastAPI(title="Fraud Detection API")
 detector = EnsembleDetector()
@@ -25,11 +28,37 @@ app.add_middleware(
 security = HTTPBearer()
 API_KEYS = {"your_api_key_here"}
 
-def verify_api_key(credentials: HTTPAuthorizationCredentials = Security(security)):
-    if credentials.credentials not in API_KEYS:
-        raise HTTPException(status_code=401, detail="Invalid API key")
-    return credentials.credentials
+# WebSocket connections store
+active_connections: List[WebSocket] = []
 
+async def notify_clients(message: dict):
+    """Send updates to all connected WebSocket clients"""
+    for connection in active_connections:
+        try:
+            await connection.send_json(message)
+        except WebSocketDisconnect:
+            active_connections.remove(connection)
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    active_connections.append(websocket)
+    try:
+        while True:
+            try:
+                # Keep connection alive and handle incoming messages
+                data = await websocket.receive_text()
+                # Process any incoming WebSocket messages here
+                await websocket.send_json({"status": "received", "data": data})
+            except WebSocketDisconnect:
+                active_connections.remove(websocket)
+                break
+    except Exception as e:
+        if websocket in active_connections:
+            active_connections.remove(websocket)
+        await websocket.close()
+
+# Update the predict endpoint to notify WebSocket clients
 @app.post("/api/v1/predict")
 async def predict_fraud(
     features: Dict[str, Any],
@@ -39,9 +68,15 @@ async def predict_fraud(
     prediction = detector.predict_fraud_probability(features)
     
     if prediction['is_fraudulent']:
-        await publish_event("fraud_alerts", {
+        event_data = {
             **features,
             **prediction
+        }
+        await publish_event("fraud_alerts", event_data)
+        # Notify WebSocket clients
+        await notify_clients({
+            "type": "fraud_alert",
+            "data": event_data
         })
     
     return prediction
