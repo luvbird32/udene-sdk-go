@@ -26,7 +26,39 @@ paths:
               schema:
                 $ref: '#/components/schemas/FraudPredictionResponse'
 
-  # ... keep existing code (other endpoints)
+  /privacy/data-request:
+    post:
+      summary: Submit data access or deletion request (GDPR/CCPA)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrivacyRequest'
+      responses:
+        '200':
+          description: Request processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrivacyResponse'
+
+  /privacy/retention-policy:
+    put:
+      summary: Update data retention policy
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetentionPolicy'
+      responses:
+        '200':
+          description: Policy updated successfully
 
 components:
   schemas:
@@ -82,6 +114,55 @@ components:
           format: float
           description: Confidence in the prediction (0-1)
 
-    # ... keep existing code (other schemas)
+    PrivacyRequest:
+      type: object
+      properties:
+        requestType:
+          type: string
+          enum: [access, deletion]
+        userId:
+          type: string
+        email:
+          type: string
+        region:
+          type: string
+          enum: [EU, California, Other]
+      required:
+        - requestType
+        - userId
+        - email
+        - region
+
+    PrivacyResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        estimatedCompletionTime:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [pending, processing, completed]
+
+    RetentionPolicy:
+      type: object
+      properties:
+        dataType:
+          type: string
+          enum: [transaction, userProfile, fraudAlert]
+        retentionPeriod:
+          type: integer
+          description: Retention period in days
+        anonymizationEnabled:
+          type: boolean
+        region:
+          type: string
+          enum: [EU, California, Global]
+      required:
+        - dataType
+        - retentionPeriod
+        - anonymizationEnabled
+        - region
 
   # ... keep existing code (security schemes)

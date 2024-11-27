@@ -12,6 +12,10 @@ from config.messaging import (
     publish_event, init_kafka, close_kafka
 )
 from ml.fraud_detector import detector
+from privacy.anonymizer import anonymize_data
+from privacy.retention import RetentionManager
+from privacy.gdpr import GDPRHandler
+from privacy.ccpa import CCPAHandler
 
 app = FastAPI(title="Fraud Detection API")
 
@@ -27,7 +31,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# TLS 1.3 configuration
+ssl_context = {
+    "ssl_version": "TLSv1_3",
+    "ciphers": "TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256"
+}
+
 security = HTTPBearer()
+retention_manager = RetentionManager()
+gdpr_handler = GDPRHandler()
+ccpa_handler = CCPAHandler()
 
 # Mock database (replace with real database in production)
 API_KEYS = {"your_api_key_here"}
@@ -154,6 +167,48 @@ async def track_interaction(request: TrackRequest, _: str = Depends(verify_api_k
 async def validate_key(_: str = Depends(verify_api_key)):
     return {"status": "valid"}
 
+class PrivacyRequest(BaseModel):
+    requestType: str
+    userId: str
+    email: str
+    region: str
+
+class RetentionPolicy(BaseModel):
+    dataType: str
+    retentionPeriod: int
+    anonymizationEnabled: bool
+    region: str
+
+@app.post("/api/v1/privacy/data-request")
+async def handle_privacy_request(
+    request: PrivacyRequest,
+    credentials: HTTPAuthorizationCredentials = Security(security)
+):
+    verify_api_key(credentials)
+    
+    if request.region == "EU":
+        return await gdpr_handler.process_request(request)
+    elif request.region == "California":
+        return await ccpa_handler.process_request(request)
+    else:
+        return await gdpr_handler.process_request(request)  # Default to GDPR-like handling
+
+@app.put("/api/v1/privacy/retention-policy")
+async def update_retention_policy(
+    policy: RetentionPolicy,
+    credentials: HTTPAuthorizationCredentials = Security(security)
+):
+    verify_api_key(credentials)
+    return await retention_manager.update_policy(policy)
+
+# Middleware for data anonymization
+@app.middleware("http")
+async def anonymize_response_data(request, call_next):
+    response = await call_next(request)
+    if "application/json" in response.headers.get("content-type", ""):
+        response.body = anonymize_data(response.body)
+    return response
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000, ssl_context=ssl_context)
