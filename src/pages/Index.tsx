@@ -9,7 +9,6 @@ import { useEffect } from "react";
 import { HealthStatus } from "@/components/monitoring/HealthStatus";
 import { ErrorLog } from "@/components/monitoring/ErrorLog";
 import { PerformanceMetrics } from "@/components/monitoring/PerformanceMetrics";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
 import { DevTools } from "@/components/developer/DevTools";
@@ -100,32 +99,36 @@ const Index = () => {
 
         <TabsContent value="dashboard" className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" role="region" aria-label="Key Metrics">
-            <MetricCard
-              title="Risk Score"
-              value={metrics?.riskScore}
-              icon={Shield}
-              showProgress
-              isLoading={metricsLoading}
-            />
-            <MetricCard
-              title="Active Users"
-              value={metrics?.activeUsers}
-              icon={Users}
-              isLoading={metricsLoading}
-            />
-            <MetricCard
-              title="Processing Time"
-              value={metrics?.avgProcessingTime}
-              suffix="ms"
-              icon={Clock}
-              isLoading={metricsLoading}
-            />
-            <MetricCard
-              title="Concurrent Calls"
-              value={metrics?.concurrentCalls}
-              icon={Network}
-              isLoading={metricsLoading}
-            />
+            {metricsLoading ? (
+              <div className="col-span-4 text-center py-8 text-muted-foreground">
+                Loading metrics...
+              </div>
+            ) : (
+              <>
+                <MetricCard
+                  title="Risk Score"
+                  value={metrics?.riskScore}
+                  icon={Shield}
+                  showProgress
+                />
+                <MetricCard
+                  title="Active Users"
+                  value={metrics?.activeUsers}
+                  icon={Users}
+                />
+                <MetricCard
+                  title="Processing Time"
+                  value={metrics?.avgProcessingTime}
+                  suffix="ms"
+                  icon={Clock}
+                />
+                <MetricCard
+                  title="Concurrent Calls"
+                  value={metrics?.concurrentCalls}
+                  icon={Network}
+                />
+              </>
+            )}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -155,11 +158,10 @@ interface MetricCardProps {
   value?: number | string;
   icon: React.ElementType;
   showProgress?: boolean;
-  isLoading?: boolean;
   suffix?: string;
 }
 
-const MetricCard = ({ title, value, icon: Icon, showProgress, isLoading, suffix = "" }: MetricCardProps) => {
+const MetricCard = ({ title, value, icon: Icon, showProgress, suffix = "" }: MetricCardProps) => {
   const displayValue = value !== undefined ? `${value}${suffix}` : "N/A";
   
   return (
@@ -168,9 +170,7 @@ const MetricCard = ({ title, value, icon: Icon, showProgress, isLoading, suffix 
         <h3 className="font-semibold text-foreground">{title}</h3>
         <Icon className="text-secondary w-5 h-5" aria-hidden="true" />
       </div>
-      {isLoading ? (
-        <Skeleton className="h-8 w-24" />
-      ) : showProgress ? (
+      {showProgress ? (
         <div className="space-y-2">
           <Progress 
             value={typeof value === 'number' ? value : 0} 

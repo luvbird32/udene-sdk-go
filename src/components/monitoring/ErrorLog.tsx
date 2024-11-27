@@ -2,7 +2,6 @@ import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
-import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle } from "lucide-react";
 
 export const ErrorLog = () => {
@@ -31,13 +30,9 @@ export const ErrorLog = () => {
     return (
       <Card className="p-4">
         <h3 className="font-semibold mb-4">Error Log</h3>
-        <ScrollArea className="h-[200px]">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="mb-2">
-              <Skeleton className="h-12 w-full" />
-            </div>
-          ))}
-        </ScrollArea>
+        <div className="flex items-center justify-center h-[200px] text-muted-foreground">
+          Loading error logs...
+        </div>
       </Card>
     );
   }
