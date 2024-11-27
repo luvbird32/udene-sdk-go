@@ -5,6 +5,7 @@ from typing import List, Dict, Any
 import random
 from datetime import datetime
 from pydantic import BaseModel
+from prometheus_fastapi_instrumentator import Instrumentator
 from config.messaging import (
     cache_metrics, get_cached_metrics,
     cache_activity, get_cached_activity,
@@ -13,6 +14,9 @@ from config.messaging import (
 from ml.fraud_detector import detector
 
 app = FastAPI(title="Fraud Detection API")
+
+# Initialize Prometheus metrics
+Instrumentator().instrument(app).expose(app)
 
 # CORS configuration
 app.add_middleware(
