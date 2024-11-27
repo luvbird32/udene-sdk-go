@@ -1,0 +1,93 @@
+openapi: 3.0.0
+info:
+  title: Fraud Detection API
+  version: '1.0'
+  description: API for real-time fraud detection and monitoring
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+paths:
+  /metrics:
+    get:
+      summary: Get fraud metrics
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FraudMetrics'
+  /activity:
+    get:
+      summary: Get recent activity
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Activity'
+  /track:
+    post:
+      summary: Track user interaction
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackRequest'
+      responses:
+        '200':
+          description: Successful response
+components:
+  schemas:
+    FraudMetrics:
+      type: object
+      properties:
+        riskScore:
+          type: number
+          format: float
+        activeUsers:
+          type: integer
+        alertCount:
+          type: integer
+        apiCalls:
+          type: integer
+    Activity:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [suspicious, normal]
+        description:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+    TrackRequest:
+      type: object
+      properties:
+        userId:
+          type: string
+        action:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+          additionalProperties: true
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
