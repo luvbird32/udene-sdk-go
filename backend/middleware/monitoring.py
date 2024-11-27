@@ -1,3 +1,7 @@
+"""
+Monitoring Middleware Module
+Implements request monitoring and metrics collection middleware.
+"""
 import time
 import logging
 from prometheus_client import Counter, Histogram
@@ -15,7 +19,16 @@ REQUEST_LATENCY = Histogram('http_request_duration_seconds', 'HTTP request laten
 ERROR_COUNT = Counter('error_count', 'Number of errors')
 
 async def monitor_requests(request, call_next):
-    """Middleware to monitor request metrics"""
+    """
+    Middleware to monitor request metrics
+    
+    Args:
+        request: The incoming request
+        call_next: The next middleware in the chain
+        
+    Returns:
+        The response from the next middleware
+    """
     REQUEST_COUNT.inc()
     start_time = time.time()
     

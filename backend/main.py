@@ -1,3 +1,7 @@
+"""
+FastAPI Main Application Module
+Configures and initializes the FastAPI application with middleware, CORS, and routes.
+"""
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
@@ -7,10 +11,10 @@ from .middleware.privacy import anonymize_response_data
 
 app = FastAPI(title="Fraud Detection API")
 
-# Initialize Prometheus metrics
+# Initialize Prometheus metrics for monitoring
 Instrumentator().instrument(app).expose(app)
 
-# CORS configuration
+# Configure CORS to allow specified origins and methods
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -19,11 +23,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Add middlewares
+# Add custom middleware for request monitoring and data anonymization
 app.middleware("http")(anonymize_response_data)
 app.middleware("http")(monitor_requests)
 
-# Include routers
+# Include route handlers for different API endpoints
 app.include_router(health.router)
 app.include_router(metrics.router)
 app.include_router(fraud.router)

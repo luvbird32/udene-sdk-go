@@ -1,8 +1,12 @@
+"""
+Database Configuration Module
+Defines configuration settings for database connections, indexes, and data archival.
+"""
 from typing import Dict, Any
 import os
 from datetime import datetime, timedelta
 
-# Database Configuration
+# Database connection configuration
 DATABASE_CONFIG = {
     "host": os.getenv("DB_HOST", "localhost"),
     "port": int(os.getenv("DB_PORT", 27017)),
@@ -11,7 +15,7 @@ DATABASE_CONFIG = {
     "archive_after_days": int(os.getenv("ARCHIVE_AFTER_DAYS", 90))
 }
 
-# Index Configuration
+# Index configuration for optimizing database queries
 INDEXES = {
     "transactions": [
         {"fields": [("timestamp", -1)], "name": "timestamp_idx"},
@@ -27,7 +31,7 @@ INDEXES = {
     ]
 }
 
-# Archival Configuration
+# Data archival rules for managing data retention
 ARCHIVAL_RULES = {
     "transactions": {
         "age_limit": timedelta(days=90),
