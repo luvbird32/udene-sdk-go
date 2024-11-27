@@ -7,6 +7,24 @@ export interface APIError {
   status_code: number;
 }
 
+export interface FraudMetrics {
+  riskScore: number;
+  activeUsers: number;
+  alertCount: number;
+  apiCalls: number;
+  accuracy: number;
+  falsePositiveRate: number;
+  avgProcessingTime: number;
+  concurrentCalls: number;
+}
+
+export interface Activity {
+  id: string;
+  type: string;
+  description: string;
+  timestamp: string;
+}
+
 export const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -53,5 +71,24 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const validateApiKey = async (apiKey: string): Promise<boolean> => {
+  try {
+    const response = await api.post('/validate-key', { apiKey });
+    return response.status === 200;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const getFraudMetrics = async (): Promise<FraudMetrics> => {
+  const response = await api.get('/metrics');
+  return response.data;
+};
+
+export const getRecentActivity = async (): Promise<Activity[]> => {
+  const response = await api.get('/activity');
+  return response.data;
+};
 
 export * from './apiKeys';

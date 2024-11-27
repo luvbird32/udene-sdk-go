@@ -12,7 +12,7 @@ export const DevTools = () => {
 
   const handleValidateKey = async () => {
     try {
-      const isValid = await validateApiKey();
+      const isValid = await validateApiKey(apiKey);
       toast({
         title: isValid ? "API Key Valid" : "API Key Invalid",
         description: isValid 
