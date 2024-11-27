@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import { Activity, Shield, Users, Clock, Settings, Network } from "lucide-react";
+import { Activity, Shield, Users, Clock, Network } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getFraudMetrics, getRecentActivity } from "@/services/api";
 import { wsClient } from "@/utils/websocket";
@@ -13,8 +13,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
 import { DevTools } from "@/components/developer/DevTools";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const { toast } = useToast();
@@ -58,24 +56,11 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background p-6" role="main">
-      <header className="mb-8 flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground mb-2" tabIndex={0}>Fraud Detection System</h1>
-          <p className="text-muted-foreground" tabIndex={0}>Comprehensive monitoring, analysis, and documentation</p>
-        </div>
-        <div className="flex gap-4">
-          <Link to="/auth/reset-password">
-            <Button variant="outline">Reset Password</Button>
-          </Link>
-          <Link to="/settings">
-            <Button className="flex items-center gap-2">
-              <Settings className="h-5 w-5" />
-              <span>Settings</span>
-            </Button>
-          </Link>
-        </div>
-      </header>
+    <div className="space-y-6" role="main">
+      <div>
+        <h1 className="text-3xl font-bold text-foreground mb-2" tabIndex={0}>Fraud Detection System</h1>
+        <p className="text-muted-foreground" tabIndex={0}>Comprehensive monitoring, analysis, and documentation</p>
+      </div>
 
       <Tabs defaultValue="dashboard" className="space-y-4">
         <TabsList>
