@@ -21,7 +21,7 @@ export interface Activity {
   timestamp: string;
 }
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
@@ -29,13 +29,8 @@ const api = axios.create({
 });
 
 export const validateApiKey = async (apiKey: string) => {
-  try {
-    const response = await api.post('/api/v1/validate-key', { apiKey });
-    return response.data.valid;
-  } catch (error) {
-    console.error('API Key validation failed:', error);
-    return false;
-  }
+  const response = await api.post('/api/v1/validate-key', { apiKey });
+  return response.data.valid;
 };
 
 export const getApiKeys = async () => {
