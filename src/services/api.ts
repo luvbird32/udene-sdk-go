@@ -2,6 +2,32 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
+// Type definitions
+export interface FraudMetrics {
+  riskScore: number;
+  activeUsers: number;
+  alertCount: number;
+  apiCalls: number;
+  accuracy: number;
+  falsePositiveRate: number;
+  avgProcessingTime: number;
+  concurrentCalls: number;
+}
+
+export interface Activity {
+  id: string;
+  type: string;
+  description: string;
+  timestamp: string;
+}
+
+export interface ApiKey {
+  id: string;
+  key: string;
+  createdAt: string;
+  name: string;
+}
+
 export const api = axios.create({
   baseURL: API_URL,
   headers: {
