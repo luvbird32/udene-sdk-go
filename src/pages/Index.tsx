@@ -5,7 +5,7 @@ import { Activity, Shield, Users, Clock, Network } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getFraudMetrics, getRecentActivity } from "@/services/api";
 import { wsClient } from "@/utils/websocket";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { HealthStatus } from "@/components/monitoring/HealthStatus";
 import { ErrorLog } from "@/components/monitoring/ErrorLog";
 import { PerformanceMetrics } from "@/components/monitoring/PerformanceMetrics";
@@ -13,10 +13,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
 import { DevTools } from "@/components/developer/DevTools";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 const Index = () => {
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState("dashboard");
 
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
     queryKey: ["metrics"],
@@ -52,7 +52,15 @@ const Index = () => {
   }, [toast]);
 
   if (metricsError || activitiesError) {
-    throw new Error("Failed to load dashboard data");
+    return (
+      <Alert variant="destructive">
+        <AlertTitle>Error Loading Dashboard</AlertTitle>
+        <AlertDescription>
+          {metricsError ? "Failed to load metrics data" : "Failed to load activity data"}. 
+          Please try refreshing the page.
+        </AlertDescription>
+      </Alert>
+    );
   }
 
   return (
