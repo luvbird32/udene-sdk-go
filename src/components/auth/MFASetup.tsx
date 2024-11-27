@@ -1,3 +1,8 @@
+/**
+ * MFASetup Component
+ * Handles the setup of Multi-Factor Authentication methods.
+ * Supports three authentication methods: authenticator app, SMS, and email.
+ */
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
@@ -7,15 +12,20 @@ import { Label } from "@/components/ui/label"
 import { QrCode, Smartphone, Mail } from "lucide-react"
 
 export function MFASetup() {
+  // State for tracking selected authentication method and loading state
   const [method, setMethod] = useState<string>("app")
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
 
+  /**
+   * Handles the MFA setup process
+   * Makes API call to set up the selected authentication method
+   */
   const handleSetup = async () => {
     setIsLoading(true)
     try {
-      // Here we would normally call the API to set up MFA
-      await new Promise(resolve => setTimeout(resolve, 1000)) // Simulated API call
+      // Simulated API call - replace with actual implementation
+      await new Promise(resolve => setTimeout(resolve, 1000))
       toast({
         title: "MFA Enabled",
         description: `Multi-factor authentication has been set up using ${
@@ -43,11 +53,13 @@ export function MFASetup() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
+        {/* MFA method selection radio group */}
         <RadioGroup
           defaultValue="app"
           onValueChange={setMethod}
           className="space-y-4"
         >
+          {/* Authenticator app option */}
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="app" id="app" />
             <Label htmlFor="app" className="flex items-center gap-2">
@@ -55,6 +67,7 @@ export function MFASetup() {
               Authenticator App
             </Label>
           </div>
+          {/* SMS authentication option */}
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="sms" id="sms" />
             <Label htmlFor="sms" className="flex items-center gap-2">
@@ -62,6 +75,7 @@ export function MFASetup() {
               SMS Authentication
             </Label>
           </div>
+          {/* Email authentication option */}
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="email" id="email" />
             <Label htmlFor="email" className="flex items-center gap-2">
@@ -71,6 +85,7 @@ export function MFASetup() {
           </div>
         </RadioGroup>
 
+        {/* Setup confirmation button */}
         <Button 
           onClick={handleSetup} 
           className="w-full"
