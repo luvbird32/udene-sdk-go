@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Fraud Detection API
+  title: Udene - Fraud Detection API
   version: '1.0'
   description: API for real-time fraud detection and monitoring
 servers:

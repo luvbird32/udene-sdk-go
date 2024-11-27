@@ -9,7 +9,7 @@ from .routes import health, metrics, fraud, privacy
 from .middleware.monitoring import monitor_requests
 from .middleware.privacy import anonymize_response_data
 
-app = FastAPI(title="Fraud Detection API")
+app = FastAPI(title="Udene - Fraud Detection API")
 
 # Initialize Prometheus metrics for monitoring
 Instrumentator().instrument(app).expose(app)

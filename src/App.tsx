@@ -1,5 +1,5 @@
 /**
- * Main application component that handles routing and global providers.
+ * Udene - Main application component that handles routing and global providers.
  * Wraps the entire application with QueryClientProvider for data fetching
  * and Router for navigation.
  */
