@@ -1,7 +1,7 @@
 /**
  * API Service Module
- * Handles all API communication and provides type-safe interfaces for API responses.
- * Includes error handling, authentication, and response interceptors.
+ * Handles all API communication with comprehensive error handling and type safety.
+ * Includes authentication, response interceptors, and standardized error handling.
  */
 import axios, { AxiosError } from "axios";
 
@@ -32,7 +32,10 @@ export interface Activity {
   timestamp: string;
 }
 
-// Initialize axios instance with default configuration
+/**
+ * Initialize axios instance with default configuration
+ * Includes base URL, headers, and timeout settings
+ */
 export const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -41,7 +44,10 @@ export const api = axios.create({
   timeout: 60000,
 });
 
-// Authentication request interceptor
+/**
+ * Authentication request interceptor
+ * Automatically adds authentication token to requests if available
+ */
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("fraud_api_key");
   if (token) {
@@ -50,7 +56,10 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Response and error handling interceptor
+/**
+ * Response and error handling interceptor
+ * Handles common error scenarios and logs API performance metrics
+ */
 api.interceptors.response.use(
   (response) => {
     // Log API processing time if available
