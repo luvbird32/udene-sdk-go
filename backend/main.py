@@ -5,13 +5,18 @@ from typing import List
 import random
 from datetime import datetime
 from pydantic import BaseModel
+from config.messaging import (
+    cache_metrics, get_cached_metrics,
+    cache_activity, get_cached_activity,
+    publish_event, init_kafka, close_kafka
+)
 
 app = FastAPI(title="Fraud Detection API")
 
 # CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with specific origins
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -52,10 +57,23 @@ def verify_api_key(credentials: HTTPAuthorizationCredentials = Security(security
         )
     return credentials.credentials
 
+@app.on_event("startup")
+async def startup_event():
+    await init_kafka()
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    await close_kafka()
+
 @app.get("/api/v1/metrics", response_model=FraudMetrics)
 async def get_metrics(_: str = Depends(verify_api_key)):
-    # Mock data - replace with real data in production
-    return {
+    # Try to get metrics from cache first
+    cached_metrics = get_cached_metrics()
+    if cached_metrics:
+        return cached_metrics
+
+    # If not in cache, generate metrics (replace with real data in production)
+    metrics = {
         "riskScore": random.uniform(0, 100),
         "activeUsers": random.randint(500, 1500),
         "alertCount": random.randint(0, 10),
@@ -65,10 +83,19 @@ async def get_metrics(_: str = Depends(verify_api_key)):
         "avgProcessingTime": 35,
         "concurrentCalls": random.randint(10000, 15000)
     }
+    
+    # Cache the metrics
+    cache_metrics(metrics)
+    return metrics
 
 @app.get("/api/v1/activity", response_model=List[Activity])
 async def get_activity(_: str = Depends(verify_api_key)):
-    # Mock data - replace with real data in production
+    # Try to get activity from cache first
+    cached_activity = get_cached_activity()
+    if cached_activity:
+        return cached_activity
+
+    # If not in cache, generate activity (replace with real data in production)
     activities = []
     for i in range(5):
         activities.append({
@@ -77,11 +104,15 @@ async def get_activity(_: str = Depends(verify_api_key)):
             "description": f"User activity detected {'(suspicious)' if random.random() > 0.5 else '(normal)'}",
             "timestamp": datetime.now().isoformat()
         })
+    
+    # Cache the activity
+    cache_activity(activities)
     return activities
 
 @app.post("/api/v1/track")
 async def track_interaction(request: TrackRequest, _: str = Depends(verify_api_key)):
-    # Mock processing - replace with real processing in production
+    # Publish the interaction event to Kafka
+    await publish_event("user_interactions", request.dict())
     return {"status": "success"}
 
 @app.get("/api/v1/validate")
