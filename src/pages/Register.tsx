@@ -6,6 +6,7 @@ import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
+import { useAuth } from "@/contexts/AuthContext"
 import {
   Card,
   CardContent,
@@ -38,6 +39,7 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
   const navigate = useNavigate()
+  const { login } = useAuth()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,13 +54,32 @@ export default function Register() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
     try {
-      // Here we would normally call the API
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: values.name,
+          email: values.email,
+          password: values.password,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Registration failed');
+      }
+
+      const data = await response.json();
+      
+      // Automatically log in the user after successful registration
+      await login(values.email, values.password);
+      
       toast({
         title: "Success",
-        description: "Your account has been created. Please verify your email.",
+        description: "Your account has been created and you're now logged in.",
       })
-      navigate("/auth/verify-email")
+      navigate("/")
     } catch (error) {
       toast({
         variant: "destructive",

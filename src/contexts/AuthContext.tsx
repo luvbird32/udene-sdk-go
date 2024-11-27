@@ -26,38 +26,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Check for existing session
     const storedUser = localStorage.getItem('user');
-    if (storedUser) {
+    const token = localStorage.getItem('auth_token');
+    
+    if (storedUser && token) {
       setUser(JSON.parse(storedUser));
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
     setLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
     try {
-      // In production, this would make a real API call
       const response = await api.post('/auth/login', {
         email,
         password,
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-        }
       });
 
-      const userData = response.data;
+      const { user: userData, token } = response.data;
+      
       setUser(userData);
       localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('auth_token', token);
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       
-      toast({
-        title: "Success",
-        description: "Successfully logged in",
-      });
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Invalid credentials",
-      });
+      console.error('Login error:', error);
       throw error;
     }
   };
@@ -66,6 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
     localStorage.removeItem('user');
     localStorage.removeItem('auth_token');
+    delete api.defaults.headers.common['Authorization'];
     
     toast({
       title: "Logged out",

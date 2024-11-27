@@ -6,6 +6,7 @@ import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
+import { useAuth } from "@/contexts/AuthContext"
 import {
   Card,
   CardContent,
@@ -33,6 +34,7 @@ export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
   const navigate = useNavigate()
+  const { login } = useAuth()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,8 +47,7 @@ export default function SignIn() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
     try {
-      // Here we would normally call the API
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await login(values.email, values.password);
       toast({
         title: "Success",
         description: "You have successfully signed in.",
