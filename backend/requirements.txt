@@ -18,15 +18,8 @@ cassandra-driver==3.28.0
 # Message Queue
 aiokafka==0.10.0
 
-# Machine Learning
-tensorflow==2.16.1
-torch==2.2.0
-scikit-learn==1.4.0
-numpy==1.26.0
-pandas==2.2.0
-xgboost==2.0.3
-
 # Monitoring and Instrumentation
+prometheus-client==0.20.0
 prometheus-fastapi-instrumentator==6.1.0
 
 # Cryptography and Security
@@ -34,3 +27,6 @@ cryptography==41.0.7
 
 # Utility Libraries
 python-dateutil==2.8.2
+
+# Note: Removed heavy ML libraries to save space
+# They can be installed separately if needed

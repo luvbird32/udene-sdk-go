@@ -12,9 +12,6 @@ from middleware.security import SecurityHeadersMiddleware
 
 app = FastAPI(title="Udene - Fraud Detection API")
 
-# Initialize Prometheus metrics for monitoring
-Instrumentator().instrument(app).expose(app)
-
 # Configure CORS to allow specified origins and methods
 app.add_middleware(
     CORSMiddleware,
@@ -28,6 +25,10 @@ app.add_middleware(
 app.add_middleware(SecurityHeadersMiddleware)
 app.middleware("http")(anonymize_response_data)
 app.middleware("http")(monitor_requests)
+
+# Initialize Prometheus metrics for monitoring
+# Configure Instrumentator before including routers
+Instrumentator().instrument(app)
 
 # Include route handlers for different API endpoints
 app.include_router(health.router)
