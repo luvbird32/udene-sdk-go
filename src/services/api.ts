@@ -28,9 +28,13 @@ export const api = axios.create({
   },
 });
 
-export const validateApiKey = async (apiKey: string) => {
-  const response = await api.post('/api/v1/validate-key', { apiKey });
-  return response.data.valid;
+export const validateApiKey = async (apiKey: string): Promise<boolean> => {
+  try {
+    const response = await api.post('/api/v1/validate-key', { apiKey });
+    return response.data.valid;
+  } catch (error) {
+    return false;
+  }
 };
 
 export const getApiKeys = async () => {
@@ -38,8 +42,8 @@ export const getApiKeys = async () => {
   return response.data;
 };
 
-export const createApiKey = async ({ name }: { name: string }) => {
-  const response = await api.post('/api/v1/api-keys', { name });
+export const createApiKey = async (data: { name: string }) => {
+  const response = await api.post('/api/v1/api-keys', data);
   return response.data;
 };
 

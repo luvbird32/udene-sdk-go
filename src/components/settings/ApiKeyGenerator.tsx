@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { Copy, Trash2 } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -19,9 +19,18 @@ export const ApiKeyGenerator = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: apiKeys = [] } = useQuery({
+  const { data: apiKeys = [], isLoading } = useQuery({
     queryKey: ['api-keys'],
-    queryFn: getApiKeys
+    queryFn: getApiKeys,
+    meta: {
+      onError: (error: Error) => {
+        toast({
+          title: "Error Loading API Keys",
+          description: error.message,
+          variant: "destructive",
+        });
+      },
+    },
   });
 
   const createKeyMutation = useMutation({
@@ -31,9 +40,16 @@ export const ApiKeyGenerator = () => {
       setNewKeyName("");
       toast({
         title: "API Key Generated",
-        description: "Your new API key has been generated. Make sure to copy it now - you won't be able to see the full key again!",
+        description: "Your new API key has been generated successfully.",
       });
-    }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error Generating API Key",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
   });
 
   const deleteKeyMutation = useMutation({
@@ -44,7 +60,14 @@ export const ApiKeyGenerator = () => {
         title: "API Key Deleted",
         description: "The API key has been deleted successfully.",
       });
-    }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error Deleting API Key",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
   });
 
   const generateApiKey = () => {
@@ -52,7 +75,7 @@ export const ApiKeyGenerator = () => {
       toast({
         title: "Error",
         description: "Please provide a name for your API key",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -70,6 +93,16 @@ export const ApiKeyGenerator = () => {
   const handleDeleteKey = (id: string) => {
     deleteKeyMutation.mutate(id);
   };
+
+  if (isLoading) {
+    return (
+      <Card className="p-6">
+        <div className="flex items-center justify-center h-32">
+          <p className="text-muted-foreground">Loading API keys...</p>
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card className="p-6">
@@ -97,7 +130,7 @@ export const ApiKeyGenerator = () => {
             <p className="text-sm text-muted-foreground">No API keys generated yet.</p>
           ) : (
             <div className="space-y-3">
-              {apiKeys.map((apiKey) => (
+              {apiKeys.map((apiKey: ApiKey) => (
                 <div key={apiKey.id} className="p-4 border rounded-lg space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="font-medium">{apiKey.name}</span>
