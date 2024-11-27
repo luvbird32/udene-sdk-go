@@ -3,6 +3,7 @@ name = "udene"
 version = "0.1.0"
 description = "Fraud Detection API"
 authors = ["Your Name <your.email@example.com>"]
+packages = [{include = "."}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
