@@ -4,7 +4,7 @@ info:
   version: '1.0'
   description: API for real-time fraud detection and monitoring
 servers:
-  - url: https://api.example.com/v1
+  - url: https://api.udene.com/v1
     description: Production server
 paths:
   /predict:
