@@ -33,7 +33,7 @@ export KAFKA_BOOTSTRAP_SERVERS=localhost:9092
 
 # API Configuration
 export ALLOWED_ORIGINS=http://localhost:5173
-export API_KEYS=your_api_key_here
+export UDENE_API_KEY=your_api_key_here
 ```
 
 6. Run the server:

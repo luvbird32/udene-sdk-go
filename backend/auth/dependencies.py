@@ -7,7 +7,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 # Initialize security scheme for Bearer token authentication
 security = HTTPBearer()
-API_KEYS = {"your_api_key_here"}
+API_KEYS = {"udene_api_key_here"}
 
 def verify_api_key(credentials: HTTPAuthorizationCredentials = Depends(security)) -> str:
     """
