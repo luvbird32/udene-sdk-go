@@ -7,6 +7,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Settings from "./pages/Settings";
 import Users from "./pages/Users";
+import SignIn from "./pages/SignIn";
+import Register from "./pages/Register";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { EmailVerification } from "./components/auth/EmailVerification";
 import { PasswordReset } from "./components/auth/PasswordReset";
@@ -29,6 +31,8 @@ function App() {
             {/* User management dashboard */}
             <Route path="/users" element={<Users />} />
             {/* Authentication routes */}
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/auth/verify-email" element={<EmailVerification />} />
             <Route path="/auth/reset-password" element={<PasswordReset />} />
             <Route path="/auth/mfa-setup" element={<MFASetup />} />
