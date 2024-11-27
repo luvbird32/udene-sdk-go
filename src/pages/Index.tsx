@@ -3,7 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { Activity, Shield, Users, Clock, Network } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { getFraudMetrics, getRecentActivity } from "@/services/api";
+import { getFraudMetrics, getRecentActivity, type FraudMetrics } from "@/services/api";
 import { wsClient } from "@/utils/websocket";
 import { useEffect } from "react";
 import { HealthStatus } from "@/components/monitoring/HealthStatus";
@@ -17,7 +17,7 @@ import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 const Index = () => {
   const { toast } = useToast();
 
-  const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
+  const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery<FraudMetrics>({
     queryKey: ["metrics"],
     queryFn: getFraudMetrics,
     refetchInterval: 3000,
