@@ -1,18 +1,26 @@
-from fastapi import APIRouter, Depends
-from typing import Dict, Any
+from flask import Blueprint, jsonify
 import random
 from datetime import datetime
+from functools import wraps
 from ..auth.dependencies import verify_api_key
 from ..models.metrics import FraudMetrics, Activity
 from ..services.cache import cache_metrics, get_cached_metrics, cache_activity, get_cached_activity
 
-router = APIRouter(prefix="/api/v1")
+bp = Blueprint('metrics', __name__, url_prefix='/api/v1')
 
-@router.get("/metrics", response_model=FraudMetrics)
-async def get_metrics(_: str = Depends(verify_api_key)):
+def require_api_key(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        api_key = verify_api_key()
+        return f(*args, **kwargs)
+    return decorated_function
+
+@bp.route("/metrics")
+@require_api_key
+def get_metrics():
     cached_metrics = get_cached_metrics()
     if cached_metrics:
-        return cached_metrics
+        return jsonify(cached_metrics)
 
     metrics = {
         "riskScore": random.uniform(0, 100),
@@ -26,13 +34,14 @@ async def get_metrics(_: str = Depends(verify_api_key)):
     }
     
     cache_metrics(metrics)
-    return metrics
+    return jsonify(metrics)
 
-@router.get("/activity")
-async def get_activity(_: str = Depends(verify_api_key)):
+@bp.route("/activity")
+@require_api_key
+def get_activity():
     cached_activity = get_cached_activity()
     if cached_activity:
-        return cached_activity
+        return jsonify(cached_activity)
 
     activities = []
     for i in range(5):
@@ -44,4 +53,4 @@ async def get_activity(_: str = Depends(verify_api_key)):
         })
     
     cache_activity(activities)
-    return activities
+    return jsonify(activities)

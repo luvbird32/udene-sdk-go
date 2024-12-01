@@ -1,11 +1,11 @@
-from fastapi import APIRouter
+from flask import Blueprint, jsonify
 import logging
 
-router = APIRouter(prefix="/api/v1")
+bp = Blueprint('health', __name__, url_prefix='/api/v1')
 logger = logging.getLogger(__name__)
 
-@router.get("/health")
-async def health_check():
+@bp.route("/health")
+def health_check():
     """Check system health status"""
     try:
         health_status = {
@@ -14,10 +14,10 @@ async def health_check():
             "database": True,
             "cache": True
         }
-        return health_status
+        return jsonify(health_status)
     except Exception as e:
         logger.error(f"Health check failed: {str(e)}")
-        return {
+        return jsonify({
             "status": "unhealthy",
             "error": str(e)
-        }
+        }), 500

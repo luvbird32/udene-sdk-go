@@ -1,70 +1,45 @@
 """
-FastAPI Main Application Module
-Configures and initializes the FastAPI application with middleware, CORS, and routes.
+Flask Main Application Module
+Configures and initializes the Flask application with middleware, CORS, and routes.
 """
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import Optional
-import jwt
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 from datetime import datetime, timedelta
+import jwt
 from routes import health, metrics, fraud, privacy
-from middleware.monitoring import monitor_requests
-from middleware.privacy import anonymize_response_data
-from middleware.security import SecurityHeadersMiddleware
 
-app = FastAPI(title="Udene - Fraud Detection API")
-
-# Configure CORS to allow frontend requests
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Vite's default dev server port
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Add custom middleware
-app.add_middleware(SecurityHeadersMiddleware)
-app.middleware("http")(anonymize_response_data)
-app.middleware("http")(monitor_requests)
+app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": ["http://localhost:5173"]}})
 
 # Secret key for JWT tokens
 SECRET_KEY = "your-secret-key-here"  # In production, use environment variable
 ALGORITHM = "HS256"
 
-class UserLogin(BaseModel):
-    email: str
-    password: str
-
-class UserResponse(BaseModel):
-    id: str
-    email: str
-    name: str
-
-@app.post("/auth/login")
-async def login(user_data: UserLogin):
+@app.route("/auth/login", methods=["POST"])
+def login():
+    data = request.get_json()
+    email = data.get("email")
+    password = data.get("password")
+    
     # For demo purposes - in production, verify against database
-    if user_data.email == "test@example.com" and user_data.password == "password123":
+    if email == "test@example.com" and password == "password123":
         # Create access token
         access_token = create_access_token(
-            data={"sub": "user123", "email": user_data.email}
+            data={"sub": "user123", "email": email}
         )
         
-        return {
+        return jsonify({
             "token": access_token,
             "user": {
                 "id": "user123",
-                "email": user_data.email,
+                "email": email,
                 "name": "Test User"
             }
-        }
-    raise HTTPException(
-        status_code=401,
-        detail="Invalid credentials"
-    )
+        })
+    
+    return jsonify({"error": "Invalid credentials"}), 401
 
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
@@ -74,12 +49,11 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-# Include route handlers
-app.include_router(health.router)
-app.include_router(metrics.router)
-app.include_router(fraud.router)
-app.include_router(privacy.router)
+# Register blueprints for routes
+app.register_blueprint(health.bp)
+app.register_blueprint(metrics.bp)
+app.register_blueprint(fraud.bp)
+app.register_blueprint(privacy.bp)
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    app.run(host="0.0.0.0", port=8000, debug=True)

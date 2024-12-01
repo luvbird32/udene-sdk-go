@@ -1,23 +1,22 @@
-from fastapi import APIRouter, Security, HTTPException
-from fastapi.security import HTTPAuthorizationCredentials
-from ..auth.dependencies import security, verify_api_key
+from flask import Blueprint, jsonify, request
+from ..auth.dependencies import verify_api_key
 from ..models.privacy import PrivacyRequest, RetentionPolicy
 from ..services.privacy import privacy_handler
 
-router = APIRouter(prefix="/api/v1/privacy")
+bp = Blueprint('privacy', __name__, url_prefix='/api/v1/privacy')
 
-@router.post("/data-request")
-async def handle_privacy_request(
-    request: PrivacyRequest,
-    credentials: HTTPAuthorizationCredentials = Security(security)
-):
-    verify_api_key(credentials)
-    return await privacy_handler.process_privacy_request(request.requestType, request.userId, request.region)
+@bp.route("/data-request", methods=["POST"])
+def handle_privacy_request():
+    verify_api_key()
+    data = request.get_json()
+    return jsonify(privacy_handler.process_privacy_request(
+        data["requestType"],
+        data["userId"],
+        data["region"]
+    ))
 
-@router.put("/retention-policy")
-async def update_retention_policy(
-    policy: RetentionPolicy,
-    credentials: HTTPAuthorizationCredentials = Security(security)
-):
-    verify_api_key(credentials)
-    return await privacy_handler.update_retention_policy(policy.dict())
+@bp.route("/retention-policy", methods=["PUT"])
+def update_retention_policy():
+    verify_api_key()
+    policy = request.get_json()
+    return jsonify(privacy_handler.update_retention_policy(policy))

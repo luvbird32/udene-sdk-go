@@ -1,30 +1,25 @@
-"""
-Authentication Dependencies Module
-Provides authentication-related dependencies for FastAPI routes.
-"""
-from fastapi import HTTPException, Depends
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from flask import request
+from functools import wraps
+from werkzeug.exceptions import Unauthorized
 
-# Initialize security scheme for Bearer token authentication
-security = HTTPBearer()
 API_KEYS = {"udene_api_key_here"}
 
-def verify_api_key(credentials: HTTPAuthorizationCredentials = Depends(security)) -> str:
+def verify_api_key():
     """
     Verify the API key from the Authorization header
     
-    Args:
-        credentials: The HTTP Authorization credentials containing the API key
-        
     Returns:
         str: The verified API key
         
     Raises:
-        HTTPException: If the API key is invalid
+        Unauthorized: If the API key is invalid
     """
-    if credentials.credentials not in API_KEYS:
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid API key"
-        )
-    return credentials.credentials
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or not auth_header.startswith('Bearer '):
+        raise Unauthorized("Missing or invalid authorization header")
+    
+    api_key = auth_header.split(' ')[1]
+    if api_key not in API_KEYS:
+        raise Unauthorized("Invalid API key")
+        
+    return api_key

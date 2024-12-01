@@ -1,6 +1,6 @@
 # Core Web Framework
-fastapi==0.109.2
-uvicorn==0.27.1
+Flask==3.0.2
+Flask-Cors==4.0.0
 python-multipart==0.0.9
 pyjwt==2.8.0
 
@@ -21,7 +21,6 @@ aiokafka==0.10.0
 
 # Monitoring and Instrumentation
 prometheus-client==0.20.0
-prometheus-fastapi-instrumentator==6.1.0
 
 # Cryptography and Security
 cryptography==41.0.7
