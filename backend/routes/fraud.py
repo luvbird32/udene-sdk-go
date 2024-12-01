@@ -1,14 +1,12 @@
-from flask import Blueprint, jsonify, request, websocket
-from typing import Dict, Any, List
+from flask import Blueprint, jsonify, request, current_app
+from typing import Dict, Any
 from ..auth.dependencies import verify_api_key
 from ..ml.ensemble_detector import EnsembleDetector
 from ..services.messaging import publish_event
+from flask_socketio import emit
 
 bp = Blueprint('fraud', __name__, url_prefix='/api/v1')
 detector = EnsembleDetector()
-
-# WebSocket connections store
-active_connections: List[websocket] = []
 
 @bp.route("/predict", methods=["POST"])
 def predict_fraud():
@@ -24,7 +22,8 @@ def predict_fraud():
             **prediction
         }
         publish_event("fraud_alerts", event_data)
-        # Note: WebSocket functionality needs to be implemented differently in Flask
+        # Emit WebSocket event for real-time notification
+        emit('fraud_alert', event_data, broadcast=True, namespace='/')
     
     return jsonify(prediction)
 
