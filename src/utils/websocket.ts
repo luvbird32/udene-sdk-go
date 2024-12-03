@@ -10,7 +10,13 @@ class WebSocketClient {
   constructor(private url: string) {}
 
   connect() {
-    this.ws = new WebSocket(this.url);
+    // Determine if we should use secure WebSocket based on the current protocol
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const host = window.location.hostname;
+    const port = import.meta.env.PROD ? '' : ':8000';
+    const wsUrl = `${protocol}//${host}${port}/ws`;
+
+    this.ws = new WebSocket(wsUrl);
 
     this.ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
