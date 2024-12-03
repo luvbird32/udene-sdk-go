@@ -1,7 +1,3 @@
-/**
- * Custom hook for tracking user interactions
- * Sets up event listeners for various user interactions and manages cleanup
- */
 import { useEffect, useRef } from 'react';
 import { interactionTracker } from '../utils/interactionTracker';
 
@@ -9,11 +5,9 @@ export const useInteractionTracking = () => {
   const isTracking = useRef(false);
 
   useEffect(() => {
-    // Prevent duplicate event listeners
     if (isTracking.current) return;
     isTracking.current = true;
 
-    // Event handler definitions
     const handleMouseMove = (e: MouseEvent) => interactionTracker.trackMouseMovement(e);
     const handleKeyPress = (e: KeyboardEvent) => interactionTracker.trackKeyPress(e);
     const handleScroll = (e: Event) => interactionTracker.trackScroll(e);
@@ -41,7 +35,7 @@ export const useInteractionTracking = () => {
       });
     });
 
-    // Cleanup function to remove event listeners
+    // Cleanup
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('keypress', handleKeyPress);

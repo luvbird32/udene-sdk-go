@@ -1,52 +1,34 @@
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import { Activity, Shield, Users, Clock, Network } from "lucide-react";
+import { Activity, Shield, Users, Clock, Settings, Network } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { getFraudMetrics, getRecentActivity, type FraudMetrics } from "@/services/api";
+import { getFraudMetrics, getRecentActivity } from "@/services/api";
 import { wsClient } from "@/utils/websocket";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { HealthStatus } from "@/components/monitoring/HealthStatus";
 import { ErrorLog } from "@/components/monitoring/ErrorLog";
 import { PerformanceMetrics } from "@/components/monitoring/PerformanceMetrics";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
 import { DevTools } from "@/components/developer/DevTools";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState("dashboard");
 
-  const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery<FraudMetrics>({
+  const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
     queryKey: ["metrics"],
     queryFn: getFraudMetrics,
     refetchInterval: 3000,
-    retry: 3,
-    meta: {
-      onError: (error: Error) => {
-        toast({
-          title: "Error Loading Metrics",
-          description: error.message || "Failed to load metrics data",
-          variant: "destructive",
-        });
-      },
-    },
   });
 
   const { data: activities, isLoading: activitiesLoading, error: activitiesError } = useQuery({
     queryKey: ["activities"],
     queryFn: getRecentActivity,
     refetchInterval: 3000,
-    retry: 3,
-    meta: {
-      onError: (error: Error) => {
-        toast({
-          title: "Error Loading Activities",
-          description: error.message || "Failed to load activity data",
-          variant: "destructive",
-        });
-      },
-    },
   });
 
   useEffect(() => {
@@ -71,24 +53,24 @@ const Index = () => {
   }, [toast]);
 
   if (metricsError || activitiesError) {
-    return (
-      <Alert variant="destructive">
-        <AlertTitle>Error Loading Dashboard</AlertTitle>
-        <AlertDescription>
-          {metricsError instanceof Error ? metricsError.message : "Failed to load metrics data"}
-          {activitiesError instanceof Error && <br />}
-          {activitiesError instanceof Error && activitiesError.message}
-        </AlertDescription>
-      </Alert>
-    );
+    throw new Error("Failed to load dashboard data");
   }
 
   return (
-    <div className="space-y-6" role="main">
-      <div>
-        <h1 className="text-3xl font-bold text-foreground mb-2" tabIndex={0}>Fraud Detection System</h1>
-        <p className="text-muted-foreground" tabIndex={0}>Comprehensive monitoring, analysis, and documentation</p>
-      </div>
+    <div className="min-h-screen bg-background p-6" role="main">
+      <header className="mb-8 flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground mb-2" tabIndex={0}>Fraud Detection System</h1>
+          <p className="text-muted-foreground" tabIndex={0}>Comprehensive monitoring, analysis, and documentation</p>
+        </div>
+        <Link 
+          to="/settings" 
+          className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent"
+        >
+          <Settings className="h-5 w-5" />
+          <span>Settings</span>
+        </Link>
+      </header>
 
       <Tabs defaultValue="dashboard" className="space-y-4">
         <TabsList>
@@ -99,36 +81,31 @@ const Index = () => {
 
         <TabsContent value="dashboard" className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" role="region" aria-label="Key Metrics">
-            {metricsLoading ? (
-              <div className="col-span-4 text-center py-8 text-muted-foreground">
-                Loading metrics...
-              </div>
-            ) : (
-              <>
-                <MetricCard
-                  title="Risk Score"
-                  value={metrics?.riskScore}
-                  icon={Shield}
-                  showProgress
-                />
-                <MetricCard
-                  title="Active Users"
-                  value={metrics?.activeUsers}
-                  icon={Users}
-                />
-                <MetricCard
-                  title="Processing Time"
-                  value={metrics?.avgProcessingTime}
-                  suffix="ms"
-                  icon={Clock}
-                />
-                <MetricCard
-                  title="Concurrent Calls"
-                  value={metrics?.concurrentCalls}
-                  icon={Network}
-                />
-              </>
-            )}
+            <MetricCard
+              title="Risk Score"
+              value={metrics?.riskScore}
+              icon={Shield}
+              showProgress
+              isLoading={metricsLoading}
+            />
+            <MetricCard
+              title="Active Users"
+              value={metrics?.activeUsers}
+              icon={Users}
+              isLoading={metricsLoading}
+            />
+            <MetricCard
+              title="Processing Time"
+              value={`${metrics?.avgProcessingTime}ms`}
+              icon={Clock}
+              isLoading={metricsLoading}
+            />
+            <MetricCard
+              title="Concurrent Calls"
+              value={metrics?.concurrentCalls}
+              icon={Network}
+              isLoading={metricsLoading}
+            />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -158,32 +135,26 @@ interface MetricCardProps {
   value?: number | string;
   icon: React.ElementType;
   showProgress?: boolean;
-  suffix?: string;
+  isLoading?: boolean;
 }
 
-const MetricCard = ({ title, value, icon: Icon, showProgress, suffix = "" }: MetricCardProps) => {
-  const displayValue = value !== undefined ? `${value}${suffix}` : "N/A";
-  
-  return (
-    <Card className="p-6" role="article" aria-label={title}>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-foreground">{title}</h3>
-        <Icon className="text-secondary w-5 h-5" aria-hidden="true" />
+const MetricCard = ({ title, value, icon: Icon, showProgress, isLoading }: MetricCardProps) => (
+  <Card className="p-6" role="article" aria-label={title}>
+    <div className="flex items-center justify-between mb-4">
+      <h3 className="font-semibold text-foreground">{title}</h3>
+      <Icon className="text-secondary w-5 h-5" aria-hidden="true" />
+    </div>
+    {isLoading ? (
+      <Skeleton className="h-8 w-24" />
+    ) : showProgress ? (
+      <div className="space-y-2">
+        <Progress value={Number(value)} className="h-2" aria-label={`${title} Progress`} />
+        <p className="text-2xl font-bold" aria-live="polite">{value}%</p>
       </div>
-      {showProgress ? (
-        <div className="space-y-2">
-          <Progress 
-            value={typeof value === 'number' ? value : 0} 
-            className="h-2" 
-            aria-label={`${title} Progress`} 
-          />
-          <p className="text-2xl font-bold" aria-live="polite">{displayValue}</p>
-        </div>
-      ) : (
-        <p className="text-2xl font-bold" aria-live="polite">{displayValue}</p>
-      )}
-    </Card>
-  );
-};
+    ) : (
+      <p className="text-2xl font-bold" aria-live="polite">{value}</p>
+    )}
+  </Card>
+);
 
 export default Index;

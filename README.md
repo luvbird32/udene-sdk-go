@@ -1,11 +1,11 @@
-# Udene - Fraud Detection API Documentation
+# Fraud Detection API Documentation
 
 ## Quick Start
 
 ```bash
-export UDENE_API_KEY=your_api_key_here
-curl -X GET "https://api.udene.com/v1/metrics" \
-  -H "Authorization: Bearer $UDENE_API_KEY"
+export FRAUD_API_KEY=your_api_key_here
+curl -X GET "https://api.example.com/v1/metrics" \
+  -H "Authorization: Bearer $FRAUD_API_KEY"
 ```
 
 ## Technology Stack
