@@ -31,9 +31,10 @@ const Index = () => {
     refetchInterval: 3000,
   });
 
+  // WebSocket connection temporarily disabled
   useEffect(() => {
+    // Commented out WebSocket functionality
     wsClient.connect();
-    
     const handleWebSocketMessage = (data: any) => {
       if (data.type === 'fraud_alert') {
         toast({
@@ -43,9 +44,7 @@ const Index = () => {
         });
       }
     };
-
     wsClient.subscribe(handleWebSocketMessage);
-
     return () => {
       wsClient.unsubscribe(handleWebSocketMessage);
       wsClient.disconnect();
