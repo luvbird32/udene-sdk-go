@@ -2,8 +2,11 @@ import { Shield, AlertTriangle } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 export const HealthStatus = () => {
+  const { toast } = useToast();
+
   const { data: health, isLoading } = useQuery({
     queryKey: ["health"],
     queryFn: async () => {
@@ -16,6 +19,11 @@ export const HealthStatus = () => {
 
         if (dbError) {
           console.error("Database check failed:", dbError);
+          toast({
+            title: "Database Connection Error",
+            description: "Unable to connect to the database. Please try again later.",
+            variant: "destructive",
+          });
         }
 
         // Check if we can access the API
@@ -33,6 +41,11 @@ export const HealthStatus = () => {
         return status;
       } catch (error) {
         console.error("Health check failed:", error);
+        toast({
+          title: "Health Check Failed",
+          description: "Unable to verify system health. Please try again later.",
+          variant: "destructive",
+        });
         return {
           status: "unhealthy",
           api: false,
@@ -42,6 +55,7 @@ export const HealthStatus = () => {
       }
     },
     refetchInterval: 30000, // Check every 30 seconds
+    retry: 2,
   });
 
   if (isLoading) {
