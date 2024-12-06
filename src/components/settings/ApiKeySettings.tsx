@@ -3,22 +3,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Tables } from "@/integrations/supabase/types";
-import { v4 as uuidv4 } from 'uuid';
 
 export const ApiKeySettings = () => {
   const { toast } = useToast();
-  const [apiKeys, setApiKeys] = useState<Tables<'api_keys'>[]>([]);
+  const [apiKeys, setApiKeys] = useState([]);
   const [newKeyName, setNewKeyName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    fetchApiKeys();
-  }, []);
-
+  // Simple function to fetch API keys
   const fetchApiKeys = async () => {
     try {
-      setIsLoading(true);
       const { data, error } = await supabase
         .from('api_keys')
         .select('*')
@@ -27,17 +21,20 @@ export const ApiKeySettings = () => {
       if (error) throw error;
       setApiKeys(data || []);
     } catch (error) {
-      console.error('Error fetching API keys:', error);
+      console.error('Error:', error);
       toast({
         title: "Error fetching API keys",
-        description: "Failed to load API keys. Please try again.",
+        description: "Please try again later",
         variant: "destructive"
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
+  useEffect(() => {
+    fetchApiKeys();
+  }, []);
+
+  // Simple function to generate a new API key
   const generateApiKey = async () => {
     if (!newKeyName.trim()) {
       toast({
@@ -50,10 +47,9 @@ export const ApiKeySettings = () => {
 
     try {
       setIsLoading(true);
-      // Generate a unique key with a prefix
-      const keyValue = `frd_${uuidv4().replace(/-/g, '')}`;
-
-      const { error: insertError } = await supabase
+      const keyValue = `key_${Math.random().toString(36).substring(2)}`;
+      
+      const { error } = await supabase
         .from('api_keys')
         .insert({
           key_value: keyValue,
@@ -61,16 +57,16 @@ export const ApiKeySettings = () => {
           status: 'active'
         });
 
-      if (insertError) throw insertError;
+      if (error) throw error;
 
       setNewKeyName("");
       await fetchApiKeys();
       toast({
         title: "Success",
-        description: "New API key generated successfully"
+        description: "New API key generated"
       });
     } catch (error) {
-      console.error('Error generating API key:', error);
+      console.error('Error:', error);
       toast({
         title: "Error",
         description: "Failed to generate API key",
@@ -81,23 +77,24 @@ export const ApiKeySettings = () => {
     }
   };
 
-  const revokeApiKey = async (keyId: string) => {
+  // Simple function to revoke an API key
+  const revokeApiKey = async (id) => {
     try {
       setIsLoading(true);
       const { error } = await supabase
         .from('api_keys')
         .update({ status: 'revoked' })
-        .eq('id', keyId);
+        .eq('id', id);
 
       if (error) throw error;
 
       await fetchApiKeys();
       toast({
         title: "Success",
-        description: "API key revoked successfully"
+        description: "API key revoked"
       });
     } catch (error) {
-      console.error('Error revoking API key:', error);
+      console.error('Error:', error);
       toast({
         title: "Error",
         description: "Failed to revoke API key",
@@ -127,47 +124,37 @@ export const ApiKeySettings = () => {
 
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Active API Keys</h3>
-        {isLoading ? (
-          <p>Loading...</p>
-        ) : (
-          <div className="space-y-4">
-            {apiKeys.map((key) => (
-              <div key={key.id} className="p-4 border rounded-lg space-y-2">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="font-medium">{key.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      Created: {new Date(key.created_at || '').toLocaleDateString()}
-                    </p>
-                  </div>
-                  {key.status === 'active' && (
-                    <Button
-                      variant="destructive"
-                      onClick={() => revokeApiKey(key.id)}
-                      disabled={isLoading}
-                    >
-                      Revoke
-                    </Button>
-                  )}
-                </div>
-                {key.status === 'active' && (
-                  <div className="mt-2">
-                    <Input
-                      value={key.key_value}
-                      readOnly
-                      className="font-mono text-sm"
-                    />
-                  </div>
-                )}
+        {apiKeys.map((key) => (
+          <div key={key.id} className="p-4 border rounded-lg">
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="font-medium">{key.name}</p>
                 <p className="text-sm text-muted-foreground">
-                  Status: <span className={key.status === 'active' ? 'text-green-600' : 'text-red-600'}>
-                    {key.status.charAt(0).toUpperCase() + key.status.slice(1)}
-                  </span>
+                  Created: {new Date(key.created_at).toLocaleDateString()}
                 </p>
               </div>
-            ))}
+              {key.status === 'active' && (
+                <Button
+                  variant="destructive"
+                  onClick={() => revokeApiKey(key.id)}
+                  disabled={isLoading}
+                >
+                  Revoke
+                </Button>
+              )}
+            </div>
+            {key.status === 'active' && (
+              <Input
+                value={key.key_value}
+                readOnly
+                className="mt-2 font-mono text-sm"
+              />
+            )}
+            <p className="text-sm text-muted-foreground mt-2">
+              Status: {key.status}
+            </p>
           </div>
-        )}
+        ))}
       </div>
     </div>
   );
