@@ -3,18 +3,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-
-interface ApiKey {
-  id: string;
-  name: string;
-  key_value: string;
-  status: string;
-  created_at: string;
-}
+import { Tables } from "@/integrations/supabase/types";
 
 export const ApiKeySettings = () => {
   const { toast } = useToast();
-  const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
+  const [apiKeys, setApiKeys] = useState<Tables<'api_keys'>[]>([]);
   const [newKeyName, setNewKeyName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -61,11 +54,11 @@ export const ApiKeySettings = () => {
 
       const { error: insertError } = await supabase
         .from('api_keys')
-        .insert([{
+        .insert({
           key_value: keyData,
           name: newKeyName,
           status: 'active'
-        }]);
+        });
 
       if (insertError) throw insertError;
 
@@ -143,7 +136,7 @@ export const ApiKeySettings = () => {
                   <div>
                     <p className="font-medium">{key.name}</p>
                     <p className="text-sm text-muted-foreground">
-                      Created: {new Date(key.created_at).toLocaleDateString()}
+                      Created: {new Date(key.created_at || '').toLocaleDateString()}
                     </p>
                   </div>
                   {key.status === 'active' && (
