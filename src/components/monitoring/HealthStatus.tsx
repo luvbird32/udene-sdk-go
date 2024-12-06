@@ -2,13 +2,15 @@ import { Shield, AlertTriangle } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 export const HealthStatus = () => {
+  const { toast } = useToast();
+
   const { data: health, isLoading } = useQuery({
     queryKey: ["health"],
     queryFn: async () => {
       try {
-        console.log("Checking database connection...");
         // Check Supabase connection
         const { data: dbCheck, error: dbError } = await supabase
           .from('metrics')
@@ -16,15 +18,20 @@ export const HealthStatus = () => {
 
         if (dbError) {
           console.error("Database check failed:", dbError);
+          toast({
+            title: "Database Connection Error",
+            description: "Unable to connect to the database. Please try again later.",
+            variant: "destructive",
+          });
         }
 
-        // Check if we can access the API
+        // Check API health
         const apiCheck = await fetch("/api/v1/health");
-        const apiStatus = apiCheck.ok;
+        const apiStatus = await apiCheck.json();
 
         const status = {
-          status: !dbError && apiStatus ? "healthy" : "unhealthy",
-          api: apiStatus,
+          status: apiStatus.status === "healthy" && !dbError ? "healthy" : "unhealthy",
+          api: apiStatus.status === "healthy",
           database: !dbError,
           cache: !dbError // Using same check for cache since we're using Supabase
         };
@@ -33,6 +40,11 @@ export const HealthStatus = () => {
         return status;
       } catch (error) {
         console.error("Health check failed:", error);
+        toast({
+          title: "Health Check Failed",
+          description: "Unable to verify system health. Please try again later.",
+          variant: "destructive",
+        });
         return {
           status: "unhealthy",
           api: false,
@@ -42,6 +54,7 @@ export const HealthStatus = () => {
       }
     },
     refetchInterval: 30000, // Check every 30 seconds
+    retry: 2,
   });
 
   if (isLoading) {

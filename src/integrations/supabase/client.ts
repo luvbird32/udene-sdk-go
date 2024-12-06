@@ -4,51 +4,35 @@ import type { Database } from './types';
 const supabaseUrl = "https://gocqiurpyzzlhohzcmii.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdvY3FpdXJweXp6bGhvaHpjbWlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDg2MzI2NjcsImV4cCI6MjAyNDIwODY2N30.LxuMkXMtX5QzWGDtAhHD3cwuGGu7NxHJ4QHSJE7_pHo";
 
-// Add detailed logging for debugging
-console.log("Supabase Configuration:");
-console.log("URL:", supabaseUrl);
-console.log("Key length:", supabaseKey?.length || 0);
-console.log("Key starts with:", supabaseKey?.substring(0, 10));
-
+// Initialize Supabase client with retries and error handling
 export const supabase = createClient<Database>(supabaseUrl, supabaseKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true
-  }
+  },
+  global: {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  },
 });
 
-// Test the connection and log detailed results
-supabase.auth.getSession().then(({ data, error }) => {
-  if (error) {
-    console.error("Supabase connection error:", error);
-    console.error("Error details:", {
-      message: error.message,
-      status: error.status,
-      name: error.name
-    });
-  } else {
-    console.log("Supabase connection successful");
-    console.log("Session data:", {
-      hasSession: !!data.session,
-      expiresAt: data.session?.expires_at
-    });
-  }
-});
+// Test connection and log status
+console.log("Initializing Supabase connection...");
 
-// Test a simple query to verify database access
+// Verify database connection
 supabase
   .from('metrics')
   .select('count(*)', { count: 'exact', head: true })
   .then(({ count, error }) => {
     if (error) {
-      console.error("Database access error:", error);
-      console.error("Error details:", {
+      console.error("Database connection error:", {
         message: error.message,
         code: error.code,
         details: error.details
       });
     } else {
-      console.log("Database access successful, row count:", count);
+      console.log("Database connection successful");
     }
   });
