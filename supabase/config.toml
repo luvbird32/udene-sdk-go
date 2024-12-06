@@ -1,3 +1,8 @@
 project_id = "jbbfljgvjpkzqmoylyzc"
+
 [functions.detect-fraud]
 verify_jwt = false
+
+[functions.python-ml]
+verify_jwt = false
+language = "python"
