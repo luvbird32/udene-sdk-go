@@ -98,15 +98,30 @@ export const getRecentActivity = async (): Promise<Activity[]> => {
   }
 };
 
-export const trackInteraction = async (data: {
+interface InteractionData {
   userId: string;
   action: string;
   timestamp: string;
   metadata: Record<string, unknown>;
-}): Promise<void> => {
+}
+
+export const trackInteraction = async (data: InteractionData): Promise<void> => {
   const { error } = await supabase
     .from('transactions')
-    .insert([data]);
+    .insert([{
+      amount: 0, // Default amount for tracking interactions
+      merchant_id: data.userId,
+      customer_id: data.userId,
+      timestamp: data.timestamp,
+      location: 'unknown',
+      device_id: (data.metadata.deviceId as string) || 'unknown',
+      ip_address: (data.metadata.ipAddress as string) || 'unknown',
+      transaction_type: data.action,
+      card_present: false,
+      recurring: false,
+      risk_score: null,
+      is_fraudulent: null
+    }]);
   
   if (error) throw error;
 };
