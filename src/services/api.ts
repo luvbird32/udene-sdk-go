@@ -21,18 +21,22 @@ export interface Activity {
 export const getFraudMetrics = async (): Promise<FraudMetrics> => {
   try {
     // Get recent transactions for risk calculation
-    const { data: recentTransactions } = await supabase
+    const { data: recentTransactions, error: transactionsError } = await supabase
       .from('transactions')
       .select('risk_score, is_fraudulent')
       .order('created_at', { ascending: false })
       .limit(1000);
 
+    if (transactionsError) throw transactionsError;
+
     // Get active users (transactions in last hour)
     const hourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-    const { count: activeUsers } = await supabase
+    const { count: activeUsers, error: activeUsersError } = await supabase
       .from('transactions')
       .select('*', { count: 'exact', head: true })
       .gte('timestamp', hourAgo);
+
+    if (activeUsersError) throw activeUsersError;
 
     // Calculate average risk score
     const avgRiskScore = recentTransactions?.reduce((acc, t) => acc + (t.risk_score || 0), 0) / 
@@ -50,9 +54,11 @@ export const getFraudMetrics = async (): Promise<FraudMetrics> => {
       : 95;
 
     // Get total number of alerts
-    const { count: alertCount } = await supabase
+    const { count: alertCount, error: alertError } = await supabase
       .from('fraud_alerts')
       .select('*', { count: 'exact', head: true });
+
+    if (alertError) throw alertError;
 
     return {
       riskScore: Math.round(avgRiskScore || 0),
@@ -61,7 +67,7 @@ export const getFraudMetrics = async (): Promise<FraudMetrics> => {
       apiCalls: recentTransactions?.length || 0,
       accuracy,
       falsePositiveRate: 100 - accuracy,
-      avgProcessingTime: 35, // Default value since we don't track this yet
+      avgProcessingTime: 35,
       concurrentCalls: activeUsers || 0
     };
   } catch (error) {
@@ -72,7 +78,7 @@ export const getFraudMetrics = async (): Promise<FraudMetrics> => {
 
 export const getRecentActivity = async (): Promise<Activity[]> => {
   try {
-    const { data: alerts, error } = await supabase
+    const { data, error } = await supabase
       .from('fraud_alerts')
       .select('*')
       .order('created_at', { ascending: false })
@@ -80,7 +86,7 @@ export const getRecentActivity = async (): Promise<Activity[]> => {
 
     if (error) throw error;
 
-    return (alerts || []).map(alert => ({
+    return (data || []).map(alert => ({
       id: alert.id,
       type: 'suspicious',
       description: alert.description,
@@ -98,7 +104,20 @@ export const trackInteraction = async (data: {
   timestamp: string;
   metadata: Record<string, unknown>;
 }): Promise<void> => {
-  await api.post("/track", data);
+  const { error } = await supabase
+    .from('transactions')
+    .insert([data]);
+  
+  if (error) throw error;
+};
+
+export const validateApiKey = async (): Promise<boolean> => {
+  try {
+    const { data, error } = await supabase.auth.getUser();
+    return !error && !!data.user;
+  } catch {
+    return false;
+  }
 };
 
 export const setApiKey = (apiKey: string): void => {
@@ -107,13 +126,4 @@ export const setApiKey = (apiKey: string): void => {
 
 export const clearApiKey = (): void => {
   localStorage.removeItem("fraud_api_key");
-};
-
-export const validateApiKey = async (): Promise<boolean> => {
-  try {
-    await api.get("/validate");
-    return true;
-  } catch {
-    return false;
-  }
 };
