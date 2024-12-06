@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Tables } from "@/integrations/supabase/types";
+import { v4 as uuidv4 } from 'uuid';
 
 export const ApiKeySettings = () => {
   const { toast } = useToast();
@@ -49,13 +50,13 @@ export const ApiKeySettings = () => {
 
     try {
       setIsLoading(true);
-      const { data: keyData, error: keyError } = await supabase.rpc('generate_api_key');
-      if (keyError) throw keyError;
+      // Generate a unique key with a prefix
+      const keyValue = `frd_${uuidv4().replace(/-/g, '')}`;
 
       const { error: insertError } = await supabase
         .from('api_keys')
         .insert({
-          key_value: keyData,
+          key_value: keyValue,
           name: newKeyName,
           status: 'active'
         });
