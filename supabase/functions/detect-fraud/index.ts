@@ -1,4 +1,3 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
@@ -18,8 +17,8 @@ interface Transaction {
   recurring: boolean
 }
 
-serve(async (req) => {
-  // Handle CORS preflight requests
+Deno.serve(async (req) => {
+  // Handle CORS
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
@@ -30,56 +29,60 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const { transaction } = await req.json() as { transaction: Transaction }
-    console.log('Processing transaction:', transaction)
+    const { transaction } = await req.json()
+    const data: Transaction = transaction
 
     // Simple fraud detection logic
     const riskFactors = []
     let riskScore = 0
 
-    // Check amount threshold
-    if (transaction.amount > 10000) {
+    // High amount transactions
+    if (data.amount > 10000) {
       riskFactors.push('High amount transaction')
       riskScore += 30
     }
 
-    // Check card present vs online
-    if (!transaction.card_present) {
-      riskScore += 20
+    // Card not present transactions
+    if (!data.card_present) {
       riskFactors.push('Card not present')
+      riskScore += 20
     }
 
-    // Location-based risk
-    if (transaction.location.toLowerCase().includes('high_risk_country')) {
+    // New device for customer
+    const { data: previousTransactions } = await supabase
+      .from('transactions')
+      .select('device_id')
+      .eq('customer_id', data.customer_id)
+      .eq('device_id', data.device_id)
+
+    if (!previousTransactions?.length) {
+      riskFactors.push('New device')
       riskScore += 25
-      riskFactors.push('High-risk location')
     }
-
-    const isFraudulent = riskScore >= 50
 
     // Store transaction
-    const { data: transactionData, error: transactionError } = await supabase
+    const { data: savedTransaction, error: transactionError } = await supabase
       .from('transactions')
-      .insert([{
-        ...transaction,
+      .insert({
+        ...data,
         risk_score: riskScore,
-        is_fraudulent: isFraudulent
-      }])
+        is_fraudulent: riskScore > 50
+      })
       .select()
       .single()
 
     if (transactionError) throw transactionError
 
-    // Create fraud alert if necessary
-    if (isFraudulent) {
+    // Create fraud alert if risk score is high
+    if (riskScore > 50) {
       const { error: alertError } = await supabase
         .from('fraud_alerts')
-        .insert([{
-          transaction_id: transactionData.id,
-          alert_type: 'high_risk_transaction',
-          severity: riskScore >= 75 ? 'high' : 'medium',
-          description: `Suspicious transaction detected: ${riskFactors.join(', ')}`
-        }])
+        .insert({
+          transaction_id: savedTransaction.id,
+          alert_type: 'High Risk Transaction',
+          severity: riskScore > 75 ? 'high' : 'medium',
+          description: `Risk factors: ${riskFactors.join(', ')}`
+        })
 
       if (alertError) throw alertError
     }
@@ -87,42 +90,33 @@ serve(async (req) => {
     // Update metrics
     const { error: metricsError } = await supabase
       .from('metrics')
-      .insert([
-        {
-          metric_name: 'total_transactions',
-          metric_value: 1
-        },
-        {
-          metric_name: 'average_risk_score',
-          metric_value: riskScore
-        },
-        {
-          metric_name: 'fraud_alerts',
-          metric_value: isFraudulent ? 1 : 0
-        }
-      ])
+      .insert({
+        metric_name: 'average_risk_score',
+        metric_value: riskScore
+      })
 
     if (metricsError) throw metricsError
 
     return new Response(
-      JSON.stringify({
+      JSON.stringify({ 
+        success: true, 
         risk_score: riskScore,
-        is_fraudulent: isFraudulent,
-        risk_factors: riskFactors
+        is_fraudulent: riskScore > 50 
       }),
-      {
+      { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200,
-      },
+        status: 200 
+      }
     )
+
   } catch (error) {
     console.error('Error:', error)
     return new Response(
       JSON.stringify({ error: error.message }),
-      {
+      { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500,
-      },
+        status: 400
+      }
     )
   }
 })
