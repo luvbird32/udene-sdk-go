@@ -45,8 +45,8 @@ export const getFraudMetrics = async (): Promise<FraudMetrics> => {
     // Calculate accuracy from transactions with known fraud status
     const transactionsWithStatus = recentTransactions?.filter(t => t.is_fraudulent !== null) || [];
     const correctPredictions = transactionsWithStatus.filter(t => 
-      (t.risk_score >= 50 && t.is_fraudulent) || 
-      (t.risk_score < 50 && !t.is_fraudulent)
+      (t.risk_score >= 70 && t.is_fraudulent) || 
+      (t.risk_score < 70 && !t.is_fraudulent)
     ).length;
     
     const accuracy = transactionsWithStatus.length > 0 
@@ -98,32 +98,18 @@ export const getRecentActivity = async (): Promise<Activity[]> => {
   }
 };
 
-interface InteractionData {
-  userId: string;
-  action: string;
-  timestamp: string;
-  metadata: Record<string, unknown>;
-}
+export const predictFraud = async (transactionData: any) => {
+  try {
+    const { data, error } = await supabase.functions.invoke('detect-fraud', {
+      body: { transaction: transactionData }
+    });
 
-export const trackInteraction = async (data: InteractionData): Promise<void> => {
-  const { error } = await supabase
-    .from('transactions')
-    .insert([{
-      amount: 0, // Default amount for tracking interactions
-      merchant_id: data.userId,
-      customer_id: data.userId,
-      timestamp: data.timestamp,
-      location: 'unknown',
-      device_id: (data.metadata.deviceId as string) || 'unknown',
-      ip_address: (data.metadata.ipAddress as string) || 'unknown',
-      transaction_type: data.action,
-      card_present: false,
-      recurring: false,
-      risk_score: null,
-      is_fraudulent: null
-    }]);
-  
-  if (error) throw error;
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Error predicting fraud:', error);
+    throw error;
+  }
 };
 
 export const validateApiKey = async (): Promise<boolean> => {
