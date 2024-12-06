@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User, Settings as SettingsIcon, Lock, Key } from "lucide-react";
+import { User, Settings as SettingsIcon, Lock, Key, ArrowLeft } from "lucide-react";
 import { ProfileSettings } from "@/components/settings/ProfileSettings";
 import { SecuritySettings } from "@/components/settings/SecuritySettings";
 import { ApiKeySettings } from "@/components/settings/ApiKeySettings";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const Settings = () => {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState({
     name: "John Doe",
     email: "john@example.com",
@@ -15,7 +18,17 @@ const Settings = () => {
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-6">User Settings</h1>
+      <div className="flex items-center gap-4 mb-6">
+        <Button 
+          variant="ghost" 
+          size="icon"
+          onClick={() => navigate(-1)}
+          className="hover:bg-accent"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Button>
+        <h1 className="text-3xl font-bold">User Settings</h1>
+      </div>
 
       <Tabs defaultValue="profile" className="space-y-6">
         <TabsList>
