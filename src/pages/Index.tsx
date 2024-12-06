@@ -35,24 +35,29 @@ const Index = () => {
     retry: 1,
   });
 
-  // WebSocket connection temporarily disabled
   useEffect(() => {
-    // Commented out WebSocket functionality
-    // wsClient.connect();
-    // const handleWebSocketMessage = (data: any) => {
-    //   if (data.type === 'fraud_alert') {
-    //     toast({
-    //       title: "Real-time Fraud Alert",
-    //       description: "New fraudulent activity detected",
-    //       variant: "destructive",
-    //     });
-    //   }
-    // };
-    // wsClient.subscribe(handleWebSocketMessage);
-    // return () => {
-    //   wsClient.unsubscribe(handleWebSocketMessage);
-    //   wsClient.disconnect();
-    // };
+    const fraudAlertsChannel = supabase
+      .channel('fraud_alerts')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'fraud_alerts'
+        },
+        (payload) => {
+          toast({
+            title: "New Fraud Alert",
+            description: payload.new.description,
+            variant: "destructive",
+          });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(fraudAlertsChannel);
+    };
   }, [toast]);
 
   const renderError = (error: Error) => (

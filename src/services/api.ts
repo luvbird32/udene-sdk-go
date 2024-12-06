@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios";
+import { supabase } from "@/integrations/supabase/client";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1";
 
@@ -78,89 +79,93 @@ api.interceptors.response.use(
   }
 );
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: "admin" | "user" | "analyst";
-  lastActive: string;
-  status: "active" | "inactive";
-}
-
-export const getUsers = async (): Promise<User[]> => {
-  try {
-    const response = await api.get("/users");
-    return response.data;
-  } catch (error) {
-    if (import.meta.env.DEV) {
-      // Return mock data in development
-      return [
-        {
-          id: "1",
-          name: "John Doe",
-          email: "john@example.com",
-          role: "admin",
-          lastActive: "2024-02-20T10:00:00",
-          status: "active",
-        },
-        {
-          id: "2",
-          name: "Jane Smith",
-          email: "jane@example.com",
-          role: "analyst",
-          lastActive: "2024-02-19T15:30:00",
-          status: "active",
-        },
-      ];
-    }
-    throw error;
-  }
-};
-
-export const updateUserRole = async (userId: string, role: User["role"]): Promise<void> => {
-  await api.put(`/users/${userId}/role`, { role });
-};
-
-export const updateUserStatus = async (userId: string, status: User["status"]): Promise<void> => {
-  await api.put(`/users/${userId}/status`, { status });
-};
-
 export const getFraudMetrics = async (): Promise<FraudMetrics> => {
   try {
-    const response = await api.get("/metrics");
-    return response.data;
+    const { data: metricsData, error: metricsError } = await supabase
+      .from('metrics')
+      .select('*')
+      .order('timestamp', { ascending: false })
+      .limit(100);
+
+    if (metricsError) throw metricsError;
+
+    // Calculate aggregated metrics
+    const recentMetrics = metricsData.reduce((acc, metric) => {
+      if (metric.metric_name === 'average_risk_score') {
+        acc.riskScore = Math.round(metric.metric_value);
+      } else if (metric.metric_name === 'fraud_alerts') {
+        acc.alertCount = (acc.alertCount || 0) + metric.metric_value;
+      }
+      return acc;
+    }, {} as Partial<FraudMetrics>);
+
+    // Get active users (transactions in last hour)
+    const hourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const { count: activeUsers } = await supabase
+      .from('transactions')
+      .select('*', { count: 'exact', head: true })
+      .gte('timestamp', hourAgo);
+
+    // Get API calls (transactions processed)
+    const { count: apiCalls } = await supabase
+      .from('transactions')
+      .select('*', { count: 'exact', head: true });
+
+    // Calculate accuracy from recent transactions
+    const { data: recentTransactions } = await supabase
+      .from('transactions')
+      .select('is_fraudulent, risk_score')
+      .order('timestamp', { ascending: false })
+      .limit(1000);
+
+    const accuracy = recentTransactions?.length 
+      ? recentTransactions.filter(t => 
+          (t.risk_score >= 50 && t.is_fraudulent) || 
+          (t.risk_score < 50 && !t.is_fraudulent)
+        ).length / recentTransactions.length * 100
+      : 95;
+
+    return {
+      riskScore: recentMetrics.riskScore || 0,
+      activeUsers: activeUsers || 0,
+      alertCount: recentMetrics.alertCount || 0,
+      apiCalls: apiCalls || 0,
+      accuracy,
+      falsePositiveRate: 100 - accuracy,
+      avgProcessingTime: 35, // This would need actual timing data
+      concurrentCalls: activeUsers || 0
+    };
   } catch (error) {
-    if (import.meta.env.DEV) {
-      // Return mock data in development if API is not available
-      return {
-        riskScore: Math.random() * 100,
-        activeUsers: Math.floor(Math.random() * 1000),
-        alertCount: Math.floor(Math.random() * 10),
-        apiCalls: Math.floor(Math.random() * 10000),
-        accuracy: 97.5,
-        falsePositiveRate: 1.5,
-        avgProcessingTime: 35,
-        concurrentCalls: 12500
-      };
-    }
+    console.error('Error fetching metrics:', error);
     throw error;
   }
 };
 
 export const getRecentActivity = async (): Promise<Activity[]> => {
   try {
-    const response = await api.get("/activity");
-    return response.data;
+    const { data: alerts, error } = await supabase
+      .from('fraud_alerts')
+      .select(`
+        *,
+        transactions (
+          amount,
+          merchant_id,
+          customer_id
+        )
+      `)
+      .order('created_at', { ascending: false })
+      .limit(5);
+
+    if (error) throw error;
+
+    return alerts.map(alert => ({
+      id: alert.id,
+      type: 'suspicious',
+      description: alert.description,
+      timestamp: alert.created_at
+    }));
   } catch (error) {
-    if (import.meta.env.DEV) {
-      // Return mock data in development if API is not available
-      return Array.from({ length: 5 }, (_, i) => ({
-        id: `mock-${i}`,
-        type: Math.random() > 0.5 ? "suspicious" : "normal",
-        description: `Mock activity ${i + 1}`,
-        timestamp: new Date(Date.now() - i * 1000 * 60).toISOString()
-      }));
-    }
+    console.error('Error fetching activity:', error);
     throw error;
   }
 };
