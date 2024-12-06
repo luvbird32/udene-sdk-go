@@ -14,6 +14,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
 import { DevTools } from "@/components/developer/DevTools";
 import { Link } from "react-router-dom";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 const Index = () => {
   const { toast } = useToast();
@@ -23,37 +25,45 @@ const Index = () => {
     queryKey: ["metrics"],
     queryFn: getFraudMetrics,
     refetchInterval: 3000,
+    retry: 1,
   });
 
   const { data: activities, isLoading: activitiesLoading, error: activitiesError } = useQuery({
     queryKey: ["activities"],
     queryFn: getRecentActivity,
     refetchInterval: 3000,
+    retry: 1,
   });
 
   // WebSocket connection temporarily disabled
   useEffect(() => {
     // Commented out WebSocket functionality
-    wsClient.connect();
-    const handleWebSocketMessage = (data: any) => {
-      if (data.type === 'fraud_alert') {
-        toast({
-          title: "Real-time Fraud Alert",
-          description: "New fraudulent activity detected",
-          variant: "destructive",
-        });
-      }
-    };
-    wsClient.subscribe(handleWebSocketMessage);
-    return () => {
-      wsClient.unsubscribe(handleWebSocketMessage);
-      wsClient.disconnect();
-    };
+    // wsClient.connect();
+    // const handleWebSocketMessage = (data: any) => {
+    //   if (data.type === 'fraud_alert') {
+    //     toast({
+    //       title: "Real-time Fraud Alert",
+    //       description: "New fraudulent activity detected",
+    //       variant: "destructive",
+    //     });
+    //   }
+    // };
+    // wsClient.subscribe(handleWebSocketMessage);
+    // return () => {
+    //   wsClient.unsubscribe(handleWebSocketMessage);
+    //   wsClient.disconnect();
+    // };
   }, [toast]);
 
-  if (metricsError || activitiesError) {
-    throw new Error("Failed to load dashboard data");
-  }
+  const renderError = (error: Error) => (
+    <Alert variant="destructive" className="mb-4">
+      <AlertCircle className="h-4 w-4" />
+      <AlertTitle>Error</AlertTitle>
+      <AlertDescription>
+        {error.message || "An error occurred while loading the dashboard"}
+      </AlertDescription>
+    </Alert>
+  );
 
   return (
     <div className="min-h-screen bg-background p-6" role="main">
@@ -79,6 +89,8 @@ const Index = () => {
         </TabsList>
 
         <TabsContent value="dashboard" className="space-y-8">
+          {(metricsError || activitiesError) && renderError(metricsError || activitiesError)}
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" role="region" aria-label="Key Metrics">
             <MetricCard
               title="Risk Score"
