@@ -5,11 +5,10 @@ const supabaseUrl = "https://gocqiurpyzzlhohzcmii.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdvY3FpdXJweXp6bGhvaHpjbWlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDg2MzI2NjcsImV4cCI6MjAyNDIwODY2N30.LxuMkXMtX5QzWGDtAhHD3cwuGGu7NxHJ4QHSJE7_pHo";
 
 // Add detailed logging for debugging
-console.log("Supabase Configuration:");
+console.log("Initializing Supabase client...");
 console.log("URL:", supabaseUrl);
-console.log("Key length:", supabaseKey?.length || 0);
-console.log("Key starts with:", supabaseKey?.substring(0, 10));
 
+// Create and export the Supabase client
 export const supabase = createClient<Database>(supabaseUrl, supabaseKey, {
   auth: {
     autoRefreshToken: true,
