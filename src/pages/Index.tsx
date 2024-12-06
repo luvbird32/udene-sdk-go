@@ -3,8 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { Activity, Shield, Users, Clock, Settings, Network } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { getFraudMetrics, getRecentActivity } from "@/services/api";
-import { wsClient } from "@/utils/websocket";
+import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { HealthStatus } from "@/components/monitoring/HealthStatus";
 import { ErrorLog } from "@/components/monitoring/ErrorLog";
@@ -16,27 +15,57 @@ import { DevTools } from "@/components/developer/DevTools";
 import { Link } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 
 const Index = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("dashboard");
 
+  // Fetch metrics from Supabase
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
     queryKey: ["metrics"],
-    queryFn: getFraudMetrics,
+    queryFn: async () => {
+      console.log("Fetching metrics from Supabase...");
+      const { data: metricsData, error: metricsError } = await supabase
+        .from('metrics')
+        .select('*')
+        .order('timestamp', { ascending: false })
+        .limit(1);
+
+      if (metricsError) {
+        console.error("Error fetching metrics:", metricsError);
+        throw metricsError;
+      }
+
+      // Get recent transactions for risk calculation
+      const { data: recentTransactions, error: transactionsError } = await supabase
+        .from('transactions')
+        .select('risk_score, is_fraudulent')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (transactionsError) {
+        console.error("Error fetching transactions:", transactionsError);
+        throw transactionsError;
+      }
+
+      // Calculate average risk score
+      const avgRiskScore = recentTransactions?.reduce((acc, t) => acc + (t.risk_score || 0), 0) / 
+        (recentTransactions?.length || 1);
+
+      return {
+        riskScore: Math.round(avgRiskScore || 0),
+        activeUsers: metricsData?.[0]?.metric_value || 0,
+        avgProcessingTime: 35, // Default value, can be updated from metrics table
+        concurrentCalls: metricsData?.[0]?.metric_value || 0
+      };
+    },
     refetchInterval: 3000,
     retry: 1,
   });
 
-  const { data: activities, isLoading: activitiesLoading, error: activitiesError } = useQuery({
-    queryKey: ["activities"],
-    queryFn: getRecentActivity,
-    refetchInterval: 3000,
-    retry: 1,
-  });
-
+  // Subscribe to real-time fraud alerts
   useEffect(() => {
+    console.log("Setting up real-time fraud alerts subscription...");
     const fraudAlertsChannel = supabase
       .channel('fraud_alerts')
       .on(
@@ -47,6 +76,7 @@ const Index = () => {
           table: 'fraud_alerts'
         },
         (payload) => {
+          console.log("New fraud alert received:", payload);
           toast({
             title: "New Fraud Alert",
             description: payload.new.description,
@@ -57,6 +87,7 @@ const Index = () => {
       .subscribe();
 
     return () => {
+      console.log("Cleaning up fraud alerts subscription...");
       supabase.removeChannel(fraudAlertsChannel);
     };
   }, [toast]);
@@ -95,7 +126,7 @@ const Index = () => {
         </TabsList>
 
         <TabsContent value="dashboard" className="space-y-8">
-          {(metricsError || activitiesError) && renderError(metricsError || activitiesError)}
+          {metricsError && renderError(metricsError)}
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" role="region" aria-label="Key Metrics">
             <MetricCard
