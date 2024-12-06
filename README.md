@@ -11,12 +11,11 @@ curl -X GET "https://api.example.com/v1/metrics" \
 ## Technology Stack
 
 ### Backend Infrastructure
-- **API Framework**: Python (FastAPI)
-- **Machine Learning**: TensorFlow, PyTorch
-- **Database**: Cassandra, MongoDB
-- **Caching**: Redis
-- **Message Queue**: Apache Kafka
-- **Monitoring**: Prometheus, Grafana
+- **Database**: Supabase (PostgreSQL)
+- **Machine Learning**: Edge Functions
+- **Caching**: Supabase
+- **Message Queue**: Supabase Realtime
+- **Monitoring**: Supabase Dashboard
 
 ## Authentication
 
