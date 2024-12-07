@@ -17,7 +17,7 @@ export const LoginForm = () => {
               border: '1px solid rgba(255, 255, 255, 0.2)',
               color: '#4ade80',
               fontWeight: '500',
-              ':hover': {
+              '&:hover': {
                 background: 'rgba(255, 255, 255, 0.2)',
               },
             },
@@ -27,7 +27,7 @@ export const LoginForm = () => {
               color: '#ffffff',
               padding: '0.75rem',
               borderRadius: '0.375rem',
-              ':focus': {
+              '&:focus': {
                 border: '1px solid rgba(255, 255, 255, 0.4)',
                 outline: 'none',
               },
@@ -42,7 +42,7 @@ export const LoginForm = () => {
             },
             anchor: {
               color: '#4ade80',
-              ':hover': {
+              '&:hover': {
                 color: '#22c55e',
               },
             },
@@ -52,11 +52,11 @@ export const LoginForm = () => {
             label: 'text-green-400',
             button: 'w-full glass-button mt-4',
             input: 'glass-input w-full',
+            message: 'text-sm text-red-400',
           },
         }}
         theme="dark"
         providers={[]}
-        onlyThirdPartyProviders={false}
         redirectTo={`${window.location.origin}/settings`}
         view="sign_up"
         showLinks={true}
