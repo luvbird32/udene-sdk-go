@@ -1,19 +1,64 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User, Lock, Key, ArrowLeft } from "lucide-react";
 import { ProfileSettings } from "@/components/settings/ProfileSettings";
 import { SecuritySettings } from "@/components/settings/SecuritySettings";
 import { ApiKeySettings } from "@/components/settings/ApiKeySettings";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Link, useNavigate } from "react-router-dom";
+import { LoginForm } from "@/components/auth/LoginForm";
+import { supabase } from "@/integrations/supabase/client";
 
 const Settings = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
   const [profile, setProfile] = useState({
-    name: "John Doe",
-    email: "john@example.com",
+    name: "",
+    email: "",
     avatar: "/placeholder.svg"
   });
+
+  useEffect(() => {
+    // Check current session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        setProfile({
+          name: session.user.user_metadata.full_name || "",
+          email: session.user.email || "",
+          avatar: session.user.user_metadata.avatar_url || "/placeholder.svg"
+        });
+      }
+    });
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-background p-6">
+        <div className="max-w-4xl mx-auto space-y-6">
+          <div className="flex items-center gap-4 mb-8">
+            <Link 
+              to="/" 
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ArrowLeft className="h-5 w-5" />
+              <span>Back to Dashboard</span>
+            </Link>
+          </div>
+          <LoginForm />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background p-6">
