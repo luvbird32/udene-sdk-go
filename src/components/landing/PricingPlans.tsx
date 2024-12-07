@@ -1,6 +1,7 @@
-import { Check } from "lucide-react";
+import { Check, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
 
 export const PricingPlans = () => {
   const plans = [
@@ -9,6 +10,7 @@ export const PricingPlans = () => {
       price: "$49",
       period: "per month",
       description: "Perfect for small businesses getting started with fraud prevention",
+      promotion: "First 1000 subscribers get lifetime fixed rate + 10,000 API calls/month",
       features: [
         "Up to 5,000 API calls/month",
         "Basic fraud detection rules",
@@ -18,13 +20,15 @@ export const PricingPlans = () => {
         "Basic reporting"
       ],
       buttonText: "Start Free Trial",
-      highlighted: false
+      highlighted: false,
+      isPromo: true
     },
     {
       name: "Professional",
       price: "$149",
       period: "per month",
       description: "Advanced protection for growing businesses",
+      promotion: "First 1000 subscribers lock in 50% off + 50,000 API calls/month for life",
       features: [
         "Up to 25,000 API calls/month",
         "Advanced ML detection",
@@ -34,7 +38,8 @@ export const PricingPlans = () => {
         "Advanced analytics"
       ],
       buttonText: "Get Started",
-      highlighted: true
+      highlighted: true,
+      isPromo: true
     },
     {
       name: "Enterprise",
@@ -50,7 +55,8 @@ export const PricingPlans = () => {
         "Custom reporting"
       ],
       buttonText: "Contact Sales",
-      highlighted: false
+      highlighted: false,
+      isPromo: false
     }
   ];
 
@@ -74,6 +80,14 @@ export const PricingPlans = () => {
                 plan.highlighted ? "border-2 border-green-400" : "border border-green-500/20"
               }`}
             >
+              {plan.isPromo && (
+                <div className="flex items-center gap-2 mb-4">
+                  <Badge variant="secondary" className="bg-green-500/20 text-green-300">
+                    <Sparkles className="w-4 h-4 mr-1" />
+                    Early Bird Offer
+                  </Badge>
+                </div>
+              )}
               <h3 className="text-2xl font-semibold text-green-300 mb-2">
                 {plan.name}
               </h3>
@@ -81,9 +95,17 @@ export const PricingPlans = () => {
                 <span className="text-4xl font-bold text-green-400">{plan.price}</span>
                 <span className="text-green-300/80 ml-2">{plan.period}</span>
               </div>
-              <p className="text-green-300/80 mb-6">
+              <p className="text-green-300/80 mb-4">
                 {plan.description}
               </p>
+              {plan.isPromo && (
+                <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-3 mb-6">
+                  <p className="text-sm text-green-300">
+                    <Sparkles className="w-4 h-4 inline-block mr-1" />
+                    {plan.promotion}
+                  </p>
+                </div>
+              )}
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature, idx) => (
                   <li key={idx} className="flex items-center text-green-300">
