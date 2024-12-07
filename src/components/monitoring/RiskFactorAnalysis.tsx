@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { Info } from "lucide-react";
+import { Info, MessageCircle, UserCog, Smartphone } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const RiskFactorAnalysis = () => {
@@ -20,7 +20,6 @@ export const RiskFactorAnalysis = () => {
 
       if (error) throw error;
       
-      // Return the first transaction if exists, otherwise null
       return data && data.length > 0 ? data[0] : null;
     },
     refetchInterval: 5000,
@@ -37,7 +36,6 @@ export const RiskFactorAnalysis = () => {
     );
   }
 
-  // Show a message when no transactions are available
   if (!latestTransaction) {
     return (
       <Card className="p-4">
@@ -52,12 +50,47 @@ export const RiskFactorAnalysis = () => {
 
   const riskFactors = latestTransaction?.risk_factors || {};
   const featureImportance = latestTransaction?.feature_importance || {};
+  const profileChanges = latestTransaction?.profile_changes || {};
+  const interactionPatterns = latestTransaction?.interaction_patterns || {};
   
   // Transform data for the chart
   const chartData = Object.entries(featureImportance).map(([factor, importance]) => ({
     factor,
     importance: Number(importance) * 100
   })).sort((a, b) => b.importance - a.importance);
+
+  // Dating-specific risk indicators
+  const getDatingRiskIndicators = () => {
+    const indicators = [];
+    
+    if (latestTransaction.message_velocity > 50) {
+      indicators.push({
+        icon: <MessageCircle className="w-4 h-4 mt-1 text-muted-foreground" />,
+        title: "High Message Velocity",
+        description: `Unusual messaging pattern detected: ${latestTransaction.message_velocity.toFixed(1)} messages/hour`
+      });
+    }
+    
+    if (Object.keys(profileChanges).length > 0) {
+      indicators.push({
+        icon: <UserCog className="w-4 h-4 mt-1 text-muted-foreground" />,
+        title: "Frequent Profile Changes",
+        description: "Multiple profile updates in short period"
+      });
+    }
+    
+    if (interactionPatterns.multiple_devices) {
+      indicators.push({
+        icon: <Smartphone className="w-4 h-4 mt-1 text-muted-foreground" />,
+        title: "Multiple Device Usage",
+        description: "Access from unusual number of devices"
+      });
+    }
+    
+    return indicators;
+  };
+
+  const datingRiskIndicators = getDatingRiskIndicators();
 
   return (
     <Card className="p-4">
@@ -87,6 +120,17 @@ export const RiskFactorAnalysis = () => {
           <h4 className="text-sm font-medium mb-2">Risk Explanations</h4>
           <ScrollArea className="h-[200px]">
             <div className="space-y-2">
+              {datingRiskIndicators.map((indicator, index) => (
+                <div key={index} className="p-2 bg-muted rounded-lg">
+                  <div className="flex items-start gap-2">
+                    {indicator.icon}
+                    <div>
+                      <p className="font-medium">{indicator.title}</p>
+                      <p className="text-sm text-muted-foreground">{indicator.description}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
               {Object.entries(riskFactors).map(([factor, explanation]) => (
                 <div key={factor} className="p-2 bg-muted rounded-lg">
                   <div className="flex items-start gap-2">

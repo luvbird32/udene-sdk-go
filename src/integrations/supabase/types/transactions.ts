@@ -14,6 +14,14 @@ export interface Transaction {
   timestamp: string
   transaction_type: string
   updated_at: string | null
+  risk_factors?: Record<string, string>
+  feature_importance?: Record<string, number>
+  feedback_status?: string | null
+  feedback_notes?: string | null
+  appeal_timestamp?: string | null
+  message_velocity?: number | null
+  profile_changes?: Record<string, any> | null
+  interaction_patterns?: Record<string, any> | null
 }
 
 export interface TransactionInsert {
@@ -32,6 +40,14 @@ export interface TransactionInsert {
   timestamp?: string
   transaction_type: string
   updated_at?: string | null
+  risk_factors?: Record<string, string>
+  feature_importance?: Record<string, number>
+  feedback_status?: string | null
+  feedback_notes?: string | null
+  appeal_timestamp?: string | null
+  message_velocity?: number | null
+  profile_changes?: Record<string, any> | null
+  interaction_patterns?: Record<string, any> | null
 }
 
 export interface TransactionUpdate {
@@ -50,4 +66,12 @@ export interface TransactionUpdate {
   timestamp?: string
   transaction_type?: string
   updated_at?: string | null
+  risk_factors?: Record<string, string>
+  feature_importance?: Record<string, number>
+  feedback_status?: string | null
+  feedback_notes?: string | null
+  appeal_timestamp?: string | null
+  message_velocity?: number | null
+  profile_changes?: Record<string, any> | null
+  interaction_patterns?: Record<string, any> | null
 }

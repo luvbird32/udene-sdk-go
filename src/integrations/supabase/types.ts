@@ -206,10 +206,13 @@ export type Database = {
           feedback_notes: string | null
           feedback_status: string | null
           id: string
+          interaction_patterns: Json | null
           ip_address: string
           is_fraudulent: boolean | null
           location: string
           merchant_id: string
+          message_velocity: number | null
+          profile_changes: Json | null
           recurring: boolean
           risk_factors: Json | null
           risk_score: number | null
@@ -228,10 +231,13 @@ export type Database = {
           feedback_notes?: string | null
           feedback_status?: string | null
           id?: string
+          interaction_patterns?: Json | null
           ip_address: string
           is_fraudulent?: boolean | null
           location: string
           merchant_id: string
+          message_velocity?: number | null
+          profile_changes?: Json | null
           recurring: boolean
           risk_factors?: Json | null
           risk_score?: number | null
@@ -250,10 +256,13 @@ export type Database = {
           feedback_notes?: string | null
           feedback_status?: string | null
           id?: string
+          interaction_patterns?: Json | null
           ip_address?: string
           is_fraudulent?: boolean | null
           location?: string
           merchant_id?: string
+          message_velocity?: number | null
+          profile_changes?: Json | null
           recurring?: boolean
           risk_factors?: Json | null
           risk_score?: number | null
