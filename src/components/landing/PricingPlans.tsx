@@ -2,8 +2,33 @@ import { Check, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 export const PricingPlans = () => {
+  // Query to get the number of subscribers for each plan
+  const { data: subscriberCounts } = useQuery({
+    queryKey: ["subscriber-counts"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('account_type', { count: 'exact' })
+        .in('account_type', ['starter', 'professional'])
+        .eq('role', 'subscriber');
+
+      if (error) throw error;
+
+      const starterCount = data?.filter(p => p.account_type === 'starter').length || 0;
+      const proCount = data?.filter(p => p.account_type === 'professional').length || 0;
+
+      return {
+        starter: 1000 - starterCount, // Remaining slots out of 1000
+        professional: 1000 - proCount // Remaining slots out of 1000
+      };
+    },
+    refetchInterval: 30000 // Refresh every 30 seconds
+  });
+
   const plans = [
     {
       name: "Starter",
@@ -21,7 +46,8 @@ export const PricingPlans = () => {
       ],
       buttonText: "Start Annual Plan",
       highlighted: false,
-      isPromo: true
+      isPromo: true,
+      slotsLeft: subscriberCounts?.starter || 1000
     },
     {
       name: "Professional",
@@ -39,7 +65,8 @@ export const PricingPlans = () => {
       ],
       buttonText: "Get Annual Plan",
       highlighted: true,
-      isPromo: true
+      isPromo: true,
+      slotsLeft: subscriberCounts?.professional || 1000
     },
     {
       name: "Enterprise",
@@ -81,11 +108,16 @@ export const PricingPlans = () => {
               }`}
             >
               {plan.isPromo && (
-                <div className="flex items-center gap-2 mb-4">
+                <div className="space-y-2 mb-4">
                   <Badge variant="secondary" className="bg-green-500/20 text-green-300">
                     <Sparkles className="w-4 h-4 mr-1" />
                     Early Bird Offer
                   </Badge>
+                  {plan.slotsLeft && plan.slotsLeft > 0 && (
+                    <div className="text-sm text-green-300 bg-green-500/10 p-2 rounded-md">
+                      <span className="font-bold">{plan.slotsLeft}</span> slots remaining
+                    </div>
+                  )}
                 </div>
               )}
               <h3 className="text-2xl font-semibold text-green-300 mb-2">
