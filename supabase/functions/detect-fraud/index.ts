@@ -16,6 +16,7 @@ interface Transaction {
   transaction_type: string
   card_present: boolean
   recurring: boolean
+  timestamp: string
 }
 
 serve(async (req) => {
@@ -33,58 +34,34 @@ serve(async (req) => {
     const { transaction } = await req.json()
     const data: Transaction = transaction
 
-    // Enhanced scoring system
-    const scores = await Promise.all([
-      calculateVelocityScore(supabase, data),
-      calculateLocationRisk(data.location),
-      calculateDeviceTrustScore(supabase, data.device_id),
-      calculateTransactionPatternScore(data),
-      calculateAmountRiskScore(data.amount),
-    ])
+    // Get recent transactions for pattern analysis
+    const { data: recentTransactions } = await supabase
+      .from('transactions')
+      .select('*')
+      .eq('customer_id', data.customer_id)
+      .order('created_at', { ascending: false })
+      .limit(10)
 
-    // Apply weighted scoring
-    const [velocityScore, locationRisk, deviceTrust, patternScore, amountRisk] = scores
-    console.log('Individual risk scores:', {
-      velocityScore,
-      locationRisk,
-      deviceTrust,
-      patternScore,
-      amountRisk
-    });
+    // Get ML insights from Python function
+    const mlResponse = await supabase.functions.invoke('python-ml', {
+      body: { 
+        transaction: data,
+        recent_transactions: recentTransactions 
+      }
+    })
 
-    // Weighted combination of scores
-    let totalRiskScore = (
-      velocityScore * 0.25 +      // Transaction velocity weight
-      locationRisk * 0.2 +        // Location risk weight
-      (100 - deviceTrust) * 0.2 + // Device trust weight (inverted)
-      patternScore * 0.2 +        // Transaction pattern weight
-      amountRisk * 0.15          // Amount risk weight
-    )
-
-    // Apply business rules
-    const riskFactors = []
-    
-    // Check for high-risk conditions
-    if (velocityScore > 70) riskFactors.push('High transaction velocity')
-    if (locationRisk > 70) riskFactors.push('Suspicious location')
-    if (deviceTrust < 30) riskFactors.push('Untrusted device')
-    if (patternScore > 70) riskFactors.push('Unusual transaction pattern')
-    if (amountRisk > 70) riskFactors.push('Suspicious amount')
-    
-    // Additional business rules
-    if (!data.card_present && data.amount > 1000) {
-      totalRiskScore += 15
-      riskFactors.push('Large card-not-present transaction')
+    if (mlResponse.error) {
+      throw new Error(`ML analysis failed: ${mlResponse.error.message}`)
     }
 
-    if (!data.recurring && data.amount > 5000) {
-      totalRiskScore += 20
-      riskFactors.push('Large non-recurring transaction')
-    }
+    const mlRiskScore = mlResponse.data.risk_score || 0
+    console.log('ML risk analysis:', mlResponse.data)
 
-    // Normalize final score to 0-100 range
-    totalRiskScore = Math.min(100, Math.max(0, totalRiskScore))
-    console.log('Final risk score:', totalRiskScore);
+    // Combine ML score with basic rules
+    const basicRiskScore = await calculateBasicRiskScore(data)
+    const totalRiskScore = (mlRiskScore * 0.6) + (basicRiskScore * 0.4)
+    
+    console.log('Final combined risk score:', totalRiskScore)
 
     // Store transaction with risk scores
     const { data: savedTransaction, error: transactionError } = await supabase
@@ -107,7 +84,7 @@ serve(async (req) => {
           transaction_id: savedTransaction.id,
           alert_type: 'High Risk Transaction',
           severity: totalRiskScore > 85 ? 'high' : 'medium',
-          description: `Risk factors: ${riskFactors.join(', ')}`
+          description: `Risk factors: ML Score ${mlRiskScore.toFixed(1)}%, Basic Score ${basicRiskScore.toFixed(1)}%`
         })
 
       if (alertError) throw alertError
@@ -117,7 +94,7 @@ serve(async (req) => {
       JSON.stringify({ 
         risk_score: totalRiskScore,
         is_fraudulent: totalRiskScore > 70,
-        risk_factors: riskFactors
+        ml_insights: mlResponse.data.risk_factors
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
@@ -134,96 +111,20 @@ serve(async (req) => {
   }
 })
 
-// Enhanced helper functions
-async function calculateVelocityScore(supabase: any, transaction: Transaction): Promise<number> {
-  const timeWindows = [
-    { hours: 1, weight: 0.5 },   // Last hour
-    { hours: 24, weight: 0.3 },  // Last day
-    { hours: 168, weight: 0.2 }, // Last week
-  ]
-
-  let totalScore = 0
-  
-  for (const window of timeWindows) {
-    const timeWindow = new Date()
-    timeWindow.setHours(timeWindow.getHours() - window.hours)
-
-    const { count } = await supabase
-      .from('transactions')
-      .select('*', { count: 'exact', head: true })
-      .eq('customer_id', transaction.customer_id)
-      .gte('created_at', timeWindow.toISOString())
-
-    // Calculate window-specific score
-    const windowScore = Math.min(100, (count || 0) * (10 / window.hours))
-    totalScore += windowScore * window.weight
-  }
-
-  return totalScore
-}
-
-async function calculateLocationRisk(location: string): Promise<number> {
-  const highRiskLocations = ['anonymous proxy', 'satellite provider', 'unknown']
-  const mediumRiskLocations = ['high fraud rate country', 'unusual location for customer']
-  
-  const locationLower = location.toLowerCase()
-  
-  if (highRiskLocations.includes(locationLower)) return 100
-  if (mediumRiskLocations.includes(locationLower)) return 70
-  
-  return 0
-}
-
-async function calculateDeviceTrustScore(supabase: any, deviceId: string): Promise<number> {
-  // Check device history
-  const { data: deviceHistory } = await supabase
-    .from('transactions')
-    .select('is_fraudulent')
-    .eq('device_id', deviceId)
-
-  if (!deviceHistory?.length) return 30 // New device starts with low trust
-
-  // Calculate trust score based on transaction history
-  const fraudulentCount = deviceHistory.filter(t => t.is_fraudulent).length
-  const trustScore = Math.max(0, 100 - (fraudulentCount * 20))
-  
-  return trustScore
-}
-
-function calculateTransactionPatternScore(transaction: Transaction): number {
+async function calculateBasicRiskScore(transaction: Transaction): Promise<number> {
   let score = 0
   
-  // Check for unusual patterns
-  if (!transaction.card_present && transaction.amount > 1000) {
-    score += 30
-  }
+  // Amount-based risk
+  if (transaction.amount > 1000) score += 20
+  if (transaction.amount > 5000) score += 20
   
-  if (transaction.transaction_type === 'international' && !transaction.recurring) {
-    score += 20
-  }
+  // Transaction type risk
+  if (!transaction.card_present) score += 15
+  if (!transaction.recurring && transaction.amount > 1000) score += 15
   
-  if (transaction.amount % 100 === 0 && transaction.amount > 500) {
-    score += 15 // Round amounts are sometimes suspicious
-  }
+  // Time-based risk (basic)
+  const hour = new Date(transaction.timestamp).getHours()
+  if (hour >= 0 && hour < 5) score += 20
   
   return Math.min(100, score)
-}
-
-function calculateAmountRiskScore(amount: number): number {
-  // Define amount thresholds
-  const thresholds = [
-    { amount: 10000, score: 100 },
-    { amount: 5000, score: 80 },
-    { amount: 1000, score: 60 },
-    { amount: 500, score: 40 },
-    { amount: 100, score: 20 },
-  ]
-  
-  for (const threshold of thresholds) {
-    if (amount >= threshold.amount) {
-      return threshold.score
-    }
-  }
-  
-  return 0
 }
