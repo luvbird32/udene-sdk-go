@@ -11,6 +11,9 @@ import { FeedbackManagement } from "@/components/monitoring/FeedbackManagement";
 import { CustomerBehavior } from "@/components/monitoring/CustomerBehavior";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { UserActivities } from "@/components/dashboard/UserActivities";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 interface DashboardContentProps {
   metrics: any;
@@ -19,6 +22,23 @@ interface DashboardContentProps {
 }
 
 export const DashboardContent = ({ metrics, metricsLoading, metricsError }: DashboardContentProps) => {
+  const { data: profile } = useQuery({
+    queryKey: ["user-profile"],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
+
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      if (error) throw error;
+      return profile;
+    }
+  });
+
   const renderError = (error: Error) => (
     <Alert variant="destructive" className="mb-4">
       <AlertCircle className="h-4 w-4" />
@@ -29,11 +49,15 @@ export const DashboardContent = ({ metrics, metricsLoading, metricsError }: Dash
     </Alert>
   );
 
+  if (!profile) return null;
+
   return (
     <div className="space-y-8">
       {metricsError && renderError(metricsError)}
       
       <KeyMetrics metrics={metrics} isLoading={metricsLoading} />
+
+      <UserActivities profileId={profile.id} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <HealthStatus />
