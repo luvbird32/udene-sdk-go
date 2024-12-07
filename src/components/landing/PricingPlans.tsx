@@ -10,7 +10,7 @@ export const PricingPlans = () => {
       price: "$49",
       period: "per month",
       description: "Perfect for small businesses getting started with fraud prevention",
-      promotion: "First 1000 subscribers get lifetime fixed rate + 10,000 API calls/month",
+      promotion: "First 1000 annual subscribers get lifetime fixed rate + 1M API calls/month",
       features: [
         "Up to 5,000 API calls/month",
         "Basic fraud detection rules",
@@ -19,7 +19,7 @@ export const PricingPlans = () => {
         "Standard API access",
         "Basic reporting"
       ],
-      buttonText: "Start Free Trial",
+      buttonText: "Start Annual Plan",
       highlighted: false,
       isPromo: true
     },
@@ -28,7 +28,7 @@ export const PricingPlans = () => {
       price: "$149",
       period: "per month",
       description: "Advanced protection for growing businesses",
-      promotion: "First 1000 subscribers lock in 50% off + 50,000 API calls/month for life",
+      promotion: "First 1000 annual subscribers lock in 50% off + 3M API calls/month for life",
       features: [
         "Up to 25,000 API calls/month",
         "Advanced ML detection",
@@ -37,7 +37,7 @@ export const PricingPlans = () => {
         "Webhook integrations",
         "Advanced analytics"
       ],
-      buttonText: "Get Started",
+      buttonText: "Get Annual Plan",
       highlighted: true,
       isPromo: true
     },
@@ -94,6 +94,11 @@ export const PricingPlans = () => {
               <div className="mb-4">
                 <span className="text-4xl font-bold text-green-400">{plan.price}</span>
                 <span className="text-green-300/80 ml-2">{plan.period}</span>
+                {plan.isPromo && (
+                  <div className="text-sm text-green-300/80 mt-1">
+                    Billed annually
+                  </div>
+                )}
               </div>
               <p className="text-green-300/80 mb-4">
                 {plan.description}
