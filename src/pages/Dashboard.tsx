@@ -74,32 +74,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Hero Section with SEO Content */}
-      <section className="relative z-10 mb-16">
-        <div className="glass-card p-8 rounded-lg max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl font-bold mb-4 text-green-400 animate-pulse-slow" tabIndex={0}>
-            Next-Gen Fraud Detection
-          </h1>
-          <p className="text-xl text-green-300/90 mb-6" tabIndex={0}>
-            Protect your business with advanced AI-powered fraud detection and real-time monitoring
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-            <div className="glass-card p-4 rounded-lg">
-              <h3 className="text-lg font-semibold mb-2">Real-time Analytics</h3>
-              <p className="text-sm text-green-300/80">Instant threat detection and response capabilities</p>
-            </div>
-            <div className="glass-card p-4 rounded-lg">
-              <h3 className="text-lg font-semibold mb-2">ML-Powered</h3>
-              <p className="text-sm text-green-300/80">Advanced machine learning algorithms for pattern recognition</p>
-            </div>
-            <div className="glass-card p-4 rounded-lg">
-              <h3 className="text-lg font-semibold mb-2">Compliance Ready</h3>
-              <p className="text-sm text-green-300/80">Built-in compliance reporting and documentation</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Header section */}
       <header className="mb-8 flex justify-between items-center relative z-10">
         <div className="glass-card p-6 rounded-lg w-full max-w-2xl">
