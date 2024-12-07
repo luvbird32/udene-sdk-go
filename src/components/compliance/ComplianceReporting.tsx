@@ -15,6 +15,7 @@ export const ComplianceReporting = () => {
   useEffect(() => {
     const getCurrentUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
+      console.log('Current user:', user); // Debug log
       setUserId(user?.id || null);
     };
     getCurrentUser();
@@ -34,11 +35,13 @@ export const ComplianceReporting = () => {
   });
 
   const generateReport = async (type: string) => {
+    console.log('Generate report clicked, userId:', userId); // Debug log
+    
     // Check if user is authenticated
     if (!userId) {
       toast({
-        title: "Error",
-        description: "You must be logged in to generate reports",
+        title: "Authentication Required",
+        description: "Please sign in to generate reports",
         variant: "destructive"
       });
       return;
@@ -87,12 +90,16 @@ export const ComplianceReporting = () => {
     <div className="space-y-6">
       <Card className="glass-card p-6">
         <h3 className="text-lg font-semibold mb-4 text-green-400">Generate Compliance Report</h3>
+        {!userId && (
+          <p className="text-yellow-400 mb-4">Please sign in to generate reports</p>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Button 
             variant="outline" 
-            className="glass-button flex items-center gap-2"
+            className="glass-button flex items-center gap-2 relative"
             onClick={() => generateReport('gdpr_data_access')}
             disabled={!userId}
+            title={!userId ? "Please sign in to generate reports" : "Generate GDPR Data Access Report"}
           >
             <FileText className="h-4 w-4" />
             GDPR Data Access Report
@@ -102,6 +109,7 @@ export const ComplianceReporting = () => {
             className="glass-button flex items-center gap-2"
             onClick={() => generateReport('psd2_transaction_log')}
             disabled={!userId}
+            title={!userId ? "Please sign in to generate reports" : "Generate PSD2 Transaction Log"}
           >
             <FileText className="h-4 w-4" />
             PSD2 Transaction Log
@@ -111,6 +119,7 @@ export const ComplianceReporting = () => {
             className="glass-button flex items-center gap-2"
             onClick={() => generateReport('fraud_audit_trail')}
             disabled={!userId}
+            title={!userId ? "Please sign in to generate reports" : "Generate Fraud Audit Trail"}
           >
             <FileText className="h-4 w-4" />
             Fraud Audit Trail
