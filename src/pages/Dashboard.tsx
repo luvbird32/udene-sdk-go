@@ -5,72 +5,18 @@ import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
 import { DevTools } from "@/components/developer/DevTools";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
 import { ComplianceReporting } from "@/components/compliance/ComplianceReporting";
 import { useSessionTimeout } from "@/hooks/useSessionTimeout";
 import { useRealtimeSubscriptions } from "@/hooks/useRealtimeSubscriptions";
 import { AccountTypeIndicator } from "@/components/dashboard/AccountTypeIndicator";
-import { useEffect, useState } from "react";
-import { LoginForm } from "@/components/auth/LoginForm";
 
 const Dashboard = () => {
   const { toast } = useToast();
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   
   useSessionTimeout();
   useRealtimeSubscriptions();
-
-  // Check authentication status and redirect if not authenticated
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
-          navigate('/', { replace: true });
-        } else {
-          setIsAuthenticated(true);
-        }
-      } catch (error) {
-        console.error('Auth check error:', error);
-        toast({
-          title: "Authentication Error",
-          description: "Please try logging in again",
-          variant: "destructive",
-        });
-        navigate('/', { replace: true });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    checkAuth();
-
-    // Subscribe to auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (!session) {
-        navigate('/', { replace: true });
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate, toast]);
-
-  // Show loading state
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
-      </div>
-    );
-  }
-
-  // If not authenticated, redirect should have happened
-  if (!isAuthenticated) {
-    return null;
-  }
 
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
     queryKey: ["metrics"],
