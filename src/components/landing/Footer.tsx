@@ -38,7 +38,7 @@ export const Footer = () => {
           <div className="col-span-2">
             <Link to="/" className="flex items-center mb-4">
               <Shield className="w-8 h-8 text-green-400 mr-2" />
-              <span className="text-xl font-bold text-green-300">FraudGuard</span>
+              <span className="text-xl font-bold text-green-300">Udene</span>
             </Link>
             <p className="text-green-300/80 mb-4 max-w-sm">
               Enterprise-grade fraud detection powered by advanced AI algorithms and real-time monitoring
@@ -68,16 +68,16 @@ export const Footer = () => {
         
         <div className="border-t border-green-500/20 pt-8 mt-8 text-center md:flex md:justify-between md:text-left">
           <p className="text-green-300/80 mb-4 md:mb-0">
-            © {currentYear} FraudGuard. All rights reserved.
+            © {currentYear} Udene. All rights reserved.
           </p>
           <div className="space-x-6">
-            <a href="https://twitter.com" className="text-green-300/80 hover:text-green-300 transition-colors">
+            <a href="https://twitter.com/udene" className="text-green-300/80 hover:text-green-300 transition-colors">
               Twitter
             </a>
-            <a href="https://linkedin.com" className="text-green-300/80 hover:text-green-300 transition-colors">
+            <a href="https://linkedin.com/company/udene" className="text-green-300/80 hover:text-green-300 transition-colors">
               LinkedIn
             </a>
-            <a href="https://github.com" className="text-green-300/80 hover:text-green-300 transition-colors">
+            <a href="https://github.com/udene" className="text-green-300/80 hover:text-green-300 transition-colors">
               GitHub
             </a>
           </div>

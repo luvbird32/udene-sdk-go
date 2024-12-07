@@ -11,7 +11,7 @@ const Landing = () => {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "Advanced Fraud Detection System",
+    "name": "Udene Fraud Detection System",
     "applicationCategory": "SecurityApplication",
     "operatingSystem": "Web-based",
     "description": "Enterprise-grade fraud detection and cybersecurity monitoring system with real-time analytics and machine learning capabilities.",
@@ -32,14 +32,15 @@ const Landing = () => {
   return (
     <>
       <Helmet>
-        <title>Advanced Fraud Detection System | Enterprise Cybersecurity Platform</title>
-        <meta name="description" content="Enterprise-grade fraud detection system with real-time monitoring, machine learning analytics, and comprehensive compliance reporting. Protect your business with advanced cybersecurity." />
-        <meta name="keywords" content="fraud detection, cybersecurity, real-time monitoring, machine learning, compliance reporting, risk assessment" />
-        <meta property="og:title" content="Advanced Fraud Detection System | Enterprise Cybersecurity Platform" />
+        <title>Udene | Enterprise Fraud Detection Platform</title>
+        <meta name="description" content="Udene: Enterprise-grade fraud detection system with real-time monitoring, machine learning analytics, and comprehensive compliance reporting." />
+        <meta name="keywords" content="udene, fraud detection, cybersecurity, real-time monitoring, machine learning, compliance reporting, risk assessment" />
+        <meta property="og:title" content="Udene | Enterprise Fraud Detection Platform" />
         <meta property="og:description" content="Enterprise-grade fraud detection system with real-time monitoring, machine learning analytics, and comprehensive compliance reporting." />
         <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://udene.net" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Advanced Fraud Detection System" />
+        <meta name="twitter:title" content="Udene Fraud Detection System" />
         <meta name="twitter:description" content="Enterprise-grade fraud detection with real-time monitoring and ML analytics." />
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
