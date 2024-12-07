@@ -6,11 +6,11 @@ export const PricingPlans = () => {
   const plans = [
     {
       name: "Starter",
-      price: "$99",
+      price: "$49",
       period: "per month",
       description: "Perfect for small businesses getting started with fraud prevention",
       features: [
-        "Up to 10,000 API calls/month",
+        "Up to 5,000 API calls/month",
         "Basic fraud detection rules",
         "Email support",
         "Real-time monitoring",
@@ -22,11 +22,11 @@ export const PricingPlans = () => {
     },
     {
       name: "Professional",
-      price: "$299",
+      price: "$149",
       period: "per month",
       description: "Advanced protection for growing businesses",
       features: [
-        "Up to 50,000 API calls/month",
+        "Up to 25,000 API calls/month",
         "Advanced ML detection",
         "24/7 priority support",
         "Custom rule engine",
