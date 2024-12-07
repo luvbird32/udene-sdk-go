@@ -2,11 +2,12 @@ import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
 export const GeographicalDistribution = () => {
-  const { data: distribution } = useQuery({
+  const { data: distribution, error, isLoading } = useQuery({
     queryKey: ["geographical-distribution"],
     queryFn: async () => {
       console.log("Fetching geographical distribution...");
@@ -18,9 +19,10 @@ export const GeographicalDistribution = () => {
 
       if (error) throw error;
 
-      // Group by location
+      // Group by location and handle null/undefined values
       const locationCounts = (data || []).reduce((acc: { [key: string]: number }, transaction) => {
-        acc[transaction.location] = (acc[transaction.location] || 0) + 1;
+        const location = transaction.location || 'Unknown';
+        acc[location] = (acc[location] || 0) + 1;
         return acc;
       }, {});
 
@@ -31,6 +33,29 @@ export const GeographicalDistribution = () => {
     },
     refetchInterval: 30000,
   });
+
+  if (error) {
+    return (
+      <Card className="p-4">
+        <Alert variant="destructive">
+          <AlertDescription>
+            Error loading geographical distribution: {error.message}
+          </AlertDescription>
+        </Alert>
+      </Card>
+    );
+  }
+
+  if (isLoading || !distribution) {
+    return (
+      <Card className="p-4">
+        <h3 className="font-semibold mb-4">Top Transaction Locations</h3>
+        <div className="h-[200px] flex items-center justify-center">
+          <div className="animate-pulse text-muted-foreground">Loading...</div>
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card className="p-4">

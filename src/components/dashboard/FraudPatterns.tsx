@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface Pattern {
   type: string;
@@ -11,7 +12,7 @@ interface Pattern {
 }
 
 export const FraudPatterns = () => {
-  const { data: patterns } = useQuery({
+  const { data: patterns, error, isLoading } = useQuery({
     queryKey: ["fraud-patterns"],
     queryFn: async () => {
       console.log("Analyzing fraud patterns...");
@@ -24,10 +25,10 @@ export const FraudPatterns = () => {
 
       if (error) throw error;
 
-      // Analyze patterns
-      const cardNotPresentCount = fraudulent?.filter(t => !t.card_present).length || 0;
-      const recurringCount = fraudulent?.filter(t => t.recurring).length || 0;
-      const highRiskCount = fraudulent?.filter(t => t.risk_score >= 80).length || 0;
+      // Analyze patterns with null checks
+      const cardNotPresentCount = fraudulent?.filter(t => t.card_present === false).length || 0;
+      const recurringCount = fraudulent?.filter(t => t.recurring === true).length || 0;
+      const highRiskCount = fraudulent?.filter(t => (t.risk_score || 0) >= 80).length || 0;
 
       const patterns: Pattern[] = [
         {
@@ -52,6 +53,31 @@ export const FraudPatterns = () => {
     refetchInterval: 30000,
   });
 
+  if (error) {
+    return (
+      <Card className="p-4">
+        <Alert variant="destructive">
+          <AlertDescription>
+            Error loading fraud patterns: {error.message}
+          </AlertDescription>
+        </Alert>
+      </Card>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <Card className="p-4">
+        <h3 className="font-semibold mb-4">Fraud Pattern Analysis</h3>
+        <div className="animate-pulse space-y-4">
+          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+          <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+          <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <Card className="p-4">
       <h3 className="font-semibold mb-4">Fraud Pattern Analysis</h3>
@@ -66,6 +92,11 @@ export const FraudPatterns = () => {
               <p className="text-sm text-muted-foreground">{pattern.description}</p>
             </div>
           ))}
+          {(!patterns || patterns.length === 0) && (
+            <div className="text-center text-muted-foreground py-4">
+              No fraud patterns detected
+            </div>
+          )}
         </div>
       </ScrollArea>
     </Card>

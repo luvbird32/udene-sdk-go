@@ -2,9 +2,10 @@ import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const TransactionTrends = () => {
-  const { data: trends } = useQuery({
+  const { data: trends, error, isLoading } = useQuery({
     queryKey: ["transaction-trends"],
     queryFn: async () => {
       console.log("Fetching transaction trends...");
@@ -16,21 +17,23 @@ export const TransactionTrends = () => {
 
       if (error) throw error;
 
-      // Group transactions by hour
+      // Group transactions by hour with null checks
       const hourlyData = (data || []).reduce((acc: any[], transaction) => {
         const hour = new Date(transaction.timestamp).getHours();
         const existing = acc.find(item => item.hour === hour);
+        const amount = Number(transaction.amount) || 0;
+        const riskScore = Number(transaction.risk_score) || 0;
         
         if (existing) {
           existing.count += 1;
-          existing.totalAmount += Number(transaction.amount);
-          existing.avgRiskScore = (existing.avgRiskScore * (existing.count - 1) + transaction.risk_score) / existing.count;
+          existing.totalAmount += amount;
+          existing.avgRiskScore = (existing.avgRiskScore * (existing.count - 1) + riskScore) / existing.count;
         } else {
           acc.push({
             hour,
             count: 1,
-            totalAmount: Number(transaction.amount),
-            avgRiskScore: transaction.risk_score
+            totalAmount: amount,
+            avgRiskScore: riskScore
           });
         }
         return acc;
@@ -41,12 +44,35 @@ export const TransactionTrends = () => {
     refetchInterval: 30000,
   });
 
+  if (error) {
+    return (
+      <Card className="p-4">
+        <Alert variant="destructive">
+          <AlertDescription>
+            Error loading transaction trends: {error.message}
+          </AlertDescription>
+        </Alert>
+      </Card>
+    );
+  }
+
+  if (isLoading || !trends) {
+    return (
+      <Card className="p-4">
+        <h3 className="font-semibold mb-4">Hourly Transaction Trends</h3>
+        <div className="h-[200px] flex items-center justify-center">
+          <div className="animate-pulse text-muted-foreground">Loading...</div>
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <Card className="p-4">
       <h3 className="font-semibold mb-4">Hourly Transaction Trends</h3>
       <div className="h-[200px]">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={trends ?? []}>
+          <BarChart data={trends}>
             <XAxis dataKey="hour" />
             <YAxis />
             <Tooltip />
