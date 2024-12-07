@@ -18,10 +18,15 @@ export const LoginForm = () => {
         localization={{
           variables: {
             sign_up: {
-              user_metadata: {
-                full_name: 'Full Name',
-                date_of_birth: 'Date of Birth'
-              }
+              email_label: 'Email',
+              password_label: 'Password',
+              email_input_placeholder: 'Your email address',
+              password_input_placeholder: 'Your password',
+              button_label: 'Sign Up',
+              loading_button_label: 'Signing up ...',
+              social_provider_text: 'Sign in with {{provider}}',
+              link_text: 'Don\'t have an account? Sign up',
+              confirmation_text: 'Check your email for the confirmation link'
             }
           }
         }}
