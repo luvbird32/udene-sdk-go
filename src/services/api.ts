@@ -104,9 +104,9 @@ export const getRecentActivity = async (): Promise<Activity[]> => {
 
     if (error) throw error;
 
-    const activity = (data || []).map(alert => ({
+    const activity: Activity[] = (data || []).map(alert => ({
       id: alert.id,
-      type: 'suspicious',
+      type: "suspicious" as const, // Explicitly set as "suspicious" since these are fraud alerts
       description: alert.description,
       timestamp: alert.created_at
     }));
