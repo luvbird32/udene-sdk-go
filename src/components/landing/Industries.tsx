@@ -1,4 +1,4 @@
-import { Building2, ShoppingCart, Plane, Building, Briefcase, Hospital, Gamepad2, Smartphone } from "lucide-react";
+import { Building2, ShoppingCart, Plane, Building, Briefcase, Hospital, Gamepad2, Smartphone, Heart, Globe } from "lucide-react";
 
 export const Industries = () => {
   const industries = [
@@ -41,6 +41,16 @@ export const Industries = () => {
       icon: Briefcase,
       name: "Professional Services",
       description: "Secure client data, prevent payment fraud, and protect business transactions"
+    },
+    {
+      icon: Heart,
+      name: "Dating Applications",
+      description: "Prevent romance scams, verify user identities, and protect against fraudulent interactions"
+    },
+    {
+      icon: Globe,
+      name: "Online Platforms",
+      description: "Secure user registrations, prevent fake profiles, and protect digital interactions"
     }
   ];
 
