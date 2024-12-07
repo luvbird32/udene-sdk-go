@@ -24,7 +24,7 @@ Deno.serve(async (req) => {
 
     const { email, password, role } = await req.json()
 
-    // Create the user
+    // Create the user with email confirmation disabled
     const { data: userData, error: createError } = await supabaseClient.auth.admin.createUser({
       email,
       password,
@@ -35,26 +35,32 @@ Deno.serve(async (req) => {
       throw createError
     }
 
-    // Update the user's role in the profiles table
+    // Create the profile record
     if (userData.user) {
-      const { error: updateError } = await supabaseClient
+      const { error: profileError } = await supabaseClient
         .from('profiles')
-        .update({ role })
-        .eq('id', userData.user.id)
+        .insert({
+          id: userData.user.id,
+          role,
+          status: 'active',
+          username: email.split('@')[0], // Set a default username based on email
+        })
 
-      if (updateError) {
-        throw updateError
+      if (profileError) {
+        console.error('Error creating profile:', profileError)
+        throw profileError
       }
     }
 
     return new Response(
-      JSON.stringify({ message: 'User created successfully' }),
+      JSON.stringify({ message: 'User created successfully', user: userData.user }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200,
       },
     )
   } catch (error) {
+    console.error('Error in create-user function:', error)
     return new Response(
       JSON.stringify({ error: error.message }),
       {

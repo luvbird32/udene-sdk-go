@@ -17,13 +17,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { UserPlus } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const AddUserDialog = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -53,6 +54,9 @@ export const AddUserDialog = () => {
         const error = await response.json();
         throw new Error(error.error || "Failed to create user");
       }
+
+      // Invalidate the users query to refresh the list
+      await queryClient.invalidateQueries({ queryKey: ["users"] });
 
       toast({
         title: "Success",
@@ -125,6 +129,7 @@ export const AddUserDialog = () => {
               <SelectContent>
                 <SelectItem value="user">User</SelectItem>
                 <SelectItem value="admin">Admin</SelectItem>
+                <SelectItem value="analyst">Analyst</SelectItem>
               </SelectContent>
             </Select>
           </div>
