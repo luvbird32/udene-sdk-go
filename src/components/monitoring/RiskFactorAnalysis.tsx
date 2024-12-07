@@ -5,6 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recha
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Info } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const RiskFactorAnalysis = () => {
   const { data: latestTransaction, isLoading } = useQuery({
@@ -15,11 +16,12 @@ export const RiskFactorAnalysis = () => {
         .from('transactions')
         .select('*')
         .order('created_at', { ascending: false })
-        .limit(1)
-        .single();
+        .limit(1);
 
       if (error) throw error;
-      return data;
+      
+      // Return the first transaction if exists, otherwise null
+      return data && data.length > 0 ? data[0] : null;
     },
     refetchInterval: 5000,
   });
@@ -31,6 +33,19 @@ export const RiskFactorAnalysis = () => {
           <div className="h-4 bg-gray-200 rounded w-1/4"></div>
           <div className="h-32 bg-gray-200 rounded"></div>
         </div>
+      </Card>
+    );
+  }
+
+  // Show a message when no transactions are available
+  if (!latestTransaction) {
+    return (
+      <Card className="p-4">
+        <Alert>
+          <AlertDescription>
+            No transactions available. New transactions will appear here automatically.
+          </AlertDescription>
+        </Alert>
       </Card>
     );
   }
