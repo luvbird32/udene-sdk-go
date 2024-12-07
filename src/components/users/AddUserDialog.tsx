@@ -49,13 +49,30 @@ export const AddUserDialog = () => {
         }
       );
 
-      const data = await response.json();
-      console.log("Response from create-user:", data);
+      const responseText = await response.text();
+      console.log("Raw response:", responseText);
+      
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (e) {
+        console.error("Failed to parse response:", e);
+        throw new Error("Invalid response from server");
+      }
+
+      console.log("Parsed response:", data);
 
       if (!response.ok) {
-        if (data.code === "USER_EXISTS") {
-          console.log("User exists error detected");
-          throw new Error("A user with this email already exists. Please use a different email address.");
+        // If the response contains a stringified error message in the body
+        if (typeof data.body === 'string') {
+          try {
+            const parsedBody = JSON.parse(data.body);
+            if (parsedBody.code === "USER_EXISTS") {
+              throw new Error(parsedBody.error || "A user with this email already exists");
+            }
+          } catch (e) {
+            console.error("Error parsing body:", e);
+          }
         }
         throw new Error(data.error || "Failed to create user");
       }
