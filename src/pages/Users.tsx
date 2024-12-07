@@ -10,6 +10,7 @@ import { ActivityLog } from "@/components/users/ActivityLog";
 import { Link } from "react-router-dom";
 import { User } from "@/components/users/types";
 import { supabase } from "@/integrations/supabase/client";
+import { AddUserDialog } from "@/components/users/AddUserDialog";
 
 const Users = () => {
   const { toast } = useToast();
@@ -126,7 +127,7 @@ const Users = () => {
           </Link>
           <h1 className="text-3xl font-bold">User Administration</h1>
         </div>
-        <Button>Add User</Button>
+        <AddUserDialog />
       </div>
 
       <Tabs value={selectedTab} onValueChange={setSelectedTab}>
