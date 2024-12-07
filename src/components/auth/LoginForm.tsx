@@ -11,23 +11,22 @@ export const LoginForm = () => {
         appearance={{ theme: ThemeSupa }}
         theme="light"
         providers={[]}
-        authOptions={{
-          emailRedirectTo: `${window.location.origin}/settings`,
-          additionalSignUpFields: [
-            {
-              key: 'full_name',
-              label: 'Full Name',
-              type: 'text',
-              required: true,
-            },
-            {
-              key: 'date_of_birth',
-              label: 'Date of Birth',
-              type: 'date',
-              required: true,
-            },
-          ],
-        }}
+        onlyThirdPartyProviders={false}
+        redirectTo={`${window.location.origin}/settings`}
+        additionalSignUpFields={[
+          {
+            key: 'full_name',
+            label: 'Full Name',
+            type: 'text',
+            required: true,
+          },
+          {
+            key: 'date_of_birth',
+            label: 'Date of Birth',
+            type: 'date',
+            required: true,
+          },
+        ]}
       />
     </Card>
   );
