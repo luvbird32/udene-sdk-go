@@ -13,23 +13,28 @@ export const ErrorLog = () => {
   const { data: errors, isLoading } = useQuery({
     queryKey: ["errors"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('metrics')
-        .select('*')
-        .eq('metric_name', 'error')
-        .order('timestamp', { ascending: false })
-        .limit(10);
-      
-      if (error) {
-        console.error('Error fetching error logs:', error);
+      try {
+        const { data, error } = await supabase
+          .from('metrics')
+          .select('id, metric_value, timestamp')
+          .eq('metric_name', 'error')
+          .order('timestamp', { ascending: false })
+          .limit(10);
+        
+        if (error) {
+          console.error('Error fetching error logs:', error);
+          throw error;
+        }
+
+        return data?.map(entry => ({
+          id: entry.id,
+          message: entry.metric_value.toString(),
+          timestamp: entry.timestamp
+        })) || [];
+      } catch (error) {
+        console.error('Error in error logs query:', error);
         return [];
       }
-
-      return data?.map(entry => ({
-        id: entry.id,
-        message: entry.metric_value.toString(),
-        timestamp: entry.timestamp
-      })) || [];
     },
     refetchInterval: 5000,
   });

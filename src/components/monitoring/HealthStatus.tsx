@@ -12,18 +12,15 @@ export const HealthStatus = () => {
     queryFn: async () => {
       try {
         console.log("Checking database connection...");
-        // Check Supabase connection
-        const { data: dbCheck, error: dbError } = await supabase
+        
+        // Check Supabase connection using a simpler query
+        const { count, error: dbError } = await supabase
           .from('metrics')
-          .select('count(*)', { count: 'exact', head: true });
+          .select('*', { count: 'exact' });
 
         if (dbError) {
           console.error("Database check failed:", dbError);
-          toast({
-            title: "Database Connection Error",
-            description: "Unable to connect to the database. Please try again later.",
-            variant: "destructive",
-          });
+          throw dbError;
         }
 
         // Check if we can access the API
@@ -31,10 +28,10 @@ export const HealthStatus = () => {
         const apiStatus = apiCheck.ok;
 
         const status = {
-          status: !dbError && apiStatus ? "healthy" : "unhealthy",
+          status: count !== null && apiStatus ? "healthy" : "unhealthy",
           api: apiStatus,
-          database: !dbError,
-          cache: !dbError // Using same check for cache since we're using Supabase
+          database: count !== null,
+          cache: count !== null // Using same check for cache since we're using Supabase
         };
 
         console.log("Health check result:", status);
