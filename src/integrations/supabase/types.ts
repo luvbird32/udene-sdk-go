@@ -129,12 +129,14 @@ export type Database = {
           created_at: string | null
           customer_id: string
           device_id: string
+          feature_importance: Json | null
           id: string
           ip_address: string
           is_fraudulent: boolean | null
           location: string
           merchant_id: string
           recurring: boolean
+          risk_factors: Json | null
           risk_score: number | null
           timestamp: string
           transaction_type: string
@@ -146,12 +148,14 @@ export type Database = {
           created_at?: string | null
           customer_id: string
           device_id: string
+          feature_importance?: Json | null
           id?: string
           ip_address: string
           is_fraudulent?: boolean | null
           location: string
           merchant_id: string
           recurring: boolean
+          risk_factors?: Json | null
           risk_score?: number | null
           timestamp?: string
           transaction_type: string
@@ -163,12 +167,14 @@ export type Database = {
           created_at?: string | null
           customer_id?: string
           device_id?: string
+          feature_importance?: Json | null
           id?: string
           ip_address?: string
           is_fraudulent?: boolean | null
           location?: string
           merchant_id?: string
           recurring?: boolean
+          risk_factors?: Json | null
           risk_score?: number | null
           timestamp?: string
           transaction_type?: string

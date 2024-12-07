@@ -3,20 +3,11 @@ import { Settings } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect } from "react";
-import { HealthStatus } from "@/components/monitoring/HealthStatus";
-import { ErrorLog } from "@/components/monitoring/ErrorLog";
-import { PerformanceMetrics } from "@/components/monitoring/PerformanceMetrics";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
 import { DevTools } from "@/components/developer/DevTools";
 import { Link, useNavigate } from "react-router-dom";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
-import { KeyMetrics } from "@/components/dashboard/KeyMetrics";
-import { DetectionMetrics } from "@/components/monitoring/DetectionMetrics";
-import { TransactionTrends } from "@/components/dashboard/TransactionTrends";
-import { GeographicalDistribution } from "@/components/dashboard/GeographicalDistribution";
-import { FraudPatterns } from "@/components/dashboard/FraudPatterns";
+import { DashboardContent } from "@/components/dashboard/DashboardContent";
 
 const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
 
@@ -24,7 +15,6 @@ const Index = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Session timeout handling
   useEffect(() => {
     let lastActivity = Date.now();
     let timeoutId: NodeJS.Timeout;
@@ -65,7 +55,6 @@ const Index = () => {
     };
   }, [navigate, toast]);
 
-  // Fetch metrics from Supabase
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
     queryKey: ["metrics"],
     queryFn: async () => {
@@ -102,7 +91,6 @@ const Index = () => {
     retry: 1,
   });
 
-  // Subscribe to real-time fraud alerts
   useEffect(() => {
     console.log("Setting up real-time fraud alerts subscription...");
     const fraudAlertsChannel = supabase
@@ -131,16 +119,6 @@ const Index = () => {
     };
   }, [toast]);
 
-  const renderError = (error: Error) => (
-    <Alert variant="destructive" className="mb-4">
-      <AlertCircle className="h-4 w-4" />
-      <AlertTitle>Error</AlertTitle>
-      <AlertDescription>
-        {error.message || "An error occurred while loading the dashboard"}
-      </AlertDescription>
-    </Alert>
-  );
-
   return (
     <div className="min-h-screen bg-background p-6" role="main">
       <header className="mb-8 flex justify-between items-center">
@@ -164,26 +142,12 @@ const Index = () => {
           <TabsTrigger value="devtools">Developer Tools</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="dashboard" className="space-y-8">
-          {metricsError && renderError(metricsError)}
-          
-          <KeyMetrics metrics={metrics} isLoading={metricsLoading} />
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <HealthStatus />
-            <DetectionMetrics />
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <TransactionTrends />
-            <GeographicalDistribution />
-            <FraudPatterns />
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <ErrorLog />
-            <PerformanceMetrics />
-          </div>
+        <TabsContent value="dashboard">
+          <DashboardContent 
+            metrics={metrics}
+            metricsLoading={metricsLoading}
+            metricsError={metricsError}
+          />
         </TabsContent>
 
         <TabsContent value="docs">
