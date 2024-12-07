@@ -36,6 +36,78 @@ export type Database = {
         }
         Relationships: []
       }
+      audit_logs: {
+        Row: {
+          changes: Json | null
+          created_at: string | null
+          entity_id: string
+          entity_type: string
+          event_type: string
+          id: string
+          ip_address: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          changes?: Json | null
+          created_at?: string | null
+          entity_id: string
+          entity_type: string
+          event_type: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          changes?: Json | null
+          created_at?: string | null
+          entity_id?: string
+          entity_type?: string
+          event_type?: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      compliance_reports: {
+        Row: {
+          created_at: string | null
+          download_url: string | null
+          generated_by: string | null
+          id: string
+          report_data: Json | null
+          report_period: unknown
+          report_type: string
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          download_url?: string | null
+          generated_by?: string | null
+          id?: string
+          report_data?: Json | null
+          report_period: unknown
+          report_type: string
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          download_url?: string | null
+          generated_by?: string | null
+          id?: string
+          report_data?: Json | null
+          report_period?: unknown
+          report_type?: string
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       fraud_alerts: {
         Row: {
           alert_type: string

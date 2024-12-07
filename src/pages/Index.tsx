@@ -6,54 +6,20 @@ import { useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
 import { DevTools } from "@/components/developer/DevTools";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
-
-const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
+import { ComplianceReporting } from "@/components/compliance/ComplianceReporting";
+import { useSessionTimeout } from "@/hooks/useSessionTimeout";
+import { useRealtimeSubscriptions } from "@/hooks/useRealtimeSubscriptions";
 
 const Index = () => {
   const { toast } = useToast();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    let lastActivity = Date.now();
-    let timeoutId: NodeJS.Timeout;
-
-    const resetTimeout = () => {
-      lastActivity = Date.now();
-    };
-
-    const checkTimeout = () => {
-      const now = Date.now();
-      if (now - lastActivity >= SESSION_TIMEOUT) {
-        // Session expired
-        supabase.auth.signOut();
-        navigate('/login');
-        toast({
-          title: "Session Expired",
-          description: "Your session has expired. Please log in again.",
-          variant: "destructive"
-        });
-      }
-    };
-
-    // Set up activity listeners
-    const activityEvents = ['mousedown', 'keydown', 'scroll', 'touchstart'];
-    activityEvents.forEach(event => {
-      document.addEventListener(event, resetTimeout);
-    });
-
-    // Check session every minute
-    timeoutId = setInterval(checkTimeout, 60000);
-
-    // Cleanup
-    return () => {
-      activityEvents.forEach(event => {
-        document.removeEventListener(event, resetTimeout);
-      });
-      clearInterval(timeoutId);
-    };
-  }, [navigate, toast]);
+  
+  // Move session timeout logic to a custom hook
+  useSessionTimeout();
+  
+  // Move realtime subscriptions to a custom hook
+  useRealtimeSubscriptions();
 
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
     queryKey: ["metrics"],
@@ -67,7 +33,6 @@ const Index = () => {
 
       if (metricsError) throw metricsError;
 
-      // Get recent transactions for risk calculation
       const { data: recentTransactions, error: transactionsError } = await supabase
         .from('transactions')
         .select('risk_score, is_fraudulent')
@@ -76,7 +41,6 @@ const Index = () => {
 
       if (transactionsError) throw transactionsError;
 
-      // Calculate average risk score
       const avgRiskScore = recentTransactions?.reduce((acc, t) => acc + (t.risk_score || 0), 0) / 
         (recentTransactions?.length || 1);
 
@@ -91,95 +55,16 @@ const Index = () => {
     retry: 1,
   });
 
-  useEffect(() => {
-    console.log("Setting up real-time fraud alerts subscription...");
-    const fraudAlertsChannel = supabase
-      .channel('fraud_alerts')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'fraud_alerts'
-        },
-        async (payload) => {
-          console.log("New fraud alert received:", payload);
-          
-          // Trigger webhook for fraud detection
-          try {
-            await supabase.functions.invoke('webhook-delivery', {
-              body: {
-                event_type: 'fraud.detected',
-                payload: {
-                  alert_id: payload.new.id,
-                  transaction_id: payload.new.transaction_id,
-                  alert_type: payload.new.alert_type,
-                  severity: payload.new.severity,
-                  description: payload.new.description
-                }
-              }
-            });
-          } catch (error) {
-            console.error('Failed to deliver webhook:', error);
-          }
-
-          toast({
-            title: "New Fraud Alert",
-            description: payload.new.description,
-            variant: "destructive",
-          });
-        }
-      )
-      .subscribe();
-
-    // Subscribe to transaction changes
-    const transactionsChannel = supabase
-      .channel('transactions')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'transactions'
-        },
-        async (payload) => {
-          console.log("New transaction received:", payload);
-          
-          // Trigger webhook for new transaction
-          try {
-            await supabase.functions.invoke('webhook-delivery', {
-              body: {
-                event_type: 'transaction.created',
-                payload: {
-                  transaction_id: payload.new.id,
-                  amount: payload.new.amount,
-                  merchant_id: payload.new.merchant_id,
-                  customer_id: payload.new.customer_id,
-                  timestamp: payload.new.timestamp,
-                  risk_score: payload.new.risk_score
-                }
-              }
-            });
-          } catch (error) {
-            console.error('Failed to deliver webhook:', error);
-          }
-        }
-      )
-      .subscribe();
-
-    return () => {
-      console.log("Cleaning up subscriptions...");
-      supabase.removeChannel(fraudAlertsChannel);
-      supabase.removeChannel(transactionsChannel);
-    };
-  }, [toast]);
-
   return (
     <div className="min-h-screen bg-background p-6" role="main">
       <header className="mb-8 flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-foreground mb-2" tabIndex={0}>Fraud Detection System</h1>
-          <p className="text-muted-foreground" tabIndex={0}>Comprehensive monitoring, analysis, and documentation</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2" tabIndex={0}>
+            Fraud Detection System
+          </h1>
+          <p className="text-muted-foreground" tabIndex={0}>
+            Comprehensive monitoring, analysis, and documentation
+          </p>
         </div>
         <Link 
           to="/settings" 
@@ -193,6 +78,7 @@ const Index = () => {
       <Tabs defaultValue="dashboard" className="space-y-4">
         <TabsList>
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+          <TabsTrigger value="compliance">Compliance</TabsTrigger>
           <TabsTrigger value="docs">API Documentation</TabsTrigger>
           <TabsTrigger value="devtools">Developer Tools</TabsTrigger>
         </TabsList>
@@ -203,6 +89,10 @@ const Index = () => {
             metricsLoading={metricsLoading}
             metricsError={metricsError}
           />
+        </TabsContent>
+
+        <TabsContent value="compliance">
+          <ComplianceReporting />
         </TabsContent>
 
         <TabsContent value="docs">
