@@ -17,7 +17,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { UserPlus } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -37,8 +36,7 @@ export const AddUserDialog = () => {
     setLoading(true);
 
     try {
-      const { email, password, role } = formData;
-
+      console.log("Attempting to create user:", formData.email);
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-user`,
         {
@@ -47,16 +45,17 @@ export const AddUserDialog = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
           },
-          body: JSON.stringify({ email, password, role }),
+          body: JSON.stringify(formData),
         }
       );
 
       const data = await response.json();
+      console.log("Response from create-user:", data);
 
       if (!response.ok) {
-        // Check for specific error codes
-        if (data.code === 'USER_EXISTS') {
-          throw new Error('A user with this email already exists. Please use a different email address.');
+        if (data.code === "USER_EXISTS") {
+          console.log("User exists error detected");
+          throw new Error("A user with this email already exists. Please use a different email address.");
         }
         throw new Error(data.error || "Failed to create user");
       }
