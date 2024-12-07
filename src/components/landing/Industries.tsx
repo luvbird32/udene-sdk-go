@@ -1,9 +1,9 @@
-import { Building2, ShoppingCart, Plane, Bank, Briefcase, Hospital, Gamepad2, Smartphone } from "lucide-react";
+import { Building2, ShoppingCart, Plane, Building, Briefcase, Hospital, Gamepad2, Smartphone } from "lucide-react";
 
 export const Industries = () => {
   const industries = [
     {
-      icon: Bank,
+      icon: Building2,
       name: "Financial Services",
       description: "Protect banking transactions, detect credit card fraud, and secure digital payments"
     },
