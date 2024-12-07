@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 const Settings = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState({
     name: "",
     email: "",
@@ -22,6 +23,7 @@ const Settings = () => {
     // Check current session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
+      setLoading(false);
       if (session?.user) {
         setProfile({
           name: session.user.user_metadata.full_name || "",
@@ -36,10 +38,21 @@ const Settings = () => {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      if (!session?.user) {
+        navigate('/');
+      }
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [navigate]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   if (!user) {
     return (
@@ -51,7 +64,7 @@ const Settings = () => {
               className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
             >
               <ArrowLeft className="h-5 w-5" />
-              <span>Back to Dashboard</span>
+              <span>Back to Home</span>
             </Link>
           </div>
           <LoginForm />

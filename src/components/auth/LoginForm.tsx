@@ -4,78 +4,64 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { Auth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { useNavigate } from "react-router-dom";
 
 export const LoginForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "Success",
-        description: "Logged in successfully",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "An error occurred during login",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
+  // Check for existing session and redirect if found
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (session) {
+      navigate("/dashboard");
     }
-  };
+  });
 
   return (
-    <Card className="w-full max-w-md p-6 space-y-6 bg-background">
+    <Card className="w-full max-w-md p-8 space-y-8 bg-background shadow-lg">
       <div className="space-y-2 text-center">
-        <h1 className="text-2xl font-bold">Login</h1>
-        <p className="text-muted-foreground">Enter your credentials to continue</p>
+        <h1 className="text-3xl font-bold tracking-tight">Welcome Back</h1>
+        <p className="text-muted-foreground">
+          Sign in to your account to continue
+        </p>
       </div>
       
-      <form onSubmit={handleLogin} className="space-y-4">
-        <div className="space-y-2">
-          <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full"
-            required
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full"
-            required
-          />
-        </div>
+      <Auth
+        supabaseClient={supabase}
+        appearance={{
+          theme: ThemeSupa,
+          variables: {
+            default: {
+              colors: {
+                brand: 'rgb(var(--primary))',
+                brandAccent: 'rgb(var(--primary))',
+              },
+            },
+          },
+          className: {
+            container: 'w-full',
+            button: 'w-full px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90',
+            input: 'w-full px-3 py-2 border rounded-md',
+          },
+        }}
+        providers={[]}
+        theme="light"
+      />
 
-        <Button 
-          type="submit" 
-          className="w-full"
-          disabled={loading}
-        >
-          {loading ? "Logging in..." : "Login"}
-        </Button>
-      </form>
+      <div className="text-center text-sm text-muted-foreground">
+        <p>
+          By continuing, you agree to our{" "}
+          <a href="#" className="underline hover:text-primary">
+            Terms of Service
+          </a>{" "}
+          and{" "}
+          <a href="#" className="underline hover:text-primary">
+            Privacy Policy
+          </a>
+        </p>
+      </div>
     </Card>
   );
 };
