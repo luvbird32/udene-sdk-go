@@ -2,7 +2,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { Settings } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
 import { DevTools } from "@/components/developer/DevTools";
@@ -15,10 +14,7 @@ import { useRealtimeSubscriptions } from "@/hooks/useRealtimeSubscriptions";
 const Index = () => {
   const { toast } = useToast();
   
-  // Move session timeout logic to a custom hook
   useSessionTimeout();
-  
-  // Move realtime subscriptions to a custom hook
   useRealtimeSubscriptions();
 
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
@@ -56,53 +52,85 @@ const Index = () => {
   });
 
   return (
-    <div className="min-h-screen bg-background p-6" role="main">
-      <header className="mb-8 flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground mb-2" tabIndex={0}>
+    <div className="min-h-screen bg-black text-green-400 p-6 relative overflow-hidden" role="main">
+      {/* Matrix-inspired animated background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          {Array.from({ length: 50 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-green-500 text-xl animate-fall"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${3 + Math.random() * 7}s`
+              }}
+            >
+              {String.fromCharCode(0x30A0 + Math.random() * 96)}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Header section */}
+      <header className="mb-8 flex justify-between items-center relative z-10">
+        <div className="glass-card p-6 rounded-lg w-full max-w-2xl">
+          <h1 className="text-4xl font-bold mb-2 text-green-400 animate-pulse-slow" tabIndex={0}>
             Fraud Detection System
           </h1>
-          <p className="text-muted-foreground" tabIndex={0}>
-            Comprehensive monitoring, analysis, and documentation
+          <p className="text-green-300/80" tabIndex={0}>
+            Advanced monitoring and analysis for cybersecurity threats
           </p>
         </div>
         <Link 
           to="/settings" 
-          className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent"
+          className="flex items-center gap-2 px-6 py-3 rounded-md hover:bg-green-900/20 transition-all duration-300 glass-card ml-4"
         >
           <Settings className="h-5 w-5" />
           <span>Settings</span>
         </Link>
       </header>
 
-      <Tabs defaultValue="dashboard" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-          <TabsTrigger value="compliance">Compliance</TabsTrigger>
-          <TabsTrigger value="docs">API Documentation</TabsTrigger>
-          <TabsTrigger value="devtools">Developer Tools</TabsTrigger>
-        </TabsList>
+      {/* Main content */}
+      <div className="relative z-10">
+        <Tabs defaultValue="dashboard" className="space-y-4">
+          <TabsList className="glass-card p-1">
+            <TabsTrigger value="dashboard" className="data-[state=active]:bg-green-900/40">
+              Dashboard
+            </TabsTrigger>
+            <TabsTrigger value="compliance" className="data-[state=active]:bg-green-900/40">
+              Compliance
+            </TabsTrigger>
+            <TabsTrigger value="docs" className="data-[state=active]:bg-green-900/40">
+              API Documentation
+            </TabsTrigger>
+            <TabsTrigger value="devtools" className="data-[state=active]:bg-green-900/40">
+              Developer Tools
+            </TabsTrigger>
+          </TabsList>
 
-        <TabsContent value="dashboard">
-          <DashboardContent 
-            metrics={metrics}
-            metricsLoading={metricsLoading}
-            metricsError={metricsError}
-          />
-        </TabsContent>
+          <TabsContent value="dashboard" className="glass-card p-6 rounded-lg">
+            <DashboardContent 
+              metrics={metrics}
+              metricsLoading={metricsLoading}
+              metricsError={metricsError}
+            />
+          </TabsContent>
 
-        <TabsContent value="compliance">
-          <ComplianceReporting />
-        </TabsContent>
+          <TabsContent value="compliance" className="glass-card p-6 rounded-lg">
+            <ComplianceReporting />
+          </TabsContent>
 
-        <TabsContent value="docs">
-          <ApiDocs />
-        </TabsContent>
+          <TabsContent value="docs" className="glass-card p-6 rounded-lg">
+            <ApiDocs />
+          </TabsContent>
 
-        <TabsContent value="devtools">
-          <DevTools />
-        </TabsContent>
-      </Tabs>
+          <TabsContent value="devtools" className="glass-card p-6 rounded-lg">
+            <DevTools />
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 };

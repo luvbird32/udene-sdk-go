@@ -39,5 +39,33 @@
 }
 
 .glass-card {
-  @apply bg-black bg-opacity-40 backdrop-blur-lg border border-white/10 rounded-lg;
+  @apply bg-black bg-opacity-40 backdrop-blur-lg border border-green-500/10 rounded-lg;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-100%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(1000%);
+    opacity: 0;
+  }
+}
+
+.animate-fall {
+  animation: fall linear infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
