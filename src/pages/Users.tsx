@@ -72,45 +72,53 @@ const Users = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-4">
-          <Link to="/dashboard">
-            <Button variant="outline" size="icon">
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-          </Link>
-          <h1 className="text-3xl font-bold">User Administration</h1>
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
+      <div className="container mx-auto p-6">
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-4">
+            <Link to="/dashboard">
+              <Button variant="outline" size="icon" className="glass-button">
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+            </Link>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+              User Administration
+            </h1>
+          </div>
+          <Button className="glass-button">Add User</Button>
         </div>
-        <Button>Add User</Button>
+
+        <Card className="glass-card p-6">
+          <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-4">
+            <TabsList className="glass-nav bg-black/20 border-none">
+              <TabsTrigger value="users" className="data-[state=active]:bg-white/10">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-4 w-4" />
+                  <span>Users & Roles</span>
+                </div>
+              </TabsTrigger>
+              <TabsTrigger value="activity" className="data-[state=active]:bg-white/10">
+                <div className="flex items-center gap-2">
+                  <Activity className="h-4 w-4" />
+                  <span>Activity Log</span>
+                </div>
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="users" className="glass-card mt-4">
+              <UserTable 
+                users={users}
+                onRoleChange={handleRoleChange}
+                onStatusToggle={handleStatusToggle}
+              />
+            </TabsContent>
+
+            <TabsContent value="activity">
+              <ActivityLog users={users} />
+            </TabsContent>
+          </Tabs>
+        </Card>
       </div>
-
-      <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-        <TabsList className="mb-4">
-          <TabsTrigger value="users" className="space-x-2">
-            <Shield className="h-4 w-4" />
-            <span>Users & Roles</span>
-          </TabsTrigger>
-          <TabsTrigger value="activity" className="space-x-2">
-            <Activity className="h-4 w-4" />
-            <span>Activity Log</span>
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="users">
-          <Card className="p-6">
-            <UserTable 
-              users={users}
-              onRoleChange={handleRoleChange}
-              onStatusToggle={handleStatusToggle}
-            />
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="activity">
-          <ActivityLog users={users} />
-        </TabsContent>
-      </Tabs>
     </div>
   );
 };
