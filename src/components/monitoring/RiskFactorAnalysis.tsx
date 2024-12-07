@@ -7,6 +7,24 @@ import { Badge } from "@/components/ui/badge";
 import { Info, MessageCircle, UserCog, Smartphone, Mail } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
+interface RiskFactors {
+  multiple_platforms?: string;
+  fraud_history?: string;
+  [key: string]: string | undefined;
+}
+
+interface Transaction {
+  risk_score?: number;
+  message_velocity?: number;
+  profile_changes?: Record<string, any>;
+  interaction_patterns?: {
+    multiple_devices?: boolean;
+    [key: string]: any;
+  };
+  risk_factors?: RiskFactors;
+  feature_importance?: Record<string, number>;
+}
+
 export const RiskFactorAnalysis = () => {
   const { data: latestTransaction, isLoading } = useQuery({
     queryKey: ["latest-flagged-transaction"],
@@ -20,7 +38,7 @@ export const RiskFactorAnalysis = () => {
 
       if (error) throw error;
       
-      return data && data.length > 0 ? data[0] : null;
+      return (data && data.length > 0 ? data[0] : null) as Transaction | null;
     },
     refetchInterval: 5000,
   });
@@ -48,10 +66,10 @@ export const RiskFactorAnalysis = () => {
     );
   }
 
-  const riskFactors = latestTransaction?.risk_factors || {};
-  const featureImportance = latestTransaction?.feature_importance || {};
-  const profileChanges = latestTransaction?.profile_changes || {};
-  const interactionPatterns = latestTransaction?.interaction_patterns || {};
+  const riskFactors = latestTransaction.risk_factors || {};
+  const featureImportance = latestTransaction.feature_importance || {};
+  const profileChanges = latestTransaction.profile_changes || {};
+  const interactionPatterns = latestTransaction.interaction_patterns || {};
   
   // Transform data for the chart
   const chartData = Object.entries(featureImportance).map(([factor, importance]) => ({
@@ -63,7 +81,7 @@ export const RiskFactorAnalysis = () => {
   const getDatingRiskIndicators = () => {
     const indicators = [];
     
-    if (latestTransaction.message_velocity > 50) {
+    if (latestTransaction.message_velocity && latestTransaction.message_velocity > 50) {
       indicators.push({
         icon: <MessageCircle className="w-4 h-4 mt-1 text-muted-foreground" />,
         title: "High Message Velocity",
@@ -79,12 +97,7 @@ export const RiskFactorAnalysis = () => {
       });
     }
     
-    if (
-      typeof interactionPatterns === 'object' && 
-      interactionPatterns !== null && 
-      'multiple_devices' in interactionPatterns && 
-      interactionPatterns.multiple_devices === true
-    ) {
+    if (interactionPatterns.multiple_devices === true) {
       indicators.push({
         icon: <Smartphone className="w-4 h-4 mt-1 text-muted-foreground" />,
         title: "Multiple Device Usage",
@@ -118,8 +131,8 @@ export const RiskFactorAnalysis = () => {
     <Card className="p-4">
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold">Risk Factor Analysis</h3>
-        <Badge variant={latestTransaction?.risk_score >= 70 ? "destructive" : "secondary"}>
-          Risk Score: {latestTransaction?.risk_score?.toFixed(1)}%
+        <Badge variant={latestTransaction.risk_score && latestTransaction.risk_score >= 70 ? "destructive" : "secondary"}>
+          Risk Score: {latestTransaction.risk_score?.toFixed(1)}%
         </Badge>
       </div>
 
@@ -153,19 +166,19 @@ export const RiskFactorAnalysis = () => {
                   </div>
                 </div>
               ))}
-              {Object.entries(riskFactors).map(([factor, explanation]) => (
-                !['multiple_platforms', 'fraud_history'].includes(factor) && (
+              {Object.entries(riskFactors)
+                .filter(([key]) => !['multiple_platforms', 'fraud_history'].includes(key))
+                .map(([factor, explanation]) => (
                   <div key={factor} className="p-2 bg-muted rounded-lg">
                     <div className="flex items-start gap-2">
                       <Info className="w-4 h-4 mt-1 text-muted-foreground" />
                       <div>
                         <p className="font-medium">{factor}</p>
-                        <p className="text-sm text-muted-foreground">{explanation as string}</p>
+                        <p className="text-sm text-muted-foreground">{explanation}</p>
                       </div>
                     </div>
                   </div>
-                )
-              ))}
+                ))}
             </div>
           </ScrollArea>
         </div>
