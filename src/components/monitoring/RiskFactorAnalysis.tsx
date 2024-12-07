@@ -1,31 +1,18 @@
 import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { Info, MessageCircle, UserCog, Smartphone, Mail } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { RiskChart } from "./RiskChart";
+import { RiskIndicators } from "./RiskIndicators";
+import { analyzeDatingRiskIndicators } from "@/utils/riskAnalysis";
+import type { Transaction } from "@/types/risk";
 
-interface RiskFactors {
-  multiple_platforms?: string;
-  fraud_history?: string;
-  [key: string]: string | undefined;
-}
-
-interface Transaction {
-  risk_score?: number;
-  message_velocity?: number;
-  profile_changes?: Record<string, any>;
-  interaction_patterns?: {
-    multiple_devices?: boolean;
-    [key: string]: any;
-  };
-  risk_factors?: RiskFactors;
-  feature_importance?: Record<string, number>;
-}
-
+/**
+ * Main component for analyzing and displaying transaction risk factors
+ */
 export const RiskFactorAnalysis = () => {
+  // Fetch latest flagged transaction
   const { data: latestTransaction, isLoading } = useQuery({
     queryKey: ["latest-flagged-transaction"],
     queryFn: async () => {
@@ -37,12 +24,12 @@ export const RiskFactorAnalysis = () => {
         .limit(1);
 
       if (error) throw error;
-      
       return (data && data.length > 0 ? data[0] : null) as Transaction | null;
     },
     refetchInterval: 5000,
   });
 
+  // Show loading state
   if (isLoading) {
     return (
       <Card className="p-4">
@@ -54,6 +41,7 @@ export const RiskFactorAnalysis = () => {
     );
   }
 
+  // Show empty state
   if (!latestTransaction) {
     return (
       <Card className="p-4">
@@ -66,72 +54,24 @@ export const RiskFactorAnalysis = () => {
     );
   }
 
+  // Extract risk data
   const riskFactors = latestTransaction.risk_factors || {};
   const featureImportance = latestTransaction.feature_importance || {};
-  const profileChanges = latestTransaction.profile_changes || {};
-  const interactionPatterns = latestTransaction.interaction_patterns || {};
   
-  // Transform data for the chart
-  const chartData = Object.entries(featureImportance).map(([factor, importance]) => ({
-    factor,
-    importance: Number(importance) * 100
-  })).sort((a, b) => b.importance - a.importance);
-
-  // Dating-specific risk indicators
-  const getDatingRiskIndicators = () => {
-    const indicators = [];
-    
-    if (latestTransaction.message_velocity && latestTransaction.message_velocity > 50) {
-      indicators.push({
-        icon: <MessageCircle className="w-4 h-4 mt-1 text-muted-foreground" />,
-        title: "High Message Velocity",
-        description: `Unusual messaging pattern detected: ${latestTransaction.message_velocity.toFixed(1)} messages/hour`
-      });
-    }
-    
-    if (Object.keys(profileChanges).length > 0) {
-      indicators.push({
-        icon: <UserCog className="w-4 h-4 mt-1 text-muted-foreground" />,
-        title: "Frequent Profile Changes",
-        description: "Multiple profile updates in short period"
-      });
-    }
-    
-    if (interactionPatterns.multiple_devices === true) {
-      indicators.push({
-        icon: <Smartphone className="w-4 h-4 mt-1 text-muted-foreground" />,
-        title: "Multiple Device Usage",
-        description: "Access from unusual number of devices"
-      });
-    }
-
-    // Add email reputation indicators
-    if (riskFactors.multiple_platforms) {
-      indicators.push({
-        icon: <Mail className="w-4 h-4 mt-1 text-muted-foreground" />,
-        title: "Multiple Platform Usage",
-        description: riskFactors.multiple_platforms
-      });
-    }
-
-    if (riskFactors.fraud_history) {
-      indicators.push({
-        icon: <Info className="w-4 h-4 mt-1 text-muted-foreground" />,
-        title: "Previous Fraud History",
-        description: riskFactors.fraud_history
-      });
-    }
-    
-    return indicators;
-  };
-
-  const datingRiskIndicators = getDatingRiskIndicators();
+  // Get risk indicators
+  const datingRiskIndicators = analyzeDatingRiskIndicators(latestTransaction);
+  
+  // Get additional risk factors (excluding already displayed ones)
+  const additionalFactors = Object.entries(riskFactors)
+    .filter(([key]) => !['multiple_platforms', 'fraud_history'].includes(key));
 
   return (
     <Card className="p-4">
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold">Risk Factor Analysis</h3>
-        <Badge variant={latestTransaction.risk_score && latestTransaction.risk_score >= 70 ? "destructive" : "secondary"}>
+        <Badge 
+          variant={latestTransaction.risk_score && latestTransaction.risk_score >= 70 ? "destructive" : "secondary"}
+        >
           Risk Score: {latestTransaction.risk_score?.toFixed(1)}%
         </Badge>
       </div>
@@ -139,48 +79,15 @@ export const RiskFactorAnalysis = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div>
           <h4 className="text-sm font-medium mb-2">Feature Importance</h4>
-          <div className="h-[200px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} layout="vertical">
-                <XAxis type="number" domain={[0, 100]} />
-                <YAxis type="category" dataKey="factor" width={100} />
-                <Tooltip />
-                <Bar dataKey="importance" fill="#8884d8" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+          <RiskChart featureImportance={featureImportance} />
         </div>
 
         <div>
           <h4 className="text-sm font-medium mb-2">Risk Explanations</h4>
-          <ScrollArea className="h-[200px]">
-            <div className="space-y-2">
-              {datingRiskIndicators.map((indicator, index) => (
-                <div key={index} className="p-2 bg-muted rounded-lg">
-                  <div className="flex items-start gap-2">
-                    {indicator.icon}
-                    <div>
-                      <p className="font-medium">{indicator.title}</p>
-                      <p className="text-sm text-muted-foreground">{indicator.description}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-              {Object.entries(riskFactors)
-                .filter(([key]) => !['multiple_platforms', 'fraud_history'].includes(key))
-                .map(([factor, explanation]) => (
-                  <div key={factor} className="p-2 bg-muted rounded-lg">
-                    <div className="flex items-start gap-2">
-                      <Info className="w-4 h-4 mt-1 text-muted-foreground" />
-                      <div>
-                        <p className="font-medium">{factor}</p>
-                        <p className="text-sm text-muted-foreground">{explanation}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-            </div>
-          </ScrollArea>
+          <RiskIndicators 
+            indicators={datingRiskIndicators}
+            additionalFactors={additionalFactors}
+          />
         </div>
       </div>
     </Card>
