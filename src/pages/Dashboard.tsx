@@ -1,5 +1,5 @@
 import { useToast } from "@/components/ui/use-toast";
-import { Settings } from "lucide-react";
+import { Settings, Users } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -110,13 +110,22 @@ const Dashboard = () => {
             Advanced monitoring and analysis for cybersecurity threats
           </p>
         </div>
-        <Link 
-          to="/settings" 
-          className="flex items-center gap-2 px-6 py-3 rounded-md hover:bg-green-900/20 transition-all duration-300 glass-card ml-4"
-        >
-          <Settings className="h-5 w-5" />
-          <span>Settings</span>
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link 
+            to="/users" 
+            className="flex items-center gap-2 px-6 py-3 rounded-md hover:bg-green-900/20 transition-all duration-300 glass-card"
+          >
+            <Users className="h-5 w-5" />
+            <span>Users</span>
+          </Link>
+          <Link 
+            to="/settings" 
+            className="flex items-center gap-2 px-6 py-3 rounded-md hover:bg-green-900/20 transition-all duration-300 glass-card"
+          >
+            <Settings className="h-5 w-5" />
+            <span>Settings</span>
+          </Link>
+        </div>
       </header>
 
       {/* Account Type Indicator */}
