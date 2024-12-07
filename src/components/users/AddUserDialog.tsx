@@ -19,11 +19,13 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { UserPlus } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const AddUserDialog = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -53,6 +55,8 @@ export const AddUserDialog = () => {
         const error = await response.json();
         throw new Error(error.error || "Failed to create user");
       }
+
+      await queryClient.invalidateQueries({ queryKey: ["users"] });
 
       toast({
         title: "Success",
