@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { getItem, setItem } from "@/utils/indexedDB";
 
 export interface FraudMetrics {
   riskScore: number;
@@ -20,7 +21,13 @@ export interface Activity {
 
 export const getFraudMetrics = async (): Promise<FraudMetrics> => {
   try {
-    // Get recent transactions for risk calculation
+    // Try to get cached metrics first
+    const cachedMetrics = await getItem('apiResponses', 'fraudMetrics');
+    if (cachedMetrics) {
+      return cachedMetrics;
+    }
+
+    // If no cache, fetch from API
     const { data: recentTransactions, error: transactionsError } = await supabase
       .from('transactions')
       .select('risk_score, is_fraudulent')
@@ -60,7 +67,7 @@ export const getFraudMetrics = async (): Promise<FraudMetrics> => {
 
     if (alertError) throw alertError;
 
-    return {
+    const metrics = {
       riskScore: Math.round(avgRiskScore || 0),
       activeUsers: activeUsers || 0,
       alertCount: alertCount || 0,
@@ -70,6 +77,11 @@ export const getFraudMetrics = async (): Promise<FraudMetrics> => {
       avgProcessingTime: 35,
       concurrentCalls: activeUsers || 0
     };
+
+    // Cache the metrics for 5 minutes
+    await setItem('apiResponses', 'fraudMetrics', metrics, Date.now() + 5 * 60 * 1000);
+
+    return metrics;
   } catch (error) {
     console.error('Error fetching metrics:', error);
     throw error;
@@ -78,6 +90,12 @@ export const getFraudMetrics = async (): Promise<FraudMetrics> => {
 
 export const getRecentActivity = async (): Promise<Activity[]> => {
   try {
+    // Try to get cached activity first
+    const cachedActivity = await getItem('apiResponses', 'recentActivity');
+    if (cachedActivity) {
+      return cachedActivity;
+    }
+
     const { data, error } = await supabase
       .from('fraud_alerts')
       .select('*')
@@ -86,12 +104,17 @@ export const getRecentActivity = async (): Promise<Activity[]> => {
 
     if (error) throw error;
 
-    return (data || []).map(alert => ({
+    const activity = (data || []).map(alert => ({
       id: alert.id,
       type: 'suspicious',
       description: alert.description,
       timestamp: alert.created_at
     }));
+
+    // Cache the activity for 1 minute
+    await setItem('apiResponses', 'recentActivity', activity, Date.now() + 60 * 1000);
+
+    return activity;
   } catch (error) {
     console.error('Error fetching activity:', error);
     throw error;
