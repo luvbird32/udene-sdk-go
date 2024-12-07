@@ -9,96 +9,6 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      api_keys: {
-        Row: {
-          created_at: string | null
-          expires_at: string | null
-          id: string
-          key_value: string
-          last_used_at: string | null
-          name: string
-          status: string
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          expires_at?: string | null
-          id?: string
-          key_value: string
-          last_used_at?: string | null
-          name: string
-          status?: string
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          expires_at?: string | null
-          id?: string
-          key_value?: string
-          last_used_at?: string | null
-          name?: string
-          status?: string
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      device_fingerprints: {
-        Row: {
-          created_at: string | null
-          device_id: string
-          fingerprint_data: Json
-          id: string
-          last_seen_at: string | null
-          trust_score: number | null
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          device_id: string
-          fingerprint_data: Json
-          id?: string
-          last_seen_at?: string | null
-          trust_score?: number | null
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          device_id?: string
-          fingerprint_data?: Json
-          id?: string
-          last_seen_at?: string | null
-          trust_score?: number | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      files: {
-        Row: {
-          content: string
-          created_at: string | null
-          id: string
-          language: string
-          name: string
-          updated_at: string | null
-        }
-        Insert: {
-          content: string
-          created_at?: string | null
-          id?: string
-          language: string
-          name: string
-          updated_at?: string | null
-        }
-        Update: {
-          content?: string
-          created_at?: string | null
-          id?: string
-          language?: string
-          name?: string
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
       fraud_alerts: {
         Row: {
           alert_type: string
@@ -140,39 +50,6 @@ export type Database = {
           },
         ]
       }
-      fraud_rules: {
-        Row: {
-          condition_json: Json
-          created_at: string | null
-          description: string | null
-          id: string
-          is_active: boolean | null
-          name: string
-          risk_score: number
-          updated_at: string | null
-        }
-        Insert: {
-          condition_json: Json
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          is_active?: boolean | null
-          name: string
-          risk_score: number
-          updated_at?: string | null
-        }
-        Update: {
-          condition_json?: Json
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          is_active?: boolean | null
-          name?: string
-          risk_score?: number
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
       metrics: {
         Row: {
           id: string
@@ -201,19 +78,16 @@ export type Database = {
           created_at: string | null
           customer_id: string
           device_id: string
-          device_trust_score: number | null
           id: string
           ip_address: string
           is_fraudulent: boolean | null
           location: string
-          location_risk_score: number | null
           merchant_id: string
           recurring: boolean
           risk_score: number | null
           timestamp: string
           transaction_type: string
           updated_at: string | null
-          velocity_score: number | null
         }
         Insert: {
           amount: number
@@ -221,19 +95,16 @@ export type Database = {
           created_at?: string | null
           customer_id: string
           device_id: string
-          device_trust_score?: number | null
           id?: string
           ip_address: string
           is_fraudulent?: boolean | null
           location: string
-          location_risk_score?: number | null
           merchant_id: string
           recurring: boolean
           risk_score?: number | null
           timestamp?: string
           transaction_type: string
           updated_at?: string | null
-          velocity_score?: number | null
         }
         Update: {
           amount?: number
@@ -241,19 +112,16 @@ export type Database = {
           created_at?: string | null
           customer_id?: string
           device_id?: string
-          device_trust_score?: number | null
           id?: string
           ip_address?: string
           is_fraudulent?: boolean | null
           location?: string
-          location_risk_score?: number | null
           merchant_id?: string
           recurring?: boolean
           risk_score?: number | null
           timestamp?: string
           transaction_type?: string
           updated_at?: string | null
-          velocity_score?: number | null
         }
         Relationships: []
       }
@@ -262,10 +130,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      generate_api_key: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never
