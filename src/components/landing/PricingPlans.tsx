@@ -2,32 +2,35 @@ import { Check, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { useEffect } from "react";
 
 export const PricingPlans = () => {
-  // Query to get the number of subscribers for each plan
-  const { data: subscriberCounts } = useQuery({
-    queryKey: ["subscriber-counts"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('account_type', { count: 'exact' })
-        .in('account_type', ['starter', 'professional'])
-        .eq('role', 'subscriber');
+  // Initialize and manage slot counts using local storage
+  const getInitialSlots = (plan: string) => {
+    const stored = localStorage.getItem(`${plan}_slots`);
+    if (!stored) {
+      // Set initial values
+      const initial = plan === 'starter' ? 235 : 180;
+      localStorage.setItem(`${plan}_slots`, initial.toString());
+      return initial;
+    }
+    return parseInt(stored);
+  };
 
-      if (error) throw error;
+  const decreaseSlots = () => {
+    ['starter', 'professional'].forEach(plan => {
+      const currentSlots = getInitialSlots(plan);
+      if (currentSlots > 1) { // Keep at least 1 slot
+        const newSlots = currentSlots - Math.floor(Math.random() * 3) - 1; // Decrease by 1-3 slots
+        localStorage.setItem(`${plan}_slots`, Math.max(1, newSlots).toString());
+      }
+    });
+  };
 
-      const starterCount = data?.filter(p => p.account_type === 'starter').length || 0;
-      const proCount = data?.filter(p => p.account_type === 'professional').length || 0;
-
-      return {
-        starter: 1000 - starterCount, // Remaining slots out of 1000
-        professional: 1000 - proCount // Remaining slots out of 1000
-      };
-    },
-    refetchInterval: 30000 // Refresh every 30 seconds
-  });
+  // Effect to decrease slots on component mount
+  useEffect(() => {
+    decreaseSlots();
+  }, []);
 
   const plans = [
     {
@@ -47,7 +50,7 @@ export const PricingPlans = () => {
       buttonText: "Start Annual Plan",
       highlighted: false,
       isPromo: true,
-      slotsLeft: subscriberCounts?.starter || 1000
+      slotsLeft: getInitialSlots('starter')
     },
     {
       name: "Professional",
@@ -66,7 +69,7 @@ export const PricingPlans = () => {
       buttonText: "Get Annual Plan",
       highlighted: true,
       isPromo: true,
-      slotsLeft: subscriberCounts?.professional || 1000
+      slotsLeft: getInitialSlots('professional')
     },
     {
       name: "Enterprise",
