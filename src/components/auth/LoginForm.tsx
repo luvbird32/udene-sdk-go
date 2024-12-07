@@ -11,7 +11,7 @@ export const LoginForm = () => {
         appearance={{ theme: ThemeSupa }}
         theme="light"
         providers={[]}
-        options={{
+        authOptions={{
           emailRedirectTo: `${window.location.origin}/settings`,
           additionalSignUpFields: [
             {
