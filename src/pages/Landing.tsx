@@ -47,14 +47,31 @@ const Landing = () => {
         </script>
       </Helmet>
 
-      <div className="min-h-screen bg-black text-green-400 relative overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-green-400 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(74,222,128,0.1)_0%,transparent_70%)] z-0"></div>
         <MatrixBackground />
-        <main className="relative z-10">
+        <nav className="glass-nav py-4 px-6">
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
+            <div className="text-2xl font-bold text-green-400">Udene</div>
+            <div className="space-x-6">
+              <a href="#features" className="text-green-300 hover:text-green-400 transition-colors">Features</a>
+              <a href="#pricing" className="text-green-300 hover:text-green-400 transition-colors">Pricing</a>
+              <a href="#contact" className="glass-button px-4 py-2 rounded-lg text-green-400">Contact</a>
+            </div>
+          </div>
+        </nav>
+        <main className="relative z-10 pt-20">
           <HeroSection />
-          <Features />
+          <div className="glass-section" id="features">
+            <Features />
+          </div>
           <Industries />
-          <UseCases />
-          <PricingPlans />
+          <div className="glass-section">
+            <UseCases />
+          </div>
+          <div className="glass-section" id="pricing">
+            <PricingPlans />
+          </div>
         </main>
         <Footer />
       </div>

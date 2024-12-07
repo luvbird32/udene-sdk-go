@@ -34,12 +34,31 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-['Inter'];
+    @apply bg-background text-foreground font-['Inter'] bg-gradient-to-br from-black via-gray-900 to-black min-h-screen;
   }
 }
 
 .glass-card {
-  @apply bg-black bg-opacity-40 backdrop-blur-lg border border-green-500/10 rounded-lg;
+  @apply bg-black/30 backdrop-blur-xl border border-white/10 shadow-xl;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+}
+
+.glass-nav {
+  @apply fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-lg border-b border-white/10;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+}
+
+.glass-button {
+  @apply bg-white/10 backdrop-blur-md hover:bg-white/20 border border-white/20 transition-all duration-300;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+}
+
+.glass-input {
+  @apply bg-black/20 backdrop-blur-md border border-white/20 focus:border-white/40 transition-all duration-300;
+}
+
+.glass-section {
+  @apply relative backdrop-blur-sm bg-gradient-to-br from-black/40 via-black/20 to-black/40 border-y border-white/10;
 }
 
 @keyframes fall {
@@ -68,4 +87,20 @@
   50% {
     opacity: 0.7;
   }
+}
+
+.glow {
+  @apply relative;
+}
+
+.glow::after {
+  content: '';
+  @apply absolute inset-0 rounded-lg;
+  background: radial-gradient(circle at center, rgba(74, 222, 128, 0.1) 0%, transparent 70%);
+  filter: blur(20px);
+  z-index: -1;
+}
+
+.glass-divider {
+  @apply h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent;
 }
