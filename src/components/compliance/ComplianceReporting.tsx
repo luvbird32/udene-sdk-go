@@ -54,7 +54,7 @@ export const ComplianceReporting = () => {
         report_type: type,
         report_period: `[${startOfMonth.toISOString()},${endOfMonth.toISOString()}]`,
         status: 'pending',
-        generated_by: userId // Set the generated_by field to current user's ID
+        generated_by: userId
       });
 
     if (error) {
@@ -74,10 +74,10 @@ export const ComplianceReporting = () => {
 
   if (isLoading) {
     return (
-      <Card className="p-4">
+      <Card className="glass-card p-4">
         <div className="animate-pulse space-y-4">
-          <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-32 bg-gray-200 rounded"></div>
+          <div className="h-4 bg-black/20 rounded w-1/4"></div>
+          <div className="h-32 bg-black/20 rounded"></div>
         </div>
       </Card>
     );
@@ -85,12 +85,12 @@ export const ComplianceReporting = () => {
 
   return (
     <div className="space-y-6">
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Generate Compliance Report</h3>
+      <Card className="glass-card p-6">
+        <h3 className="text-lg font-semibold mb-4 text-green-400">Generate Compliance Report</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Button 
             variant="outline" 
-            className="flex items-center gap-2"
+            className="glass-button flex items-center gap-2"
             onClick={() => generateReport('gdpr_data_access')}
             disabled={!userId}
           >
@@ -99,7 +99,7 @@ export const ComplianceReporting = () => {
           </Button>
           <Button 
             variant="outline"
-            className="flex items-center gap-2"
+            className="glass-button flex items-center gap-2"
             onClick={() => generateReport('psd2_transaction_log')}
             disabled={!userId}
           >
@@ -108,7 +108,7 @@ export const ComplianceReporting = () => {
           </Button>
           <Button 
             variant="outline"
-            className="flex items-center gap-2"
+            className="glass-button flex items-center gap-2"
             onClick={() => generateReport('fraud_audit_trail')}
             disabled={!userId}
           >
@@ -118,26 +118,26 @@ export const ComplianceReporting = () => {
         </div>
       </Card>
 
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Recent Reports</h3>
+      <Card className="glass-card p-6">
+        <h3 className="text-lg font-semibold mb-4 text-green-400">Recent Reports</h3>
         <ScrollArea className="h-[300px]">
           <div className="space-y-4">
             {reports?.map((report) => (
               <div 
                 key={report.id} 
-                className="p-4 border rounded-lg flex items-center justify-between"
+                className="glass-card p-4 rounded-lg flex items-center justify-between"
               >
                 <div>
-                  <p className="font-medium">{report.report_type.replace(/_/g, ' ').toUpperCase()}</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="font-medium text-green-400">{report.report_type.replace(/_/g, ' ').toUpperCase()}</p>
+                  <p className="text-sm text-green-300/80">
                     Generated: {new Date(report.created_at).toLocaleString()}
                   </p>
-                  <p className="text-sm text-muted-foreground capitalize">
+                  <p className="text-sm text-green-300/80 capitalize">
                     Status: {report.status}
                   </p>
                 </div>
                 {report.download_url && (
-                  <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                  <Button variant="ghost" size="sm" className="glass-button flex items-center gap-2">
                     <FileDown className="h-4 w-4" />
                     Download
                   </Button>
