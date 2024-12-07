@@ -8,6 +8,7 @@ import { ErrorLog } from "@/components/monitoring/ErrorLog";
 import { PerformanceMetrics } from "@/components/monitoring/PerformanceMetrics";
 import { RiskFactorAnalysis } from "@/components/monitoring/RiskFactorAnalysis";
 import { FeedbackManagement } from "@/components/monitoring/FeedbackManagement";
+import { CustomerBehavior } from "@/components/monitoring/CustomerBehavior";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
@@ -38,6 +39,8 @@ export const DashboardContent = ({ metrics, metricsLoading, metricsError }: Dash
         <HealthStatus />
         <DetectionMetrics />
       </div>
+
+      <CustomerBehavior />
 
       <RiskFactorAnalysis />
 
