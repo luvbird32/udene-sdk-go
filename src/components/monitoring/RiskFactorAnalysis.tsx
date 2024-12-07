@@ -79,7 +79,13 @@ export const RiskFactorAnalysis = () => {
       });
     }
     
-    if (interactionPatterns.multiple_devices) {
+    // Type guard to check if interactionPatterns is an object with multiple_devices property
+    if (
+      typeof interactionPatterns === 'object' && 
+      interactionPatterns !== null && 
+      'multiple_devices' in interactionPatterns && 
+      interactionPatterns.multiple_devices === true
+    ) {
       indicators.push({
         icon: <Smartphone className="w-4 h-4 mt-1 text-muted-foreground" />,
         title: "Multiple Device Usage",
