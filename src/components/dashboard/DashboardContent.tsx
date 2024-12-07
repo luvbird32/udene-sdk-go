@@ -14,6 +14,9 @@ import { AlertCircle } from "lucide-react";
 import { UserActivities } from "@/components/dashboard/UserActivities";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { analyzeVPNRisk } from "@/utils/vpnDetection";
+import { useEffect } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 interface DashboardContentProps {
   metrics: any;
@@ -22,6 +25,8 @@ interface DashboardContentProps {
 }
 
 export const DashboardContent = ({ metrics, metricsLoading, metricsError }: DashboardContentProps) => {
+  const { toast } = useToast();
+  
   const { data: profile } = useQuery({
     queryKey: ["user-profile"],
     queryFn: async () => {
@@ -38,6 +43,36 @@ export const DashboardContent = ({ metrics, metricsLoading, metricsError }: Dash
       return profile;
     }
   });
+
+  // Add VPN detection
+  useEffect(() => {
+    const checkVPNUsage = async () => {
+      const vpnRisk = await analyzeVPNRisk();
+      
+      if (vpnRisk.riskLevel !== 'low') {
+        toast({
+          title: "Security Alert",
+          description: `Suspicious connection detected: ${vpnRisk.details.join(', ')}`,
+          variant: "destructive",
+        });
+
+        // Log the VPN detection event
+        if (profile?.id) {
+          await supabase.from('user_activities').insert({
+            profile_id: profile.id,
+            activity_type: 'security_alert',
+            description: 'VPN or proxy usage detected',
+            metadata: {
+              risk_level: vpnRisk.riskLevel,
+              details: vpnRisk.details
+            }
+          });
+        }
+      }
+    };
+
+    checkVPNUsage();
+  }, [profile?.id]);
 
   const renderError = (error: Error) => (
     <Alert variant="destructive" className="mb-4">
