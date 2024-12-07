@@ -5,19 +5,41 @@ import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
 import { DevTools } from "@/components/developer/DevTools";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
 import { ComplianceReporting } from "@/components/compliance/ComplianceReporting";
 import { useSessionTimeout } from "@/hooks/useSessionTimeout";
 import { useRealtimeSubscriptions } from "@/hooks/useRealtimeSubscriptions";
 import { AccountTypeIndicator } from "@/components/dashboard/AccountTypeIndicator";
-import { Helmet } from "react-helmet";
+import { useEffect } from "react";
 
 const Dashboard = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   useSessionTimeout();
   useRealtimeSubscriptions();
+
+  // Check authentication status and redirect if not authenticated
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate('/');
+      }
+    };
+    
+    checkAuth();
+
+    // Subscribe to auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!session) {
+        navigate('/');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
 
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
     queryKey: ["metrics"],
