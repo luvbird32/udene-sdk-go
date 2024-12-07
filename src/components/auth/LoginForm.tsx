@@ -18,8 +18,8 @@ export const LoginForm = () => {
               color: '#4ade80',
               fontWeight: '500',
               '&:hover': {
-                background: 'rgba(255, 255, 255, 0.2)',
-              },
+                background: 'rgba(255, 255, 255, 0.2)'
+              }
             },
             input: {
               background: 'rgba(0, 0, 0, 0.2)',
@@ -29,31 +29,31 @@ export const LoginForm = () => {
               borderRadius: '0.375rem',
               '&:focus': {
                 border: '1px solid rgba(255, 255, 255, 0.4)',
-                outline: 'none',
-              },
+                outline: 'none'
+              }
             },
             label: {
               color: '#4ade80',
               marginBottom: '0.5rem',
-              display: 'block',
+              display: 'block'
             },
             message: {
-              color: '#ffffff',
+              color: '#ffffff'
             },
             anchor: {
               color: '#4ade80',
               '&:hover': {
-                color: '#22c55e',
-              },
-            },
+                color: '#22c55e'
+              }
+            }
           },
           className: {
             container: 'space-y-4',
             label: 'text-green-400',
             button: 'w-full glass-button mt-4',
             input: 'glass-input w-full',
-            message: 'text-sm text-red-400',
-          },
+            message: 'text-sm text-red-400'
+          }
         }}
         theme="dark"
         providers={[]}
