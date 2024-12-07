@@ -3,15 +3,25 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { User } from '@supabase/supabase-js';
 
 export const ApiKeySettings = () => {
   const { toast } = useToast();
   const [apiKeys, setApiKeys] = useState([]);
   const [newKeyName, setNewKeyName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  // Fetch current user session
+  const fetchUserSession = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    setUser(user);
+  };
 
   // Simple function to fetch API keys
   const fetchApiKeys = async () => {
+    if (!user) return;
+
     try {
       const { data, error } = await supabase
         .from('api_keys')
@@ -31,11 +41,26 @@ export const ApiKeySettings = () => {
   };
 
   useEffect(() => {
-    fetchApiKeys();
+    fetchUserSession();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchApiKeys();
+    }
+  }, [user]);
 
   // Simple function to generate a new API key
   const generateApiKey = async () => {
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to generate API keys",
+        variant: "destructive"
+      });
+      return;
+    }
+
     if (!newKeyName.trim()) {
       toast({
         title: "Error",
@@ -79,6 +104,15 @@ export const ApiKeySettings = () => {
 
   // Simple function to revoke an API key
   const revokeApiKey = async (id) => {
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to revoke API keys",
+        variant: "destructive"
+      });
+      return;
+    }
+
     try {
       setIsLoading(true);
       const { error } = await supabase
@@ -105,6 +139,17 @@ export const ApiKeySettings = () => {
     }
   };
 
+  // If no user is logged in, show a login prompt
+  if (!user) {
+    return (
+      <div className="text-center p-6 bg-muted rounded-lg">
+        <p className="text-muted-foreground mb-4">
+          Please log in to manage your API keys
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="space-y-4">
@@ -124,37 +169,41 @@ export const ApiKeySettings = () => {
 
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Active API Keys</h3>
-        {apiKeys.map((key) => (
-          <div key={key.id} className="p-4 border rounded-lg">
-            <div className="flex justify-between items-center">
-              <div>
-                <p className="font-medium">{key.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  Created: {new Date(key.created_at).toLocaleDateString()}
-                </p>
+        {apiKeys.length === 0 ? (
+          <p className="text-muted-foreground">No API keys found</p>
+        ) : (
+          apiKeys.map((key) => (
+            <div key={key.id} className="p-4 border rounded-lg">
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="font-medium">{key.name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Created: {new Date(key.created_at).toLocaleDateString()}
+                  </p>
+                </div>
+                {key.status === 'active' && (
+                  <Button
+                    variant="destructive"
+                    onClick={() => revokeApiKey(key.id)}
+                    disabled={isLoading}
+                  >
+                    Revoke
+                  </Button>
+                )}
               </div>
               {key.status === 'active' && (
-                <Button
-                  variant="destructive"
-                  onClick={() => revokeApiKey(key.id)}
-                  disabled={isLoading}
-                >
-                  Revoke
-                </Button>
+                <Input
+                  value={key.key_value}
+                  readOnly
+                  className="mt-2 font-mono text-sm"
+                />
               )}
+              <p className="text-sm text-muted-foreground mt-2">
+                Status: {key.status}
+              </p>
             </div>
-            {key.status === 'active' && (
-              <Input
-                value={key.key_value}
-                readOnly
-                className="mt-2 font-mono text-sm"
-              />
-            )}
-            <p className="text-sm text-muted-foreground mt-2">
-              Status: {key.status}
-            </p>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
