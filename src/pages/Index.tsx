@@ -14,6 +14,9 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { KeyMetrics } from "@/components/dashboard/KeyMetrics";
 import { DetectionMetrics } from "@/components/monitoring/DetectionMetrics";
+import { TransactionTrends } from "@/components/dashboard/TransactionTrends";
+import { GeographicalDistribution } from "@/components/dashboard/GeographicalDistribution";
+import { FraudPatterns } from "@/components/dashboard/FraudPatterns";
 
 const Index = () => {
   const { toast } = useToast();
@@ -118,13 +121,27 @@ const Index = () => {
         </TabsList>
 
         <TabsContent value="dashboard" className="space-y-8">
-          {metricsError && renderError(metricsError)}
+          {metricsError && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>
+                {metricsError.message || "An error occurred while loading the dashboard"}
+              </AlertDescription>
+            </Alert>
+          )}
           
           <KeyMetrics metrics={metrics} isLoading={metricsLoading} />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <HealthStatus />
             <DetectionMetrics />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <TransactionTrends />
+            <GeographicalDistribution />
+            <FraudPatterns />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
