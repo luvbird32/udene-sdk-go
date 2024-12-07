@@ -200,29 +200,73 @@ export type Database = {
         }
         Relationships: []
       }
+      organizations: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
+          account_type: string
           avatar_url: string | null
           created_at: string | null
           id: string
+          organization_id: string | null
+          organization_name: string | null
+          organization_role: string | null
+          role: string
           updated_at: string | null
           username: string | null
         }
         Insert: {
+          account_type?: string
           avatar_url?: string | null
           created_at?: string | null
           id: string
+          organization_id?: string | null
+          organization_name?: string | null
+          organization_role?: string | null
+          role?: string
           updated_at?: string | null
           username?: string | null
         }
         Update: {
+          account_type?: string
           avatar_url?: string | null
           created_at?: string | null
           id?: string
+          organization_id?: string | null
+          organization_name?: string | null
+          organization_role?: string | null
+          role?: string
           updated_at?: string | null
           username?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_organization"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       transactions: {
         Row: {
