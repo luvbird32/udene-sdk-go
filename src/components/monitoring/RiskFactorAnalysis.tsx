@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { Info, MessageCircle, UserCog, Smartphone } from "lucide-react";
+import { Info, MessageCircle, UserCog, Smartphone, Mail } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const RiskFactorAnalysis = () => {
@@ -79,7 +79,6 @@ export const RiskFactorAnalysis = () => {
       });
     }
     
-    // Type guard to check if interactionPatterns is an object with multiple_devices property
     if (
       typeof interactionPatterns === 'object' && 
       interactionPatterns !== null && 
@@ -90,6 +89,23 @@ export const RiskFactorAnalysis = () => {
         icon: <Smartphone className="w-4 h-4 mt-1 text-muted-foreground" />,
         title: "Multiple Device Usage",
         description: "Access from unusual number of devices"
+      });
+    }
+
+    // Add email reputation indicators
+    if (riskFactors.multiple_platforms) {
+      indicators.push({
+        icon: <Mail className="w-4 h-4 mt-1 text-muted-foreground" />,
+        title: "Multiple Platform Usage",
+        description: riskFactors.multiple_platforms
+      });
+    }
+
+    if (riskFactors.fraud_history) {
+      indicators.push({
+        icon: <Info className="w-4 h-4 mt-1 text-muted-foreground" />,
+        title: "Previous Fraud History",
+        description: riskFactors.fraud_history
       });
     }
     
@@ -138,15 +154,17 @@ export const RiskFactorAnalysis = () => {
                 </div>
               ))}
               {Object.entries(riskFactors).map(([factor, explanation]) => (
-                <div key={factor} className="p-2 bg-muted rounded-lg">
-                  <div className="flex items-start gap-2">
-                    <Info className="w-4 h-4 mt-1 text-muted-foreground" />
-                    <div>
-                      <p className="font-medium">{factor}</p>
-                      <p className="text-sm text-muted-foreground">{explanation as string}</p>
+                !['multiple_platforms', 'fraud_history'].includes(factor) && (
+                  <div key={factor} className="p-2 bg-muted rounded-lg">
+                    <div className="flex items-start gap-2">
+                      <Info className="w-4 h-4 mt-1 text-muted-foreground" />
+                      <div>
+                        <p className="font-medium">{factor}</p>
+                        <p className="text-sm text-muted-foreground">{explanation as string}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )
               ))}
             </div>
           </ScrollArea>

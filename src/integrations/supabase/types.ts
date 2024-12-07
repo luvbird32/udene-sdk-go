@@ -108,6 +108,36 @@ export type Database = {
         }
         Relationships: []
       }
+      email_reputation: {
+        Row: {
+          email: string
+          first_seen: string | null
+          fraud_flags: Json
+          id: string
+          last_updated: string | null
+          platform_occurrences: Json
+          risk_score: number | null
+        }
+        Insert: {
+          email: string
+          first_seen?: string | null
+          fraud_flags?: Json
+          id?: string
+          last_updated?: string | null
+          platform_occurrences?: Json
+          risk_score?: number | null
+        }
+        Update: {
+          email?: string
+          first_seen?: string | null
+          fraud_flags?: Json
+          id?: string
+          last_updated?: string | null
+          platform_occurrences?: Json
+          risk_score?: number | null
+        }
+        Relationships: []
+      }
       fraud_alerts: {
         Row: {
           alert_type: string

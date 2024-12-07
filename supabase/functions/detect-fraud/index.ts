@@ -17,6 +17,7 @@ interface Transaction {
   card_present: boolean
   recurring: boolean
   timestamp: string
+  email?: string // Add email field
 }
 
 serve(async (req) => {
@@ -61,6 +62,40 @@ serve(async (req) => {
     
     const data: Transaction = transaction
 
+    // Check email reputation if email is provided
+    let emailRiskScore = 0
+    let emailRiskFactors = {}
+    
+    if (data.email) {
+      console.log('Checking email reputation for:', data.email);
+      const { data: emailRep, error: emailError } = await supabase
+        .from('email_reputation')
+        .select('*')
+        .eq('email', data.email)
+        .single()
+
+      if (emailError && emailError.code !== 'PGRST116') { // PGRST116 is "not found"
+        console.error('Error checking email reputation:', emailError)
+      }
+
+      if (emailRep) {
+        const platformCount = Object.keys(emailRep.platform_occurrences).length
+        const fraudFlagsCount = emailRep.fraud_flags.length
+        
+        emailRiskScore = Math.min(
+          ((platformCount * 10) + (fraudFlagsCount * 20)), 
+          100
+        )
+        
+        emailRiskFactors = {
+          multiple_platforms: platformCount > 1 ? `Found on ${platformCount} platforms` : null,
+          fraud_history: fraudFlagsCount > 0 ? `${fraudFlagsCount} previous fraud flags` : null
+        }
+        
+        console.log('Email risk assessment:', { emailRiskScore, emailRiskFactors });
+      }
+    }
+
     // Get recent transactions for pattern analysis
     const { data: recentTransactions } = await supabase
       .from('transactions')
@@ -84,9 +119,13 @@ serve(async (req) => {
     const mlRiskScore = mlResponse.data.risk_score || 0
     console.log('ML risk analysis:', mlResponse.data)
 
-    // Combine ML score with basic rules
+    // Combine ML score with basic rules and email risk
     const basicRiskScore = await calculateBasicRiskScore(data)
-    const totalRiskScore = (mlRiskScore * 0.6) + (basicRiskScore * 0.4)
+    const totalRiskScore = (
+      (mlRiskScore * 0.5) + 
+      (basicRiskScore * 0.3) + 
+      (emailRiskScore * 0.2)
+    )
     
     console.log('Final combined risk score:', totalRiskScore)
 
@@ -96,7 +135,11 @@ serve(async (req) => {
       .insert({
         ...data,
         risk_score: totalRiskScore,
-        is_fraudulent: totalRiskScore > 70
+        is_fraudulent: totalRiskScore > 70,
+        risk_factors: {
+          ...mlResponse.data.risk_factors,
+          ...emailRiskFactors
+        }
       })
       .select()
       .single()
@@ -111,7 +154,7 @@ serve(async (req) => {
           transaction_id: savedTransaction.id,
           alert_type: 'High Risk Transaction',
           severity: totalRiskScore > 85 ? 'high' : 'medium',
-          description: `Risk factors: ML Score ${mlRiskScore.toFixed(1)}%, Basic Score ${basicRiskScore.toFixed(1)}%`
+          description: `Risk factors: ML Score ${mlRiskScore.toFixed(1)}%, Basic Score ${basicRiskScore.toFixed(1)}%, Email Score ${emailRiskScore.toFixed(1)}%`
         })
 
       if (alertError) throw alertError
@@ -122,6 +165,7 @@ serve(async (req) => {
         risk_score: totalRiskScore,
         is_fraudulent: totalRiskScore > 70,
         ml_insights: mlResponse.data.risk_factors,
+        email_risk_factors: emailRiskFactors,
         performance_metrics: mlResponse.data.performance_metrics
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
