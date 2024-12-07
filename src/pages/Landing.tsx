@@ -1,6 +1,8 @@
 import { Helmet } from "react-helmet";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { Features } from "@/components/landing/Features";
+import { Industries } from "@/components/landing/Industries";
+import { UseCases } from "@/components/landing/UseCases";
 import { MatrixBackground } from "@/components/landing/MatrixBackground";
 
 const Landing = () => {
@@ -47,6 +49,8 @@ const Landing = () => {
         <main className="relative z-10">
           <HeroSection />
           <Features />
+          <Industries />
+          <UseCases />
         </main>
       </div>
     </>
