@@ -5,9 +5,20 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { FileDown, FileText } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { useEffect, useState } from "react";
 
 export const ComplianceReporting = () => {
   const { toast } = useToast();
+  const [userId, setUserId] = useState<string | null>(null);
+
+  // Get the current user's ID when component mounts
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUserId(user?.id || null);
+    };
+    getCurrentUser();
+  }, []);
 
   const { data: reports, isLoading } = useQuery({
     queryKey: ["compliance-reports"],
@@ -23,6 +34,16 @@ export const ComplianceReporting = () => {
   });
 
   const generateReport = async (type: string) => {
+    // Check if user is authenticated
+    if (!userId) {
+      toast({
+        title: "Error",
+        description: "You must be logged in to generate reports",
+        variant: "destructive"
+      });
+      return;
+    }
+
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
@@ -32,10 +53,12 @@ export const ComplianceReporting = () => {
       .insert({
         report_type: type,
         report_period: `[${startOfMonth.toISOString()},${endOfMonth.toISOString()}]`,
-        status: 'pending'
+        status: 'pending',
+        generated_by: userId // Set the generated_by field to current user's ID
       });
 
     if (error) {
+      console.error('Error generating report:', error);
       toast({
         title: "Error",
         description: "Failed to generate report",
@@ -69,6 +92,7 @@ export const ComplianceReporting = () => {
             variant="outline" 
             className="flex items-center gap-2"
             onClick={() => generateReport('gdpr_data_access')}
+            disabled={!userId}
           >
             <FileText className="h-4 w-4" />
             GDPR Data Access Report
@@ -77,6 +101,7 @@ export const ComplianceReporting = () => {
             variant="outline"
             className="flex items-center gap-2"
             onClick={() => generateReport('psd2_transaction_log')}
+            disabled={!userId}
           >
             <FileText className="h-4 w-4" />
             PSD2 Transaction Log
@@ -85,6 +110,7 @@ export const ComplianceReporting = () => {
             variant="outline"
             className="flex items-center gap-2"
             onClick={() => generateReport('fraud_audit_trail')}
+            disabled={!userId}
           >
             <FileText className="h-4 w-4" />
             Fraud Audit Trail
