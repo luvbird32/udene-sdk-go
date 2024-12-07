@@ -13,20 +13,18 @@ export const LoginForm = () => {
         providers={[]}
         onlyThirdPartyProviders={false}
         redirectTo={`${window.location.origin}/settings`}
-        additionalSignUpFields={[
-          {
-            key: 'full_name',
-            label: 'Full Name',
-            type: 'text',
-            required: true,
-          },
-          {
-            key: 'date_of_birth',
-            label: 'Date of Birth',
-            type: 'date',
-            required: true,
-          },
-        ]}
+        view="sign_up"
+        showLinks={true}
+        localization={{
+          variables: {
+            sign_up: {
+              user_metadata: {
+                full_name: 'Full Name',
+                date_of_birth: 'Date of Birth'
+              }
+            }
+          }
+        }}
       />
     </Card>
   );
