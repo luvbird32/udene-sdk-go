@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from '@supabase/supabase-js';
+import { generateSecureApiKey } from '@/utils/apiKeyUtils';
 
 export const ApiKeySettings = () => {
   const { toast } = useToast();
@@ -50,7 +51,7 @@ export const ApiKeySettings = () => {
     }
   }, [user]);
 
-  // Simple function to generate a new API key
+  // Modified function to generate a more secure API key
   const generateApiKey = async () => {
     if (!user) {
       toast({
@@ -72,7 +73,8 @@ export const ApiKeySettings = () => {
 
     try {
       setIsLoading(true);
-      const keyValue = `key_${Math.random().toString(36).substring(2)}`;
+      // Generate a secure API key with prefix
+      const keyValue = `frd_${generateSecureApiKey(40)}`; // 40 chars + prefix
       
       const { error } = await supabase
         .from('api_keys')
