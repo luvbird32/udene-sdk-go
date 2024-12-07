@@ -12,7 +12,7 @@ import { useSessionTimeout } from "@/hooks/useSessionTimeout";
 import { useRealtimeSubscriptions } from "@/hooks/useRealtimeSubscriptions";
 import { Helmet } from "react-helmet";
 
-const Index = () => {
+const Dashboard = () => {
   const { toast } = useToast();
   
   useSessionTimeout();
@@ -201,4 +201,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Dashboard;
