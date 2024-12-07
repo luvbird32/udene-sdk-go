@@ -1,24 +1,22 @@
-import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import { Activity, Shield, Users, Clock, Settings, Network } from "lucide-react";
+import { Settings } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { HealthStatus } from "@/components/monitoring/HealthStatus";
 import { ErrorLog } from "@/components/monitoring/ErrorLog";
 import { PerformanceMetrics } from "@/components/monitoring/PerformanceMetrics";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
 import { DevTools } from "@/components/developer/DevTools";
 import { Link } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { KeyMetrics } from "@/components/dashboard/KeyMetrics";
+import { DetectionMetrics } from "@/components/monitoring/DetectionMetrics";
 
 const Index = () => {
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState("dashboard");
 
   // Fetch metrics from Supabase
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
@@ -31,10 +29,7 @@ const Index = () => {
         .order('timestamp', { ascending: false })
         .limit(1);
 
-      if (metricsError) {
-        console.error("Error fetching metrics:", metricsError);
-        throw metricsError;
-      }
+      if (metricsError) throw metricsError;
 
       // Get recent transactions for risk calculation
       const { data: recentTransactions, error: transactionsError } = await supabase
@@ -43,10 +38,7 @@ const Index = () => {
         .order('created_at', { ascending: false })
         .limit(100);
 
-      if (transactionsError) {
-        console.error("Error fetching transactions:", transactionsError);
-        throw transactionsError;
-      }
+      if (transactionsError) throw transactionsError;
 
       // Calculate average risk score
       const avgRiskScore = recentTransactions?.reduce((acc, t) => acc + (t.risk_score || 0), 0) / 
@@ -55,7 +47,7 @@ const Index = () => {
       return {
         riskScore: Math.round(avgRiskScore || 0),
         activeUsers: metricsData?.[0]?.metric_value || 0,
-        avgProcessingTime: 35, // Default value, can be updated from metrics table
+        avgProcessingTime: 35,
         concurrentCalls: metricsData?.[0]?.metric_value || 0
       };
     },
@@ -128,40 +120,15 @@ const Index = () => {
         <TabsContent value="dashboard" className="space-y-8">
           {metricsError && renderError(metricsError)}
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" role="region" aria-label="Key Metrics">
-            <MetricCard
-              title="Risk Score"
-              value={metrics?.riskScore}
-              icon={Shield}
-              showProgress
-              isLoading={metricsLoading}
-            />
-            <MetricCard
-              title="Active Users"
-              value={metrics?.activeUsers}
-              icon={Users}
-              isLoading={metricsLoading}
-            />
-            <MetricCard
-              title="Processing Time"
-              value={`${metrics?.avgProcessingTime}ms`}
-              icon={Clock}
-              isLoading={metricsLoading}
-            />
-            <MetricCard
-              title="Concurrent Calls"
-              value={metrics?.concurrentCalls}
-              icon={Network}
-              isLoading={metricsLoading}
-            />
-          </div>
+          <KeyMetrics metrics={metrics} isLoading={metricsLoading} />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <HealthStatus />
-            <ErrorLog />
+            <DetectionMetrics />
           </div>
 
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <ErrorLog />
             <PerformanceMetrics />
           </div>
         </TabsContent>
@@ -177,32 +144,5 @@ const Index = () => {
     </div>
   );
 };
-
-interface MetricCardProps {
-  title: string;
-  value?: number | string;
-  icon: React.ElementType;
-  showProgress?: boolean;
-  isLoading?: boolean;
-}
-
-const MetricCard = ({ title, value, icon: Icon, showProgress, isLoading }: MetricCardProps) => (
-  <Card className="p-6" role="article" aria-label={title}>
-    <div className="flex items-center justify-between mb-4">
-      <h3 className="font-semibold text-foreground">{title}</h3>
-      <Icon className="text-secondary w-5 h-5" aria-hidden="true" />
-    </div>
-    {isLoading ? (
-      <Skeleton className="h-8 w-24" />
-    ) : showProgress ? (
-      <div className="space-y-2">
-        <Progress value={Number(value)} className="h-2" aria-label={`${title} Progress`} />
-        <p className="text-2xl font-bold" aria-live="polite">{value}%</p>
-      </div>
-    ) : (
-      <p className="text-2xl font-bold" aria-live="polite">{value}</p>
-    )}
-  </Card>
-);
 
 export default Index;
