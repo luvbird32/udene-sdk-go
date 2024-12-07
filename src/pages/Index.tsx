@@ -9,7 +9,7 @@ import { PerformanceMetrics } from "@/components/monitoring/PerformanceMetrics";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
 import { DevTools } from "@/components/developer/DevTools";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { KeyMetrics } from "@/components/dashboard/KeyMetrics";
@@ -18,8 +18,52 @@ import { TransactionTrends } from "@/components/dashboard/TransactionTrends";
 import { GeographicalDistribution } from "@/components/dashboard/GeographicalDistribution";
 import { FraudPatterns } from "@/components/dashboard/FraudPatterns";
 
+const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
+
 const Index = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
+
+  // Session timeout handling
+  useEffect(() => {
+    let lastActivity = Date.now();
+    let timeoutId: NodeJS.Timeout;
+
+    const resetTimeout = () => {
+      lastActivity = Date.now();
+    };
+
+    const checkTimeout = () => {
+      const now = Date.now();
+      if (now - lastActivity >= SESSION_TIMEOUT) {
+        // Session expired
+        supabase.auth.signOut();
+        navigate('/login');
+        toast({
+          title: "Session Expired",
+          description: "Your session has expired. Please log in again.",
+          variant: "destructive"
+        });
+      }
+    };
+
+    // Set up activity listeners
+    const activityEvents = ['mousedown', 'keydown', 'scroll', 'touchstart'];
+    activityEvents.forEach(event => {
+      document.addEventListener(event, resetTimeout);
+    });
+
+    // Check session every minute
+    timeoutId = setInterval(checkTimeout, 60000);
+
+    // Cleanup
+    return () => {
+      activityEvents.forEach(event => {
+        document.removeEventListener(event, resetTimeout);
+      });
+      clearInterval(timeoutId);
+    };
+  }, [navigate, toast]);
 
   // Fetch metrics from Supabase
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
@@ -121,15 +165,7 @@ const Index = () => {
         </TabsList>
 
         <TabsContent value="dashboard" className="space-y-8">
-          {metricsError && (
-            <Alert variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>
-                {metricsError.message || "An error occurred while loading the dashboard"}
-              </AlertDescription>
-            </Alert>
-          )}
+          {metricsError && renderError(metricsError)}
           
           <KeyMetrics metrics={metrics} isLoading={metricsLoading} />
 
