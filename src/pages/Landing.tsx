@@ -28,10 +28,10 @@ const Landing = () => {
   return (
     <>
       <Helmet>
-        <title>Advanced Fraud Detection System | Real-time Cybersecurity Monitoring</title>
+        <title>Advanced Fraud Detection System | Enterprise Cybersecurity Platform</title>
         <meta name="description" content="Enterprise-grade fraud detection system with real-time monitoring, machine learning analytics, and comprehensive compliance reporting. Protect your business with advanced cybersecurity." />
         <meta name="keywords" content="fraud detection, cybersecurity, real-time monitoring, machine learning, compliance reporting, risk assessment" />
-        <meta property="og:title" content="Advanced Fraud Detection System | Real-time Cybersecurity Monitoring" />
+        <meta property="og:title" content="Advanced Fraud Detection System | Enterprise Cybersecurity Platform" />
         <meta property="og:description" content="Enterprise-grade fraud detection system with real-time monitoring, machine learning analytics, and comprehensive compliance reporting." />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
@@ -42,10 +42,12 @@ const Landing = () => {
         </script>
       </Helmet>
 
-      <div className="min-h-screen bg-black text-green-400 p-6 relative overflow-hidden">
+      <div className="min-h-screen bg-black text-green-400 relative overflow-hidden">
         <MatrixBackground />
-        <HeroSection />
-        <Features />
+        <main className="relative z-10">
+          <HeroSection />
+          <Features />
+        </main>
       </div>
     </>
   );
