@@ -231,6 +231,7 @@ export type Database = {
           organization_name: string | null
           organization_role: string | null
           role: string
+          status: string
           updated_at: string | null
           username: string | null
         }
@@ -243,6 +244,7 @@ export type Database = {
           organization_name?: string | null
           organization_role?: string | null
           role?: string
+          status?: string
           updated_at?: string | null
           username?: string | null
         }
@@ -255,6 +257,7 @@ export type Database = {
           organization_name?: string | null
           organization_role?: string | null
           role?: string
+          status?: string
           updated_at?: string | null
           username?: string | null
         }

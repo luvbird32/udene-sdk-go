@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Shield, Activity, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -9,48 +9,77 @@ import { UserTable } from "@/components/users/UserTable";
 import { ActivityLog } from "@/components/users/ActivityLog";
 import { Link } from "react-router-dom";
 import { User } from "@/components/users/types";
-
-const mockUsers: User[] = [
-  {
-    id: "1",
-    name: "John Doe",
-    email: "john@example.com",
-    role: "admin",
-    lastActive: "2024-02-20T10:00:00",
-    status: "active",
-  },
-  {
-    id: "2",
-    name: "Jane Smith",
-    email: "jane@example.com",
-    role: "analyst",
-    lastActive: "2024-02-19T15:30:00",
-    status: "active",
-  },
-];
+import { supabase } from "@/integrations/supabase/client";
 
 const Users = () => {
   const { toast } = useToast();
   const [selectedTab, setSelectedTab] = useState("users");
+  const queryClient = useQueryClient();
 
-  const { data: users = mockUsers, isLoading } = useQuery({
+  const { data: users = [], isLoading } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      // In a real app, this would fetch from your API
-      return mockUsers;
+      const { data: profiles, error } = await supabase
+        .from("profiles")
+        .select("id, username, role, status, created_at, updated_at")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching users:", error);
+        throw error;
+      }
+
+      // Transform the data to match our User type
+      return profiles.map((profile): User => ({
+        id: profile.id,
+        name: profile.username || "Unnamed User",
+        email: "", // We'll need to join with auth.users to get this, but it's not accessible via API
+        role: profile.role as User["role"],
+        lastActive: profile.updated_at,
+        status: profile.status as User["status"],
+      }));
+    },
+  });
+
+  const updateUserMutation = useMutation({
+    mutationFn: async ({
+      userId,
+      data,
+    }: {
+      userId: string;
+      data: Partial<User>;
+    }) => {
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          role: data.role,
+          status: data.status,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", userId);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });
 
   const handleRoleChange = async (userId: string, newRole: User["role"]) => {
     try {
+      await updateUserMutation.mutateAsync({
+        userId,
+        data: { role: newRole },
+      });
       toast({
         title: "Role Updated",
         description: `User role has been updated to ${newRole}`,
       });
     } catch (error) {
+      console.error("Error updating role:", error);
       toast({
         title: "Error",
-        description: "Failed to update user role",
+        description: "Failed to update user role. Please try again.",
         variant: "destructive",
       });
     }
@@ -58,18 +87,33 @@ const Users = () => {
 
   const handleStatusToggle = async (userId: string, newStatus: User["status"]) => {
     try {
+      await updateUserMutation.mutateAsync({
+        userId,
+        data: { status: newStatus },
+      });
       toast({
         title: "Status Updated",
         description: `User status has been updated to ${newStatus}`,
       });
     } catch (error) {
+      console.error("Error updating status:", error);
       toast({
         title: "Error",
-        description: "Failed to update user status",
+        description: "Failed to update user status. Please try again.",
         variant: "destructive",
       });
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto p-6">
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-6">
