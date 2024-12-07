@@ -31,7 +31,34 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const { transaction } = await req.json()
+    const { transaction, is_confirmed_fraud } = await req.json()
+    
+    // If this is a fraud confirmation update
+    if (is_confirmed_fraud !== undefined) {
+      console.log('Updating model with fraud confirmation:', is_confirmed_fraud);
+      
+      // Get recent transactions for context
+      const { data: recentTransactions } = await supabase
+        .from('transactions')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(10)
+      
+      // Update ML model with confirmation
+      const mlResponse = await supabase.functions.invoke('python-ml', {
+        body: { 
+          transaction,
+          recent_transactions: recentTransactions,
+          is_confirmed_fraud
+        }
+      })
+      
+      return new Response(
+        JSON.stringify(mlResponse.data),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+    
     const data: Transaction = transaction
 
     // Get recent transactions for pattern analysis
@@ -94,7 +121,8 @@ serve(async (req) => {
       JSON.stringify({ 
         risk_score: totalRiskScore,
         is_fraudulent: totalRiskScore > 70,
-        ml_insights: mlResponse.data.risk_factors
+        ml_insights: mlResponse.data.risk_factors,
+        performance_metrics: mlResponse.data.performance_metrics
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
