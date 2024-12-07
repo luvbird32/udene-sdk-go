@@ -2,6 +2,8 @@ import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface ErrorLogEntry {
   id: string;
@@ -10,10 +12,11 @@ interface ErrorLogEntry {
 }
 
 export const ErrorLog = () => {
-  const { data: errors, isLoading } = useQuery({
+  const { data: errors, isLoading, error } = useQuery({
     queryKey: ["errors"],
     queryFn: async () => {
       try {
+        console.log("Fetching error logs...");
         const { data, error } = await supabase
           .from('metrics')
           .select('id, metric_value, timestamp')
@@ -38,6 +41,20 @@ export const ErrorLog = () => {
     },
     refetchInterval: 5000,
   });
+
+  if (error) {
+    return (
+      <Card className="p-4">
+        <h3 className="font-semibold mb-4">Error Log</h3>
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            Unable to load error logs. Please try again later.
+          </AlertDescription>
+        </Alert>
+      </Card>
+    );
+  }
 
   if (isLoading) {
     return (

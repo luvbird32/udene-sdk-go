@@ -1,81 +1,71 @@
-import { Auth } from '@supabase/auth-ui-react';
-import { ThemeSupa } from '@supabase/auth-ui-shared';
+import React, { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useToast } from '@/components/ui/use-toast';
 
 export const LoginForm = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Login successful",
+        description: "Welcome back!",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <Card className="glass-card w-full max-w-md mx-auto p-8 shadow-xl">
-      <Auth
-        supabaseClient={supabase}
-        appearance={{
-          theme: ThemeSupa,
-          style: {
-            button: {
-              background: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              color: '#4ade80',
-              fontWeight: '500',
-              '&:hover': {
-                background: 'rgba(255, 255, 255, 0.2)'
-              }
-            },
-            input: {
-              background: 'rgba(0, 0, 0, 0.2)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              color: '#ffffff',
-              padding: '0.75rem',
-              borderRadius: '0.375rem',
-              '&:focus': {
-                border: '1px solid rgba(255, 255, 255, 0.4)',
-                outline: 'none'
-              }
-            },
-            label: {
-              color: '#4ade80',
-              marginBottom: '0.5rem',
-              display: 'block'
-            },
-            message: {
-              color: '#ffffff'
-            },
-            anchor: {
-              color: '#4ade80',
-              '&:hover': {
-                color: '#22c55e'
-              }
-            }
-          },
-          className: {
-            container: 'space-y-4',
-            label: 'text-green-400',
-            button: 'w-full glass-button mt-4',
-            input: 'glass-input w-full',
-            message: 'text-sm text-red-400'
-          }
-        }}
-        theme="dark"
-        providers={[]}
-        redirectTo={`${window.location.origin}/settings`}
-        view="sign_up"
-        showLinks={true}
-        localization={{
-          variables: {
-            sign_up: {
-              email_label: 'Email',
-              password_label: 'Password',
-              email_input_placeholder: 'Your email address',
-              password_input_placeholder: 'Your password',
-              button_label: 'Sign Up',
-              loading_button_label: 'Signing up ...',
-              social_provider_text: 'Sign in with {{provider}}',
-              link_text: "Don't have an account? Sign up",
-              confirmation_text: 'Check your email for the confirmation link'
-            }
-          }
-        }}
-      />
-    </Card>
+    <form onSubmit={handleLogin} className="space-y-4 w-full max-w-md mx-auto">
+      <div className="space-y-2">
+        <Input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+      <div className="space-y-2">
+        <Input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+      <Button 
+        type="submit" 
+        className="w-full"
+        disabled={loading}
+      >
+        {loading ? 'Loading...' : 'Login'}
+      </Button>
+    </form>
   );
 };
