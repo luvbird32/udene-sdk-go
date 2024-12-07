@@ -1,4 +1,3 @@
-import { MessageCircle, UserCog, Smartphone, Mail, Info } from "lucide-react";
 import type { Transaction, RiskIndicator } from "@/types/risk";
 
 /**
@@ -11,7 +10,7 @@ export const analyzeDatingRiskIndicators = (transaction: Transaction): RiskIndic
   // Check message velocity patterns
   if (message_velocity && message_velocity > 50) {
     indicators.push({
-      icon: <MessageCircle className="w-4 h-4 mt-1 text-muted-foreground" />,
+      iconType: 'message',
       title: "High Message Velocity",
       description: `Unusual messaging pattern detected: ${message_velocity.toFixed(1)} messages/hour`
     });
@@ -20,7 +19,7 @@ export const analyzeDatingRiskIndicators = (transaction: Transaction): RiskIndic
   // Check profile changes
   if (Object.keys(profile_changes || {}).length > 0) {
     indicators.push({
-      icon: <UserCog className="w-4 h-4 mt-1 text-muted-foreground" />,
+      iconType: 'user',
       title: "Frequent Profile Changes",
       description: "Multiple profile updates in short period"
     });
@@ -29,7 +28,7 @@ export const analyzeDatingRiskIndicators = (transaction: Transaction): RiskIndic
   // Check device patterns
   if (interaction_patterns?.multiple_devices === true) {
     indicators.push({
-      icon: <Smartphone className="w-4 h-4 mt-1 text-muted-foreground" />,
+      iconType: 'device',
       title: "Multiple Device Usage",
       description: "Access from unusual number of devices"
     });
@@ -38,7 +37,7 @@ export const analyzeDatingRiskIndicators = (transaction: Transaction): RiskIndic
   // Check platform usage and fraud history
   if (risk_factors?.multiple_platforms) {
     indicators.push({
-      icon: <Mail className="w-4 h-4 mt-1 text-muted-foreground" />,
+      iconType: 'mail',
       title: "Multiple Platform Usage",
       description: risk_factors.multiple_platforms
     });
@@ -46,7 +45,7 @@ export const analyzeDatingRiskIndicators = (transaction: Transaction): RiskIndic
 
   if (risk_factors?.fraud_history) {
     indicators.push({
-      icon: <Info className="w-4 h-4 mt-1 text-muted-foreground" />,
+      iconType: 'info',
       title: "Previous Fraud History",
       description: risk_factors.fraud_history
     });

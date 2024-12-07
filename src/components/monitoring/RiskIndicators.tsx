@@ -1,11 +1,32 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Info } from "lucide-react";
+import { Info, MessageCircle, UserCog, Smartphone, Mail } from "lucide-react";
 import type { RiskIndicator } from "@/types/risk";
 
 interface RiskIndicatorsProps {
   indicators: RiskIndicator[];
   additionalFactors: [string, string][];
 }
+
+/**
+ * Maps icon types to their corresponding Lucide React components
+ */
+const getIconComponent = (iconType: RiskIndicator['iconType']) => {
+  const iconProps = { className: "w-4 h-4 mt-1 text-muted-foreground" };
+  switch (iconType) {
+    case 'message':
+      return <MessageCircle {...iconProps} />;
+    case 'user':
+      return <UserCog {...iconProps} />;
+    case 'device':
+      return <Smartphone {...iconProps} />;
+    case 'mail':
+      return <Mail {...iconProps} />;
+    case 'info':
+      return <Info {...iconProps} />;
+    default:
+      return <Info {...iconProps} />;
+  }
+};
 
 /**
  * Displays a list of risk indicators and additional risk factors
@@ -18,7 +39,7 @@ export const RiskIndicators = ({ indicators, additionalFactors }: RiskIndicators
         {indicators.map((indicator, index) => (
           <div key={index} className="p-2 bg-muted rounded-lg">
             <div className="flex items-start gap-2">
-              {indicator.icon}
+              {getIconComponent(indicator.iconType)}
               <div>
                 <p className="font-medium">{indicator.title}</p>
                 <p className="text-sm text-muted-foreground">{indicator.description}</p>

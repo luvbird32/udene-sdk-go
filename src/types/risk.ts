@@ -26,7 +26,7 @@ export interface Transaction {
  * Represents a risk indicator with its display properties
  */
 export interface RiskIndicator {
-  icon: React.ReactNode;
+  iconType: 'message' | 'user' | 'device' | 'mail' | 'info';
   title: string;
   description: string;
 }
