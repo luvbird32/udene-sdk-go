@@ -1,34 +1,14 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Shield, Activity, MoreVertical } from "lucide-react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Shield, Activity, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: "admin" | "user" | "analyst";
-  lastActive: string;
-  status: "active" | "inactive";
-}
+import { UserTable } from "@/components/users/UserTable";
+import { ActivityLog } from "@/components/users/ActivityLog";
+import { Link } from "react-router-dom";
+import { User } from "@/components/users/types";
 
 const mockUsers: User[] = [
   {
@@ -63,7 +43,6 @@ const Users = () => {
 
   const handleRoleChange = async (userId: string, newRole: User["role"]) => {
     try {
-      // In a real app, this would call your API
       toast({
         title: "Role Updated",
         description: `User role has been updated to ${newRole}`,
@@ -79,7 +58,6 @@ const Users = () => {
 
   const handleStatusToggle = async (userId: string, newStatus: User["status"]) => {
     try {
-      // In a real app, this would call your API
       toast({
         title: "Status Updated",
         description: `User status has been updated to ${newStatus}`,
@@ -96,7 +74,14 @@ const Users = () => {
   return (
     <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">User Administration</h1>
+        <div className="flex items-center gap-4">
+          <Link to="/dashboard">
+            <Button variant="outline" size="icon">
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+          </Link>
+          <h1 className="text-3xl font-bold">User Administration</h1>
+        </div>
         <Button>Add User</Button>
       </div>
 
@@ -114,103 +99,16 @@ const Users = () => {
 
         <TabsContent value="users">
           <Card className="p-6">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Last Active</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {users.map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell>{user.name}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={user.role === "admin" ? "destructive" : "default"}
-                      >
-                        {user.role}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={user.status === "active" ? "default" : "secondary"}
-                      >
-                        {user.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      {new Date(user.lastActive).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreVertical className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                          <DropdownMenuItem
-                            onClick={() => handleRoleChange(user.id, "admin")}
-                          >
-                            Make Admin
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() => handleRoleChange(user.id, "analyst")}
-                          >
-                            Make Analyst
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() => handleRoleChange(user.id, "user")}
-                          >
-                            Make User
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() =>
-                              handleStatusToggle(
-                                user.id,
-                                user.status === "active" ? "inactive" : "active"
-                              )
-                            }
-                          >
-                            {user.status === "active"
-                              ? "Deactivate User"
-                              : "Activate User"}
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <UserTable 
+              users={users}
+              onRoleChange={handleRoleChange}
+              onStatusToggle={handleStatusToggle}
+            />
           </Card>
         </TabsContent>
 
         <TabsContent value="activity">
-          <Card className="p-6">
-            <div className="space-y-4">
-              {users.map((user) => (
-                <div
-                  key={user.id}
-                  className="flex items-center justify-between border-b pb-4"
-                >
-                  <div>
-                    <p className="font-medium">{user.name}</p>
-                    <p className="text-sm text-gray-500">
-                      Last active: {new Date(user.lastActive).toLocaleString()}
-                    </p>
-                  </div>
-                  <Badge variant="outline">{user.role}</Badge>
-                </div>
-              ))}
-            </div>
-          </Card>
+          <ActivityLog users={users} />
         </TabsContent>
       </Tabs>
     </div>

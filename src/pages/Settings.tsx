@@ -5,9 +5,9 @@ import { SecuritySettings } from "@/components/settings/SecuritySettings";
 import { ApiKeySettings } from "@/components/settings/ApiKeySettings";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
+import { LogOut, ArrowLeft } from "lucide-react";
 
 const Settings = () => {
   const [profile, setProfile] = useState({
@@ -42,7 +42,14 @@ const Settings = () => {
   return (
     <div className="container mx-auto py-10">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Settings</h1>
+        <div className="flex items-center gap-4">
+          <Link to="/dashboard">
+            <Button variant="outline" size="icon">
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+          </Link>
+          <h1 className="text-3xl font-bold">Settings</h1>
+        </div>
         <Button 
           variant="destructive" 
           onClick={handleSignOut}
