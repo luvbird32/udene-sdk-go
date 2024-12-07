@@ -51,9 +51,14 @@ export const AddUserDialog = () => {
         }
       );
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to create user");
+        // Check for specific error codes
+        if (data.code === 'USER_EXISTS') {
+          throw new Error('A user with this email already exists. Please use a different email address.');
+        }
+        throw new Error(data.error || "Failed to create user");
       }
 
       await queryClient.invalidateQueries({ queryKey: ["users"] });
