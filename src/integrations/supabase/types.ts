@@ -125,11 +125,14 @@ export type Database = {
       transactions: {
         Row: {
           amount: number
+          appeal_timestamp: string | null
           card_present: boolean
           created_at: string | null
           customer_id: string
           device_id: string
           feature_importance: Json | null
+          feedback_notes: string | null
+          feedback_status: string | null
           id: string
           ip_address: string
           is_fraudulent: boolean | null
@@ -144,11 +147,14 @@ export type Database = {
         }
         Insert: {
           amount: number
+          appeal_timestamp?: string | null
           card_present: boolean
           created_at?: string | null
           customer_id: string
           device_id: string
           feature_importance?: Json | null
+          feedback_notes?: string | null
+          feedback_status?: string | null
           id?: string
           ip_address: string
           is_fraudulent?: boolean | null
@@ -163,11 +169,14 @@ export type Database = {
         }
         Update: {
           amount?: number
+          appeal_timestamp?: string | null
           card_present?: boolean
           created_at?: string | null
           customer_id?: string
           device_id?: string
           feature_importance?: Json | null
+          feedback_notes?: string | null
+          feedback_status?: string | null
           id?: string
           ip_address?: string
           is_fraudulent?: boolean | null
@@ -179,6 +188,33 @@ export type Database = {
           timestamp?: string
           transaction_type?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      whitelist: {
+        Row: {
+          added_at: string | null
+          entity_id: string
+          entity_type: string
+          expires_at: string | null
+          id: string
+          reason: string
+        }
+        Insert: {
+          added_at?: string | null
+          entity_id: string
+          entity_type: string
+          expires_at?: string | null
+          id?: string
+          reason: string
+        }
+        Update: {
+          added_at?: string | null
+          entity_id?: string
+          entity_type?: string
+          expires_at?: string | null
+          id?: string
+          reason?: string
         }
         Relationships: []
       }

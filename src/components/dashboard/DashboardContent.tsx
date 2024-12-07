@@ -7,6 +7,7 @@ import { FraudPatterns } from "@/components/dashboard/FraudPatterns";
 import { ErrorLog } from "@/components/monitoring/ErrorLog";
 import { PerformanceMetrics } from "@/components/monitoring/PerformanceMetrics";
 import { RiskFactorAnalysis } from "@/components/monitoring/RiskFactorAnalysis";
+import { FeedbackManagement } from "@/components/monitoring/FeedbackManagement";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
@@ -39,6 +40,8 @@ export const DashboardContent = ({ metrics, metricsLoading, metricsError }: Dash
       </div>
 
       <RiskFactorAnalysis />
+
+      <FeedbackManagement />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <TransactionTrends />
