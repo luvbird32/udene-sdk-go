@@ -135,11 +135,23 @@ export const predictFraud = async (transactionData: any) => {
   }
 };
 
-export const validateApiKey = async (): Promise<boolean> => {
+export const validateApiKey = async (apiKey: string): Promise<boolean> => {
   try {
-    const { data, error } = await supabase.auth.getUser();
-    return !error && !!data.user;
-  } catch {
+    console.log("Checking API key in database");
+    const { data, error } = await supabase
+      .from('api_keys')
+      .select('status')
+      .eq('key_value', apiKey)
+      .single();
+
+    if (error) {
+      console.error('API key validation error:', error);
+      return false;
+    }
+
+    return data?.status === 'active';
+  } catch (error) {
+    console.error('API key validation failed:', error);
     return false;
   }
 };

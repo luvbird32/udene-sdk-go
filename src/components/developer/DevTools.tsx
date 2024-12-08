@@ -12,7 +12,10 @@ export const DevTools = () => {
 
   const handleValidateKey = async () => {
     try {
-      const isValid = await validateApiKey();
+      console.log("Validating API key:", apiKey);
+      const isValid = await validateApiKey(apiKey);
+      console.log("API key validation result:", isValid);
+      
       toast({
         title: isValid ? "API Key Valid" : "API Key Invalid",
         description: isValid 
@@ -21,6 +24,7 @@ export const DevTools = () => {
         variant: isValid ? "default" : "destructive",
       });
     } catch (error) {
+      console.error("API key validation error:", error);
       toast({
         title: "Validation Error",
         description: "Failed to validate API key",
@@ -49,7 +53,12 @@ export const DevTools = () => {
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
               />
-              <Button onClick={handleValidateKey}>Validate</Button>
+              <Button 
+                onClick={handleValidateKey}
+                disabled={!apiKey.trim()}
+              >
+                Validate
+              </Button>
             </div>
           </div>
         </TabsContent>
