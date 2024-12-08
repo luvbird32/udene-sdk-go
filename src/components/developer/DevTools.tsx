@@ -8,9 +8,20 @@ import { validateApiKey } from "@/services/api";
 
 export const DevTools = () => {
   const [apiKey, setApiKey] = useState("");
+  const [isValidating, setIsValidating] = useState(false);
   const { toast } = useToast();
 
   const handleValidateKey = async () => {
+    if (!apiKey.trim()) {
+      toast({
+        title: "Validation Error",
+        description: "Please enter an API key",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsValidating(true);
     try {
       console.log("Validating API key:", apiKey);
       const isValid = await validateApiKey(apiKey);
@@ -30,6 +41,8 @@ export const DevTools = () => {
         description: "Failed to validate API key",
         variant: "destructive",
       });
+    } finally {
+      setIsValidating(false);
     }
   };
 
@@ -52,12 +65,13 @@ export const DevTools = () => {
                 placeholder="Enter your API key"
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
+                disabled={isValidating}
               />
               <Button 
                 onClick={handleValidateKey}
-                disabled={!apiKey.trim()}
+                disabled={!apiKey.trim() || isValidating}
               >
-                Validate
+                {isValidating ? "Validating..." : "Validate"}
               </Button>
             </div>
           </div>

@@ -135,7 +135,21 @@ export const predictFraud = async (transactionData: any) => {
   }
 };
 
+interface ApiKey {
+  id: string;
+  key_value: string;
+  status: 'active' | 'inactive' | 'revoked';
+  name: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export const validateApiKey = async (apiKey: string): Promise<boolean> => {
+  if (!apiKey?.trim()) {
+    console.log('Empty API key provided');
+    return false;
+  }
+
   try {
     console.log("Checking API key in database");
     const { data, error } = await supabase
@@ -149,7 +163,14 @@ export const validateApiKey = async (apiKey: string): Promise<boolean> => {
       return false;
     }
 
-    return data?.status === 'active';
+    if (!data) {
+      console.log('No API key found');
+      return false;
+    }
+
+    const isValid = data.status === 'active';
+    console.log('API key validation result:', isValid);
+    return isValid;
   } catch (error) {
     console.error('API key validation failed:', error);
     return false;
