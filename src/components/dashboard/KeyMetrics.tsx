@@ -12,20 +12,27 @@ interface MetricCardProps {
 }
 
 const MetricCard = ({ title, value, icon: Icon, showProgress, isLoading }: MetricCardProps) => (
-  <Card className="p-6" role="article" aria-label={title}>
+  <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]" role="article" aria-label={title}>
     <div className="flex items-center justify-between mb-4">
       <h3 className="font-semibold text-foreground">{title}</h3>
-      <Icon className="text-secondary w-5 h-5" aria-hidden="true" />
+      <Icon className="text-secondary w-5 h-5 animate-pulse-slow" aria-hidden="true" />
     </div>
     {isLoading ? (
-      <Skeleton className="h-8 w-24" />
+      <div className="space-y-2">
+        <Skeleton className="h-8 w-24" />
+        {showProgress && <Skeleton className="h-2 w-full" />}
+      </div>
     ) : showProgress ? (
       <div className="space-y-2">
-        <Progress value={Number(value)} className="h-2" aria-label={`${title} Progress`} />
-        <p className="text-2xl font-bold" aria-live="polite">{value}%</p>
+        <Progress 
+          value={Number(value)} 
+          className="h-2 transition-all duration-300" 
+          aria-label={`${title} Progress`} 
+        />
+        <p className="text-2xl font-bold animate-fade-in" aria-live="polite">{value}%</p>
       </div>
     ) : (
-      <p className="text-2xl font-bold" aria-live="polite">{value}</p>
+      <p className="text-2xl font-bold animate-fade-in" aria-live="polite">{value}</p>
     )}
   </Card>
 );
@@ -41,7 +48,11 @@ interface KeyMetricsProps {
 }
 
 export const KeyMetrics = ({ metrics, isLoading }: KeyMetricsProps) => (
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" role="region" aria-label="Key Metrics">
+  <div 
+    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" 
+    role="region" 
+    aria-label="Key Metrics"
+  >
     <MetricCard
       title="Risk Score"
       value={metrics?.riskScore}

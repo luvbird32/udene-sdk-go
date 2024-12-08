@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
@@ -19,7 +20,6 @@ export const GeographicalDistribution = () => {
 
       if (error) throw error;
 
-      // Group by location and handle null/undefined values
       const locationCounts = (data || []).reduce((acc: { [key: string]: number }, transaction) => {
         const location = transaction.location || 'Unknown';
         acc[location] = (acc[location] || 0) + 1;
@@ -29,15 +29,15 @@ export const GeographicalDistribution = () => {
       return Object.entries(locationCounts)
         .map(([name, value]) => ({ name, value }))
         .sort((a, b) => b.value - a.value)
-        .slice(0, 5); // Top 5 locations
+        .slice(0, 5);
     },
     refetchInterval: 30000,
   });
 
   if (error) {
     return (
-      <Card className="p-4">
-        <Alert variant="destructive">
+      <Card className="p-4 border-red-500/20">
+        <Alert variant="destructive" className="animate-fade-in">
           <AlertDescription>
             Error loading geographical distribution: {error.message}
           </AlertDescription>
@@ -50,15 +50,15 @@ export const GeographicalDistribution = () => {
     return (
       <Card className="p-4">
         <h3 className="font-semibold mb-4">Top Transaction Locations</h3>
-        <div className="h-[200px] flex items-center justify-center">
-          <div className="animate-pulse text-muted-foreground">Loading...</div>
+        <div className="h-[200px] space-y-4">
+          <Skeleton className="h-full w-full rounded-lg" />
         </div>
       </Card>
     );
   }
 
   return (
-    <Card className="p-4">
+    <Card className="p-4 hover:shadow-lg transition-all duration-300">
       <h3 className="font-semibold mb-4">Top Transaction Locations</h3>
       <div className="h-[200px]">
         <ResponsiveContainer width="100%" height="100%">
@@ -72,12 +72,24 @@ export const GeographicalDistribution = () => {
               outerRadius={80}
               fill="#8884d8"
               dataKey="value"
+              className="animate-fade-in"
             >
               {distribution?.map((_, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell 
+                  key={`cell-${index}`} 
+                  fill={COLORS[index % COLORS.length]}
+                  className="hover:opacity-80 transition-opacity duration-300"
+                />
               ))}
             </Pie>
-            <Tooltip />
+            <Tooltip 
+              contentStyle={{ 
+                backgroundColor: 'rgba(0, 0, 0, 0.8)', 
+                border: 'none',
+                borderRadius: '8px',
+                padding: '8px'
+              }} 
+            />
             <Legend />
           </PieChart>
         </ResponsiveContainer>
