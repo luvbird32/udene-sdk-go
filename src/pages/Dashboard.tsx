@@ -38,14 +38,17 @@ const Dashboard = () => {
 
       if (transactionsError) throw transactionsError;
 
-      const avgRiskScore = recentTransactions?.reduce((acc, t) => acc + (t.risk_score || 0), 0) / 
-        (recentTransactions?.length || 1);
+      // Safely calculate average risk score
+      const validTransactions = recentTransactions?.filter(t => t?.risk_score != null) ?? [];
+      const avgRiskScore = validTransactions.length > 0
+        ? validTransactions.reduce((acc, t) => acc + (t.risk_score ?? 0), 0) / validTransactions.length
+        : 0;
 
       return {
-        riskScore: Math.round(avgRiskScore || 0),
-        activeUsers: metricsData?.[0]?.metric_value || 0,
+        riskScore: Math.round(avgRiskScore),
+        activeUsers: metricsData?.[0]?.metric_value ?? 0,
         avgProcessingTime: 35,
-        concurrentCalls: metricsData?.[0]?.metric_value || 0
+        concurrentCalls: metricsData?.[0]?.metric_value ?? 0
       };
     },
     refetchInterval: 3000,

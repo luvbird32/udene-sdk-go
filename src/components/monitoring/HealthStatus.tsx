@@ -16,7 +16,7 @@ export const HealthStatus = () => {
         // Check Supabase connection using a simpler query
         const { count, error: dbError } = await supabase
           .from('metrics')
-          .select('*', { count: 'exact' });
+          .select('*', { count: 'exact', head: true }); // Using head: true for better performance
 
         if (dbError) {
           console.error("Database check failed:", dbError);
@@ -27,11 +27,14 @@ export const HealthStatus = () => {
         const apiCheck = await fetch("/api/v1/health");
         const apiStatus = apiCheck.ok;
 
+        // Ensure count is a number and not null
+        const dbConnected = typeof count === 'number';
+
         const status = {
-          status: count !== null && apiStatus ? "healthy" : "unhealthy",
+          status: dbConnected && apiStatus ? "healthy" : "unhealthy",
           api: apiStatus,
-          database: count !== null,
-          cache: count !== null // Using same check for cache since we're using Supabase
+          database: dbConnected,
+          cache: dbConnected // Using same check for cache since we're using Supabase
         };
 
         console.log("Health check result:", status);
