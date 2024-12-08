@@ -23,7 +23,7 @@ const Users = () => {
       console.log("Fetching users from Supabase...");
       const { data: profiles, error } = await supabase
         .from("profiles")
-        .select("id, username, email, role, status, updated_at")
+        .select("id, username, role, status, updated_at")
         .order("created_at", { ascending: false });
 
       if (error) {
@@ -35,7 +35,7 @@ const Users = () => {
       return profiles.map((profile): User => ({
         id: profile.id,
         name: profile.username || "Unnamed User",
-        email: profile.email || "",
+        email: null, // Email is not available in profiles table
         role: profile.role as User["role"],
         lastActive: profile.updated_at,
         status: profile.status as User["status"],
