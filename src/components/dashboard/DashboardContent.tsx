@@ -92,7 +92,7 @@ export const DashboardContent = ({ metrics, metricsLoading, metricsError }: Dash
       
       <KeyMetrics metrics={metrics} isLoading={metricsLoading} />
 
-      <UserActivities profileId={profile.id} />
+      <UserActivities />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <HealthStatus />
