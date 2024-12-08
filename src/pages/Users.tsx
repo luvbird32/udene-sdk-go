@@ -37,9 +37,9 @@ const Users = () => {
         id: profile.id,
         name: profile.username || "Unnamed User",
         email: null, // Email is stored in auth.users and not accessible here
-        role: profile.role,
+        role: profile.role as User["role"], // Type assertion to ensure role matches User type
         lastActive: profile.updated_at || profile.created_at,
-        status: profile.status,
+        status: profile.status as User["status"], // Type assertion to ensure status matches User type
       }));
     },
   });
