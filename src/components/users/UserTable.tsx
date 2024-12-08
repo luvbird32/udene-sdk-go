@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { UserActions } from "./UserActions";
 import { Badge } from "@/components/ui/badge";
-import { User } from "./types";
+import { User } from "@/types/users";
 
 interface UserTableProps {
   users: User[];

@@ -8,7 +8,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { UserTable } from "@/components/users/UserTable";
 import { ActivityLog } from "@/components/users/ActivityLog";
 import { Link } from "react-router-dom";
-import { User } from "@/components/users/types";
+import { User } from "@/types/users";
 import { supabase } from "@/integrations/supabase/client";
 import { AddUserDialog } from "@/components/users/AddUserDialog";
 

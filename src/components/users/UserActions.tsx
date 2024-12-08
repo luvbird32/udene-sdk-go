@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User } from "./types";
+import { User } from "@/types/users";
 
 interface UserActionsProps {
   user: User;

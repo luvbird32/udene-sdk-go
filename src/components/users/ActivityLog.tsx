@@ -1,7 +1,7 @@
 import { Activity } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { User } from "./types";
+import { User } from "@/types/users";
 
 interface ActivityLogProps {
   users: User[];
