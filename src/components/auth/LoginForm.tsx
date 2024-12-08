@@ -15,25 +15,24 @@ export const LoginForm = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log("Attempting login with email:", email);
+    console.log("Starting login attempt with email:", email);
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+        email: email.trim(),
+        password: password,
       });
 
-      console.log("Login response:", { data, error });
+      console.log("Raw login response:", { data, error });
 
       if (error) {
-        let errorMessage = "Login failed. ";
+        console.error("Login error details:", error);
         
+        let errorMessage = "Login failed. ";
         if (error.message.includes("Invalid login credentials")) {
-          errorMessage += "Please check your email and password.";
-        } else if (error.message.includes("Email not confirmed")) {
-          errorMessage += "Please confirm your email before logging in.";
+          errorMessage = "Invalid email or password. Please try again.";
         } else {
-          errorMessage += error.message;
+          errorMessage = error.message;
         }
 
         toast({
@@ -44,15 +43,23 @@ export const LoginForm = () => {
         return;
       }
 
-      if (data.session) {
+      if (data?.session) {
+        console.log("Login successful, session created");
         toast({
-          title: "Login Successful",
-          description: "Redirecting to dashboard...",
+          title: "Success",
+          description: "Login successful! Redirecting...",
         });
         navigate('/dashboard');
+      } else {
+        console.error("No session created after successful login");
+        toast({
+          title: "Login Error",
+          description: "Failed to create session. Please try again.",
+          variant: "destructive"
+        });
       }
     } catch (err) {
-      console.error("Login error:", err);
+      console.error("Unexpected login error:", err);
       toast({
         title: "Login Error",
         description: "An unexpected error occurred. Please try again.",
@@ -77,6 +84,7 @@ export const LoginForm = () => {
           required
           placeholder="Enter your email"
           className="mt-1"
+          disabled={isLoading}
         />
       </div>
       <div>
@@ -91,6 +99,7 @@ export const LoginForm = () => {
           required
           placeholder="Enter your password"
           className="mt-1"
+          disabled={isLoading}
         />
       </div>
       <Button 
