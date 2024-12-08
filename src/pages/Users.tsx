@@ -1,132 +1,22 @@
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Shield, Activity, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/components/ui/use-toast";
 import { UserTable } from "@/components/users/UserTable";
 import { ActivityLog } from "@/components/users/ActivityLog";
 import { Link } from "react-router-dom";
-import { User } from "@/types/users";
-import { supabase } from "@/integrations/supabase/client";
 import { AddUserDialog } from "@/components/users/AddUserDialog";
+import { useUsers } from "@/hooks/useUsers";
+import { User } from "@/types/users";
 
 const Users = () => {
-  const { toast } = useToast();
   const [selectedTab, setSelectedTab] = useState("users");
-  const queryClient = useQueryClient();
-
-  // Get current user's profile
-  const { data: currentUser } = useQuery({
-    queryKey: ["current-user"],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("No user found");
-      return user;
-    },
-  });
-
-  const { data: users = [], isLoading } = useQuery({
-    queryKey: ["users"],
-    queryFn: async () => {
-      console.log("Fetching users from Supabase...");
-      const { data: profiles, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        console.error("Error fetching users:", error);
-        throw error;
-      }
-
-      console.log("Fetched profiles:", profiles);
-
-      return profiles.map((profile): User => ({
-        id: profile.id,
-        name: profile.username || "Unnamed User",
-        email: null,
-        role: profile.role as User["role"],
-        lastActive: profile.updated_at || profile.created_at,
-        status: profile.status as User["status"],
-      }));
-    },
-  });
-
-  const updateUserMutation = useMutation({
-    mutationFn: async ({
-      userId,
-      data,
-    }: {
-      userId: string;
-      data: Partial<User>;
-    }) => {
-      console.log("Updating user in Supabase:", userId, data);
-      
-      if (!currentUser?.id) {
-        throw new Error("No authenticated user found");
-      }
-
-      // First, validate the role if it's being updated
-      if (data.role && !["admin", "user", "analyst"].includes(data.role)) {
-        throw new Error("Invalid role specified");
-      }
-
-      // Then validate the status if it's being updated
-      if (data.status && !["active", "inactive"].includes(data.status)) {
-        throw new Error("Invalid status specified");
-      }
-
-      const { error: updateError } = await supabase
-        .from("profiles")
-        .update({
-          role: data.role,
-          status: data.status,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", userId);
-
-      if (updateError) {
-        console.error("Error updating user:", updateError);
-        throw updateError;
-      }
-
-      // Log the user activity with the correct profile_id
-      const { error: activityError } = await supabase
-        .from("user_activities")
-        .insert({
-          profile_id: currentUser.id, // Using the authenticated user's ID
-          activity_type: "user_update",
-          description: `Updated user ${userId}: ${Object.keys(data).join(", ")}`,
-          metadata: data
-        });
-
-      if (activityError) {
-        console.error("Error logging activity:", activityError);
-        throw activityError;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast({
-        title: "Success",
-        description: "User updated successfully",
-      });
-    },
-    onError: (error) => {
-      console.error("Mutation error:", error);
-      toast({
-        title: "Error",
-        description: "Failed to update user. Please try again.",
-        variant: "destructive",
-      });
-    },
-  });
+  const { users, isLoading, updateUser } = useUsers();
 
   const handleRoleChange = async (userId: string, newRole: User["role"]) => {
     try {
-      await updateUserMutation.mutateAsync({
+      await updateUser({
         userId,
         data: { role: newRole },
       });
@@ -137,7 +27,7 @@ const Users = () => {
 
   const handleStatusToggle = async (userId: string, newStatus: User["status"]) => {
     try {
-      await updateUserMutation.mutateAsync({
+      await updateUser({
         userId,
         data: { status: newStatus },
       });
