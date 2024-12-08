@@ -3,9 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 export const SignupForm = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -13,20 +15,28 @@ export const SignupForm = () => {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    console.log("Attempting signup with email:", email);
 
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
       });
 
+      console.log("Signup response:", { data, error });
+
       if (error) {
+        let errorMessage = "Signup failed. ";
+        
+        if (error.message.includes("already registered")) {
+          errorMessage += "This email is already registered.";
+        } else {
+          errorMessage += error.message;
+        }
+
         toast({
           title: "Signup Failed",
-          description: error.message || "An unexpected error occurred",
+          description: errorMessage,
           variant: "destructive"
         });
         return;
@@ -35,10 +45,12 @@ export const SignupForm = () => {
       if (data.user) {
         toast({
           title: "Signup Successful",
-          description: "Please check your email to confirm your account.",
+          description: "You have been successfully registered and logged in.",
         });
+        navigate('/dashboard');
       }
     } catch (err) {
+      console.error("Signup error:", err);
       toast({
         title: "Signup Error",
         description: "An unexpected error occurred. Please try again.",
