@@ -36,7 +36,7 @@ const Users = () => {
       return profiles.map((profile): User => ({
         id: profile.id,
         name: profile.username || "Unnamed User",
-        email: null, // Email is not available in profiles table
+        email: null,
         role: profile.role as User["role"],
         lastActive: profile.updated_at || profile.created_at,
         status: profile.status as User["status"],
