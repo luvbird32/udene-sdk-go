@@ -11,7 +11,6 @@ import { FeedbackManagement } from "@/components/monitoring/FeedbackManagement";
 import { CustomerBehavior } from "@/components/monitoring/CustomerBehavior";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import { UserActivities } from "@/components/dashboard/UserActivities";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { analyzeVPNRisk } from "@/utils/vpnDetection";
@@ -91,8 +90,6 @@ export const DashboardContent = ({ metrics, metricsLoading, metricsError }: Dash
       {metricsError && renderError(metricsError)}
       
       <KeyMetrics metrics={metrics} isLoading={metricsLoading} />
-
-      <UserActivities />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <HealthStatus />
