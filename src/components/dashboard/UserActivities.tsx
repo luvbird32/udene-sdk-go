@@ -16,6 +16,7 @@ export const UserActivities = () => {
   const { data: currentUser } = useQuery({
     queryKey: ["current-user"],
     queryFn: async () => {
+      console.log("Fetching current user...");
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("No user found");
       return user;
@@ -27,7 +28,7 @@ export const UserActivities = () => {
     queryFn: async () => {
       if (!currentUser?.id) return [];
       
-      console.log("Fetching user activities...");
+      console.log("Fetching user activities for:", currentUser.id);
       const { data, error } = await supabase
         .from('user_activities')
         .select('*')
