@@ -20,9 +20,10 @@ const Users = () => {
   const { data: users = [], isLoading } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
+      console.log("Fetching users from Supabase...");
       const { data: profiles, error } = await supabase
         .from("profiles")
-        .select("id, username, role, status, created_at, updated_at")
+        .select("id, username, email, role, status, updated_at")
         .order("created_at", { ascending: false });
 
       if (error) {
@@ -34,7 +35,7 @@ const Users = () => {
       return profiles.map((profile): User => ({
         id: profile.id,
         name: profile.username || "Unnamed User",
-        email: "", // We'll need to join with auth.users to get this, but it's not accessible via API
+        email: profile.email || "",
         role: profile.role as User["role"],
         lastActive: profile.updated_at,
         status: profile.status as User["status"],
@@ -50,6 +51,7 @@ const Users = () => {
       userId: string;
       data: Partial<User>;
     }) => {
+      console.log("Updating user in Supabase:", userId, data);
       const { error } = await supabase
         .from("profiles")
         .update({
