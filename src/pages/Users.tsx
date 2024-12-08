@@ -23,7 +23,7 @@ const Users = () => {
       console.log("Fetching users from Supabase...");
       const { data: profiles, error } = await supabase
         .from("profiles")
-        .select("id, username, role, status, updated_at")
+        .select("*")
         .order("created_at", { ascending: false });
 
       if (error) {
@@ -31,13 +31,14 @@ const Users = () => {
         throw error;
       }
 
-      // Transform the data to match our User type
+      console.log("Fetched profiles:", profiles);
+
       return profiles.map((profile): User => ({
         id: profile.id,
         name: profile.username || "Unnamed User",
         email: null, // Email is not available in profiles table
         role: profile.role as User["role"],
-        lastActive: profile.updated_at,
+        lastActive: profile.updated_at || profile.created_at,
         status: profile.status as User["status"],
       }));
     },
@@ -61,10 +62,25 @@ const Users = () => {
         })
         .eq("id", userId);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error updating user:", error);
+        throw error;
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
+      toast({
+        title: "Success",
+        description: "User updated successfully",
+      });
+    },
+    onError: (error) => {
+      console.error("Mutation error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update user. Please try again.",
+        variant: "destructive",
+      });
     },
   });
 
@@ -74,17 +90,8 @@ const Users = () => {
         userId,
         data: { role: newRole },
       });
-      toast({
-        title: "Role Updated",
-        description: `User role has been updated to ${newRole}`,
-      });
     } catch (error) {
       console.error("Error updating role:", error);
-      toast({
-        title: "Error",
-        description: "Failed to update user role. Please try again.",
-        variant: "destructive",
-      });
     }
   };
 
@@ -94,17 +101,8 @@ const Users = () => {
         userId,
         data: { status: newStatus },
       });
-      toast({
-        title: "Status Updated",
-        description: `User status has been updated to ${newStatus}`,
-      });
     } catch (error) {
       console.error("Error updating status:", error);
-      toast({
-        title: "Error",
-        description: "Failed to update user status. Please try again.",
-        variant: "destructive",
-      });
     }
   };
 
