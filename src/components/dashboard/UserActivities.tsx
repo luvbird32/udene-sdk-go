@@ -11,26 +11,34 @@ interface UserActivity {
   created_at: string;
 }
 
-interface UserActivitiesProps {
-  profileId: string;
-}
-
-export const UserActivities = ({ profileId }: UserActivitiesProps) => {
-  const { data: activities, isLoading } = useQuery({
-    queryKey: ["user-activities", profileId],
+export const UserActivities = () => {
+  // Get current user's profile ID
+  const { data: currentUser } = useQuery({
+    queryKey: ["current-user"],
     queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
+      return user;
+    },
+  });
+
+  const { data: activities, isLoading } = useQuery({
+    queryKey: ["user-activities", currentUser?.id],
+    queryFn: async () => {
+      if (!currentUser?.id) return [];
+      
       console.log("Fetching user activities...");
       const { data, error } = await supabase
         .from('user_activities')
         .select('*')
-        .eq('profile_id', profileId)
+        .eq('profile_id', currentUser.id)
         .order('created_at', { ascending: false })
         .limit(10);
 
       if (error) throw error;
       return data as UserActivity[];
     },
-    refetchInterval: 30000,
+    enabled: !!currentUser?.id,
   });
 
   const getActivityIcon = (type: string) => {

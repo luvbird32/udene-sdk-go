@@ -19,7 +19,8 @@ export const AccountTypeIndicator = () => {
 
       if (error) throw error;
       return profile;
-    }
+    },
+    staleTime: 30000, // Cache for 30 seconds
   });
 
   if (!profile) return null;
