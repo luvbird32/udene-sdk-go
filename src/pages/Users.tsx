@@ -17,6 +17,16 @@ const Users = () => {
   const [selectedTab, setSelectedTab] = useState("users");
   const queryClient = useQueryClient();
 
+  // Get current user's profile
+  const { data: currentUser } = useQuery({
+    queryKey: ["current-user"],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
+      return user;
+    },
+  });
+
   const { data: users = [], isLoading } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
@@ -36,10 +46,10 @@ const Users = () => {
       return profiles.map((profile): User => ({
         id: profile.id,
         name: profile.username || "Unnamed User",
-        email: null, // Email is stored in auth.users and not accessible here
-        role: profile.role as User["role"], // Type assertion to ensure role matches User type
+        email: null,
+        role: profile.role as User["role"],
         lastActive: profile.updated_at || profile.created_at,
-        status: profile.status as User["status"], // Type assertion to ensure status matches User type
+        status: profile.status as User["status"],
       }));
     },
   });
@@ -54,6 +64,10 @@ const Users = () => {
     }) => {
       console.log("Updating user in Supabase:", userId, data);
       
+      if (!currentUser?.id) {
+        throw new Error("No authenticated user found");
+      }
+
       // First, validate the role if it's being updated
       if (data.role && !["admin", "user", "analyst"].includes(data.role)) {
         throw new Error("Invalid role specified");
@@ -64,7 +78,7 @@ const Users = () => {
         throw new Error("Invalid status specified");
       }
 
-      const { error } = await supabase
+      const { error: updateError } = await supabase
         .from("profiles")
         .update({
           role: data.role,
@@ -73,18 +87,25 @@ const Users = () => {
         })
         .eq("id", userId);
 
-      if (error) {
-        console.error("Error updating user:", error);
-        throw error;
+      if (updateError) {
+        console.error("Error updating user:", updateError);
+        throw updateError;
       }
 
-      // Log the user activity
-      await supabase.from("user_activities").insert({
-        profile_id: userId,
-        activity_type: "user_update",
-        description: `User profile updated: ${Object.keys(data).join(", ")}`,
-        metadata: data
-      });
+      // Log the user activity with the correct profile_id
+      const { error: activityError } = await supabase
+        .from("user_activities")
+        .insert({
+          profile_id: currentUser.id, // Using the authenticated user's ID
+          activity_type: "user_update",
+          description: `Updated user ${userId}: ${Object.keys(data).join(", ")}`,
+          metadata: data
+        });
+
+      if (activityError) {
+        console.error("Error logging activity:", activityError);
+        throw activityError;
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
