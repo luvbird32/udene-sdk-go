@@ -7,7 +7,7 @@ import { Toaster } from "./components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { supabase } from "./integrations/supabase/client";
-import { LoginForm } from "./components/auth/LoginForm";
+import { AuthFormWrapper } from "./components/auth/AuthFormWrapper";
 
 const queryClient = new QueryClient();
 
@@ -42,7 +42,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<LoginForm />} />
+          <Route path="/login" element={<AuthFormWrapper />} />
           <Route
             path="/dashboard"
             element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />}
