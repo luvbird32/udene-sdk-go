@@ -36,10 +36,10 @@ const Users = () => {
       return profiles.map((profile): User => ({
         id: profile.id,
         name: profile.username || "Unnamed User",
-        email: null,
-        role: profile.role as User["role"],
+        email: null, // Email is stored in auth.users and not accessible here
+        role: profile.role,
         lastActive: profile.updated_at || profile.created_at,
-        status: profile.status as User["status"],
+        status: profile.status,
       }));
     },
   });
@@ -53,6 +53,17 @@ const Users = () => {
       data: Partial<User>;
     }) => {
       console.log("Updating user in Supabase:", userId, data);
+      
+      // First, validate the role if it's being updated
+      if (data.role && !["admin", "user", "analyst"].includes(data.role)) {
+        throw new Error("Invalid role specified");
+      }
+
+      // Then validate the status if it's being updated
+      if (data.status && !["active", "inactive"].includes(data.status)) {
+        throw new Error("Invalid status specified");
+      }
+
       const { error } = await supabase
         .from("profiles")
         .update({
@@ -66,6 +77,14 @@ const Users = () => {
         console.error("Error updating user:", error);
         throw error;
       }
+
+      // Log the user activity
+      await supabase.from("user_activities").insert({
+        profile_id: userId,
+        activity_type: "user_update",
+        description: `User profile updated: ${Object.keys(data).join(", ")}`,
+        metadata: data
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
