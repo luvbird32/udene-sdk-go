@@ -15,25 +15,17 @@ const Users = () => {
   const { users, isLoading, updateUser } = useUsers();
 
   const handleRoleChange = async (userId: string, newRole: User["role"]) => {
-    try {
-      await updateUser({
-        userId,
-        data: { role: newRole },
-      });
-    } catch (error) {
-      console.error("Error updating role:", error);
-    }
+    await updateUser({
+      userId,
+      data: { role: newRole },
+    });
   };
 
   const handleStatusToggle = async (userId: string, newStatus: User["status"]) => {
-    try {
-      await updateUser({
-        userId,
-        data: { status: newStatus },
-      });
-    } catch (error) {
-      console.error("Error updating status:", error);
-    }
+    await updateUser({
+      userId,
+      data: { status: newStatus },
+    });
   };
 
   if (isLoading) {
