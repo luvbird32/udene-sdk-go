@@ -24,11 +24,6 @@ export const HeroSection = () => {
               Start Free Trial <ArrowRight className="w-5 h-5" />
             </Button>
           </Link>
-          <Link to="/docs">
-            <Button variant="outline" className="border-green-500 text-green-400 hover:bg-green-900/20 px-8 py-6 rounded-lg text-lg">
-              View Documentation
-            </Button>
-          </Link>
         </div>
 
         <div className="mt-12 pt-12 border-t border-green-500/20 grid grid-cols-1 sm:grid-cols-3 gap-8">
