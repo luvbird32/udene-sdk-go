@@ -40,45 +40,75 @@ const Settings = () => {
   };
 
   return (
-    <div className="container mx-auto py-10">
-      <div className="flex justify-between items-center mb-8">
-        <div className="flex items-center gap-4">
-          <Link to="/dashboard">
-            <Button variant="outline" size="icon">
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-          </Link>
-          <h1 className="text-3xl font-bold">Settings</h1>
+    <div className="min-h-screen bg-black text-green-400 relative">
+      {/* Matrix Background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          {Array.from({ length: 50 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-green-500 text-xl animate-fall"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${3 + Math.random() * 7}s`
+              }}
+            >
+              {String.fromCharCode(0x30A0 + Math.random() * 96)}
+            </div>
+          ))}
         </div>
-        <Button 
-          variant="destructive" 
-          onClick={handleSignOut}
-          className="flex items-center gap-2"
-        >
-          <LogOut className="h-4 w-4" />
-          Sign Out
-        </Button>
       </div>
 
-      <Tabs defaultValue="profile" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="security">Security</TabsTrigger>
-          <TabsTrigger value="api">API Keys</TabsTrigger>
-        </TabsList>
+      <div className="container mx-auto py-10 relative z-10">
+        <div className="flex justify-between items-center mb-8">
+          <div className="flex items-center gap-4">
+            <Link to="/dashboard">
+              <Button variant="outline" size="icon" className="glass-button">
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+            </Link>
+            <h1 className="text-3xl font-bold">Settings</h1>
+          </div>
+          <Button 
+            variant="destructive" 
+            onClick={handleSignOut}
+            className="flex items-center gap-2 glass-button bg-red-500/10 hover:bg-red-500/20"
+          >
+            <LogOut className="h-4 w-4" />
+            Sign Out
+          </Button>
+        </div>
 
-        <TabsContent value="profile">
-          <ProfileSettings profile={profile} setProfile={setProfile} />
-        </TabsContent>
+        <div className="glass-card p-6 rounded-lg">
+          <Tabs defaultValue="profile" className="space-y-4">
+            <TabsList className="glass-card">
+              <TabsTrigger value="profile" className="data-[state=active]:bg-green-900/40">
+                Profile
+              </TabsTrigger>
+              <TabsTrigger value="security" className="data-[state=active]:bg-green-900/40">
+                Security
+              </TabsTrigger>
+              <TabsTrigger value="api" className="data-[state=active]:bg-green-900/40">
+                API Keys
+              </TabsTrigger>
+            </TabsList>
 
-        <TabsContent value="security">
-          <SecuritySettings />
-        </TabsContent>
+            <TabsContent value="profile" className="animate-fade-in">
+              <ProfileSettings profile={profile} setProfile={setProfile} />
+            </TabsContent>
 
-        <TabsContent value="api">
-          <ApiKeySettings />
-        </TabsContent>
-      </Tabs>
+            <TabsContent value="security" className="animate-fade-in">
+              <SecuritySettings />
+            </TabsContent>
+
+            <TabsContent value="api" className="animate-fade-in">
+              <ApiKeySettings />
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
     </div>
   );
 };
