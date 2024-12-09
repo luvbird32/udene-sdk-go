@@ -16,7 +16,7 @@ export const SignupForm = () => {
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <div>
-        <label htmlFor="signup-email" className="block text-sm font-medium text-muted-foreground">
+        <label htmlFor="signup-email" className="block text-sm font-medium text-green-400/80">
           Email
         </label>
         <Input
@@ -26,12 +26,12 @@ export const SignupForm = () => {
           onChange={(e) => setEmail(e.target.value.trim())}
           required
           placeholder="Enter your email"
-          className="mt-1"
+          className="mt-1 glass-input text-green-400 placeholder:text-green-500/50"
           disabled={isLoading}
         />
       </div>
       <div>
-        <label htmlFor="signup-password" className="block text-sm font-medium text-muted-foreground">
+        <label htmlFor="signup-password" className="block text-sm font-medium text-green-400/80">
           Password
         </label>
         <Input
@@ -41,13 +41,13 @@ export const SignupForm = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
           placeholder="Choose a password"
-          className="mt-1"
+          className="mt-1 glass-input text-green-400 placeholder:text-green-500/50"
           disabled={isLoading}
         />
       </div>
       <Button 
         type="submit" 
-        className="w-full" 
+        className="w-full glass-button text-green-400 hover:text-green-300" 
         disabled={isLoading}
       >
         {isLoading ? "Signing up..." : "Sign Up"}
