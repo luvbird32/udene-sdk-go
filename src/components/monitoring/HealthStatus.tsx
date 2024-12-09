@@ -3,24 +3,24 @@ import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const HealthStatus = () => {
   const { toast } = useToast();
 
-  const { data: health, isLoading } = useQuery({
+  const { data: health, isLoading, error } = useQuery({
     queryKey: ["health"],
     queryFn: async () => {
       try {
         console.log("Checking database connection...");
         
-        // Check Supabase connection using a simpler query
         const { count, error: dbError } = await supabase
           .from('metrics')
-          .select('*', { count: 'exact', head: true }); // Using head: true for better performance
+          .select('*', { count: 'exact', head: true });
 
         if (dbError) {
           console.error("Database check failed:", dbError);
-          throw dbError;
+          throw new Error(`Database connection failed: ${dbError.message}`);
         }
 
         // Since we're using Supabase, if we can query the database, the API is working
@@ -36,16 +36,11 @@ export const HealthStatus = () => {
       } catch (error) {
         console.error("Health check failed:", error);
         toast({
-          title: "Health Check Failed",
-          description: "Unable to verify system health. Please try again later.",
           variant: "destructive",
+          title: "System Health Check Failed",
+          description: error instanceof Error ? error.message : "Unable to verify system health",
         });
-        return {
-          status: "unhealthy",
-          api: false,
-          database: false,
-          cache: false
-        };
+        throw error;
       }
     },
     refetchInterval: 30000, // Check every 30 seconds
@@ -67,6 +62,19 @@ export const HealthStatus = () => {
     );
   }
 
+  if (error) {
+    return (
+      <Card className="p-4">
+        <Alert variant="destructive">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertDescription>
+            {error instanceof Error ? error.message : "Failed to check system health"}
+          </AlertDescription>
+        </Alert>
+      </Card>
+    );
+  }
+
   return (
     <Card className="p-4">
       <div className="flex items-center justify-between mb-4">
@@ -80,19 +88,31 @@ export const HealthStatus = () => {
       <div className="space-y-2">
         <div className="flex justify-between">
           <span>API Status</span>
-          <span className={health?.api ? "text-green-500" : "text-red-500"}>
+          <span 
+            className={health?.api ? "text-green-500" : "text-red-500"}
+            role="status"
+            aria-label={`API is ${health?.api ? 'online' : 'offline'}`}
+          >
             {health?.api ? "Online" : "Offline"}
           </span>
         </div>
         <div className="flex justify-between">
           <span>Database</span>
-          <span className={health?.database ? "text-green-500" : "text-red-500"}>
+          <span 
+            className={health?.database ? "text-green-500" : "text-red-500"}
+            role="status"
+            aria-label={`Database is ${health?.database ? 'connected' : 'disconnected'}`}
+          >
             {health?.database ? "Connected" : "Disconnected"}
           </span>
         </div>
         <div className="flex justify-between">
           <span>Cache</span>
-          <span className={health?.cache ? "text-green-500" : "text-red-500"}>
+          <span 
+            className={health?.cache ? "text-green-500" : "text-red-500"}
+            role="status"
+            aria-label={`Cache is ${health?.cache ? 'available' : 'unavailable'}`}
+          >
             {health?.cache ? "Available" : "Unavailable"}
           </span>
         </div>
