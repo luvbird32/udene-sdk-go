@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 interface AuthResponse {
@@ -16,7 +16,12 @@ export const useAuth = (): AuthResponse => {
 
   const handleLogin = async (email: string, password: string) => {
     if (!email || !password) {
-      throw new Error("Please provide both email and password");
+      toast({
+        title: "Error",
+        description: "Please provide both email and password",
+        variant: "destructive"
+      });
+      return;
     }
 
     setIsLoading(true);
@@ -39,7 +44,12 @@ export const useAuth = (): AuthResponse => {
           errorMessage = "Invalid email or password. Please try again";
         }
 
-        throw new Error(errorMessage);
+        toast({
+          title: "Login Failed",
+          description: errorMessage,
+          variant: "destructive"
+        });
+        return;
       }
 
       if (data?.session) {
@@ -50,9 +60,13 @@ export const useAuth = (): AuthResponse => {
         });
         navigate('/dashboard');
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error("Login error:", err);
-      throw err;
+      toast({
+        title: "Login Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive"
+      });
     } finally {
       setIsLoading(false);
     }

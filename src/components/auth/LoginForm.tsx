@@ -2,36 +2,15 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { isLoading, handleLogin } = useAuth();
-  const { toast } = useToast();
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!email || !password) {
-      toast({
-        title: "Error",
-        description: "Please fill in all fields",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      await handleLogin(email, password);
-    } catch (error: any) {
-      console.error("Login error:", error);
-      toast({
-        title: "Login Failed",
-        description: error?.message || "Invalid email or password",
-        variant: "destructive",
-      });
-    }
+    await handleLogin(email, password);
   };
 
   return (
