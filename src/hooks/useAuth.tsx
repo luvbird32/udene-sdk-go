@@ -25,43 +25,41 @@ export const useAuth = (): AuthResponse => {
     }
 
     setIsLoading(true);
-    console.log("Starting login attempt with email:", email);
+    const cleanEmail = email.trim().toLowerCase();
+    console.log("Starting login attempt with email:", cleanEmail);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: email.trim().toLowerCase(),
+      const { error } = await supabase.auth.signInWithPassword({
+        email: cleanEmail,
         password,
       });
 
-      console.log("Login response:", { data, error });
-
       if (error) {
-        let errorMessage = "Invalid email or password";
+        console.error("Login error:", error);
         
         if (error.message.includes("Email not confirmed")) {
-          errorMessage = "Please verify your email address before logging in";
-        } else if (error.message.includes("Invalid login credentials")) {
-          errorMessage = "Invalid email or password. Please try again";
+          toast({
+            title: "Login Failed",
+            description: "Please verify your email address before logging in",
+            variant: "destructive"
+          });
+        } else {
+          toast({
+            title: "Login Failed",
+            description: "Invalid email or password. Please try again",
+            variant: "destructive"
+          });
         }
-
-        toast({
-          title: "Login Failed",
-          description: errorMessage,
-          variant: "destructive"
-        });
         return;
       }
 
-      if (data?.session) {
-        console.log("Login successful, redirecting to dashboard");
-        toast({
-          title: "Success",
-          description: "Login successful! Redirecting...",
-        });
-        navigate('/dashboard');
-      }
+      toast({
+        title: "Success",
+        description: "Login successful! Redirecting...",
+      });
+      navigate('/dashboard');
     } catch (err) {
-      console.error("Login error:", err);
+      console.error("Unexpected login error:", err);
       toast({
         title: "Login Error",
         description: "An unexpected error occurred. Please try again.",
@@ -83,16 +81,17 @@ export const useAuth = (): AuthResponse => {
     }
 
     setIsLoading(true);
-    console.log("Attempting signup with email:", email);
+    const cleanEmail = email.trim().toLowerCase();
+    console.log("Attempting signup with email:", cleanEmail);
 
     try {
       const { data, error } = await supabase.auth.signUp({
-        email: email.trim().toLowerCase(),
+        email: cleanEmail,
         password,
         options: {
           emailRedirectTo: `${window.location.origin}/dashboard`,
           data: {
-            email: email.trim().toLowerCase(),
+            email: cleanEmail,
           }
         }
       });
@@ -116,6 +115,18 @@ export const useAuth = (): AuthResponse => {
       }
 
       if (data.user) {
+        // Create a profile entry immediately after signup
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert([{ 
+            id: data.user.id,
+            email: cleanEmail
+          }]);
+
+        if (profileError) {
+          console.error("Error creating profile:", profileError);
+        }
+
         toast({
           title: "Signup Successful",
           description: "Please check your email to verify your account before logging in.",
