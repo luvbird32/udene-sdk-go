@@ -2,12 +2,24 @@ import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LoginForm } from "./LoginForm";
 import { SignupForm } from "./SignupForm";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const AuthFormWrapper = () => {
   const [activeTab, setActiveTab] = useState('login');
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-black text-green-400 relative flex items-center justify-center p-4">
+      {/* Return Button */}
+      <button
+        onClick={() => navigate('/')}
+        className="absolute top-4 left-4 flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors glass-button px-4 py-2 rounded-md"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        Back to Home
+      </button>
+
       {/* Matrix Background */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 opacity-20">
