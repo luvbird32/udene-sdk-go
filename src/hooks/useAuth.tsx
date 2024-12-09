@@ -37,11 +37,10 @@ export const useAuth = (): AuthResponse => {
       if (error) {
         console.error("Login error:", error);
         
-        // Handle specific error cases
         if (error.message.includes("Invalid login credentials")) {
           toast({
             title: "Login Failed",
-            description: "Email not registered or incorrect password. Please try signing up if you're new.",
+            description: "Email or password is incorrect. Please try again.",
             variant: "destructive"
           });
         } else {
@@ -89,30 +88,17 @@ export const useAuth = (): AuthResponse => {
     console.log("Attempting signup with email:", cleanEmail);
 
     try {
-      const { data, error } = await supabase.auth.signUp({
+      // First check if user exists
+      const { data: existingUser } = await supabase.auth.signUp({
         email: cleanEmail,
         password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`
+        }
       });
 
-      if (error) {
-        console.error("Signup error:", error);
-        let errorMessage = "Signup failed. ";
-        
-        if (error.message.includes("already registered")) {
-          errorMessage = "This email is already registered. Please try logging in instead.";
-        } else {
-          errorMessage += error.message;
-        }
-
-        toast({
-          title: "Signup Failed",
-          description: errorMessage,
-          variant: "destructive"
-        });
-        return;
-      }
-
-      if (data.user) {
+      if (existingUser?.user) {
+        console.log("User created successfully:", existingUser.user);
         toast({
           title: "Signup Successful",
           description: "Account created successfully. You can now log in.",
@@ -121,13 +107,24 @@ export const useAuth = (): AuthResponse => {
         // Since email verification is disabled, we can automatically log them in
         await handleLogin(cleanEmail, password);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Signup error:", err);
-      toast({
-        title: "Signup Error",
-        description: "An unexpected error occurred. Please try again.",
-        variant: "destructive"
-      });
+      
+      // Check if the error is due to existing user
+      if (err.message?.includes("User already registered") || 
+          err.error_description?.includes("User already registered")) {
+        toast({
+          title: "Account Exists",
+          description: "This email is already registered. Please try logging in instead.",
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Signup Error",
+          description: "An unexpected error occurred. Please try again.",
+          variant: "destructive"
+        });
+      }
     } finally {
       setIsLoading(false);
     }
