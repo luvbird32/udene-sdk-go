@@ -29,35 +29,29 @@ export const useAuth = (): AuthResponse => {
     console.log("Starting login attempt with email:", cleanEmail);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: cleanEmail,
         password,
       });
 
       if (error) {
         console.error("Login error:", error);
-        
-        if (error.message.includes("Email not confirmed")) {
-          toast({
-            title: "Login Failed",
-            description: "Please verify your email address before logging in",
-            variant: "destructive"
-          });
-        } else {
-          toast({
-            title: "Login Failed",
-            description: "Invalid email or password. Please try again",
-            variant: "destructive"
-          });
-        }
+        toast({
+          title: "Login Failed",
+          description: "Invalid email or password. Please try again",
+          variant: "destructive"
+        });
         return;
       }
 
-      toast({
-        title: "Success",
-        description: "Login successful! Redirecting...",
-      });
-      navigate('/dashboard');
+      if (data.user) {
+        console.log("Login successful, user:", data.user);
+        toast({
+          title: "Success",
+          description: "Login successful! Redirecting...",
+        });
+        navigate('/dashboard');
+      }
     } catch (err) {
       console.error("Unexpected login error:", err);
       toast({
@@ -88,12 +82,6 @@ export const useAuth = (): AuthResponse => {
       const { data, error } = await supabase.auth.signUp({
         email: cleanEmail,
         password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/dashboard`,
-          data: {
-            email: cleanEmail,
-          }
-        }
       });
 
       console.log("Signup response:", { data, error });
@@ -120,7 +108,7 @@ export const useAuth = (): AuthResponse => {
           .from('profiles')
           .insert([{ 
             id: data.user.id,
-            email: cleanEmail
+            email: cleanEmail,
           }]);
 
         if (profileError) {
@@ -129,8 +117,11 @@ export const useAuth = (): AuthResponse => {
 
         toast({
           title: "Signup Successful",
-          description: "Please check your email to verify your account before logging in.",
+          description: "Account created successfully. You can now log in.",
         });
+        
+        // Since email verification is disabled, we can automatically log them in
+        await handleLogin(cleanEmail, password);
       }
     } catch (err) {
       console.error("Signup error:", err);
