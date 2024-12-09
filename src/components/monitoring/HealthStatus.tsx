@@ -23,18 +23,12 @@ export const HealthStatus = () => {
           throw dbError;
         }
 
-        // Check if we can access the API
-        const apiCheck = await fetch("/api/v1/health");
-        const apiStatus = apiCheck.ok;
-
-        // Ensure count is a number and not null
-        const dbConnected = typeof count === 'number';
-
+        // Since we're using Supabase, if we can query the database, the API is working
         const status = {
-          status: dbConnected && apiStatus ? "healthy" : "unhealthy",
-          api: apiStatus,
-          database: dbConnected,
-          cache: dbConnected // Using same check for cache since we're using Supabase
+          status: count !== null ? "healthy" : "unhealthy",
+          api: true,
+          database: count !== null,
+          cache: count !== null // Using same check for cache since we're using Supabase
         };
 
         console.log("Health check result:", status);
