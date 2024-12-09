@@ -23,7 +23,7 @@ export const LoginForm = () => {
           id="email"
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value.trim())}
           required
           placeholder="Enter your email"
           className="mt-1"

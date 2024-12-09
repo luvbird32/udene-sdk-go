@@ -90,7 +90,10 @@ export const useAuth = (): AuthResponse => {
         email: email.trim().toLowerCase(),
         password,
         options: {
-          emailRedirectTo: window.location.origin + '/dashboard',
+          emailRedirectTo: `${window.location.origin}/dashboard`,
+          data: {
+            email: email.trim().toLowerCase(),
+          }
         }
       });
 
@@ -115,7 +118,7 @@ export const useAuth = (): AuthResponse => {
       if (data.user) {
         toast({
           title: "Signup Successful",
-          description: "Please check your email to verify your account.",
+          description: "Please check your email to verify your account before logging in.",
         });
       }
     } catch (err) {
