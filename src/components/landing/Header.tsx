@@ -28,11 +28,11 @@ export const Header = () => {
                   <NavigationMenuContent>
                     <div className="grid gap-3 p-6 w-[400px] bg-black/90 backdrop-blur-sm">
                       <div className="grid grid-cols-2 gap-4">
-                        <Link to="/solutions/fraud-detection" className="block p-3 space-y-1 hover:bg-green-900/20 rounded-lg">
+                        <Link to="#" className="block p-3 space-y-1 hover:bg-green-900/20 rounded-lg">
                           <div className="font-medium text-green-400">Fraud Detection</div>
                           <p className="text-sm text-green-300/70">Real-time transaction monitoring</p>
                         </Link>
-                        <Link to="/solutions/risk-assessment" className="block p-3 space-y-1 hover:bg-green-900/20 rounded-lg">
+                        <Link to="#" className="block p-3 space-y-1 hover:bg-green-900/20 rounded-lg">
                           <div className="font-medium text-green-400">Risk Assessment</div>
                           <p className="text-sm text-green-300/70">Advanced risk scoring system</p>
                         </Link>
@@ -41,12 +41,12 @@ export const Header = () => {
                   </NavigationMenuContent>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link to="/pricing" className="text-green-400 hover:text-green-300 px-4 py-2">
+                  <Link to="#pricing" className="text-green-400 hover:text-green-300 px-4 py-2">
                     Pricing
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link to="/about" className="text-green-400 hover:text-green-300 px-4 py-2">
+                  <Link to="#about" className="text-green-400 hover:text-green-300 px-4 py-2">
                     About
                   </Link>
                 </NavigationMenuItem>
