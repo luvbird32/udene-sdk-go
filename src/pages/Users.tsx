@@ -33,7 +33,13 @@ const Users = () => {
       <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
         <div className="container mx-auto p-6">
           <div className="flex justify-center items-center h-[60vh]">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            <div className="animate-pulse-slow">
+              <div className="w-16 h-16 relative">
+                <div className="absolute inset-0 border-4 border-primary/30 rounded-full animate-spin"></div>
+                <div className="absolute inset-2 border-4 border-primary/50 rounded-full animate-spin-slow"></div>
+                <div className="absolute inset-4 border-4 border-primary rounded-full"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -41,8 +47,28 @@ const Users = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
-      <div className="container mx-auto p-6 space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black relative overflow-hidden">
+      {/* Matrix-like background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 opacity-10">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute animate-fall"
+              style={{
+                left: `${Math.random() * 100}%`,
+                animationDuration: `${Math.random() * 10 + 5}s`,
+                animationDelay: `${Math.random() * 5}s`,
+                opacity: Math.random() * 0.5 + 0.25
+              }}
+            >
+              {String.fromCharCode(0x30A0 + Math.random() * 96)}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="container mx-auto p-6 space-y-8 relative z-10">
         <div className="flex justify-between items-center mb-6 animate-fade-in">
           <div className="flex items-center gap-4">
             <Link to="/dashboard">

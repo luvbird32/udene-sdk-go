@@ -76,10 +76,6 @@
   animation: fall linear infinite;
 }
 
-.animate-pulse-slow {
-  animation: pulse 3s ease-in-out infinite;
-}
-
 @keyframes pulse {
   0%, 100% {
     opacity: 1;
@@ -118,6 +114,19 @@
 
 .animate-fade-in {
   animation: fade-in 0.5s ease-out forwards;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
 }
 
 @keyframes shimmer {
