@@ -15,22 +15,34 @@ export const useAuth = (): AuthResponse => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (email: string, password: string) => {
+    if (!email || !password) {
+      toast({
+        title: "Error",
+        description: "Please provide both email and password",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsLoading(true);
     console.log("Starting login attempt with email:", email);
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
+        email: email.trim().toLowerCase(),
         password,
       });
 
-      console.log("Raw login response:", { data, error });
+      console.log("Login response:", { data, error });
 
       if (error) {
-        console.error("Login error details:", error);
-        let errorMessage = "Invalid email or password. Please try again.";
-        if (!error.message.includes("Invalid login credentials")) {
-          errorMessage = error.message;
+        let errorMessage = "Invalid email or password";
+        
+        // Handle specific error cases
+        if (error.message.includes("Email not confirmed")) {
+          errorMessage = "Please verify your email address before logging in";
+        } else if (error.message.includes("Invalid login credentials")) {
+          errorMessage = "Invalid email or password. Please try again";
         }
 
         toast({
@@ -42,7 +54,7 @@ export const useAuth = (): AuthResponse => {
       }
 
       if (data?.session) {
-        console.log("Login successful, session created");
+        console.log("Login successful, redirecting to dashboard");
         toast({
           title: "Success",
           description: "Login successful! Redirecting...",
@@ -62,13 +74,25 @@ export const useAuth = (): AuthResponse => {
   };
 
   const handleSignUp = async (email: string, password: string) => {
+    if (!email || !password) {
+      toast({
+        title: "Error",
+        description: "Please provide both email and password",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsLoading(true);
     console.log("Attempting signup with email:", email);
 
     try {
       const { data, error } = await supabase.auth.signUp({
-        email,
+        email: email.trim().toLowerCase(),
         password,
+        options: {
+          emailRedirectTo: window.location.origin + '/dashboard',
+        }
       });
 
       console.log("Signup response:", { data, error });
@@ -76,7 +100,7 @@ export const useAuth = (): AuthResponse => {
       if (error) {
         let errorMessage = "Signup failed. ";
         if (error.message.includes("already registered")) {
-          errorMessage += "This email is already registered.";
+          errorMessage = "This email is already registered. Please try logging in instead.";
         } else {
           errorMessage += error.message;
         }
@@ -92,9 +116,9 @@ export const useAuth = (): AuthResponse => {
       if (data.user) {
         toast({
           title: "Signup Successful",
-          description: "You have been successfully registered and logged in.",
+          description: "Please check your email to verify your account.",
         });
-        navigate('/dashboard');
+        // Don't navigate immediately after signup since email verification might be required
       }
     } catch (err) {
       console.error("Signup error:", err);
