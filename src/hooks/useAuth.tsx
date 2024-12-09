@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 interface AuthResponse {
@@ -36,11 +36,21 @@ export const useAuth = (): AuthResponse => {
 
       if (error) {
         console.error("Login error:", error);
-        toast({
-          title: "Login Failed",
-          description: "Invalid email or password. Please try again",
-          variant: "destructive"
-        });
+        
+        // Handle specific error cases
+        if (error.message.includes("Invalid login credentials")) {
+          toast({
+            title: "Login Failed",
+            description: "Email not registered or incorrect password. Please try signing up if you're new.",
+            variant: "destructive"
+          });
+        } else {
+          toast({
+            title: "Login Failed",
+            description: error.message,
+            variant: "destructive"
+          });
+        }
         return;
       }
 
@@ -84,10 +94,10 @@ export const useAuth = (): AuthResponse => {
         password,
       });
 
-      console.log("Signup response:", { data, error });
-
       if (error) {
+        console.error("Signup error:", error);
         let errorMessage = "Signup failed. ";
+        
         if (error.message.includes("already registered")) {
           errorMessage = "This email is already registered. Please try logging in instead.";
         } else {
@@ -103,18 +113,6 @@ export const useAuth = (): AuthResponse => {
       }
 
       if (data.user) {
-        // Create a profile entry immediately after signup
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert([{ 
-            id: data.user.id,
-            email: cleanEmail,
-          }]);
-
-        if (profileError) {
-          console.error("Error creating profile:", profileError);
-        }
-
         toast({
           title: "Signup Successful",
           description: "Account created successfully. You can now log in.",
