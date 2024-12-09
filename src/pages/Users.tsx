@@ -30,54 +30,62 @@ const Users = () => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
+        <div className="container mx-auto p-6">
+          <div className="flex justify-center items-center h-[60vh]">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-4">
-          <Link to="/dashboard">
-            <Button variant="outline" size="icon">
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-          </Link>
-          <h1 className="text-3xl font-bold">User Administration</h1>
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
+      <div className="container mx-auto p-6 space-y-8">
+        <div className="flex justify-between items-center mb-6 animate-fade-in">
+          <div className="flex items-center gap-4">
+            <Link to="/dashboard">
+              <Button variant="outline" size="icon" className="glass-button">
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+            </Link>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+              User Administration
+            </h1>
+          </div>
+          <AddUserDialog />
         </div>
-        <AddUserDialog />
+
+        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="animate-fade-in">
+          <TabsList className="glass-card mb-6 p-1">
+            <TabsTrigger value="users" className="data-[state=active]:glass-button space-x-2">
+              <Shield className="h-4 w-4" />
+              <span>Users & Roles</span>
+            </TabsTrigger>
+            <TabsTrigger value="activity" className="data-[state=active]:glass-button space-x-2">
+              <Activity className="h-4 w-4" />
+              <span>Activity Log</span>
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="users" className="animate-fade-in">
+            <Card className="glass-card border-0">
+              <div className="p-6">
+                <UserTable 
+                  users={users}
+                  onRoleChange={handleRoleChange}
+                  onStatusToggle={handleStatusToggle}
+                />
+              </div>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="activity" className="animate-fade-in">
+            <ActivityLog users={users} />
+          </TabsContent>
+        </Tabs>
       </div>
-
-      <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-        <TabsList className="mb-4">
-          <TabsTrigger value="users" className="space-x-2">
-            <Shield className="h-4 w-4" />
-            <span>Users & Roles</span>
-          </TabsTrigger>
-          <TabsTrigger value="activity" className="space-x-2">
-            <Activity className="h-4 w-4" />
-            <span>Activity Log</span>
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="users">
-          <Card className="p-6">
-            <UserTable 
-              users={users}
-              onRoleChange={handleRoleChange}
-              onStatusToggle={handleStatusToggle}
-            />
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="activity">
-          <ActivityLog users={users} />
-        </TabsContent>
-      </Tabs>
     </div>
   );
 };
