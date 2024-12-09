@@ -1,15 +1,12 @@
-import { Shield } from "lucide-react";
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { UserActions } from "./UserActions";
-import { Badge } from "@/components/ui/badge";
 import { User } from "@/types/users";
+import { UserTableRow } from "./UserTableRow";
 
 interface UserTableProps {
   users: User[];
@@ -32,34 +29,12 @@ export const UserTable = ({ users, onRoleChange, onStatusToggle }: UserTableProp
       </TableHeader>
       <TableBody>
         {users.map((user) => (
-          <TableRow key={user.id}>
-            <TableCell>{user.name}</TableCell>
-            <TableCell>{user.email}</TableCell>
-            <TableCell>
-              <Badge
-                variant={user.role === "admin" ? "destructive" : "default"}
-              >
-                {user.role}
-              </Badge>
-            </TableCell>
-            <TableCell>
-              <Badge
-                variant={user.status === "active" ? "default" : "secondary"}
-              >
-                {user.status}
-              </Badge>
-            </TableCell>
-            <TableCell>
-              {new Date(user.lastActive).toLocaleDateString()}
-            </TableCell>
-            <TableCell>
-              <UserActions 
-                user={user}
-                onRoleChange={onRoleChange}
-                onStatusToggle={onStatusToggle}
-              />
-            </TableCell>
-          </TableRow>
+          <UserTableRow
+            key={user.id}
+            user={user}
+            onRoleChange={onRoleChange}
+            onStatusToggle={onStatusToggle}
+          />
         ))}
       </TableBody>
     </Table>
