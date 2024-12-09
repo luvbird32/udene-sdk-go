@@ -10,11 +10,6 @@ import { Button } from "@/components/ui/button";
 import { LogOut, ArrowLeft } from "lucide-react";
 
 const Settings = () => {
-  const [profile, setProfile] = useState({
-    name: "",
-    email: "",
-    avatar: ""
-  });
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -96,7 +91,7 @@ const Settings = () => {
             </TabsList>
 
             <TabsContent value="profile" className="animate-fade-in">
-              <ProfileSettings profile={profile} setProfile={setProfile} />
+              <ProfileSettings />
             </TabsContent>
 
             <TabsContent value="security" className="animate-fade-in">
