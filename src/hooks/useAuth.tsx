@@ -16,12 +16,7 @@ export const useAuth = (): AuthResponse => {
 
   const handleLogin = async (email: string, password: string) => {
     if (!email || !password) {
-      toast({
-        title: "Error",
-        description: "Please provide both email and password",
-        variant: "destructive"
-      });
-      return;
+      throw new Error("Please provide both email and password");
     }
 
     setIsLoading(true);
@@ -38,19 +33,13 @@ export const useAuth = (): AuthResponse => {
       if (error) {
         let errorMessage = "Invalid email or password";
         
-        // Handle specific error cases
         if (error.message.includes("Email not confirmed")) {
           errorMessage = "Please verify your email address before logging in";
         } else if (error.message.includes("Invalid login credentials")) {
           errorMessage = "Invalid email or password. Please try again";
         }
 
-        toast({
-          title: "Login Failed",
-          description: errorMessage,
-          variant: "destructive"
-        });
-        return;
+        throw new Error(errorMessage);
       }
 
       if (data?.session) {
@@ -61,13 +50,9 @@ export const useAuth = (): AuthResponse => {
         });
         navigate('/dashboard');
       }
-    } catch (err) {
-      console.error("Unexpected login error:", err);
-      toast({
-        title: "Login Error",
-        description: "An unexpected error occurred. Please try again.",
-        variant: "destructive"
-      });
+    } catch (err: any) {
+      console.error("Login error:", err);
+      throw err;
     } finally {
       setIsLoading(false);
     }
@@ -118,7 +103,6 @@ export const useAuth = (): AuthResponse => {
           title: "Signup Successful",
           description: "Please check your email to verify your account.",
         });
-        // Don't navigate immediately after signup since email verification might be required
       }
     } catch (err) {
       console.error("Signup error:", err);
