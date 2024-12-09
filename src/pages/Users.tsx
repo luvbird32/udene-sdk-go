@@ -9,10 +9,26 @@ import { Link } from "react-router-dom";
 import { AddUserDialog } from "@/components/users/AddUserDialog";
 import { useUsers } from "@/hooks/useUsers";
 import { User } from "@/types/users";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const Users = () => {
   const [selectedTab, setSelectedTab] = useState("users");
   const { users, isLoading, updateUser } = useUsers();
+
+  const { data: activities = [] } = useQuery({
+    queryKey: ["user-activities"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('user_activities')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(20);
+      
+      if (error) throw error;
+      return data;
+    }
+  });
 
   const handleRoleChange = async (userId: string, newRole: User["role"]) => {
     await updateUser({
@@ -48,21 +64,20 @@ const Users = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black relative overflow-hidden">
-      {/* Matrix-like background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute inset-0 opacity-10">
-          {Array.from({ length: 20 }).map((_, i) => (
+          {activities.map((activity, i) => (
             <div
-              key={i}
+              key={activity.id}
               className="absolute animate-fall"
               style={{
-                left: `${Math.random() * 100}%`,
+                left: `${(i / activities.length) * 100}%`,
                 animationDuration: `${Math.random() * 10 + 5}s`,
                 animationDelay: `${Math.random() * 5}s`,
                 opacity: Math.random() * 0.5 + 0.25
               }}
             >
-              {String.fromCharCode(0x30A0 + Math.random() * 96)}
+              {activity.activity_type.charAt(0).toUpperCase()}
             </div>
           ))}
         </div>
