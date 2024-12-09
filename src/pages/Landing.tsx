@@ -16,11 +16,21 @@ const Landing = () => {
         <HeroSection />
       </MatrixBackground>
       
-      <Features />
-      <Industries />
-      <UseCases />
-      <PricingPlans />
-      <Footer />
+      <div id="features">
+        <Features />
+      </div>
+      <div id="industries">
+        <Industries />
+      </div>
+      <div id="use-cases">
+        <UseCases />
+      </div>
+      <div id="pricing">
+        <PricingPlans />
+      </div>
+      <div id="about">
+        <Footer />
+      </div>
     </div>
   );
 };

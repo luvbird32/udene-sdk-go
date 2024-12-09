@@ -10,6 +10,13 @@ import {
 } from "@/components/ui/navigation-menu";
 
 export const Header = () => {
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-sm border-b border-green-900/30">
       <div className="container mx-auto px-4 py-4">
@@ -28,27 +35,39 @@ export const Header = () => {
                   <NavigationMenuContent>
                     <div className="grid gap-3 p-6 w-[400px] bg-black/90 backdrop-blur-sm">
                       <div className="grid grid-cols-2 gap-4">
-                        <Link to="#" className="block p-3 space-y-1 hover:bg-green-900/20 rounded-lg">
+                        <button 
+                          onClick={() => scrollToSection('features')} 
+                          className="block p-3 space-y-1 hover:bg-green-900/20 rounded-lg text-left"
+                        >
                           <div className="font-medium text-green-400">Fraud Detection</div>
                           <p className="text-sm text-green-300/70">Real-time transaction monitoring</p>
-                        </Link>
-                        <Link to="#" className="block p-3 space-y-1 hover:bg-green-900/20 rounded-lg">
+                        </button>
+                        <button 
+                          onClick={() => scrollToSection('features')} 
+                          className="block p-3 space-y-1 hover:bg-green-900/20 rounded-lg text-left"
+                        >
                           <div className="font-medium text-green-400">Risk Assessment</div>
                           <p className="text-sm text-green-300/70">Advanced risk scoring system</p>
-                        </Link>
+                        </button>
                       </div>
                     </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link to="#pricing" className="text-green-400 hover:text-green-300 px-4 py-2">
+                  <button 
+                    onClick={() => scrollToSection('pricing')} 
+                    className="text-green-400 hover:text-green-300 px-4 py-2"
+                  >
                     Pricing
-                  </Link>
+                  </button>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link to="#about" className="text-green-400 hover:text-green-300 px-4 py-2">
+                  <button 
+                    onClick={() => scrollToSection('about')} 
+                    className="text-green-400 hover:text-green-300 px-4 py-2"
+                  >
                     About
-                  </Link>
+                  </button>
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
