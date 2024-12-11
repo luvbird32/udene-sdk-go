@@ -20,6 +20,8 @@ import { WebhookManager } from "@/components/client-dashboard/webhooks/WebhookMa
 import { TriggerManager } from "@/components/client-dashboard/triggers/TriggerManager";
 import { ServiceManager } from "@/components/client-dashboard/services/ServiceManager";
 import { ReferralFraudMonitoring } from "@/components/client-dashboard/analytics/ReferralFraudMonitoring";
+import { RomanceScamMonitoring } from "@/components/client-dashboard/analytics/RomanceScamMonitoring";
+import { RewardProgramMonitoring } from "@/components/client-dashboard/analytics/RewardProgramMonitoring";
 import { AffiliateMonitoring } from "@/components/client-dashboard/analytics/AffiliateMonitoring";
 import { TrialAbuseMonitoring } from "@/components/client-dashboard/analytics/TrialAbuseMonitoring";
 
@@ -120,8 +122,8 @@ const ClientDashboard = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <ReferralFraudMonitoring />
-            <AffiliateMonitoring />
-            <TrialAbuseMonitoring />
+            <RomanceScamMonitoring />
+            <RewardProgramMonitoring />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
