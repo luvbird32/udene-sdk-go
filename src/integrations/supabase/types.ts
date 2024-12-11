@@ -421,13 +421,19 @@ export type Database = {
           account_type: string
           avatar_url: string | null
           created_at: string | null
+          email_verified: boolean | null
           id: string
+          last_login: string | null
           organization_id: string | null
           organization_name: string | null
           organization_role: string | null
+          phone_number: string | null
+          preferences: Json | null
           role: string
+          security_settings: Json | null
           settings: Json | null
           status: string
+          timezone: string | null
           updated_at: string | null
           username: string | null
         }
@@ -435,13 +441,19 @@ export type Database = {
           account_type?: string
           avatar_url?: string | null
           created_at?: string | null
+          email_verified?: boolean | null
           id: string
+          last_login?: string | null
           organization_id?: string | null
           organization_name?: string | null
           organization_role?: string | null
+          phone_number?: string | null
+          preferences?: Json | null
           role?: string
+          security_settings?: Json | null
           settings?: Json | null
           status?: string
+          timezone?: string | null
           updated_at?: string | null
           username?: string | null
         }
@@ -449,13 +461,19 @@ export type Database = {
           account_type?: string
           avatar_url?: string | null
           created_at?: string | null
+          email_verified?: boolean | null
           id?: string
+          last_login?: string | null
           organization_id?: string | null
           organization_name?: string | null
           organization_role?: string | null
+          phone_number?: string | null
+          preferences?: Json | null
           role?: string
+          security_settings?: Json | null
           settings?: Json | null
           status?: string
+          timezone?: string | null
           updated_at?: string | null
           username?: string | null
         }
