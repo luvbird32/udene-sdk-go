@@ -9,6 +9,54 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      affiliate_activities: {
+        Row: {
+          affiliate_id: string
+          click_id: string | null
+          commission_amount: number | null
+          conversion_id: string | null
+          created_at: string | null
+          fraud_indicators: Json | null
+          id: string
+          ip_address: string | null
+          risk_score: number | null
+          status: string | null
+          transaction_amount: number | null
+          updated_at: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          affiliate_id: string
+          click_id?: string | null
+          commission_amount?: number | null
+          conversion_id?: string | null
+          created_at?: string | null
+          fraud_indicators?: Json | null
+          id?: string
+          ip_address?: string | null
+          risk_score?: number | null
+          status?: string | null
+          transaction_amount?: number | null
+          updated_at?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          affiliate_id?: string
+          click_id?: string | null
+          commission_amount?: number | null
+          conversion_id?: string | null
+          created_at?: string | null
+          fraud_indicators?: Json | null
+          id?: string
+          ip_address?: string | null
+          risk_score?: number | null
+          status?: string | null
+          transaction_amount?: number | null
+          updated_at?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       api_keys: {
         Row: {
           created_at: string | null
@@ -421,6 +469,48 @@ export type Database = {
           },
         ]
       }
+      referral_tracking: {
+        Row: {
+          created_at: string | null
+          device_fingerprint: string | null
+          id: string
+          ip_address: string | null
+          referral_code: string
+          referred_id: string
+          referrer_id: string
+          reward_claimed: boolean | null
+          risk_score: number | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          device_fingerprint?: string | null
+          id?: string
+          ip_address?: string | null
+          referral_code: string
+          referred_id: string
+          referrer_id: string
+          reward_claimed?: boolean | null
+          risk_score?: number | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          device_fingerprint?: string | null
+          id?: string
+          ip_address?: string | null
+          referral_code?: string
+          referred_id?: string
+          referrer_id?: string
+          reward_claimed?: boolean | null
+          risk_score?: number | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       rewards_transactions: {
         Row: {
           created_at: string | null
@@ -584,6 +674,51 @@ export type Database = {
           timestamp?: string
           transaction_type?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      trial_usage: {
+        Row: {
+          created_at: string | null
+          device_fingerprints: Json | null
+          end_date: string
+          id: string
+          ip_addresses: Json | null
+          risk_score: number | null
+          start_date: string
+          status: string | null
+          trial_type: string
+          updated_at: string | null
+          usage_patterns: Json | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          device_fingerprints?: Json | null
+          end_date: string
+          id?: string
+          ip_addresses?: Json | null
+          risk_score?: number | null
+          start_date: string
+          status?: string | null
+          trial_type: string
+          updated_at?: string | null
+          usage_patterns?: Json | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          device_fingerprints?: Json | null
+          end_date?: string
+          id?: string
+          ip_addresses?: Json | null
+          risk_score?: number | null
+          start_date?: string
+          status?: string | null
+          trial_type?: string
+          updated_at?: string | null
+          usage_patterns?: Json | null
+          user_id?: string
         }
         Relationships: []
       }

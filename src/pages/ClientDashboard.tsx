@@ -19,6 +19,9 @@ import { ClientProfile } from "@/components/client-dashboard/ClientProfile";
 import { WebhookManager } from "@/components/client-dashboard/webhooks/WebhookManager";
 import { TriggerManager } from "@/components/client-dashboard/triggers/TriggerManager";
 import { ServiceManager } from "@/components/client-dashboard/services/ServiceManager";
+import { ReferralFraudMonitoring } from "@/components/client-dashboard/analytics/ReferralFraudMonitoring";
+import { AffiliateMonitoring } from "@/components/client-dashboard/analytics/AffiliateMonitoring";
+import { TrialAbuseMonitoring } from "@/components/client-dashboard/analytics/TrialAbuseMonitoring";
 
 const ClientDashboard = () => {
   const { toast } = useToast();
@@ -113,6 +116,12 @@ const ClientDashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <TrendAnalysis />
             <GeographicDistribution />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <ReferralFraudMonitoring />
+            <AffiliateMonitoring />
+            <TrialAbuseMonitoring />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
