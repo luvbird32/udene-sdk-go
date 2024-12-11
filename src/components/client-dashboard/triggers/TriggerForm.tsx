@@ -5,63 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { Card } from "@/components/ui/card";
-import { Settings, Info } from "lucide-react";
+import { Settings } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-
-const EVENT_TYPES = [
-  {
-    id: 'fraud_detected',
-    label: 'Fraud Detected',
-    description: 'Triggered when high-confidence fraud is detected',
-  },
-  {
-    id: 'suspicious_activity',
-    label: 'Suspicious Activity',
-    description: 'Triggered when potentially suspicious behavior is identified',
-  },
-  {
-    id: 'risk_score_change',
-    label: 'Risk Score Change',
-    description: 'Triggered when a significant change in risk score occurs',
-  },
-  {
-    id: 'transaction_blocked',
-    label: 'Transaction Blocked',
-    description: 'Triggered when a transaction is prevented due to risk',
-  },
-  {
-    id: 'user_blacklisted',
-    label: 'User Blacklisted',
-    description: 'Triggered when a user is added to the blacklist',
-  },
-  {
-    id: 'device_flagged',
-    label: 'Device Flagged',
-    description: 'Triggered when a device is marked as suspicious',
-  },
-  {
-    id: 'ip_blocked',
-    label: 'IP Blocked',
-    description: 'Triggered when an IP address is blocked',
-  },
-  {
-    id: 'location_alert',
-    label: 'Location Alert',
-    description: 'Triggered when unusual location activity is detected',
-  },
-  {
-    id: 'velocity_check_failed',
-    label: 'Velocity Check Failed',
-    description: 'Triggered when transaction velocity limits are exceeded',
-  },
-  {
-    id: 'pattern_detected',
-    label: 'Pattern Detected',
-    description: 'Triggered when a suspicious pattern is identified',
-  },
-];
+import { EventTypeSelector } from "./EventTypeSelector";
+import { ExampleUseCases } from "./ExampleUseCases";
 
 export const TriggerForm = () => {
   const [name, setName] = useState("");
@@ -131,18 +79,7 @@ export const TriggerForm = () => {
           <h3 className="text-lg font-semibold">Add New Trigger</h3>
         </div>
 
-        <div className="p-4 bg-muted/50 rounded-lg space-y-2">
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Info className="h-4 w-4" />
-            <span className="text-sm font-medium">Example Use Cases:</span>
-          </div>
-          <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1 ml-4">
-            <li>Block transactions when suspicious patterns are detected</li>
-            <li>Send notifications when risk scores change significantly</li>
-            <li>Automatically blacklist devices involved in fraudulent activities</li>
-            <li>Track and alert on unusual location-based activities</li>
-          </ul>
-        </div>
+        <ExampleUseCases />
 
         <div className="space-y-4">
           <div>
@@ -167,34 +104,10 @@ export const TriggerForm = () => {
 
           <div className="space-y-4">
             <Label>Event Types</Label>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {EVENT_TYPES.map((type) => (
-                <div key={type.id} className="flex items-start space-x-2">
-                  <Checkbox
-                    id={type.id}
-                    checked={selectedEventTypes.includes(type.id)}
-                    onCheckedChange={(checked) => {
-                      setSelectedEventTypes(prev => 
-                        checked 
-                          ? [...prev, type.id]
-                          : prev.filter(t => t !== type.id)
-                      );
-                    }}
-                  />
-                  <div className="grid gap-1.5 leading-none">
-                    <label
-                      htmlFor={type.id}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {type.label}
-                    </label>
-                    <p className="text-xs text-muted-foreground">
-                      {type.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <EventTypeSelector
+              selectedEventTypes={selectedEventTypes}
+              onEventTypesChange={setSelectedEventTypes}
+            />
           </div>
 
           <Button 
