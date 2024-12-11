@@ -11,6 +11,9 @@ import { ComplianceReporting } from "@/components/compliance/ComplianceReporting
 import { useSessionTimeout } from "@/hooks/useSessionTimeout";
 import { useRealtimeSubscriptions } from "@/hooks/useRealtimeSubscriptions";
 import { AccountTypeIndicator } from "@/components/dashboard/AccountTypeIndicator";
+import { SecuritySection } from "@/components/dashboard/SecuritySection";
+import { InfrastructureSection } from "@/components/dashboard/InfrastructureSection";
+import { DatabaseSection } from "@/components/dashboard/DatabaseSection";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -30,21 +33,7 @@ const Dashboard = () => {
 
       if (metricsError) throw metricsError;
 
-      const { data: recentTransactions, error: transactionsError } = await supabase
-        .from('transactions')
-        .select('risk_score, is_fraudulent')
-        .order('created_at', { ascending: false })
-        .limit(100);
-
-      if (transactionsError) throw transactionsError;
-
-      const validTransactions = recentTransactions?.filter(t => t?.risk_score != null) ?? [];
-      const avgRiskScore = validTransactions.length > 0
-        ? validTransactions.reduce((acc, t) => acc + (t.risk_score ?? 0), 0) / validTransactions.length
-        : 0;
-
       return {
-        riskScore: Math.round(avgRiskScore),
         activeUsers: metricsData?.[0]?.metric_value ?? 0,
         avgProcessingTime: 35,
         concurrentCalls: metricsData?.[0]?.metric_value ?? 0
@@ -76,7 +65,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Enhanced Header section with more admin controls */}
+      {/* Enhanced Header section */}
       <header className="mb-8 flex justify-between items-center relative z-10">
         <div className="glass-card p-6 rounded-lg w-full max-w-2xl">
           <h2 className="text-4xl font-bold mb-2 text-green-400 animate-pulse-slow" tabIndex={0}>
@@ -107,7 +96,7 @@ const Dashboard = () => {
       {/* Account Type Indicator */}
       <AccountTypeIndicator />
 
-      {/* Enhanced Main content with more admin-focused tabs */}
+      {/* Main content */}
       <div className="relative z-10">
         <Tabs defaultValue="dashboard" className="space-y-4">
           <TabsList className="glass-card p-1">
@@ -148,48 +137,15 @@ const Dashboard = () => {
           </TabsContent>
 
           <TabsContent value="security" className="glass-card p-6 rounded-lg">
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold">Security Overview</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Security content will be implemented in future updates */}
-                <div className="p-4 border border-green-500/20 rounded-lg">
-                  <p>Active Security Protocols</p>
-                </div>
-                <div className="p-4 border border-green-500/20 rounded-lg">
-                  <p>Threat Detection</p>
-                </div>
-              </div>
-            </div>
+            <SecuritySection />
           </TabsContent>
 
           <TabsContent value="infrastructure" className="glass-card p-6 rounded-lg">
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold">Infrastructure Status</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Infrastructure content will be implemented in future updates */}
-                <div className="p-4 border border-green-500/20 rounded-lg">
-                  <p>Server Status</p>
-                </div>
-                <div className="p-4 border border-green-500/20 rounded-lg">
-                  <p>Resource Usage</p>
-                </div>
-              </div>
-            </div>
+            <InfrastructureSection />
           </TabsContent>
 
           <TabsContent value="database" className="glass-card p-6 rounded-lg">
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold">Database Management</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Database content will be implemented in future updates */}
-                <div className="p-4 border border-green-500/20 rounded-lg">
-                  <p>Database Health</p>
-                </div>
-                <div className="p-4 border border-green-500/20 rounded-lg">
-                  <p>Query Performance</p>
-                </div>
-              </div>
-            </div>
+            <DatabaseSection />
           </TabsContent>
 
           <TabsContent value="compliance" className="glass-card p-6 rounded-lg">
