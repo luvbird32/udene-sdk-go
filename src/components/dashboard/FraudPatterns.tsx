@@ -12,6 +12,30 @@ interface Pattern {
   severity?: 'low' | 'medium' | 'high';
 }
 
+interface InteractionPatterns {
+  multiple_devices?: boolean;
+  vpn_detected?: boolean;
+  device_count?: number;
+  odd_hours_activity?: boolean;
+}
+
+interface RiskFactors {
+  location_mismatch?: boolean;
+  suspicious_ip?: boolean;
+  [key: string]: boolean | undefined;
+}
+
+interface TransactionWithPatterns {
+  interaction_patterns: InteractionPatterns | null;
+  risk_factors: RiskFactors | null;
+  profile_changes: Record<string, unknown> | null;
+  card_present: boolean;
+  recurring: boolean;
+  risk_score: number | null;
+  message_velocity: number | null;
+  timestamp: string;
+}
+
 export const FraudPatterns = () => {
   const { data: patterns, error, isLoading } = useQuery({
     queryKey: ["fraud-patterns"],
@@ -26,33 +50,35 @@ export const FraudPatterns = () => {
 
       if (error) throw error;
 
+      const transactions = fraudulent as TransactionWithPatterns[];
+
       // Analyze patterns with null checks
-      const cardNotPresentCount = fraudulent?.filter(t => t.card_present === false).length || 0;
-      const recurringCount = fraudulent?.filter(t => t.recurring === true).length || 0;
-      const highRiskCount = fraudulent?.filter(t => (t.risk_score || 0) >= 80).length || 0;
+      const cardNotPresentCount = transactions?.filter(t => t.card_present === false).length || 0;
+      const recurringCount = transactions?.filter(t => t.recurring === true).length || 0;
+      const highRiskCount = transactions?.filter(t => (t.risk_score || 0) >= 80).length || 0;
       
       // New pattern analysis
-      const multipleDevicesCount = fraudulent?.filter(t => 
+      const multipleDevicesCount = transactions?.filter(t => 
         t.interaction_patterns?.multiple_devices === true
       ).length || 0;
       
-      const rapidProfileChangesCount = fraudulent?.filter(t => 
+      const rapidProfileChangesCount = transactions?.filter(t => 
         Object.keys(t.profile_changes || {}).length > 3
       ).length || 0;
       
-      const unusualLocationCount = fraudulent?.filter(t => 
+      const unusualLocationCount = transactions?.filter(t => 
         t.risk_factors?.location_mismatch === true
       ).length || 0;
       
-      const highVelocityCount = fraudulent?.filter(t => 
+      const highVelocityCount = transactions?.filter(t => 
         (t.message_velocity || 0) > 50
       ).length || 0;
       
-      const vpnUsageCount = fraudulent?.filter(t => 
+      const vpnUsageCount = transactions?.filter(t => 
         t.interaction_patterns?.vpn_detected === true
       ).length || 0;
       
-      const oddHoursCount = fraudulent?.filter(t => {
+      const oddHoursCount = transactions?.filter(t => {
         const hour = new Date(t.timestamp).getHours();
         return hour >= 1 && hour <= 5;
       }).length || 0;
@@ -149,9 +175,9 @@ export const FraudPatterns = () => {
       case 'high':
         return 'destructive';
       case 'medium':
-        return 'warning';
-      default:
         return 'secondary';
+      default:
+        return 'outline';
     }
   };
 
