@@ -36,18 +36,20 @@ export const TriggerForm = () => {
         throw new Error("Name and event type are required");
       }
 
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError || !user) throw new Error("Authentication required");
+
       const { data, error } = await supabase
         .from('event_triggers')
-        .insert([
-          {
-            name: name.trim(),
-            description: description.trim() || null,
-            event_type: eventType,
-            conditions: {},
-            actions: {},
-            is_active: true
-          }
-        ])
+        .insert({
+          name: name.trim(),
+          description: description.trim() || null,
+          event_type: eventType,
+          conditions: {},
+          actions: {},
+          is_active: true,
+          user_id: user.id
+        })
         .select()
         .single();
 
