@@ -7,15 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-
-interface ClientSettingsData {
-  notification_preferences?: {
-    email: boolean;
-    sms: boolean;
-  };
-  risk_threshold?: number;
-  contact_email?: string;
-}
+import { ClientSettingsData } from "@/components/settings/types";
 
 export const ClientSettingsForm = () => {
   const { toast } = useToast();
@@ -70,7 +62,7 @@ export const ClientSettingsForm = () => {
       const { error: updateError } = await supabase
         .from('profiles')
         .update({
-          settings: formData,
+          settings: formData as any, // Cast to any to satisfy TypeScript
           updated_at: new Date().toISOString(),
         })
         .eq('id', user.id);
