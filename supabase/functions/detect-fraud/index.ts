@@ -17,7 +17,9 @@ interface Transaction {
   card_present: boolean
   recurring: boolean
   timestamp: string
-  email?: string // Add email field
+  referral_data?: any
+  affiliate_data?: any
+  trial_data?: any
 }
 
 serve(async (req) => {
@@ -38,14 +40,12 @@ serve(async (req) => {
     if (is_confirmed_fraud !== undefined) {
       console.log('Updating model with fraud confirmation:', is_confirmed_fraud);
       
-      // Get recent transactions for context
       const { data: recentTransactions } = await supabase
         .from('transactions')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(10)
       
-      // Update ML model with confirmation
       const mlResponse = await supabase.functions.invoke('python-ml', {
         body: { 
           transaction,
@@ -59,55 +59,18 @@ serve(async (req) => {
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
-    
-    const data: Transaction = transaction
 
-    // Check email reputation if email is provided
-    let emailRiskScore = 0
-    let emailRiskFactors = {}
-    
-    if (data.email) {
-      console.log('Checking email reputation for:', data.email);
-      const { data: emailRep, error: emailError } = await supabase
-        .from('email_reputation')
-        .select('*')
-        .eq('email', data.email)
-        .single()
-
-      if (emailError && emailError.code !== 'PGRST116') { // PGRST116 is "not found"
-        console.error('Error checking email reputation:', emailError)
-      }
-
-      if (emailRep) {
-        const platformCount = Object.keys(emailRep.platform_occurrences).length
-        const fraudFlagsCount = emailRep.fraud_flags.length
-        
-        emailRiskScore = Math.min(
-          ((platformCount * 10) + (fraudFlagsCount * 20)), 
-          100
-        )
-        
-        emailRiskFactors = {
-          multiple_platforms: platformCount > 1 ? `Found on ${platformCount} platforms` : null,
-          fraud_history: fraudFlagsCount > 0 ? `${fraudFlagsCount} previous fraud flags` : null
-        }
-        
-        console.log('Email risk assessment:', { emailRiskScore, emailRiskFactors });
-      }
-    }
-
-    // Get recent transactions for pattern analysis
+    // Get ML insights from Python function
     const { data: recentTransactions } = await supabase
       .from('transactions')
       .select('*')
-      .eq('customer_id', data.customer_id)
+      .eq('customer_id', transaction.customer_id)
       .order('created_at', { ascending: false })
       .limit(10)
 
-    // Get ML insights from Python function
     const mlResponse = await supabase.functions.invoke('python-ml', {
       body: { 
-        transaction: data,
+        transaction,
         recent_transactions: recentTransactions 
       }
     })
@@ -116,30 +79,16 @@ serve(async (req) => {
       throw new Error(`ML analysis failed: ${mlResponse.error.message}`)
     }
 
-    const mlRiskScore = mlResponse.data.risk_score || 0
     console.log('ML risk analysis:', mlResponse.data)
-
-    // Combine ML score with basic rules and email risk
-    const basicRiskScore = await calculateBasicRiskScore(data)
-    const totalRiskScore = (
-      (mlRiskScore * 0.5) + 
-      (basicRiskScore * 0.3) + 
-      (emailRiskScore * 0.2)
-    )
-    
-    console.log('Final combined risk score:', totalRiskScore)
 
     // Store transaction with risk scores
     const { data: savedTransaction, error: transactionError } = await supabase
       .from('transactions')
       .insert({
-        ...data,
-        risk_score: totalRiskScore,
-        is_fraudulent: totalRiskScore > 70,
-        risk_factors: {
-          ...mlResponse.data.risk_factors,
-          ...emailRiskFactors
-        }
+        ...transaction,
+        risk_score: mlResponse.data.risk_score,
+        is_fraudulent: mlResponse.data.risk_score > 70,
+        risk_factors: mlResponse.data.risk_factors
       })
       .select()
       .single()
@@ -147,26 +96,24 @@ serve(async (req) => {
     if (transactionError) throw transactionError
 
     // Create fraud alert for high-risk transactions
-    if (totalRiskScore > 70) {
-      const { error: alertError } = await supabase
+    if (mlResponse.data.risk_score > 70) {
+      await supabase
         .from('fraud_alerts')
         .insert({
           transaction_id: savedTransaction.id,
           alert_type: 'High Risk Transaction',
-          severity: totalRiskScore > 85 ? 'high' : 'medium',
-          description: `Risk factors: ML Score ${mlRiskScore.toFixed(1)}%, Basic Score ${basicRiskScore.toFixed(1)}%, Email Score ${emailRiskScore.toFixed(1)}%`
+          severity: mlResponse.data.risk_score > 85 ? 'high' : 'medium',
+          description: `Risk factors detected in ${
+            transaction.transaction_type
+          } transaction. Score: ${mlResponse.data.risk_score.toFixed(1)}%`
         })
-
-      if (alertError) throw alertError
     }
 
     return new Response(
       JSON.stringify({ 
-        risk_score: totalRiskScore,
-        is_fraudulent: totalRiskScore > 70,
-        ml_insights: mlResponse.data.risk_factors,
-        email_risk_factors: emailRiskFactors,
-        performance_metrics: mlResponse.data.performance_metrics
+        risk_score: mlResponse.data.risk_score,
+        is_fraudulent: mlResponse.data.risk_score > 70,
+        risk_factors: mlResponse.data.risk_factors
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
@@ -182,21 +129,3 @@ serve(async (req) => {
     )
   }
 })
-
-async function calculateBasicRiskScore(transaction: Transaction): Promise<number> {
-  let score = 0
-  
-  // Amount-based risk
-  if (transaction.amount > 1000) score += 20
-  if (transaction.amount > 5000) score += 20
-  
-  // Transaction type risk
-  if (!transaction.card_present) score += 15
-  if (!transaction.recurring && transaction.amount > 1000) score += 15
-  
-  // Time-based risk (basic)
-  const hour = new Date(transaction.timestamp).getHours()
-  if (hour >= 0 && hour < 5) score += 20
-  
-  return Math.min(100, score)
-}

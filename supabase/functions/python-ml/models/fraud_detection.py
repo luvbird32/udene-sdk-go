@@ -92,6 +92,113 @@ class FraudDetectionModel(BaseModel):
 
         return risk_factors
 
+    def analyze_referral_fraud_patterns(self, transaction: Dict, recent_txs: List[Dict]) -> Dict[str, float]:
+        risk_factors = {}
+        
+        if 'referral_data' in transaction:
+            referral_data = transaction.get('referral_data', {})
+            
+            # Check for multiple referrals from same IP
+            if 'ip_address' in transaction:
+                ip_referrals = [
+                    tx for tx in recent_txs 
+                    if tx.get('ip_address') == transaction['ip_address'] 
+                    and 'referral_data' in tx
+                ]
+                if len(ip_referrals) > 3:
+                    risk_factors['multiple_referrals_same_ip'] = min(len(ip_referrals) / 5, 1.0)
+
+            # Check for rapid referral sequence
+            if recent_txs:
+                referral_times = [
+                    datetime.fromisoformat(tx['timestamp']) 
+                    for tx in recent_txs 
+                    if 'referral_data' in tx
+                ]
+                if len(referral_times) >= 2:
+                    time_diffs = [
+                        (t2 - t1).total_seconds() 
+                        for t1, t2 in zip(referral_times[:-1], referral_times[1:])
+                    ]
+                    avg_time_diff = sum(time_diffs) / len(time_diffs)
+                    if avg_time_diff < 300:  # Less than 5 minutes average
+                        risk_factors['rapid_referrals'] = 0.8
+
+            # Check for circular referrals
+            if 'referrer_chain' in referral_data:
+                chain = referral_data['referrer_chain']
+                if len(set(chain)) < len(chain):
+                    risk_factors['circular_referral'] = 0.9
+
+        return risk_factors
+
+    def analyze_affiliate_fraud_patterns(self, transaction: Dict, recent_txs: List[Dict]) -> Dict[str, float]:
+        risk_factors = {}
+        
+        if 'affiliate_data' in transaction:
+            affiliate_data = transaction.get('affiliate_data', {})
+            
+            # Check for click fraud patterns
+            if 'click_timestamp' in affiliate_data:
+                click_time = datetime.fromisoformat(affiliate_data['click_timestamp'])
+                conversion_time = datetime.fromisoformat(transaction['timestamp'])
+                time_to_convert = (conversion_time - click_time).total_seconds()
+                
+                if time_to_convert < 2:  # Suspiciously fast conversion
+                    risk_factors['suspicious_conversion_speed'] = 0.9
+                
+            # Check for cookie stuffing
+            if 'cookie_data' in affiliate_data:
+                cookie_count = len(affiliate_data['cookie_data'])
+                if cookie_count > 10:
+                    risk_factors['excessive_cookies'] = min(cookie_count / 20, 1.0)
+
+            # Analyze traffic quality
+            if 'traffic_metrics' in affiliate_data:
+                metrics = affiliate_data['traffic_metrics']
+                if metrics.get('bounce_rate', 0) > 90:
+                    risk_factors['poor_traffic_quality'] = 0.7
+
+        return risk_factors
+
+    def analyze_freetrial_fraud_patterns(self, transaction: Dict, recent_txs: List[Dict]) -> Dict[str, float]:
+        risk_factors = {}
+        
+        if 'trial_data' in transaction:
+            trial_data = transaction.get('trial_data', {})
+            
+            # Check for multiple trials from same device/IP
+            device_id = transaction.get('device_id')
+            ip_address = transaction.get('ip_address')
+            
+            if device_id and ip_address:
+                related_trials = [
+                    tx for tx in recent_txs 
+                    if (tx.get('device_id') == device_id or tx.get('ip_address') == ip_address)
+                    and 'trial_data' in tx
+                ]
+                
+                if len(related_trials) > 2:
+                    risk_factors['multiple_trials'] = min(len(related_trials) / 4, 1.0)
+
+            # Check for payment method cycling
+            if 'payment_method_hash' in trial_data:
+                payment_methods = set(
+                    tx.get('trial_data', {}).get('payment_method_hash')
+                    for tx in recent_txs
+                    if 'trial_data' in tx
+                )
+                if len(payment_methods) > 3:
+                    risk_factors['payment_method_cycling'] = min(len(payment_methods) / 5, 1.0)
+
+            # Analyze usage patterns
+            if 'usage_metrics' in trial_data:
+                metrics = trial_data['usage_metrics']
+                if metrics.get('activity_score', 0) < 0.2:  # Low engagement
+                    risk_factors['suspicious_usage_pattern'] = 0.8
+
+        return risk_factors
+
     def _calculate_dating_risk_score(self, risk_factors: Dict[str, float]) -> float:
         # Weighted scoring for different risk categories
         weights = {
