@@ -4,7 +4,7 @@ import { ClientMetrics } from "@/components/client-dashboard/ClientMetrics";
 import { TransactionHistory } from "@/components/client-dashboard/TransactionHistory";
 import { RiskOverview } from "@/components/client-dashboard/RiskOverview";
 import { useToast } from "@/components/ui/use-toast";
-import { Settings, ChevronLeft } from "lucide-react";
+import { Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const ClientDashboard = () => {
@@ -41,16 +41,10 @@ const ClientDashboard = () => {
       {/* Header */}
       <header className="mb-8 flex justify-between items-center">
         <div>
-          <div className="flex items-center gap-2 mb-2">
-            <Link 
-              to="/dashboard" 
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <ChevronLeft className="h-4 w-4" />
-              <span>Back to Admin</span>
-            </Link>
-          </div>
-          <h1 className="text-3xl font-bold">Client Dashboard</h1>
+          <h1 className="text-3xl font-bold">Fraud Detection Dashboard</h1>
+          <p className="text-muted-foreground mt-2">
+            Monitor your transaction security and risk metrics
+          </p>
         </div>
         <Link 
           to="/settings" 
