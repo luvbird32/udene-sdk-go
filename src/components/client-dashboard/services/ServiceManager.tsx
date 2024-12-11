@@ -2,6 +2,7 @@ import React from 'react';
 import { ServiceHeader } from './ServiceHeader';
 import { ServiceList } from './ServiceList';
 import { useServiceManager } from './useServiceManager';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 export const ServiceManager = () => {
   const { activeServices, isLoading, toggleService } = useServiceManager();
@@ -14,17 +15,15 @@ export const ServiceManager = () => {
     </div>;
   }
 
-  const handleToggle = async (serviceType: string, isActive: boolean) => {
-    await toggleService.mutateAsync({ serviceType, isActive });
-  };
-
   return (
-    <div className="space-y-6">
-      <ServiceHeader />
-      <ServiceList 
-        activeServices={activeServices} 
-        handleToggle={handleToggle}
-      />
-    </div>
+    <TooltipProvider delayDuration={300}>
+      <div className="space-y-6">
+        <ServiceHeader />
+        <ServiceList 
+          activeServices={activeServices} 
+          handleToggle={toggleService}
+        />
+      </div>
+    </TooltipProvider>
   );
 };
