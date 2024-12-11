@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ServiceCard } from "./ServiceCard";
 import { ClientService } from "@/integrations/supabase/types/client-services";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 const FRAUD_DETECTION_SERVICES = [
   {
@@ -52,7 +53,7 @@ const FRAUD_DETECTION_SERVICES = [
 
 export const ServiceManager = () => {
   const queryClient = useQueryClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: currentUser } = useCurrentUser();
 
   const { data: activeServices, isLoading } = useQuery({
     queryKey: ["client-services"],
@@ -68,7 +69,7 @@ export const ServiceManager = () => {
 
   const toggleService = useMutation({
     mutationFn: async ({ serviceType, isActive }: { serviceType: string; isActive: boolean }) => {
-      if (!user?.id) throw new Error("No user found");
+      if (!currentUser?.id) throw new Error("No user found");
       
       const { data: existingService } = await supabase
         .from("client_services")
@@ -89,7 +90,7 @@ export const ServiceManager = () => {
           .insert({
             service_type: serviceType,
             is_active: isActive,
-            user_id: user.id,
+            user_id: currentUser.id,
             settings: {}
           });
 
