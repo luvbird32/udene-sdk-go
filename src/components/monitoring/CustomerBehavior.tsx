@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
+import type { Transaction, InteractionPatterns, RiskFactors } from "@/types/risk";
 
 export const CustomerBehavior = () => {
   const { data: behaviorMetrics } = useQuery({
@@ -19,7 +20,7 @@ export const CustomerBehavior = () => {
       if (error) throw error;
 
       // Process transactions for behavior analysis
-      const customerPatterns = transactions?.reduce((acc: any, transaction) => {
+      const customerPatterns = transactions?.reduce((acc: any, transaction: Transaction) => {
         const customerId = transaction.customer_id;
         if (!acc[customerId]) {
           acc[customerId] = {
