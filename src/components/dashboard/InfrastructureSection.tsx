@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { HealthStatus } from "@/components/monitoring/HealthStatus";
 import { PerformanceMetrics } from "@/components/monitoring/PerformanceMetrics";
 import { Server, Cpu, HardDrive, Network } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export const InfrastructureSection = () => {
   const { data: resourceMetrics } = useQuery({
