@@ -6,7 +6,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ClientSettingsData {
   notification_preferences?: {
@@ -48,6 +48,15 @@ export const ClientSettingsForm = () => {
     risk_threshold: 75,
     contact_email: '',
   });
+
+  useEffect(() => {
+    if (settings) {
+      setFormData({
+        ...formData,
+        ...settings,
+      });
+    }
+  }, [settings]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
