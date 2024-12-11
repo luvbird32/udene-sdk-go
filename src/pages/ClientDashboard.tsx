@@ -25,6 +25,7 @@ import { RomanceScamMonitoring } from "@/components/client-dashboard/analytics/R
 import { RewardProgramMonitoring } from "@/components/client-dashboard/analytics/RewardProgramMonitoring";
 import { AffiliateMonitoring } from "@/components/client-dashboard/analytics/AffiliateMonitoring";
 import { TrialAbuseMonitoring } from "@/components/client-dashboard/analytics/TrialAbuseMonitoring";
+import { FraudPatterns } from "@/components/dashboard/FraudPatterns";
 
 const ClientDashboard = () => {
   const { toast } = useToast();
@@ -121,6 +122,8 @@ const ClientDashboard = () => {
             <TrendAnalysis />
             <GeographicDistribution />
           </div>
+
+          <FraudPatterns />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <ReferralFraudMonitoring />
