@@ -9,6 +9,42 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      admin_data_extractions: {
+        Row: {
+          admin_id: string
+          created_at: string | null
+          extraction_type: string
+          file_url: string | null
+          id: string
+          query_params: Json | null
+          record_count: number | null
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          admin_id: string
+          created_at?: string | null
+          extraction_type: string
+          file_url?: string | null
+          id?: string
+          query_params?: Json | null
+          record_count?: number | null
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          admin_id?: string
+          created_at?: string | null
+          extraction_type?: string
+          file_url?: string | null
+          id?: string
+          query_params?: Json | null
+          record_count?: number | null
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       affiliate_activities: {
         Row: {
           affiliate_id: string

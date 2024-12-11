@@ -15,6 +15,7 @@ import { DatabaseSection } from "@/components/dashboard/DatabaseSection";
 import { ClientAnalytics } from "@/components/dashboard/analytics/ClientAnalytics";
 import { UsageAnalytics } from "@/components/dashboard/analytics/UsageAnalytics";
 import { UserManagement } from "@/components/dashboard/UserManagement";
+import { DataExtractionSection } from "@/components/dashboard/DataExtractionSection";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -163,6 +164,9 @@ const Dashboard = () => {
 
           <TabsContent value="database" className="glass-card p-6 rounded-lg">
             <DatabaseSection />
+            <div className="mt-8">
+              <DataExtractionSection />
+            </div>
           </TabsContent>
 
           <TabsContent value="compliance" className="glass-card p-6 rounded-lg">
