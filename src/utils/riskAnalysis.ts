@@ -1,13 +1,9 @@
-import type { Transaction, RiskIndicator } from "@/types/risk";
+import type { TransactionWithPatterns, RiskIndicator } from "@/types/risk";
 
-/**
- * Analyzes transaction data to identify dating-specific risk indicators
- */
-export const analyzeDatingRiskIndicators = (transaction: Transaction): RiskIndicator[] => {
+export const analyzeDatingRiskIndicators = (transaction: TransactionWithPatterns): RiskIndicator[] => {
   const indicators: RiskIndicator[] = [];
   const { message_velocity, profile_changes, interaction_patterns, risk_factors } = transaction;
 
-  // Check message velocity patterns
   if (message_velocity && message_velocity > 50) {
     indicators.push({
       iconType: 'message',
@@ -16,8 +12,7 @@ export const analyzeDatingRiskIndicators = (transaction: Transaction): RiskIndic
     });
   }
 
-  // Check profile changes
-  if (Object.keys(profile_changes || {}).length > 0) {
+  if (profile_changes && Object.keys(profile_changes).length > 0) {
     indicators.push({
       iconType: 'user',
       title: "Frequent Profile Changes",
@@ -25,7 +20,6 @@ export const analyzeDatingRiskIndicators = (transaction: Transaction): RiskIndic
     });
   }
 
-  // Check device patterns
   if (interaction_patterns?.multiple_devices === true) {
     indicators.push({
       iconType: 'device',
@@ -34,7 +28,6 @@ export const analyzeDatingRiskIndicators = (transaction: Transaction): RiskIndic
     });
   }
 
-  // Check platform usage and fraud history
   if (risk_factors?.multiple_platforms) {
     indicators.push({
       iconType: 'mail',

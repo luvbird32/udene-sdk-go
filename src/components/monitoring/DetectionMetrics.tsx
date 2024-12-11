@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import type { Transaction, RiskFactors } from "@/types/risk";
+import type { DatabaseTransaction, RiskFactors } from "@/types/risk";
 
 export const DetectionMetrics = () => {
   const { data: metrics } = useQuery({
@@ -16,7 +16,7 @@ export const DetectionMetrics = () => {
 
       if (error) throw error;
 
-      return (transactions as Transaction[])?.reduce((acc: any, tx: Transaction) => {
+      return (transactions as DatabaseTransaction[])?.reduce((acc: any, tx: DatabaseTransaction) => {
         const riskFactors = tx.risk_factors as RiskFactors;
         
         if (riskFactors?.location_mismatch) {

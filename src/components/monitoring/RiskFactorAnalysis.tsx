@@ -6,13 +6,9 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { RiskChart } from "./RiskChart";
 import { RiskIndicators } from "./RiskIndicators";
 import { analyzeDatingRiskIndicators } from "@/utils/riskAnalysis";
-import type { Transaction } from "@/types/risk";
+import type { DatabaseTransaction, TransactionWithPatterns } from "@/types/risk";
 
-/**
- * Main component for analyzing and displaying transaction risk factors
- */
 export const RiskFactorAnalysis = () => {
-  // Fetch latest flagged transaction
   const { data: latestTransaction, isLoading } = useQuery({
     queryKey: ["latest-flagged-transaction"],
     queryFn: async () => {
@@ -24,12 +20,11 @@ export const RiskFactorAnalysis = () => {
         .limit(1);
 
       if (error) throw error;
-      return (data && data.length > 0 ? data[0] : null) as Transaction | null;
+      return (data && data.length > 0 ? data[0] : null) as TransactionWithPatterns | null;
     },
     refetchInterval: 5000,
   });
 
-  // Show loading state
   if (isLoading) {
     return (
       <Card className="p-4">
@@ -41,7 +36,6 @@ export const RiskFactorAnalysis = () => {
     );
   }
 
-  // Show empty state
   if (!latestTransaction) {
     return (
       <Card className="p-4">
@@ -54,16 +48,14 @@ export const RiskFactorAnalysis = () => {
     );
   }
 
-  // Extract risk data
   const riskFactors = latestTransaction.risk_factors || {};
   const featureImportance = latestTransaction.feature_importance || {};
   
-  // Get risk indicators
   const datingRiskIndicators = analyzeDatingRiskIndicators(latestTransaction);
   
-  // Get additional risk factors (excluding already displayed ones)
   const additionalFactors = Object.entries(riskFactors)
-    .filter(([key]) => !['multiple_platforms', 'fraud_history'].includes(key));
+    .filter(([key]) => !['multiple_platforms', 'fraud_history'].includes(key))
+    .map(([key, value]) => [key, String(value)]) as [string, string][];
 
   return (
     <Card className="p-4">
