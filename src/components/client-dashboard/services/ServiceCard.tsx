@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 import { Badge } from "@/components/ui/badge";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { AlertCircle, Bot, BotOff, CheckCircle2, Shield } from "lucide-react";
 
 interface ServiceCardProps {
   title: string;
@@ -39,12 +39,26 @@ export const ServiceCard = ({
     }
   };
 
+  const renderServiceIcon = () => {
+    if (serviceType === 'bot_prevention') {
+      return isActive ? (
+        <Shield className="h-6 w-6 text-green-500" />
+      ) : (
+        <BotOff className="h-6 w-6 text-gray-400" />
+      );
+    }
+    return null;
+  };
+
   return (
     <Card className="p-6 space-y-4">
       <div className="flex items-start justify-between">
-        <div>
-          <h3 className="text-lg font-semibold">{title}</h3>
-          <p className="text-sm text-muted-foreground mt-1">{description}</p>
+        <div className="flex items-start gap-3">
+          {renderServiceIcon()}
+          <div>
+            <h3 className="text-lg font-semibold">{title}</h3>
+            <p className="text-sm text-muted-foreground mt-1">{description}</p>
+          </div>
         </div>
         <Switch checked={isActive} onCheckedChange={handleToggle} />
       </div>
@@ -61,12 +75,23 @@ export const ServiceCard = ({
         </ul>
       </div>
 
-      <Badge 
-        variant={isActive ? "default" : "secondary"}
-        className="mt-4"
-      >
-        {isActive ? "Active" : "Inactive"}
-      </Badge>
+      <div className="flex items-center justify-between">
+        <Badge 
+          variant={isActive ? "default" : "secondary"}
+          className="mt-4"
+        >
+          {isActive ? "Active" : "Inactive"}
+        </Badge>
+        {serviceType === 'bot_prevention' && isActive && (
+          <Badge 
+            variant="outline" 
+            className="mt-4 flex items-center gap-1"
+          >
+            <Bot className="h-3 w-3" />
+            Bot Protection Active
+          </Badge>
+        )}
+      </div>
     </Card>
   );
 };
