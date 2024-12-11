@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ClientMetrics } from "@/components/client-dashboard/ClientMetrics";
+import { ApiCreditsDisplay } from "@/components/client-dashboard/ApiCreditsDisplay";
 import { TransactionHistory } from "@/components/client-dashboard/TransactionHistory";
 import { RiskOverview } from "@/components/client-dashboard/RiskOverview";
 import { TrendAnalysis } from "@/components/client-dashboard/analytics/TrendAnalysis";
@@ -109,6 +110,7 @@ const ClientDashboard = () => {
         </TabsList>
 
         <TabsContent value="dashboard" className="space-y-6">
+          <ApiCreditsDisplay />
           <ClientMetrics 
             metrics={metrics}
             isLoading={metricsLoading}

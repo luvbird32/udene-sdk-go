@@ -57,6 +57,42 @@ export type Database = {
         }
         Relationships: []
       }
+      api_credits: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_trial: boolean | null
+          total_credits: number
+          trial_end_date: string | null
+          trial_start_date: string | null
+          updated_at: string | null
+          used_credits: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_trial?: boolean | null
+          total_credits?: number
+          trial_end_date?: string | null
+          trial_start_date?: string | null
+          updated_at?: string | null
+          used_credits?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_trial?: boolean | null
+          total_credits?: number
+          trial_end_date?: string | null
+          trial_start_date?: string | null
+          updated_at?: string | null
+          used_credits?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       api_keys: {
         Row: {
           created_at: string | null
