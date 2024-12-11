@@ -1,4 +1,5 @@
 import { throttle } from 'lodash';
+import { supabase } from '@/integrations/supabase/client';
 
 interface InteractionData {
   timestamp: number;
@@ -9,7 +10,7 @@ interface InteractionData {
 class InteractionTracker {
   private buffer: InteractionData[] = [];
   private readonly bufferSize: number = 100;
-  private readonly flushInterval: number = 5000; // 5 seconds
+  private readonly flushInterval: number = 5000;
   
   constructor() {
     this.setupFlushInterval();
@@ -31,6 +32,21 @@ class InteractionTracker {
     if (this.buffer.length === 0) return;
 
     try {
+      const { data: botDetection } = await supabase
+        .from('audit_logs')
+        .select('*')
+        .eq('event_type', 'bot_detected')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      // If bot was detected, add this information to the interaction data
+      const deviceInfo = {
+        ...this.getDeviceInfo(),
+        botDetected: !!botDetection,
+        botIndicators: botDetection?.changes || null
+      };
+
       await fetch('/api/v1/track', {
         method: 'POST',
         headers: {
@@ -38,9 +54,10 @@ class InteractionTracker {
         },
         body: JSON.stringify({
           interactions: this.buffer,
-          deviceInfo: this.getDeviceInfo(),
+          deviceInfo
         }),
       });
+      
       this.buffer = [];
     } catch (error) {
       console.error('Failed to send interaction data:', error);
