@@ -10,7 +10,7 @@ import { RiskDistribution } from "@/components/client-dashboard/analytics/RiskDi
 import { BusinessIntelligence } from "@/components/client-dashboard/analytics/BusinessIntelligence";
 import { ReportManager } from "@/components/client-dashboard/reporting/ReportManager";
 import { useToast } from "@/components/ui/use-toast";
-import { Settings, Shield, Code, UserRound, Webhook, FileText } from "lucide-react";
+import { Settings, Shield, Code, UserRound, Webhook, FileText, Layers } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
@@ -18,6 +18,7 @@ import { ClientApiKeyManager } from "@/components/client-dashboard/ClientApiKeyM
 import { ClientProfile } from "@/components/client-dashboard/ClientProfile";
 import { WebhookManager } from "@/components/client-dashboard/webhooks/WebhookManager";
 import { TriggerManager } from "@/components/client-dashboard/triggers/TriggerManager";
+import { ServiceManager } from "@/components/client-dashboard/services/ServiceManager";
 
 const ClientDashboard = () => {
   const { toast } = useToast();
@@ -76,6 +77,10 @@ const ClientDashboard = () => {
             <Shield className="h-4 w-4 mr-2" />
             Dashboard
           </TabsTrigger>
+          <TabsTrigger value="services">
+            <Layers className="h-4 w-4 mr-2" />
+            Services
+          </TabsTrigger>
           <TabsTrigger value="reports">
             <FileText className="h-4 w-4 mr-2" />
             Reports
@@ -121,6 +126,10 @@ const ClientDashboard = () => {
             <TransactionHistory />
             <RiskOverview />
           </div>
+        </TabsContent>
+
+        <TabsContent value="services" className="space-y-6">
+          <ServiceManager />
         </TabsContent>
 
         <TabsContent value="reports" className="space-y-6">
