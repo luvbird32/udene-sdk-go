@@ -50,6 +50,17 @@ const FRAUD_DETECTION_SERVICES = [
       "Rapid redemption monitoring",
       "Program abuse prevention"
     ]
+  },
+  {
+    type: "romance_scam",
+    title: "Romance Scam Detection",
+    description: "Advanced detection of romance and relationship-based fraud patterns",
+    features: [
+      "Message pattern analysis",
+      "Relationship progression monitoring",
+      "Financial request detection",
+      "Cross-platform behavior tracking"
+    ]
   }
 ];
 
