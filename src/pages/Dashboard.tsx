@@ -3,8 +3,6 @@ import { Settings, Users, Shield, Activity, Database, Server } from "lucide-reac
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ApiDocs } from "@/components/documentation/ApiDocs";
-import { DevTools } from "@/components/developer/DevTools";
 import { Link } from "react-router-dom";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
 import { ComplianceReporting } from "@/components/compliance/ComplianceReporting";
@@ -68,7 +66,7 @@ const Dashboard = () => {
       {/* Enhanced Header section */}
       <header className="mb-8 flex justify-between items-center relative z-10">
         <div className="glass-card p-6 rounded-lg w-full max-w-2xl">
-          <h2 className="text-4xl font-bold mb-2 text-green-400 animate-pulse-slow" tabIndex={0}>
+          <h2 className="text-4xl font-bold text-green-400 animate-pulse-slow" tabIndex={0}>
             Admin Control Center
           </h2>
           <p className="text-green-300/80" tabIndex={0}>
@@ -120,12 +118,6 @@ const Dashboard = () => {
               <Shield className="h-4 w-4 mr-2" />
               Compliance
             </TabsTrigger>
-            <TabsTrigger value="docs" className="data-[state=active]:bg-green-900/40">
-              API Docs
-            </TabsTrigger>
-            <TabsTrigger value="devtools" className="data-[state=active]:bg-green-900/40">
-              Developer
-            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard" className="glass-card p-6 rounded-lg">
@@ -150,14 +142,6 @@ const Dashboard = () => {
 
           <TabsContent value="compliance" className="glass-card p-6 rounded-lg">
             <ComplianceReporting />
-          </TabsContent>
-
-          <TabsContent value="docs" className="glass-card p-6 rounded-lg">
-            <ApiDocs />
-          </TabsContent>
-
-          <TabsContent value="devtools" className="glass-card p-6 rounded-lg">
-            <DevTools />
           </TabsContent>
         </Tabs>
       </div>
