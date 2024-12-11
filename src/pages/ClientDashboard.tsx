@@ -3,6 +3,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { ClientMetrics } from "@/components/client-dashboard/ClientMetrics";
 import { TransactionHistory } from "@/components/client-dashboard/TransactionHistory";
 import { RiskOverview } from "@/components/client-dashboard/RiskOverview";
+import { TrendAnalysis } from "@/components/client-dashboard/analytics/TrendAnalysis";
+import { GeographicDistribution } from "@/components/client-dashboard/analytics/GeographicDistribution";
+import { PeakTransactionTimes } from "@/components/client-dashboard/analytics/PeakTransactionTimes";
+import { RiskDistribution } from "@/components/client-dashboard/analytics/RiskDistribution";
 import { useToast } from "@/components/ui/use-toast";
 import { Settings, Shield, Code, UserRound, Webhook } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -94,6 +98,16 @@ const ClientDashboard = () => {
             isLoading={metricsLoading}
             error={metricsError}
           />
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <TrendAnalysis />
+            <GeographicDistribution />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <PeakTransactionTimes />
+            <RiskDistribution />
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <TransactionHistory />
