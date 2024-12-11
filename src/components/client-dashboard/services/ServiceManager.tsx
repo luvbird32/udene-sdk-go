@@ -61,6 +61,28 @@ const FRAUD_DETECTION_SERVICES = [
       "Financial request detection",
       "Cross-platform behavior tracking"
     ]
+  },
+  {
+    type: "freetrial_abuse",
+    title: "Free Trial Abuse Prevention",
+    description: "Detect and prevent exploitation of free trial offerings",
+    features: [
+      "Multiple account correlation",
+      "Payment method validation",
+      "Device fingerprint tracking",
+      "Usage pattern analysis"
+    ]
+  },
+  {
+    type: "referral_fraud",
+    title: "Referral Program Protection",
+    description: "Prevent abuse and exploitation of referral programs",
+    features: [
+      "Self-referral detection",
+      "Fake account identification",
+      "Referral chain analysis",
+      "Reward distribution monitoring"
+    ]
   }
 ];
 
