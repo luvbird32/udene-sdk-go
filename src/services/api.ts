@@ -123,12 +123,36 @@ export const getRecentActivity = async (): Promise<Activity[]> => {
 
 export const predictFraud = async (transactionData: any) => {
   try {
-    const { data, error } = await supabase.functions.invoke('detect-fraud', {
+    // Regular fraud detection
+    const { data: fraudData, error: fraudError } = await supabase.functions.invoke('detect-fraud', {
       body: { transaction: transactionData }
     });
 
-    if (error) throw error;
-    return data;
+    if (fraudError) throw fraudError;
+
+    // Reward fraud detection if transaction includes rewards
+    if (transactionData.rewards) {
+      const { data: rewardFraudData, error: rewardError } = await supabase.functions.invoke('detect-reward-fraud', {
+        body: { 
+          userId: transactionData.customer_id,
+          transactionData 
+        }
+      });
+
+      if (rewardError) throw rewardError;
+
+      // Combine regular fraud and reward fraud scores
+      return {
+        ...fraudData,
+        rewardFraudScore: rewardFraudData.fraudScore,
+        rewardRiskFactors: rewardFraudData.riskFactors,
+        recommendation: fraudData.recommendation === 'block' || rewardFraudData.recommendation === 'block' 
+          ? 'block' 
+          : 'allow'
+      };
+    }
+
+    return fraudData;
   } catch (error) {
     console.error('Error predicting fraud:', error);
     throw error;

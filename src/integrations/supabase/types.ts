@@ -271,6 +271,56 @@ export type Database = {
           },
         ]
       }
+      rewards_transactions: {
+        Row: {
+          created_at: string | null
+          device_fingerprint: string | null
+          id: string
+          ip_address: string | null
+          merchant_id: string
+          points_earned: number
+          points_redeemed: number
+          program_type: string
+          transaction_id: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          device_fingerprint?: string | null
+          id?: string
+          ip_address?: string | null
+          merchant_id: string
+          points_earned?: number
+          points_redeemed?: number
+          program_type: string
+          transaction_id?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          device_fingerprint?: string | null
+          id?: string
+          ip_address?: string | null
+          merchant_id?: string
+          points_earned?: number
+          points_redeemed?: number
+          program_type?: string
+          transaction_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rewards_transactions_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       transactions: {
         Row: {
           amount: number
