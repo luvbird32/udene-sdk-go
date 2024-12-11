@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
+import ClientDashboard from "./pages/ClientDashboard";
 import Settings from "./pages/Settings";
 import Users from "./pages/Users";
 import { Toaster } from "./components/ui/toaster";
@@ -46,6 +47,10 @@ function App() {
           <Route
             path="/dashboard"
             element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />}
+          />
+          <Route
+            path="/client-dashboard"
+            element={isAuthenticated ? <ClientDashboard /> : <Navigate to="/login" replace />}
           />
           <Route
             path="/settings"
