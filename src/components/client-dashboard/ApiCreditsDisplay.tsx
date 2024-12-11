@@ -14,14 +14,28 @@ export const ApiCreditsDisplay = () => {
   // Initialize credits mutation
   const initializeCredits = useMutation({
     mutationFn: async (userId: string) => {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('api_credits')
-        .insert([{ user_id: userId }])
-        .select()
-        .single();
+        .insert([{ 
+          user_id: userId,
+          total_credits: 1000, // Default value
+          used_credits: 0,
+          is_trial: true,
+          trial_start_date: new Date().toISOString(),
+          trial_end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days from now
+        }]);
 
       if (error) throw error;
-      return data;
+
+      // Fetch the newly created record
+      const { data: newData, error: fetchError } = await supabase
+        .from('api_credits')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+
+      if (fetchError) throw fetchError;
+      return newData;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["api-credits"] });
@@ -43,8 +57,7 @@ export const ApiCreditsDisplay = () => {
 
       // If no record exists and no error, initialize credits
       if (!data && !error) {
-        const { data: newCredits } = await initializeCredits.mutateAsync(user.id);
-        return newCredits;
+        return await initializeCredits.mutateAsync(user.id);
       }
 
       if (error && error.code !== 'PGRST116') throw error;
