@@ -1,5 +1,17 @@
 export const FRAUD_DETECTION_SERVICES = [
   {
+    type: "bot_prevention",
+    title: "Bot Prevention",
+    description: "Advanced bot detection and prevention system to protect against automated attacks",
+    features: [
+      "Real-time behavior analysis",
+      "Mouse movement pattern detection",
+      "Keyboard input monitoring",
+      "Session anomaly detection",
+      "Automated threat blocking"
+    ]
+  },
+  {
     type: "transaction_monitoring",
     title: "Transaction Monitoring",
     description: "Real-time monitoring of transactions for suspicious patterns and behaviors",
