@@ -14,13 +14,40 @@ export const useAuth = (): AuthResponse => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async (email: string, password: string) => {
+  const validateCredentials = (email: string, password: string): boolean => {
     if (!email || !password) {
       toast({
         title: "Error",
         description: "Please provide both email and password",
         variant: "destructive"
       });
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast({
+        title: "Error",
+        description: "Please provide a valid email address",
+        variant: "destructive"
+      });
+      return false;
+    }
+
+    if (password.length < 6) {
+      toast({
+        title: "Error",
+        description: "Password must be at least 6 characters long",
+        variant: "destructive"
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleLogin = async (email: string, password: string) => {
+    if (!validateCredentials(email, password)) {
       return;
     }
 
@@ -31,7 +58,7 @@ export const useAuth = (): AuthResponse => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email: cleanEmail,
-        password: password.trim(),
+        password: password.trim()
       });
 
       if (error) {
@@ -74,12 +101,7 @@ export const useAuth = (): AuthResponse => {
   };
 
   const handleSignUp = async (email: string, password: string) => {
-    if (!email || !password) {
-      toast({
-        title: "Error",
-        description: "Please provide both email and password",
-        variant: "destructive"
-      });
+    if (!validateCredentials(email, password)) {
       return;
     }
 

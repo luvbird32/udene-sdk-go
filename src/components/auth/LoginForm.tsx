@@ -23,11 +23,12 @@ export const LoginForm = () => {
           id="email"
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value.trim())}
+          onChange={(e) => setEmail(e.target.value)}
           required
           placeholder="Enter your email"
           className="mt-1 glass-input text-green-400 placeholder:text-green-500/50"
           disabled={isLoading}
+          autoComplete="email"
         />
       </div>
       <div>
@@ -43,6 +44,7 @@ export const LoginForm = () => {
           placeholder="Enter your password"
           className="mt-1 glass-input text-green-400 placeholder:text-green-500/50"
           disabled={isLoading}
+          autoComplete="current-password"
         />
       </div>
       <Button 
