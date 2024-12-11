@@ -1,7 +1,7 @@
 # Webhooks Setup Guide
 
 ## Overview
-Webhooks allow you to receive real-time notifications when fraud-related events occur.
+Webhooks allow you to receive real-time notifications when important events occur in your fraud prevention system.
 
 ## Configuration
 1. Go to your dashboard
@@ -10,16 +10,23 @@ Webhooks allow you to receive real-time notifications when fraud-related events 
 4. Select events to subscribe to
 
 ## Event Types
+
+### Fraud Detection Events
 - `fraud_detected`: High-confidence fraud detection
 - `suspicious_activity`: Potentially suspicious behavior
-- `risk_score_change`: Significant changes in risk score
 - `transaction_blocked`: Transaction prevented due to risk
-- `user_blacklisted`: User added to blacklist
-- `device_flagged`: Device marked as suspicious
-- `ip_blocked`: IP address blocked
-- `location_alert`: Unusual location detected
-- `velocity_check_failed`: Transaction velocity limits exceeded
-- `pattern_detected`: Suspicious pattern identified
+- `risk_score_change`: Significant changes in risk score
+
+### Rewards Protection Events
+- `reward_fraud_detected`: Suspicious reward program activity
+- `rapid_points_redemption`: Unusually quick points redemption
+
+### Compliance Events
+- `data_retention_alert`: Data approaching retention limits
+- `privacy_request_received`: GDPR/CCPA data request received
+
+### System Events
+- `model_performance_drop`: Significant decrease in fraud detection accuracy
 
 ## Handling Webhook Events
 ```javascript
