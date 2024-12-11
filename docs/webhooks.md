@@ -13,6 +13,13 @@ Webhooks allow you to receive real-time notifications when fraud-related events 
 - `fraud_detected`: High-confidence fraud detection
 - `suspicious_activity`: Potentially suspicious behavior
 - `risk_score_change`: Significant changes in risk score
+- `transaction_blocked`: Transaction prevented due to risk
+- `user_blacklisted`: User added to blacklist
+- `device_flagged`: Device marked as suspicious
+- `ip_blocked`: IP address blocked
+- `location_alert`: Unusual location detected
+- `velocity_check_failed`: Transaction velocity limits exceeded
+- `pattern_detected`: Suspicious pattern identified
 
 ## Handling Webhook Events
 ```javascript
@@ -27,6 +34,10 @@ app.post('/webhook', (req, res) => {
     case 'suspicious_activity':
       // Handle suspicious activity
       break;
+    case 'transaction_blocked':
+      // Handle blocked transaction
+      break;
+    // Handle other events...
   }
   
   res.sendStatus(200);

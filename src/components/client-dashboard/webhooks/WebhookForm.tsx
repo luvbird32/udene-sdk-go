@@ -13,7 +13,14 @@ import { Textarea } from "@/components/ui/textarea";
 const AVAILABLE_EVENTS = [
   'fraud_detected',
   'suspicious_activity',
-  'risk_score_change'
+  'risk_score_change',
+  'transaction_blocked',
+  'user_blacklisted',
+  'device_flagged',
+  'ip_blocked',
+  'location_alert',
+  'velocity_check_failed',
+  'pattern_detected'
 ];
 
 export const WebhookForm = () => {
@@ -96,7 +103,7 @@ export const WebhookForm = () => {
 
           <div className="space-y-2">
             <Label>Events</Label>
-            <div className="grid grid-cols-1 gap-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {AVAILABLE_EVENTS.map((event) => (
                 <div key={event} className="flex items-center space-x-2">
                   <Checkbox
