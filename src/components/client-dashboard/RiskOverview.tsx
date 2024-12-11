@@ -7,6 +7,9 @@ export const RiskOverview = () => {
   const { data: riskData, isLoading } = useQuery({
     queryKey: ["risk-overview"],
     queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
+
       const { data, error } = await supabase
         .from('transactions')
         .select('risk_score, created_at')

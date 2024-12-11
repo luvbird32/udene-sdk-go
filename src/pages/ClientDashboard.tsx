@@ -4,8 +4,9 @@ import { ClientMetrics } from "@/components/client-dashboard/ClientMetrics";
 import { TransactionHistory } from "@/components/client-dashboard/TransactionHistory";
 import { RiskOverview } from "@/components/client-dashboard/RiskOverview";
 import { useToast } from "@/components/ui/use-toast";
-import { Settings } from "lucide-react";
+import { Settings, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Card } from "@/components/ui/card";
 
 const ClientDashboard = () => {
   const { toast } = useToast();
@@ -13,6 +14,9 @@ const ClientDashboard = () => {
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
     queryKey: ["client-metrics"],
     queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
+
       const { data: recentTransactions, error: transactionsError } = await supabase
         .from('transactions')
         .select('risk_score, is_fraudulent')
@@ -46,13 +50,15 @@ const ClientDashboard = () => {
             Monitor your transaction security and risk metrics
           </p>
         </div>
-        <Link 
-          to="/client-settings" 
-          className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent transition-colors"
-        >
-          <Settings className="h-5 w-5" />
-          <span>Settings</span>
-        </Link>
+        <div className="flex gap-4">
+          <Link 
+            to="/client-settings" 
+            className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent transition-colors"
+          >
+            <Settings className="h-5 w-5" />
+            <span>Settings</span>
+          </Link>
+        </div>
       </header>
 
       {/* Main Content */}

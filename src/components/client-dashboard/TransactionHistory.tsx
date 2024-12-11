@@ -9,6 +9,9 @@ export const TransactionHistory = () => {
   const { data: transactions, isLoading } = useQuery({
     queryKey: ["recent-transactions"],
     queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
+
       const { data, error } = await supabase
         .from('transactions')
         .select('*')
