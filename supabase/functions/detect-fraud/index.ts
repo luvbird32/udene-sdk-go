@@ -6,115 +6,95 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-interface Transaction {
-  amount: number
-  merchant_id: string
-  customer_id: string
-  location: string
-  device_id: string
-  ip_address: string
-  transaction_type: string
-  card_present: boolean
-  recurring: boolean
-  timestamp: string
-  referral_data?: any
-  affiliate_data?: any
-  trial_data?: any
-}
-
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
 
   try {
-    console.log('Processing fraud detection request');
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const { transaction, is_confirmed_fraud } = await req.json()
+    const { transaction_type, data } = await req.json()
     
-    // If this is a fraud confirmation update
-    if (is_confirmed_fraud !== undefined) {
-      console.log('Updating model with fraud confirmation:', is_confirmed_fraud);
-      
-      const { data: recentTransactions } = await supabase
-        .from('transactions')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(10)
-      
-      const mlResponse = await supabase.functions.invoke('python-ml', {
-        body: { 
-          transaction,
-          recent_transactions: recentTransactions,
-          is_confirmed_fraud
-        }
-      })
-      
-      return new Response(
-        JSON.stringify(mlResponse.data),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+    let riskAnalysis = { risk_score: 0, risk_factors: {} }
+    
+    switch (transaction_type) {
+      case 'trial_signup':
+        // Get historical trial data
+        const { data: trialHistory } = await supabase
+          .from('trial_usage')
+          .select('*')
+          .eq('user_id', data.user_id)
+          .order('created_at', { ascending: false })
+        
+        // Store trial data
+        const { data: trial, error: trialError } = await supabase
+          .from('trial_usage')
+          .insert({
+            user_id: data.user_id,
+            trial_type: data.trial_type,
+            start_date: new Date().toISOString(),
+            end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+            ip_addresses: [data.ip_address],
+            device_fingerprints: [data.device_fingerprint],
+            usage_patterns: {}
+          })
+          .select()
+          .single()
+          
+        if (trialError) throw trialError
+        
+        // Analyze trial patterns
+        const trialRisk = await analyzeFraudRisk('trial', data, trialHistory || [])
+        riskAnalysis = trialRisk
+        break
+        
+      case 'referral':
+        // Get historical referral data
+        const { data: referralHistory } = await supabase
+          .from('referral_tracking')
+          .select('*')
+          .or(`referrer_id.eq.${data.referrer_id},referred_id.eq.${data.referrer_id}`)
+          .order('created_at', { ascending: false })
+        
+        // Store referral data
+        const { data: referral, error: referralError } = await supabase
+          .from('referral_tracking')
+          .insert({
+            referrer_id: data.referrer_id,
+            referred_id: data.referred_id,
+            referral_code: data.referral_code,
+            ip_address: data.ip_address,
+            device_fingerprint: data.device_fingerprint
+          })
+          .select()
+          .single()
+          
+        if (referralError) throw referralError
+        
+        // Analyze referral patterns
+        const referralRisk = await analyzeFraudRisk('referral', data, referralHistory || [])
+        riskAnalysis = referralRisk
+        break
     }
-
-    // Get ML insights from Python function
-    const { data: recentTransactions } = await supabase
-      .from('transactions')
-      .select('*')
-      .eq('customer_id', transaction.customer_id)
-      .order('created_at', { ascending: false })
-      .limit(10)
-
-    const mlResponse = await supabase.functions.invoke('python-ml', {
-      body: { 
-        transaction,
-        recent_transactions: recentTransactions 
-      }
-    })
-
-    if (mlResponse.error) {
-      throw new Error(`ML analysis failed: ${mlResponse.error.message}`)
-    }
-
-    console.log('ML risk analysis:', mlResponse.data)
-
-    // Store transaction with risk scores
-    const { data: savedTransaction, error: transactionError } = await supabase
-      .from('transactions')
-      .insert({
-        ...transaction,
-        risk_score: mlResponse.data.risk_score,
-        is_fraudulent: mlResponse.data.risk_score > 70,
-        risk_factors: mlResponse.data.risk_factors
-      })
-      .select()
-      .single()
-
-    if (transactionError) throw transactionError
-
-    // Create fraud alert for high-risk transactions
-    if (mlResponse.data.risk_score > 70) {
+    
+    // Create fraud alert for high-risk activities
+    if (riskAnalysis.risk_score > 70) {
       await supabase
         .from('fraud_alerts')
         .insert({
-          transaction_id: savedTransaction.id,
-          alert_type: 'High Risk Transaction',
-          severity: mlResponse.data.risk_score > 85 ? 'high' : 'medium',
-          description: `Risk factors detected in ${
-            transaction.transaction_type
-          } transaction. Score: ${mlResponse.data.risk_score.toFixed(1)}%`
+          alert_type: `${transaction_type}_fraud`,
+          severity: riskAnalysis.risk_score > 85 ? 'high' : 'medium',
+          description: `High risk ${transaction_type} activity detected. Score: ${riskAnalysis.risk_score}`,
+          status: 'open'
         })
     }
 
     return new Response(
-      JSON.stringify({ 
-        risk_score: mlResponse.data.risk_score,
-        is_fraudulent: mlResponse.data.risk_score > 70,
-        risk_factors: mlResponse.data.risk_factors
-      }),
+      JSON.stringify(riskAnalysis),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
 
@@ -129,3 +109,28 @@ serve(async (req) => {
     )
   }
 })
+
+async function analyzeFraudRisk(type: string, currentData: any, historicalData: any[]) {
+  // Call Python ML function for sophisticated analysis
+  const mlResponse = await fetch(
+    `${Deno.env.get('SUPABASE_URL')}/functions/v1/python-ml`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        analysis_type: type,
+        current_data: currentData,
+        historical_data: historicalData
+      })
+    }
+  )
+
+  if (!mlResponse.ok) {
+    throw new Error('ML analysis failed')
+  }
+
+  return await mlResponse.json()
+}
