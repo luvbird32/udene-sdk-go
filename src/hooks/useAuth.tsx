@@ -31,7 +31,7 @@ export const useAuth = (): AuthResponse => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email: cleanEmail,
-        password,
+        password: password.trim(),
       });
 
       if (error) {
@@ -90,7 +90,7 @@ export const useAuth = (): AuthResponse => {
     try {
       const { data: existingUser, error: signUpError } = await supabase.auth.signUp({
         email: cleanEmail,
-        password,
+        password: password.trim(),
         options: {
           emailRedirectTo: `${window.location.origin}/auth/callback`
         }
@@ -99,7 +99,6 @@ export const useAuth = (): AuthResponse => {
       if (signUpError) {
         console.error("Signup error:", signUpError);
         
-        // Check if the error is due to existing user
         if (signUpError.message?.includes("User already registered") || 
             signUpError.message?.includes("user_already_exists")) {
           toast({
