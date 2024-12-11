@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
-import { DevTools } from "@/components/developer/DevTools";
+import { ClientApiKeyManager } from "@/components/client-dashboard/ClientApiKeyManager";
 
 const ClientDashboard = () => {
   const { toast } = useToast();
@@ -91,7 +91,7 @@ const ClientDashboard = () => {
         </TabsContent>
 
         <TabsContent value="api" className="space-y-6">
-          <DevTools />
+          <ClientApiKeyManager />
           <ApiDocs />
         </TabsContent>
       </Tabs>

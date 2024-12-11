@@ -78,6 +78,39 @@ export type Database = {
         }
         Relationships: []
       }
+      client_api_keys: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          key_value: string
+          name: string
+          status: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          key_value: string
+          name: string
+          status?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          key_value?: string
+          name?: string
+          status?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       compliance_reports: {
         Row: {
           created_at: string | null
