@@ -1,5 +1,5 @@
 import { useToast } from "@/components/ui/use-toast";
-import { Settings, Users, Shield, Activity, Database, Server } from "lucide-react";
+import { Settings, Users, Shield, Activity, Database, Server, BarChart2, Users2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,6 +12,8 @@ import { AccountTypeIndicator } from "@/components/dashboard/AccountTypeIndicato
 import { SecuritySection } from "@/components/dashboard/SecuritySection";
 import { InfrastructureSection } from "@/components/dashboard/InfrastructureSection";
 import { DatabaseSection } from "@/components/dashboard/DatabaseSection";
+import { ClientAnalytics } from "@/components/dashboard/analytics/ClientAnalytics";
+import { UsageAnalytics } from "@/components/dashboard/analytics/UsageAnalytics";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -91,16 +93,22 @@ const Dashboard = () => {
         </div>
       </header>
 
-      {/* Account Type Indicator */}
       <AccountTypeIndicator />
 
-      {/* Main content */}
       <div className="relative z-10">
         <Tabs defaultValue="dashboard" className="space-y-4">
           <TabsList className="glass-card p-1">
             <TabsTrigger value="dashboard" className="data-[state=active]:bg-green-900/40">
               <Activity className="h-4 w-4 mr-2" />
               System Overview
+            </TabsTrigger>
+            <TabsTrigger value="client-analytics" className="data-[state=active]:bg-green-900/40">
+              <Users2 className="h-4 w-4 mr-2" />
+              Client Analytics
+            </TabsTrigger>
+            <TabsTrigger value="usage-analytics" className="data-[state=active]:bg-green-900/40">
+              <BarChart2 className="h-4 w-4 mr-2" />
+              Usage Analytics
             </TabsTrigger>
             <TabsTrigger value="security" className="data-[state=active]:bg-green-900/40">
               <Shield className="h-4 w-4 mr-2" />
@@ -126,6 +134,14 @@ const Dashboard = () => {
               metricsLoading={metricsLoading}
               metricsError={metricsError}
             />
+          </TabsContent>
+
+          <TabsContent value="client-analytics" className="glass-card p-6 rounded-lg">
+            <ClientAnalytics />
+          </TabsContent>
+
+          <TabsContent value="usage-analytics" className="glass-card p-6 rounded-lg">
+            <UsageAnalytics />
           </TabsContent>
 
           <TabsContent value="security" className="glass-card p-6 rounded-lg">
