@@ -11,6 +11,7 @@ import { ApiDocs } from "@/components/documentation/ApiDocs";
 import { ClientApiKeyManager } from "@/components/client-dashboard/ClientApiKeyManager";
 import { ClientProfile } from "@/components/client-dashboard/ClientProfile";
 import { WebhookManager } from "@/components/client-dashboard/webhooks/WebhookManager";
+import { TriggerManager } from "@/components/client-dashboard/triggers/TriggerManager";
 
 const ClientDashboard = () => {
   const { toast } = useToast();
@@ -77,6 +78,10 @@ const ClientDashboard = () => {
             <Webhook className="h-4 w-4 mr-2" />
             Webhooks
           </TabsTrigger>
+          <TabsTrigger value="triggers">
+            <Settings className="h-4 w-4 mr-2" />
+            Triggers
+          </TabsTrigger>
           <TabsTrigger value="profile">
             <UserRound className="h-4 w-4 mr-2" />
             Profile
@@ -103,6 +108,10 @@ const ClientDashboard = () => {
 
         <TabsContent value="webhooks" className="space-y-6">
           <WebhookManager />
+        </TabsContent>
+
+        <TabsContent value="triggers" className="space-y-6">
+          <TriggerManager />
         </TabsContent>
 
         <TabsContent value="profile" className="space-y-6">
