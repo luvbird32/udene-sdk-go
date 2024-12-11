@@ -3,11 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { DollarSign, ShieldCheck, UserCheck, AlertTriangle } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import React from 'react';
 
 interface MetricCardProps {
   title: string;
   value: string;
-  icon: React.ComponentType;
+  icon: React.ComponentType<{ className?: string }>;
   description: string;
 }
 
