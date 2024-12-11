@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { Transaction } from "@/types/supabase";
 
 export const RiskOverview = () => {
   const { data: riskData, isLoading } = useQuery({
@@ -18,8 +19,8 @@ export const RiskOverview = () => {
 
       if (error) throw error;
 
-      return data.map(d => ({
-        timestamp: new Date(d.created_at).toLocaleDateString(),
+      return (data as Transaction[]).map(d => ({
+        timestamp: new Date(d.created_at!).toLocaleDateString(),
         score: d.risk_score || 0
       }));
     },

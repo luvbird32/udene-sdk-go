@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { User, UserRound, Building2, BadgeCheck } from "lucide-react";
+import { Profile } from "@/types/supabase";
 
 export const ClientProfile = () => {
   const { toast } = useToast();
