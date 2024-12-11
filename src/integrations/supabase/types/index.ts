@@ -2,6 +2,7 @@ import type { ApiKey, ApiKeyInsert, ApiKeyUpdate } from './api-keys';
 import type { FraudAlert, FraudAlertInsert, FraudAlertUpdate } from './fraud-alerts';
 import type { Metric, MetricInsert, MetricUpdate } from './metrics';
 import type { Transaction, TransactionInsert, TransactionUpdate } from './transactions';
+import type { ClientService, ClientServiceInsert, ClientServiceUpdate } from './client-services';
 
 export type Json =
   | string
@@ -18,6 +19,12 @@ export interface Database {
         Row: ApiKey
         Insert: ApiKeyInsert
         Update: ApiKeyUpdate
+        Relationships: []
+      }
+      client_services: {
+        Row: ClientService
+        Insert: ClientServiceInsert
+        Update: ClientServiceUpdate
         Relationships: []
       }
       fraud_alerts: {
@@ -133,3 +140,4 @@ export * from './api-keys';
 export * from './fraud-alerts';
 export * from './metrics';
 export * from './transactions';
+export * from './client-services';
