@@ -25,8 +25,18 @@ export const UserActions = ({ user, onRoleChange, onStatusToggle }: UserActionsP
 
   const handlePasswordReset = async () => {
     try {
-      // Instead of directly updating the password, we'll trigger a password reset email
-      const { error } = await supabase.auth.resetPasswordForEmail(user.email || '', {
+      if (!user.email) {
+        toast({
+          title: "Error",
+          description: "No email address found for this user",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      console.log("Attempting to reset password for email:", user.email);
+      
+      const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
         redirectTo: `${window.location.origin}/auth/reset-password`,
       });
 
@@ -153,11 +163,14 @@ export const UserActions = ({ user, onRoleChange, onStatusToggle }: UserActionsP
           </DialogHeader>
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              This will send a password reset email to the user's email address.
+              {user.email 
+                ? `A password reset email will be sent to ${user.email}`
+                : "No email address found for this user"}
             </p>
             <Button 
               onClick={handlePasswordReset}
               className="w-full glass-button text-green-400 hover:text-green-300"
+              disabled={!user.email}
             >
               Send Reset Email
             </Button>
