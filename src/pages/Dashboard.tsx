@@ -1,4 +1,4 @@
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Settings, Shield, Activity, Database, Server, BarChart2, Users2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,6 +16,7 @@ import { ClientAnalytics } from "@/components/dashboard/analytics/ClientAnalytic
 import { UsageAnalytics } from "@/components/dashboard/analytics/UsageAnalytics";
 import { UserManagement } from "@/components/dashboard/UserManagement";
 import { DataExtractionSection } from "@/components/dashboard/DataExtractionSection";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -78,6 +79,7 @@ const Dashboard = () => {
           </p>
         </div>
         <div className="flex items-center gap-4">
+          <NotificationBell />
           <Link 
             to="/settings" 
             className="flex items-center gap-2 px-6 py-3 rounded-md hover:bg-green-900/20 transition-all duration-300 glass-card"
