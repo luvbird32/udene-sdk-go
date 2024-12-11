@@ -4,12 +4,13 @@ import { ClientMetrics } from "@/components/client-dashboard/ClientMetrics";
 import { TransactionHistory } from "@/components/client-dashboard/TransactionHistory";
 import { RiskOverview } from "@/components/client-dashboard/RiskOverview";
 import { useToast } from "@/components/ui/use-toast";
-import { Settings, Shield, Code, UserRound } from "lucide-react";
+import { Settings, Shield, Code, UserRound, Webhook } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
 import { ClientApiKeyManager } from "@/components/client-dashboard/ClientApiKeyManager";
 import { ClientProfile } from "@/components/client-dashboard/ClientProfile";
+import { WebhookManager } from "@/components/client-dashboard/webhooks/WebhookManager";
 
 const ClientDashboard = () => {
   const { toast } = useToast();
@@ -72,6 +73,10 @@ const ClientDashboard = () => {
             <Code className="h-4 w-4 mr-2" />
             API & SDKs
           </TabsTrigger>
+          <TabsTrigger value="webhooks">
+            <Webhook className="h-4 w-4 mr-2" />
+            Webhooks
+          </TabsTrigger>
           <TabsTrigger value="profile">
             <UserRound className="h-4 w-4 mr-2" />
             Profile
@@ -94,6 +99,10 @@ const ClientDashboard = () => {
         <TabsContent value="api" className="space-y-6">
           <ClientApiKeyManager />
           <ApiDocs />
+        </TabsContent>
+
+        <TabsContent value="webhooks" className="space-y-6">
+          <WebhookManager />
         </TabsContent>
 
         <TabsContent value="profile" className="space-y-6">
