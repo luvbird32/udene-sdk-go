@@ -4,11 +4,12 @@ import { ClientMetrics } from "@/components/client-dashboard/ClientMetrics";
 import { TransactionHistory } from "@/components/client-dashboard/TransactionHistory";
 import { RiskOverview } from "@/components/client-dashboard/RiskOverview";
 import { useToast } from "@/components/ui/use-toast";
-import { Settings, Shield, Code, Book } from "lucide-react";
+import { Settings, Shield, Code } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
+import { DevTools } from "@/components/developer/DevTools";
 
 const ClientDashboard = () => {
   const { toast } = useToast();
@@ -89,7 +90,8 @@ const ClientDashboard = () => {
           </div>
         </TabsContent>
 
-        <TabsContent value="api">
+        <TabsContent value="api" className="space-y-6">
+          <DevTools />
           <ApiDocs />
         </TabsContent>
       </Tabs>
