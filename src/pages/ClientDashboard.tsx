@@ -26,10 +26,11 @@ import { RewardProgramMonitoring } from "@/components/client-dashboard/analytics
 import { AffiliateMonitoring } from "@/components/client-dashboard/analytics/AffiliateMonitoring";
 import { TrialAbuseMonitoring } from "@/components/client-dashboard/analytics/TrialAbuseMonitoring";
 import { FraudPatterns } from "@/components/dashboard/FraudPatterns";
+import { ThemeToggle } from "@/components/client-dashboard/ThemeToggle";
 
 const ClientDashboard = () => {
   const { toast } = useToast();
-
+  
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
     queryKey: ["client-metrics"],
     queryFn: async () => {
@@ -67,7 +68,8 @@ const ClientDashboard = () => {
             Monitor your transaction security and risk metrics
           </p>
         </div>
-        <div className="flex gap-4">
+        <div className="flex gap-4 items-center">
+          <ThemeToggle />
           <Link 
             to="/client-settings" 
             className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent transition-colors"
