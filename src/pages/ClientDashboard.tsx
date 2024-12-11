@@ -4,9 +4,11 @@ import { ClientMetrics } from "@/components/client-dashboard/ClientMetrics";
 import { TransactionHistory } from "@/components/client-dashboard/TransactionHistory";
 import { RiskOverview } from "@/components/client-dashboard/RiskOverview";
 import { useToast } from "@/components/ui/use-toast";
-import { Settings, Shield } from "lucide-react";
+import { Settings, Shield, Code, Book } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ApiDocs } from "@/components/documentation/ApiDocs";
 
 const ClientDashboard = () => {
   const { toast } = useToast();
@@ -62,18 +64,35 @@ const ClientDashboard = () => {
       </header>
 
       {/* Main Content */}
-      <div className="space-y-6">
-        <ClientMetrics 
-          metrics={metrics}
-          isLoading={metricsLoading}
-          error={metricsError}
-        />
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <TransactionHistory />
-          <RiskOverview />
-        </div>
-      </div>
+      <Tabs defaultValue="dashboard" className="space-y-6">
+        <TabsList>
+          <TabsTrigger value="dashboard">
+            <Shield className="h-4 w-4 mr-2" />
+            Dashboard
+          </TabsTrigger>
+          <TabsTrigger value="api">
+            <Code className="h-4 w-4 mr-2" />
+            API & SDKs
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="dashboard" className="space-y-6">
+          <ClientMetrics 
+            metrics={metrics}
+            isLoading={metricsLoading}
+            error={metricsError}
+          />
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <TransactionHistory />
+            <RiskOverview />
+          </div>
+        </TabsContent>
+
+        <TabsContent value="api">
+          <ApiDocs />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
