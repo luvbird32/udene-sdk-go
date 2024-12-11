@@ -16,27 +16,29 @@ interface UserTableProps {
 
 export const UserTable = ({ users, onRoleChange, onStatusToggle }: UserTableProps) => {
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Email</TableHead>
-          <TableHead>Role</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Last Active</TableHead>
-          <TableHead>Actions</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {users.map((user) => (
-          <UserTableRow
-            key={user.id}
-            user={user}
-            onRoleChange={onRoleChange}
-            onStatusToggle={onStatusToggle}
-          />
-        ))}
-      </TableBody>
-    </Table>
+    <div className="rounded-md border border-green-500/20 overflow-hidden">
+      <Table>
+        <TableHeader>
+          <TableRow className="border-b border-green-500/20">
+            <TableHead className="text-green-400">Name</TableHead>
+            <TableHead className="text-green-400">Email</TableHead>
+            <TableHead className="text-green-400">Role</TableHead>
+            <TableHead className="text-green-400">Status</TableHead>
+            <TableHead className="text-green-400">Last Active</TableHead>
+            <TableHead className="text-green-400">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {users.map((user) => (
+            <UserTableRow
+              key={user.id}
+              user={user}
+              onRoleChange={onRoleChange}
+              onStatusToggle={onStatusToggle}
+            />
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
