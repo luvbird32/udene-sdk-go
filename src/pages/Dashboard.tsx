@@ -14,6 +14,7 @@ import { InfrastructureSection } from "@/components/dashboard/InfrastructureSect
 import { DatabaseSection } from "@/components/dashboard/DatabaseSection";
 import { ClientAnalytics } from "@/components/dashboard/analytics/ClientAnalytics";
 import { UsageAnalytics } from "@/components/dashboard/analytics/UsageAnalytics";
+import { UserManagement } from "@/components/dashboard/UserManagement";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -102,6 +103,10 @@ const Dashboard = () => {
               <Activity className="h-4 w-4 mr-2" />
               System Overview
             </TabsTrigger>
+            <TabsTrigger value="users" className="data-[state=active]:bg-green-900/40">
+              <Users className="h-4 w-4 mr-2" />
+              User Management
+            </TabsTrigger>
             <TabsTrigger value="client-analytics" className="data-[state=active]:bg-green-900/40">
               <Users2 className="h-4 w-4 mr-2" />
               Client Analytics
@@ -134,6 +139,10 @@ const Dashboard = () => {
               metricsLoading={metricsLoading}
               metricsError={metricsError}
             />
+          </TabsContent>
+
+          <TabsContent value="users" className="glass-card p-6 rounded-lg">
+            <UserManagement />
           </TabsContent>
 
           <TabsContent value="client-analytics" className="glass-card p-6 rounded-lg">
