@@ -1,5 +1,5 @@
 import { useToast } from "@/components/ui/use-toast";
-import { Settings, Users } from "lucide-react";
+import { Settings, Users, Shield, Activity, Database, Server } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -38,7 +38,6 @@ const Dashboard = () => {
 
       if (transactionsError) throw transactionsError;
 
-      // Safely calculate average risk score
       const validTransactions = recentTransactions?.filter(t => t?.risk_score != null) ?? [];
       const avgRiskScore = validTransactions.length > 0
         ? validTransactions.reduce((acc, t) => acc + (t.risk_score ?? 0), 0) / validTransactions.length
@@ -77,14 +76,14 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Header section */}
+      {/* Enhanced Header section with more admin controls */}
       <header className="mb-8 flex justify-between items-center relative z-10">
         <div className="glass-card p-6 rounded-lg w-full max-w-2xl">
           <h2 className="text-4xl font-bold mb-2 text-green-400 animate-pulse-slow" tabIndex={0}>
-            Fraud Detection System
+            Admin Control Center
           </h2>
           <p className="text-green-300/80" tabIndex={0}>
-            Advanced monitoring and analysis for cybersecurity threats
+            Advanced system monitoring and management interface
           </p>
         </div>
         <div className="flex items-center gap-4">
@@ -108,21 +107,35 @@ const Dashboard = () => {
       {/* Account Type Indicator */}
       <AccountTypeIndicator />
 
-      {/* Main content */}
+      {/* Enhanced Main content with more admin-focused tabs */}
       <div className="relative z-10">
         <Tabs defaultValue="dashboard" className="space-y-4">
           <TabsList className="glass-card p-1">
             <TabsTrigger value="dashboard" className="data-[state=active]:bg-green-900/40">
-              Dashboard
+              <Activity className="h-4 w-4 mr-2" />
+              System Overview
+            </TabsTrigger>
+            <TabsTrigger value="security" className="data-[state=active]:bg-green-900/40">
+              <Shield className="h-4 w-4 mr-2" />
+              Security
+            </TabsTrigger>
+            <TabsTrigger value="infrastructure" className="data-[state=active]:bg-green-900/40">
+              <Server className="h-4 w-4 mr-2" />
+              Infrastructure
+            </TabsTrigger>
+            <TabsTrigger value="database" className="data-[state=active]:bg-green-900/40">
+              <Database className="h-4 w-4 mr-2" />
+              Database
             </TabsTrigger>
             <TabsTrigger value="compliance" className="data-[state=active]:bg-green-900/40">
+              <Shield className="h-4 w-4 mr-2" />
               Compliance
             </TabsTrigger>
             <TabsTrigger value="docs" className="data-[state=active]:bg-green-900/40">
-              API Documentation
+              API Docs
             </TabsTrigger>
             <TabsTrigger value="devtools" className="data-[state=active]:bg-green-900/40">
-              Developer Tools
+              Developer
             </TabsTrigger>
           </TabsList>
 
@@ -132,6 +145,51 @@ const Dashboard = () => {
               metricsLoading={metricsLoading}
               metricsError={metricsError}
             />
+          </TabsContent>
+
+          <TabsContent value="security" className="glass-card p-6 rounded-lg">
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold">Security Overview</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Security content will be implemented in future updates */}
+                <div className="p-4 border border-green-500/20 rounded-lg">
+                  <p>Active Security Protocols</p>
+                </div>
+                <div className="p-4 border border-green-500/20 rounded-lg">
+                  <p>Threat Detection</p>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="infrastructure" className="glass-card p-6 rounded-lg">
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold">Infrastructure Status</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Infrastructure content will be implemented in future updates */}
+                <div className="p-4 border border-green-500/20 rounded-lg">
+                  <p>Server Status</p>
+                </div>
+                <div className="p-4 border border-green-500/20 rounded-lg">
+                  <p>Resource Usage</p>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="database" className="glass-card p-6 rounded-lg">
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold">Database Management</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Database content will be implemented in future updates */}
+                <div className="p-4 border border-green-500/20 rounded-lg">
+                  <p>Database Health</p>
+                </div>
+                <div className="p-4 border border-green-500/20 rounded-lg">
+                  <p>Query Performance</p>
+                </div>
+              </div>
+            </div>
           </TabsContent>
 
           <TabsContent value="compliance" className="glass-card p-6 rounded-lg">
