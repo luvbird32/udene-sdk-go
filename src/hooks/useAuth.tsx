@@ -58,7 +58,7 @@ export const useAuth = (): AuthResponse => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email: cleanEmail,
-        password: password.trim()
+        password
       });
 
       if (error) {
@@ -112,7 +112,7 @@ export const useAuth = (): AuthResponse => {
     try {
       const { data: existingUser, error: signUpError } = await supabase.auth.signUp({
         email: cleanEmail,
-        password: password.trim(),
+        password,
         options: {
           emailRedirectTo: `${window.location.origin}/auth/callback`
         }
