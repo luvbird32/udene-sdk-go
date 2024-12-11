@@ -42,7 +42,9 @@ export const ClientProfile = () => {
 
       if (error) throw error;
       
-      const preferences = (data.preferences as ProfilePreferences) || {
+      // First cast to unknown, then to ProfilePreferences to ensure type safety
+      const rawPreferences = data.preferences as unknown;
+      const preferences: ProfilePreferences = (rawPreferences as ProfilePreferences) || {
         notifications: { email: true, sms: false },
         theme: "light"
       };
