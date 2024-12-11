@@ -1,8 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ServiceCard } from "./ServiceCard";
-import { ClientService } from "@/integrations/supabase/types/client-services";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import type { Database } from "@/integrations/supabase/types/database";
+
+type ClientService = Database['public']['Tables']['client_services']['Row'];
 
 const FRAUD_DETECTION_SERVICES = [
   {
@@ -59,11 +61,11 @@ export const ServiceManager = () => {
     queryKey: ["client-services"],
     queryFn: async () => {
       const { data: services, error } = await supabase
-        .from("client_services")
-        .select("*");
+        .from('client_services')
+        .select('*');
 
       if (error) throw error;
-      return services as ClientService[] || [];
+      return services as ClientService[];
     }
   });
 
@@ -72,21 +74,21 @@ export const ServiceManager = () => {
       if (!currentUser?.id) throw new Error("No user found");
       
       const { data: existingService } = await supabase
-        .from("client_services")
-        .select("*")
-        .eq("service_type", serviceType)
+        .from('client_services')
+        .select('*')
+        .eq('service_type', serviceType)
         .single();
 
       if (existingService) {
         const { error } = await supabase
-          .from("client_services")
+          .from('client_services')
           .update({ is_active: isActive })
-          .eq("service_type", serviceType);
+          .eq('service_type', serviceType);
 
         if (error) throw error;
       } else {
         const { error } = await supabase
-          .from("client_services")
+          .from('client_services')
           .insert({
             service_type: serviceType,
             is_active: isActive,
