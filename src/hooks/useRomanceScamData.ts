@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import type { InteractionPatterns } from "@/types/fraud";
 
 export const useRomanceScamData = () => {
   return useQuery({
@@ -27,7 +28,8 @@ export const useRomanceScamData = () => {
         if (tx.profile_changes && Object.keys(tx.profile_changes).length > 0) {
           acc.profileChanges = (acc.profileChanges || 0) + 1;
         }
-        if (tx.interaction_patterns?.multiple_devices) {
+        const interactionPatterns = tx.interaction_patterns as InteractionPatterns;
+        if (interactionPatterns?.multiple_devices) {
           acc.multipleDevices = (acc.multipleDevices || 0) + 1;
         }
         return acc;
