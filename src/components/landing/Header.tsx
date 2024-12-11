@@ -8,6 +8,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import { Code } from "lucide-react";
 
 export const Header = () => {
   const scrollToSection = (sectionId: string) => {
@@ -82,6 +83,15 @@ export const Header = () => {
             <Link to="/login">
               <Button className="bg-green-500 text-black hover:bg-green-400">
                 Get Started
+              </Button>
+            </Link>
+            <Link to="/client-dashboard">
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-2 text-green-400 border-green-500/50 hover:bg-green-900/20"
+              >
+                <Code className="w-4 h-4" />
+                Developer
               </Button>
             </Link>
           </div>
