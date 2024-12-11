@@ -15,13 +15,17 @@ export const ServiceManager = () => {
     </div>;
   }
 
+  const handleToggle = async (serviceType: string, isActive: boolean) => {
+    await toggleService.mutateAsync({ serviceType, isActive });
+  };
+
   return (
     <TooltipProvider delayDuration={300}>
       <div className="space-y-6">
         <ServiceHeader />
         <ServiceList 
           activeServices={activeServices} 
-          handleToggle={toggleService}
+          handleToggle={handleToggle}
         />
       </div>
     </TooltipProvider>
