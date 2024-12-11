@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProfileSettings } from "@/components/settings/ProfileSettings";
 import { SecuritySettings } from "@/components/settings/SecuritySettings";
-import { ApiKeySettings } from "@/components/settings/ApiKeySettings";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate, Link } from "react-router-dom";
@@ -85,9 +84,6 @@ const Settings = () => {
               <TabsTrigger value="security" className="data-[state=active]:bg-green-900/40">
                 Security
               </TabsTrigger>
-              <TabsTrigger value="api" className="data-[state=active]:bg-green-900/40">
-                API Keys
-              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="profile" className="animate-fade-in">
@@ -96,10 +92,6 @@ const Settings = () => {
 
             <TabsContent value="security" className="animate-fade-in">
               <SecuritySettings />
-            </TabsContent>
-
-            <TabsContent value="api" className="animate-fade-in">
-              <ApiKeySettings />
             </TabsContent>
           </Tabs>
         </div>
