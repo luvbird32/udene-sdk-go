@@ -53,17 +53,21 @@ export const useServiceManager = () => {
         throw new Error("Suspicious activity detected. Please try again later.");
       }
 
-      const { data: existingService } = await supabase
+      const { data: existingService, error: queryError } = await supabase
         .from('client_services')
         .select('*')
         .eq('service_type', serviceType)
-        .single();
+        .eq('user_id', currentUser.id)
+        .maybeSingle();
+
+      if (queryError) throw queryError;
 
       if (existingService) {
         const { error } = await supabase
           .from('client_services')
           .update({ is_active: isActive })
-          .eq('service_type', serviceType);
+          .eq('service_type', serviceType)
+          .eq('user_id', currentUser.id);
 
         if (error) throw error;
       } else {
