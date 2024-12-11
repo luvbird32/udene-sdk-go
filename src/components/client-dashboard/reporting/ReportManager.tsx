@@ -2,14 +2,12 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { FileDown, Calendar as CalendarIcon, Save, Clock } from "lucide-react";
-import { format } from "date-fns";
+import { DateRangeSelector } from "./DateRangeSelector";
+import { ReportTypeSelector } from "./ReportTypeSelector";
+import { ScheduleSection } from "./ScheduleSection";
+import { ExportActions } from "./ExportActions";
 
 interface DateRange {
   from: Date;
@@ -57,7 +55,6 @@ export const ReportManager = () => {
         const csvContent = convertToCSV(data);
         downloadFile(csvContent, 'report.csv', 'text/csv');
       } else {
-        // For PDF, we'll just show a toast for now
         toast({
           title: "PDF Export",
           description: "PDF export functionality coming soon!",
@@ -155,63 +152,21 @@ export const ReportManager = () => {
     <Card className="p-6 space-y-6">
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-semibold">Report Management</h3>
-        <div className="space-x-2">
-          <Button onClick={() => exportReport('csv')} variant="outline">
-            <FileDown className="mr-2 h-4 w-4" />
-            Export CSV
-          </Button>
-          <Button onClick={() => exportReport('pdf')} variant="outline">
-            <FileDown className="mr-2 h-4 w-4" />
-            Export PDF
-          </Button>
-        </div>
+        <ExportActions 
+          onExportCSV={() => exportReport('csv')}
+          onExportPDF={() => exportReport('pdf')}
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <label className="block text-sm font-medium mb-2">Date Range</label>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="outline" className="w-full justify-start text-left">
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {dateRange.from ? (
-                  <>
-                    {format(dateRange.from, "LLL dd, y")} -{" "}
-                    {format(dateRange.to, "LLL dd, y")}
-                  </>
-                ) : (
-                  <span>Pick a date range</span>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                mode="range"
-                selected={{
-                  from: dateRange.from,
-                  to: dateRange.to,
-                }}
-                onSelect={(range: any) => range && setDateRange(range)}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-2">Report Type</label>
-          <Select value={reportType} onValueChange={setReportType}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select report type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="transactions">Transactions</SelectItem>
-              <SelectItem value="risk">Risk Analysis</SelectItem>
-              <SelectItem value="compliance">Compliance</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
+        <DateRangeSelector 
+          dateRange={dateRange}
+          onDateRangeChange={setDateRange}
+        />
+        <ReportTypeSelector 
+          reportType={reportType}
+          onReportTypeChange={setReportType}
+        />
         <div>
           <label className="block text-sm font-medium mb-2">Templates</label>
           <Select>
@@ -229,36 +184,14 @@ export const ReportManager = () => {
         </div>
       </div>
 
-      <div className="border-t pt-4">
-        <h4 className="text-sm font-medium mb-4">Schedule Report</h4>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Input
-            placeholder="Schedule name"
-            value={scheduleName}
-            onChange={(e) => setScheduleName(e.target.value)}
-          />
-          <Select value={scheduleFrequency} onValueChange={setScheduleFrequency}>
-            <SelectTrigger>
-              <SelectValue placeholder="Frequency" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="daily">Daily</SelectItem>
-              <SelectItem value="weekly">Weekly</SelectItem>
-              <SelectItem value="monthly">Monthly</SelectItem>
-            </SelectContent>
-          </Select>
-          <div className="space-x-2">
-            <Button onClick={saveTemplate} variant="outline">
-              <Save className="mr-2 h-4 w-4" />
-              Save Template
-            </Button>
-            <Button onClick={scheduleReport} variant="outline">
-              <Clock className="mr-2 h-4 w-4" />
-              Schedule
-            </Button>
-          </div>
-        </div>
-      </div>
+      <ScheduleSection 
+        scheduleName={scheduleName}
+        scheduleFrequency={scheduleFrequency}
+        onScheduleNameChange={setScheduleName}
+        onScheduleFrequencyChange={setScheduleFrequency}
+        onSaveTemplate={saveTemplate}
+        onScheduleReport={scheduleReport}
+      />
     </Card>
   );
 };
