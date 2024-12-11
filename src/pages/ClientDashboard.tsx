@@ -47,7 +47,7 @@ const ClientDashboard = () => {
           </p>
         </div>
         <Link 
-          to="/settings" 
+          to="/client-settings" 
           className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent transition-colors"
         >
           <Settings className="h-5 w-5" />
