@@ -7,6 +7,7 @@ import { TrendAnalysis } from "@/components/client-dashboard/analytics/TrendAnal
 import { GeographicDistribution } from "@/components/client-dashboard/analytics/GeographicDistribution";
 import { PeakTransactionTimes } from "@/components/client-dashboard/analytics/PeakTransactionTimes";
 import { RiskDistribution } from "@/components/client-dashboard/analytics/RiskDistribution";
+import { BusinessIntelligence } from "@/components/client-dashboard/analytics/BusinessIntelligence";
 import { useToast } from "@/components/ui/use-toast";
 import { Settings, Shield, Code, UserRound, Webhook } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -108,6 +109,8 @@ const ClientDashboard = () => {
             <PeakTransactionTimes />
             <RiskDistribution />
           </div>
+
+          <BusinessIntelligence />
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <TransactionHistory />
