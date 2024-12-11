@@ -8,9 +8,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { User } from "@/types/users";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -22,28 +21,27 @@ interface UserActionsProps {
 
 export const UserActions = ({ user, onRoleChange, onStatusToggle }: UserActionsProps) => {
   const [isResetPasswordOpen, setIsResetPasswordOpen] = useState(false);
-  const [newPassword, setNewPassword] = useState("");
   const { toast } = useToast();
 
   const handlePasswordReset = async () => {
     try {
-      const { error } = await supabase.auth.admin.updateUserById(
-        user.id,
-        { password: newPassword }
-      );
+      // Instead of directly updating the password, we'll trigger a password reset email
+      const { error } = await supabase.auth.resetPasswordForEmail(user.email || '', {
+        redirectTo: `${window.location.origin}/auth/reset-password`,
+      });
 
       if (error) throw error;
 
       toast({
         title: "Success",
-        description: "Password has been reset successfully",
+        description: "Password reset email has been sent to the user",
       });
       setIsResetPasswordOpen(false);
     } catch (error) {
-      console.error("Error resetting password:", error);
+      console.error("Error initiating password reset:", error);
       toast({
         title: "Error",
-        description: "Failed to reset password",
+        description: "Failed to initiate password reset",
         variant: "destructive",
       });
     }
@@ -51,13 +49,12 @@ export const UserActions = ({ user, onRoleChange, onStatusToggle }: UserActionsP
 
   const handleTerminateAccount = async () => {
     try {
-      const { error } = await supabase.auth.admin.deleteUser(user.id);
+      // Instead of directly deleting the user, we'll set their status to terminated
+      await onStatusToggle(user.id, "inactive");
       
-      if (error) throw error;
-
       toast({
         title: "Success",
-        description: "Account has been terminated",
+        description: "Account has been deactivated",
       });
     } catch (error) {
       console.error("Error terminating account:", error);
@@ -155,24 +152,14 @@ export const UserActions = ({ user, onRoleChange, onStatusToggle }: UserActionsP
             <DialogTitle>Reset User Password</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <div>
-              <label htmlFor="new-password" className="block text-sm font-medium text-green-400/80">
-                New Password
-              </label>
-              <Input
-                id="new-password"
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                className="mt-1 glass-input text-green-400"
-                placeholder="Enter new password"
-              />
-            </div>
+            <p className="text-sm text-muted-foreground">
+              This will send a password reset email to the user's email address.
+            </p>
             <Button 
               onClick={handlePasswordReset}
               className="w-full glass-button text-green-400 hover:text-green-300"
             >
-              Reset Password
+              Send Reset Email
             </Button>
           </div>
         </DialogContent>
