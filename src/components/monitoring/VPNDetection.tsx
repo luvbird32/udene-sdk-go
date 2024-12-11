@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import type { Transaction, InteractionPatterns } from "@/types/risk";
+import type { DatabaseTransaction, InteractionPatterns } from "@/types/risk";
 
 interface VPNDetectionProps {
   profileId: string;
@@ -19,7 +19,7 @@ export const VPNDetection = ({ profileId }: VPNDetectionProps) => {
 
       if (error) throw error;
 
-      return (transactions as Transaction[])?.reduce((acc: any, tx: Transaction) => {
+      return (transactions as DatabaseTransaction[])?.reduce((acc: any, tx: DatabaseTransaction) => {
         const patterns = tx.interaction_patterns as InteractionPatterns;
         
         if (patterns?.vpn_detected) {
