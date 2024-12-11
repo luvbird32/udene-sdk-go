@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ServiceCard } from "./ServiceCard";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import type { Database } from "@/integrations/supabase/types/database";
+import { useToast } from "@/components/ui/use-toast";
 
 type ClientService = Database['public']['Tables']['client_services']['Row'];
 
@@ -100,17 +101,37 @@ const FRAUD_DETECTION_SERVICES = [
 export const ServiceManager = () => {
   const queryClient = useQueryClient();
   const { data: currentUser } = useCurrentUser();
+  const { toast } = useToast();
 
   const { data: activeServices, isLoading } = useQuery({
     queryKey: ["client-services"],
     queryFn: async () => {
-      const { data: services, error } = await supabase
-        .from('client_services')
-        .select('*');
+      try {
+        const { data: services, error } = await supabase
+          .from('client_services')
+          .select('*');
 
-      if (error) throw error;
-      return services as ClientService[];
-    }
+        if (error) {
+          toast({
+            title: "Error loading services",
+            description: error.message,
+            variant: "destructive"
+          });
+          throw error;
+        }
+        return services as ClientService[];
+      } catch (error) {
+        console.error('Error fetching services:', error);
+        toast({
+          title: "Connection Error",
+          description: "Failed to load services. Please check your connection and try again.",
+          variant: "destructive"
+        });
+        throw error;
+      }
+    },
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
   const toggleService = useMutation({
@@ -145,6 +166,13 @@ export const ServiceManager = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["client-services"] });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error updating service",
+        description: error.message,
+        variant: "destructive"
+      });
     }
   });
 

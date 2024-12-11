@@ -1,12 +1,5 @@
 import { throttle } from 'lodash';
-
-interface BotIndicators {
-  unnaturalSpeed: boolean;
-  linearMovement: boolean;
-  consistentTiming: boolean;
-  noHumanErrors: boolean;
-  suspiciousPatterns: boolean;
-}
+import type { BotIndicators } from '@/types/bot-detection';
 
 class BotDetectionService {
   private mousePositions: Array<{ x: number; y: number; timestamp: number }> = [];
@@ -108,8 +101,7 @@ class BotDetectionService {
   private detectTypingErrors(): boolean {
     // Humans typically make typing errors (backspace usage)
     return document.querySelectorAll('input').length > 0 && 
-           this.keyPressTimings.length > 10 && 
-           document.querySelectorAll('input').length > 0;
+           this.keyPressTimings.length > 10;
   }
 
   private detectSuspiciousPatterns(): boolean {
@@ -125,13 +117,13 @@ class BotDetectionService {
   }
 
   public attachEventListeners() {
-    document.addEventListener('mousemove', (e) => this.trackMouseMovement(e));
+    document.addEventListener('mousemove', this.trackMouseMovement);
     document.addEventListener('keypress', () => this.trackKeyPress());
     document.addEventListener('scroll', () => this.trackScroll());
   }
 
   public detachEventListeners() {
-    document.removeEventListener('mousemove', (e) => this.trackMouseMovement(e));
+    document.removeEventListener('mousemove', this.trackMouseMovement);
     document.removeEventListener('keypress', () => this.trackKeyPress());
     document.removeEventListener('scroll', () => this.trackScroll());
   }

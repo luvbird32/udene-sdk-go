@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { botDetectionService } from '@/utils/botDetection';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
+import type { BotIndicators } from '@/types/bot-detection';
 
 export const useBotDetection = () => {
   const [isBotDetected, setIsBotDetected] = useState(false);
@@ -20,12 +21,17 @@ export const useBotDetection = () => {
       if (isLikelyBot && !isBotDetected) {
         setIsBotDetected(true);
         
+        // Convert BotIndicators to a Record<string, boolean> for JSON compatibility
+        const indicatorsRecord: Record<string, boolean> = {
+          ...indicators
+        };
+        
         // Log the bot detection
         await supabase.from('audit_logs').insert({
           event_type: 'bot_detected',
           entity_type: 'user_session',
           entity_id: 'session',
-          changes: indicators
+          changes: indicatorsRecord
         });
 
         toast({
