@@ -1,0 +1,19 @@
+project_id = "jbbfljgvjpkzqmoylyzc"
+
+[global.env]
+SUPABASE_URL = "env"
+SUPABASE_ANON_KEY = "env"
+SUPABASE_SERVICE_ROLE_KEY = "env"
+SUPABASE_DB_URL = "env"
+
+[[functions]]
+name = "detect-fraud"
+verify_jwt = false
+
+[[functions]]
+name = "detect-reward-fraud"
+verify_jwt = false
+
+[[functions]]
+name = "retrain-model"
+verify_jwt = false

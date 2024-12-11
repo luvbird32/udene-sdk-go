@@ -200,6 +200,45 @@ export type Database = {
         }
         Relationships: []
       }
+      ml_models: {
+        Row: {
+          created_at: string | null
+          hyperparameters: Json | null
+          id: string
+          is_active: boolean | null
+          metrics: Json | null
+          model_type: string
+          training_date: string | null
+          training_size: number | null
+          validation_metrics: Json | null
+          version: string
+        }
+        Insert: {
+          created_at?: string | null
+          hyperparameters?: Json | null
+          id?: string
+          is_active?: boolean | null
+          metrics?: Json | null
+          model_type: string
+          training_date?: string | null
+          training_size?: number | null
+          validation_metrics?: Json | null
+          version: string
+        }
+        Update: {
+          created_at?: string | null
+          hyperparameters?: Json | null
+          id?: string
+          is_active?: boolean | null
+          metrics?: Json | null
+          model_type?: string
+          training_date?: string | null
+          training_size?: number | null
+          validation_metrics?: Json | null
+          version?: string
+        }
+        Relationships: []
+      }
       organizations: {
         Row: {
           created_at: string | null
@@ -314,6 +353,44 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "rewards_transactions_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      training_datasets: {
+        Row: {
+          created_at: string | null
+          dataset_version: string
+          features: Json
+          id: string
+          label: boolean
+          split_type: string | null
+          transaction_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          dataset_version: string
+          features: Json
+          id?: string
+          label: boolean
+          split_type?: string | null
+          transaction_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          dataset_version?: string
+          features?: Json
+          id?: string
+          label?: boolean
+          split_type?: string | null
+          transaction_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "training_datasets_transaction_id_fkey"
             columns: ["transaction_id"]
             isOneToOne: false
             referencedRelation: "transactions"
