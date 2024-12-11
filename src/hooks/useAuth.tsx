@@ -45,8 +45,8 @@ export const useAuth = (): AuthResponse => {
           });
         } else {
           toast({
-            title: "Login Failed",
-            description: error.message,
+            title: "Login Error",
+            description: "An unexpected error occurred. Please try again later.",
             variant: "destructive"
           });
         }
@@ -54,7 +54,7 @@ export const useAuth = (): AuthResponse => {
       }
 
       if (data.user) {
-        console.log("Login successful, user:", data.user);
+        console.log("Login successful, user:", data.user.id);
         toast({
           title: "Success",
           description: "Login successful! Redirecting...",
@@ -65,7 +65,7 @@ export const useAuth = (): AuthResponse => {
       console.error("Unexpected login error:", err);
       toast({
         title: "Login Error",
-        description: "An unexpected error occurred. Please try again.",
+        description: "An unexpected error occurred. Please try again later.",
         variant: "destructive"
       });
     } finally {
@@ -88,8 +88,7 @@ export const useAuth = (): AuthResponse => {
     console.log("Attempting signup with email:", cleanEmail);
 
     try {
-      // First check if user exists
-      const { data: existingUser } = await supabase.auth.signUp({
+      const { data: existingUser, error: signUpError } = await supabase.auth.signUp({
         email: cleanEmail,
         password,
         options: {
@@ -97,34 +96,45 @@ export const useAuth = (): AuthResponse => {
         }
       });
 
-      if (existingUser?.user) {
-        console.log("User created successfully:", existingUser.user);
+      if (signUpError) {
+        console.error("Signup error:", signUpError);
+        
+        // Check if the error is due to existing user
+        if (signUpError.message?.includes("User already registered") || 
+            signUpError.message?.includes("user_already_exists")) {
+          toast({
+            title: "Account Exists",
+            description: "An account with this email already exists. Please try logging in instead.",
+            variant: "destructive"
+          });
+          return;
+        }
+        
         toast({
-          title: "Signup Successful",
-          description: "Account created successfully. You can now log in.",
+          title: "Signup Error",
+          description: signUpError.message || "Failed to create account",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      if (existingUser?.user) {
+        console.log("User created successfully:", existingUser.user.id);
+        toast({
+          title: "Success",
+          description: "Account created successfully! You can now log in.",
         });
         
         // Since email verification is disabled, we can automatically log them in
         await handleLogin(cleanEmail, password);
       }
-    } catch (err: any) {
-      console.error("Signup error:", err);
-      
-      // Check if the error is due to existing user
-      if (err.message?.includes("User already registered") || 
-          err.error_description?.includes("User already registered")) {
-        toast({
-          title: "Account Exists",
-          description: "This email is already registered. Please try logging in instead.",
-          variant: "destructive"
-        });
-      } else {
-        toast({
-          title: "Signup Error",
-          description: "An unexpected error occurred. Please try again.",
-          variant: "destructive"
-        });
-      }
+    } catch (err) {
+      console.error("Unexpected signup error:", err);
+      toast({
+        title: "Signup Error",
+        description: "An unexpected error occurred. Please try again later.",
+        variant: "destructive"
+      });
     } finally {
       setIsLoading(false);
     }
