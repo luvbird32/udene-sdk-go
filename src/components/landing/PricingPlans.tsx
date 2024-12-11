@@ -5,81 +5,34 @@ import { Badge } from "@/components/ui/badge";
 import { useEffect } from "react";
 
 export const PricingPlans = () => {
-  // Initialize and manage slot counts using local storage
-  const getInitialSlots = (plan: string) => {
-    const stored = localStorage.getItem(`${plan}_slots`);
-    if (!stored) {
-      // Set initial values
-      const initial = plan === 'starter' ? 235 : 180;
-      localStorage.setItem(`${plan}_slots`, initial.toString());
-      return initial;
-    }
-    return parseInt(stored);
-  };
-
-  const decreaseSlots = () => {
-    ['starter', 'professional'].forEach(plan => {
-      const currentSlots = getInitialSlots(plan);
-      if (currentSlots > 1) { // Keep at least 1 slot
-        const newSlots = currentSlots - Math.floor(Math.random() * 3) - 1; // Decrease by 1-3 slots
-        localStorage.setItem(`${plan}_slots`, Math.max(1, newSlots).toString());
-      }
-    });
-  };
-
-  // Effect to decrease slots on component mount
-  useEffect(() => {
-    decreaseSlots();
-  }, []);
-
   const plans = [
     {
-      name: "Starter",
-      price: "$49",
-      period: "per month",
-      description: "Perfect for small businesses getting started with fraud prevention",
-      promotion: "First 1000 annual subscribers get lifetime fixed rate + 1M API calls/month",
+      name: "Pay As You Go",
+      price: "$0.001",
+      period: "per API call",
+      description: "Perfect for businesses of any size with flexible usage needs",
+      promotion: "First 1000 API calls free for new users",
       features: [
-        "Up to 5,000 API calls/month",
-        "Basic fraud detection rules",
+        "No minimum commitment",
+        "Real-time fraud detection",
         "Email support",
-        "Real-time monitoring",
+        "Basic reporting",
         "Standard API access",
-        "Basic reporting"
+        "Pay only for what you use"
       ],
-      buttonText: "Start Annual Plan",
-      highlighted: false,
-      isPromo: true,
-      slotsLeft: getInitialSlots('starter')
-    },
-    {
-      name: "Professional",
-      price: "$149",
-      period: "per month",
-      description: "Advanced protection for growing businesses",
-      promotion: "First 1000 annual subscribers lock in 50% off + 3M API calls/month for life",
-      features: [
-        "Up to 25,000 API calls/month",
-        "Advanced ML detection",
-        "24/7 priority support",
-        "Custom rule engine",
-        "Webhook integrations",
-        "Advanced analytics"
-      ],
-      buttonText: "Get Annual Plan",
+      buttonText: "Start Free Trial",
       highlighted: true,
-      isPromo: true,
-      slotsLeft: getInitialSlots('professional')
+      isPromo: true
     },
     {
       name: "Enterprise",
       price: "Custom",
       period: "contact sales",
-      description: "Tailored solutions for large organizations",
+      description: "Tailored solutions for large organizations with specific needs",
       features: [
-        "Unlimited API calls",
+        "Volume discounts",
         "Custom ML models",
-        "Dedicated support team",
+        "24/7 dedicated support",
         "Multi-region deployment",
         "SLA guarantee",
         "Custom reporting"
@@ -98,11 +51,11 @@ export const PricingPlans = () => {
             Simple, Transparent Pricing
           </h2>
           <p className="text-xl text-green-300/80 max-w-3xl mx-auto">
-            Choose the plan that best fits your business needs
+            Only pay for what you use, with no hidden fees
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {plans.map((plan, index) => (
             <div
               key={index}
@@ -114,13 +67,8 @@ export const PricingPlans = () => {
                 <div className="space-y-2 mb-4">
                   <Badge variant="secondary" className="bg-green-500/20 text-green-300">
                     <Sparkles className="w-4 h-4 mr-1" />
-                    Early Bird Offer
+                    Special Offer
                   </Badge>
-                  {plan.slotsLeft && plan.slotsLeft > 0 && (
-                    <div className="text-sm text-green-300 bg-green-500/10 p-2 rounded-md">
-                      <span className="font-bold">{plan.slotsLeft}</span> slots remaining
-                    </div>
-                  )}
                 </div>
               )}
               <h3 className="text-2xl font-semibold text-green-300 mb-2">
@@ -129,11 +77,6 @@ export const PricingPlans = () => {
               <div className="mb-4">
                 <span className="text-4xl font-bold text-green-400">{plan.price}</span>
                 <span className="text-green-300/80 ml-2">{plan.period}</span>
-                {plan.isPromo && (
-                  <div className="text-sm text-green-300/80 mt-1">
-                    Billed annually
-                  </div>
-                )}
               </div>
               <p className="text-green-300/80 mb-4">
                 {plan.description}
