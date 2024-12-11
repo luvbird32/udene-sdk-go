@@ -35,7 +35,7 @@ export const UserTableRow = ({ user, onRoleChange, onStatusToggle }: UserTableRo
   const getStatusBadgeVariant = () => {
     switch (user.status) {
       case "active":
-        return "success";
+        return "secondary";  // Changed from 'success' to 'secondary'
       case "blocked":
         return "destructive";
       case "suspended":
