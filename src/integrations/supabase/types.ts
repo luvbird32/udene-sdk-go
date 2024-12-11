@@ -12,25 +12,31 @@ export type Database = {
       api_keys: {
         Row: {
           created_at: string | null
+          description: string | null
           id: string
           key_value: string
           name: string
+          project_id: string | null
           status: string
           updated_at: string | null
         }
         Insert: {
           created_at?: string | null
+          description?: string | null
           id?: string
           key_value: string
           name: string
+          project_id?: string | null
           status?: string
           updated_at?: string | null
         }
         Update: {
           created_at?: string | null
+          description?: string | null
           id?: string
           key_value?: string
           name?: string
+          project_id?: string | null
           status?: string
           updated_at?: string | null
         }
