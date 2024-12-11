@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -9,24 +9,64 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export const ApiCreditsDisplay = () => {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
-  const { data: credits } = useQuery({
-    queryKey: ["api-credits"],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("No user found");
-
+  // Initialize credits mutation
+  const initializeCredits = useMutation({
+    mutationFn: async (userId: string) => {
       const { data, error } = await supabase
         .from('api_credits')
-        .select('*')
-        .eq('user_id', user.id)
+        .insert([{ user_id: userId }])
+        .select()
         .single();
 
       if (error) throw error;
       return data;
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["api-credits"] });
+    },
+  });
+
+  const { data: credits, isError } = useQuery({
+    queryKey: ["api-credits"],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
+
+      // Try to get existing credits
+      const { data, error } = await supabase
+        .from('api_credits')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      // If no record exists and no error, initialize credits
+      if (!data && !error) {
+        const { data: newCredits } = await initializeCredits.mutateAsync(user.id);
+        return newCredits;
+      }
+
+      if (error && error.code !== 'PGRST116') throw error;
+      return data;
+    },
     refetchInterval: 30000, // Refresh every 30 seconds
   });
+
+  // Show error state
+  if (isError) {
+    return (
+      <Card className="p-6">
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>
+            Failed to load API credits. Please try again later.
+          </AlertDescription>
+        </Alert>
+      </Card>
+    );
+  }
 
   // Calculate usage percentage
   const usagePercentage = credits ? 
