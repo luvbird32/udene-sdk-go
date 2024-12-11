@@ -42,7 +42,7 @@ export const ClientProfile = () => {
 
       if (error) throw error;
       
-      const preferences = data.preferences as ProfilePreferences || {
+      const preferences = (data.preferences as ProfilePreferences) || {
         notifications: { email: true, sms: false },
         theme: "light"
       };
@@ -75,7 +75,7 @@ export const ClientProfile = () => {
           organization_role: formData.organization_role,
           phone_number: formData.phone_number,
           timezone: formData.timezone,
-          preferences: formData.preferences,
+          preferences: formData.preferences as any,
           updated_at: new Date().toISOString(),
         })
         .eq("id", user.id);
