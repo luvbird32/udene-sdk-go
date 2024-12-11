@@ -1,5 +1,5 @@
 import { useToast } from "@/components/ui/use-toast";
-import { Settings, Users, Shield, Activity, Database, Server, BarChart2, Users2 } from "lucide-react";
+import { Settings, Shield, Activity, Database, Server, BarChart2, Users2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -79,13 +79,6 @@ const Dashboard = () => {
         </div>
         <div className="flex items-center gap-4">
           <Link 
-            to="/users" 
-            className="flex items-center gap-2 px-6 py-3 rounded-md hover:bg-green-900/20 transition-all duration-300 glass-card"
-          >
-            <Users className="h-5 w-5" />
-            <span>Users</span>
-          </Link>
-          <Link 
             to="/settings" 
             className="flex items-center gap-2 px-6 py-3 rounded-md hover:bg-green-900/20 transition-all duration-300 glass-card"
           >
@@ -105,7 +98,7 @@ const Dashboard = () => {
               System Overview
             </TabsTrigger>
             <TabsTrigger value="users" className="data-[state=active]:bg-green-900/40">
-              <Users className="h-4 w-4 mr-2" />
+              <Users2 className="h-4 w-4 mr-2" />
               User Management
             </TabsTrigger>
             <TabsTrigger value="client-analytics" className="data-[state=active]:bg-green-900/40">
