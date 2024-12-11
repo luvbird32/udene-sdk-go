@@ -83,6 +83,17 @@ const FRAUD_DETECTION_SERVICES = [
       "Referral chain analysis",
       "Reward distribution monitoring"
     ]
+  },
+  {
+    type: "affiliate_fraud",
+    title: "Affiliate Program Protection",
+    description: "Detect and prevent fraudulent affiliate marketing activities",
+    features: [
+      "Click fraud detection",
+      "Cookie stuffing prevention",
+      "Traffic quality analysis",
+      "Commission pattern monitoring"
+    ]
   }
 ];
 
