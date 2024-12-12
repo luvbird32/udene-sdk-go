@@ -11,4 +11,4 @@ export * from './ml';
 export * from './client-services';
 export * from './investigation';
 export * from './affiliate';
-export * from './trial';
+export type { TrialUsage, TrialUsageInsert, TrialUsageUpdate } from './trial';

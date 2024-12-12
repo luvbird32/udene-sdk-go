@@ -1,5 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import { TrialUsage, TrialUsageInsert } from "@/integrations/supabase/types";
+import type { TrialUsage, TrialUsageInsert } from "@/integrations/supabase/types";
 
 export const createTrialUsage = async (userId: string, trialType: string) => {
   try {
