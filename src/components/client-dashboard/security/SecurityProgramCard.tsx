@@ -2,23 +2,17 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Shield, Calendar, AlertCircle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { Tables } from "@/integrations/supabase/types";
+
+type SecurityProgram = Tables<'product_security_programs'>;
 
 interface SecurityProgramProps {
-  program: {
-    name: string;
-    description: string;
-    status: string;
-    type: string;
-    last_audit_date: string;
-    next_audit_date: string;
-    risk_assessment: {
-      level?: string;
-      score?: number;
-    };
-  };
+  program: SecurityProgram;
 }
 
 export const SecurityProgramCard = ({ program }: SecurityProgramProps) => {
+  const riskAssessment = program.risk_assessment as { level?: string; score?: number } | null;
+
   return (
     <Card className="p-6 space-y-4">
       <div className="flex items-start justify-between">
@@ -56,12 +50,12 @@ export const SecurityProgramCard = ({ program }: SecurityProgramProps) => {
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-sm">
             <AlertCircle className="h-4 w-4" />
-            <span>Risk Level: {program.risk_assessment?.level || 'Not assessed'}</span>
+            <span>Risk Level: {riskAssessment?.level || 'Not assessed'}</span>
           </div>
-          {program.risk_assessment?.score !== undefined && (
+          {riskAssessment?.score !== undefined && (
             <div className="flex items-center gap-2 text-sm">
               <AlertCircle className="h-4 w-4" />
-              <span>Risk Score: {program.risk_assessment.score}</span>
+              <span>Risk Score: {riskAssessment.score}</span>
             </div>
           )}
         </div>

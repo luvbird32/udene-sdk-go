@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SecurityProgramCard } from "./SecurityProgramCard";
 import { Card } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
+import { Tables } from "@/integrations/supabase/types";
 
 export const SecurityProgramList = () => {
   const { data: programs, isLoading } = useQuery({
@@ -14,7 +15,7 @@ export const SecurityProgramList = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data;
+      return data as Tables<'product_security_programs'>[];
     },
   });
 
