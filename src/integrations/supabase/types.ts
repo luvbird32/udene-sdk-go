@@ -562,6 +562,66 @@ export type Database = {
           },
         ]
       }
+      identity_verifications: {
+        Row: {
+          created_at: string | null
+          document_country: string | null
+          document_expiry: string | null
+          document_files: Json | null
+          document_number: string | null
+          document_type: string | null
+          id: string
+          rejection_reason: string | null
+          risk_flags: Json | null
+          selfie_file: string | null
+          status: string
+          updated_at: string | null
+          user_id: string | null
+          verification_data: Json | null
+          verification_score: number | null
+          verification_type: string
+          verified_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          document_country?: string | null
+          document_expiry?: string | null
+          document_files?: Json | null
+          document_number?: string | null
+          document_type?: string | null
+          id?: string
+          rejection_reason?: string | null
+          risk_flags?: Json | null
+          selfie_file?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id?: string | null
+          verification_data?: Json | null
+          verification_score?: number | null
+          verification_type: string
+          verified_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          document_country?: string | null
+          document_expiry?: string | null
+          document_files?: Json | null
+          document_number?: string | null
+          document_type?: string | null
+          id?: string
+          rejection_reason?: string | null
+          risk_flags?: Json | null
+          selfie_file?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id?: string | null
+          verification_data?: Json | null
+          verification_score?: number | null
+          verification_type?: string
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
       metrics: {
         Row: {
           id: string
@@ -1322,6 +1382,50 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      verification_attempts: {
+        Row: {
+          attempt_data: Json | null
+          attempt_type: string
+          created_at: string | null
+          failure_reason: string | null
+          id: string
+          ip_address: string | null
+          success: boolean | null
+          user_agent: string | null
+          verification_id: string | null
+        }
+        Insert: {
+          attempt_data?: Json | null
+          attempt_type: string
+          created_at?: string | null
+          failure_reason?: string | null
+          id?: string
+          ip_address?: string | null
+          success?: boolean | null
+          user_agent?: string | null
+          verification_id?: string | null
+        }
+        Update: {
+          attempt_data?: Json | null
+          attempt_type?: string
+          created_at?: string | null
+          failure_reason?: string | null
+          id?: string
+          ip_address?: string | null
+          success?: boolean | null
+          user_agent?: string | null
+          verification_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "verification_attempts_verification_id_fkey"
+            columns: ["verification_id"]
+            isOneToOne: false
+            referencedRelation: "identity_verifications"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       webhook_deliveries: {
         Row: {
