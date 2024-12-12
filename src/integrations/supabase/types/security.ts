@@ -1,4 +1,4 @@
-import { Database } from "./database";
+import { Database } from './database';
 
 export type SecurityProgram = Database['public']['Tables']['product_security_programs']['Row'];
 export type SecurityProgramInsert = Database['public']['Tables']['product_security_programs']['Insert'];

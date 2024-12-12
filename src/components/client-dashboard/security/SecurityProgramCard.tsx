@@ -2,9 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Shield, Calendar, AlertCircle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import { Tables } from "@/integrations/supabase/types";
-
-type SecurityProgram = Tables<'product_security_programs'>;
+import { SecurityProgram } from "@/integrations/supabase/types/security";
 
 interface SecurityProgramProps {
   program: SecurityProgram;
