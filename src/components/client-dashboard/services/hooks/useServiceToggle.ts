@@ -4,19 +4,14 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useToast } from "@/components/ui/use-toast";
 import { useBotDetection } from "@/hooks/useBotDetection";
 
-interface ToggleServiceParams {
-  serviceType: string;
-  isActive: boolean;
-}
-
 export const useServiceToggle = () => {
   const queryClient = useQueryClient();
   const { data: currentUser } = useCurrentUser();
   const { toast } = useToast();
   const { isBotDetected } = useBotDetection();
 
-  return useMutation({
-    mutationFn: async ({ serviceType, isActive }: ToggleServiceParams) => {
+  const toggleService = useMutation({
+    mutationFn: async ({ serviceType, isActive }: { serviceType: string; isActive: boolean }) => {
       if (!currentUser?.id) throw new Error("No user found");
       
       if (isBotDetected) {
@@ -72,4 +67,6 @@ export const useServiceToggle = () => {
       });
     }
   });
+
+  return toggleService;
 };

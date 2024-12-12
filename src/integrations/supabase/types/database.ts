@@ -13,7 +13,6 @@ import { SecurityProgramsTable, SecurityAssessmentsTable, ComplianceReportsTable
 import { WebhooksTable, WebhookDeliveriesTable } from './tables/webhook-tables';
 import { ReferralTrackingTable } from './tables/referral-tables';
 import { TrialUsageTable } from './tables/trial-tables';
-import { PromoCodesTable, PromoCodeUsageTable } from './tables/promo-tables';
 
 export type Json =
   | string
@@ -53,8 +52,6 @@ export interface Database {
       affiliate_activities: AffiliateActivitiesTable;
       referral_tracking: ReferralTrackingTable;
       trial_usage: TrialUsageTable;
-      promo_codes: PromoCodesTable;
-      promo_code_usage: PromoCodeUsageTable;
     };
     Views: {
       [_ in never]: never
