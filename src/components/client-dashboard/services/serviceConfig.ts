@@ -169,5 +169,17 @@ export const FRAUD_DETECTION_SERVICES = [
       'Password Security',
       'Session Management'
     ]
+  },
+  {
+    type: 'promo_code_protection',
+    title: 'Promo Code Protection',
+    description: 'Advanced protection against promo code abuse and fraud',
+    features: [
+      'Usage Pattern Analysis',
+      'Multi-account Detection',
+      'IP Address Monitoring',
+      'Device Fingerprinting',
+      'Risk Scoring'
+    ]
   }
 ];
