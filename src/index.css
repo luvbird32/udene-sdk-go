@@ -59,27 +59,27 @@
     @apply bg-background text-foreground font-['Inter'];
   }
   
-  /* Light mode styles */
-  :root:not(.dark) body {
-    @apply bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50;
+  /* Force dark mode on landing page */
+  [data-landing-page="true"] {
+    @apply dark bg-gradient-to-br from-black via-gray-900 to-black;
   }
   
-  /* Dark mode styles */
-  .dark body {
-    @apply bg-gradient-to-br from-black via-gray-900 to-black;
+  /* Light mode styles (only for non-landing pages) */
+  :root:not(.dark) [data-landing-page="false"] {
+    @apply bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50;
   }
 }
 
+/* Glass effects */
 .glass-card {
   @apply backdrop-blur-xl border shadow-xl;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
 }
 
-.dark .glass-card {
+[data-landing-page="true"] .glass-card {
   @apply bg-black/30 border-white/10;
 }
 
-:root:not(.dark) .glass-card {
+[data-landing-page="false"]:not(.dark) .glass-card {
   @apply bg-white/70 border-gray-200/50;
 }
 
@@ -87,59 +87,18 @@
   @apply fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-b;
 }
 
-.dark .glass-nav {
+[data-landing-page="true"] .glass-nav {
   @apply bg-black/20 border-white/10;
 }
 
-:root:not(.dark) .glass-nav {
+[data-landing-page="false"]:not(.dark) .glass-nav {
   @apply bg-white/70 border-gray-200/50;
 }
 
-.glass-button {
-  @apply backdrop-blur-md transition-all duration-300;
-}
-
-.dark .glass-button {
-  @apply bg-white/10 hover:bg-white/20 border-white/20;
-}
-
-:root:not(.dark) .glass-button {
-  @apply bg-white/80 hover:bg-white/90 border-gray-200/50;
-}
-
-.glass-input {
-  @apply backdrop-blur-md transition-all duration-300;
-}
-
-.dark .glass-input {
-  @apply bg-black/20 border-white/20 focus:border-white/40;
-}
-
-:root:not(.dark) .glass-input {
-  @apply bg-white/80 border-gray-200/50 focus:border-gray-300;
-}
-
-.glass-section {
-  @apply relative backdrop-blur-sm border-y;
-}
-
-.dark .glass-section {
-  @apply bg-gradient-to-br from-black/40 via-black/20 to-black/40 border-white/10;
-}
-
-:root:not(.dark) .glass-section {
-  @apply bg-gradient-to-br from-white/40 via-white/20 to-white/40 border-gray-200/50;
-}
-
+/* Animations */
 @keyframes fall {
-  0% {
-    transform: translateY(-100%);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(1000%);
-    opacity: 0;
-  }
+  0% { transform: translateY(-100%); opacity: 1; }
+  100% { transform: translateY(1000%); opacity: 0; }
 }
 
 .animate-fall {
@@ -147,12 +106,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
 
 .glow {
@@ -172,14 +127,8 @@
 }
 
 @keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
@@ -187,12 +136,8 @@
 }
 
 @keyframes spin-slow {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .animate-spin-slow {
@@ -200,12 +145,8 @@
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .animate-shimmer {
