@@ -98,5 +98,22 @@ export const FRAUD_DETECTION_SERVICES = [
       "Traffic quality analysis",
       "Commission pattern monitoring"
     ]
+  },
+  {
+    type: "bec_prevention",
+    title: "Business Email Compromise Prevention",
+    description: "Advanced detection and prevention of business email compromise attacks",
+    features: [
+      "Email pattern analysis",
+      "Domain spoofing detection",
+      "Behavioral anomaly detection",
+      "Real-time monitoring",
+      "Executive impersonation prevention",
+      "Vendor email compromise detection",
+      "Payment fraud prevention",
+      "Multi-factor authentication triggers",
+      "Suspicious IP detection",
+      "Email header analysis"
+    ]
   }
 ];
