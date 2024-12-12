@@ -792,6 +792,36 @@ export type Database = {
         }
         Relationships: []
       }
+      reward_program_rules: {
+        Row: {
+          created_at: string | null
+          id: string
+          max_daily_points: number | null
+          max_daily_redemptions: number | null
+          program_type: string
+          suspicious_patterns: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          max_daily_points?: number | null
+          max_daily_redemptions?: number | null
+          program_type: string
+          suspicious_patterns?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          max_daily_points?: number | null
+          max_daily_redemptions?: number | null
+          program_type?: string
+          suspicious_patterns?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       rewards_transactions: {
         Row: {
           created_at: string | null
@@ -802,9 +832,13 @@ export type Database = {
           points_earned: number
           points_redeemed: number
           program_type: string
+          redemption_pattern: Json | null
+          risk_indicators: Json | null
           transaction_id: string | null
+          transaction_pattern: Json | null
           updated_at: string | null
           user_id: string
+          velocity_score: number | null
         }
         Insert: {
           created_at?: string | null
@@ -815,9 +849,13 @@ export type Database = {
           points_earned?: number
           points_redeemed?: number
           program_type: string
+          redemption_pattern?: Json | null
+          risk_indicators?: Json | null
           transaction_id?: string | null
+          transaction_pattern?: Json | null
           updated_at?: string | null
           user_id: string
+          velocity_score?: number | null
         }
         Update: {
           created_at?: string | null
@@ -828,9 +866,13 @@ export type Database = {
           points_earned?: number
           points_redeemed?: number
           program_type?: string
+          redemption_pattern?: Json | null
+          risk_indicators?: Json | null
           transaction_id?: string | null
+          transaction_pattern?: Json | null
           updated_at?: string | null
           user_id?: string
+          velocity_score?: number | null
         }
         Relationships: [
           {
