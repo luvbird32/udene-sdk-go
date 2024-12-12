@@ -339,6 +339,110 @@ export type Database = {
         }
         Relationships: []
       }
+      device_fingerprint_history: {
+        Row: {
+          change_type: string
+          changes: Json
+          created_at: string | null
+          device_fingerprint_id: string | null
+          id: string
+        }
+        Insert: {
+          change_type: string
+          changes: Json
+          created_at?: string | null
+          device_fingerprint_id?: string | null
+          id?: string
+        }
+        Update: {
+          change_type?: string
+          changes?: Json
+          created_at?: string | null
+          device_fingerprint_id?: string | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "device_fingerprint_history_device_fingerprint_id_fkey"
+            columns: ["device_fingerprint_id"]
+            isOneToOne: false
+            referencedRelation: "device_fingerprints"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      device_fingerprints: {
+        Row: {
+          audio_fingerprint: string | null
+          browser_info: Json
+          canvas_fingerprint: string | null
+          color_depth: number | null
+          created_at: string | null
+          fingerprint_hash: string
+          font_fingerprint: Json | null
+          hardware_info: Json
+          id: string
+          is_suspicious: boolean | null
+          language_info: string | null
+          last_seen: string | null
+          network_info: Json
+          os_info: Json
+          plugin_fingerprint: Json | null
+          risk_score: number | null
+          screen_resolution: string | null
+          timezone_info: string | null
+          updated_at: string | null
+          user_id: string | null
+          webgl_fingerprint: string | null
+        }
+        Insert: {
+          audio_fingerprint?: string | null
+          browser_info: Json
+          canvas_fingerprint?: string | null
+          color_depth?: number | null
+          created_at?: string | null
+          fingerprint_hash: string
+          font_fingerprint?: Json | null
+          hardware_info: Json
+          id?: string
+          is_suspicious?: boolean | null
+          language_info?: string | null
+          last_seen?: string | null
+          network_info: Json
+          os_info: Json
+          plugin_fingerprint?: Json | null
+          risk_score?: number | null
+          screen_resolution?: string | null
+          timezone_info?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          webgl_fingerprint?: string | null
+        }
+        Update: {
+          audio_fingerprint?: string | null
+          browser_info?: Json
+          canvas_fingerprint?: string | null
+          color_depth?: number | null
+          created_at?: string | null
+          fingerprint_hash?: string
+          font_fingerprint?: Json | null
+          hardware_info?: Json
+          id?: string
+          is_suspicious?: boolean | null
+          language_info?: string | null
+          last_seen?: string | null
+          network_info?: Json
+          os_info?: Json
+          plugin_fingerprint?: Json | null
+          risk_score?: number | null
+          screen_resolution?: string | null
+          timezone_info?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          webgl_fingerprint?: string | null
+        }
+        Relationships: []
+      }
       email_reputation: {
         Row: {
           email: string
