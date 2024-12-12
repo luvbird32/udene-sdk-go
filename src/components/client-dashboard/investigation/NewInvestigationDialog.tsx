@@ -6,6 +6,9 @@ import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
+import { Database } from "@/integrations/supabase/types";
+
+type InvestigationLog = Database['public']['Tables']['service_investigation_logs']['Row'];
 
 interface NewInvestigationDialogProps {
   open: boolean;

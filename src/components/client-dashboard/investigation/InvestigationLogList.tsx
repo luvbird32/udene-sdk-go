@@ -33,9 +33,12 @@ export const InvestigationLogList = ({ logs }: InvestigationLogListProps) => {
     if (!findings) return "No findings recorded";
     try {
       const findingsObj = typeof findings === 'string' ? JSON.parse(findings) : findings;
-      return Object.entries(findingsObj)
-        .map(([key, value]) => `${key}: ${value}`)
-        .join(', ');
+      if (typeof findingsObj === 'object' && findingsObj !== null) {
+        return Object.entries(findingsObj)
+          .map(([key, value]) => `${key}: ${value}`)
+          .join(', ');
+      }
+      return String(findingsObj);
     } catch {
       return "Unable to parse findings";
     }
@@ -75,11 +78,11 @@ export const InvestigationLogList = ({ logs }: InvestigationLogListProps) => {
                 </div>
               </div>
 
-              {log.sanitization_steps && log.sanitization_steps.length > 0 && (
+              {Array.isArray(log.sanitization_steps) && log.sanitization_steps.length > 0 && (
                 <div>
                   <h4 className="text-sm font-medium mb-1">Sanitization Steps</h4>
                   <ul className="list-disc list-inside text-sm text-muted-foreground">
-                    {(log.sanitization_steps as string[]).map((step, index) => (
+                    {log.sanitization_steps.map((step: string, index: number) => (
                       <li key={index}>{step}</li>
                     ))}
                   </ul>
