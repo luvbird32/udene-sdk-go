@@ -2,11 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, FileText, Search, AlertCircle } from "lucide-react";
+import { Plus, FileText } from "lucide-react";
 import { useState } from "react";
 import { NewInvestigationDialog } from "./NewInvestigationDialog";
 import { InvestigationLogList } from "./InvestigationLogList";
 import { useToast } from "@/components/ui/use-toast";
+import { Database } from "@/integrations/supabase/types";
+
+type InvestigationLog = Database['public']['Tables']['service_investigation_logs']['Row'];
 
 export const InvestigationLogs = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -29,7 +32,7 @@ export const InvestigationLogs = () => {
         throw error;
       }
 
-      return data;
+      return data as InvestigationLog[];
     },
   });
 

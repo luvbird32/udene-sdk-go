@@ -125,14 +125,6 @@ const ClientDashboard = () => {
             <GeographicDistribution />
           </div>
 
-          <FraudPatterns />
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <ReferralFraudMonitoring />
-            <RomanceScamMonitoring />
-            <RewardProgramMonitoring />
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <PeakTransactionTimes />
             <RiskDistribution />

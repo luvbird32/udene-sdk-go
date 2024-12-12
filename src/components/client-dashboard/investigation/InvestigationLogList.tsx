@@ -2,17 +2,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
+import { Database } from "@/integrations/supabase/types";
 
-interface Log {
-  id: string;
-  investigation_type: string;
-  status: string;
-  created_at: string;
-  notes: string;
-}
+type InvestigationLog = Database['public']['Tables']['service_investigation_logs']['Row'];
 
 interface InvestigationLogListProps {
-  logs: Log[];
+  logs: InvestigationLog[];
 }
 
 export const InvestigationLogList = ({ logs }: InvestigationLogListProps) => {
@@ -45,7 +40,7 @@ export const InvestigationLogList = ({ logs }: InvestigationLogListProps) => {
                 </Badge>
               </div>
               <p className="text-sm text-muted-foreground mt-1">
-                Created on {format(new Date(log.created_at), "MMM d, yyyy")}
+                Created on {format(new Date(log.created_at || ''), "MMM d, yyyy")}
               </p>
               <p className="mt-2 text-sm">{log.notes}</p>
             </div>
