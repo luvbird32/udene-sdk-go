@@ -2,15 +2,19 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { useServiceToggle } from "./hooks/useServiceToggle";
-import { ClientService } from "@/integrations/supabase/types";
+import { Tables } from "@/integrations/supabase/types";
 
 interface ServiceCardProps {
-  service: ClientService;
+  service: Tables<'client_services'>;
   hasPromoCode?: boolean;
 }
 
 export const ServiceCard = ({ service, hasPromoCode }: ServiceCardProps) => {
-  const { isEnabled, toggleService, isLoading } = useServiceToggle(service.id);
+  const { mutate: toggleService, isLoading } = useServiceToggle(service.id);
+
+  const handleToggle = (checked: boolean) => {
+    toggleService({ serviceId: service.id, isActive: checked });
+  };
 
   return (
     <Card className="relative">
@@ -35,11 +39,11 @@ export const ServiceCard = ({ service, hasPromoCode }: ServiceCardProps) => {
       </CardContent>
       <CardFooter className="flex justify-between items-center">
         <span className="text-sm text-muted-foreground">
-          {isEnabled ? "Enabled" : "Disabled"}
+          {service.is_active ? "Enabled" : "Disabled"}
         </span>
         <Switch
-          checked={isEnabled}
-          onCheckedChange={toggleService}
+          checked={service.is_active}
+          onCheckedChange={handleToggle}
           disabled={isLoading}
         />
       </CardFooter>

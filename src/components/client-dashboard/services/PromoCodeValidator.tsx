@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { Tables } from "@/integrations/supabase/types";
 
 interface PromoCodeValidatorProps {
   onValidCode: (code: string) => void;
@@ -34,7 +35,9 @@ export const PromoCodeValidator = ({ onValidCode }: PromoCodeValidatorProps) => 
         return;
       }
 
-      if (promoCode.times_used >= promoCode.usage_limit) {
+      const typedPromoCode = promoCode as Tables<'promo_codes'>;
+
+      if (typedPromoCode.times_used >= typedPromoCode.usage_limit) {
         toast({
           title: "Code Expired",
           description: "This promo code has reached its usage limit.",
@@ -43,7 +46,7 @@ export const PromoCodeValidator = ({ onValidCode }: PromoCodeValidatorProps) => 
         return;
       }
 
-      if (promoCode.expires_at && new Date(promoCode.expires_at) < new Date()) {
+      if (typedPromoCode.expires_at && new Date(typedPromoCode.expires_at) < new Date()) {
         toast({
           title: "Code Expired",
           description: "This promo code has expired.",
@@ -56,7 +59,7 @@ export const PromoCodeValidator = ({ onValidCode }: PromoCodeValidatorProps) => 
       const { error: usageError } = await supabase
         .from('promo_code_usage')
         .insert({
-          promo_code_id: promoCode.id,
+          promo_code_id: typedPromoCode.id,
           ip_address: window.location.hostname,
           device_fingerprint: navigator.userAgent,
         });
