@@ -2,21 +2,44 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import type { Database } from "@/integrations/supabase/types/database";
+import { useEffect, useState } from "react";
 
 type ClientService = Database['public']['Tables']['client_services']['Row'];
 
 export const useServices = () => {
   const { toast } = useToast();
+  const [userId, setUserId] = useState<string | null>(null);
+
+  // Get and track the current user's ID
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUserId(session?.user?.id || null);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserId(session?.user?.id || null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   return useQuery({
-    queryKey: ["client-services"],
+    queryKey: ["client-services", userId],
     queryFn: async () => {
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
+
       try {
         const { data: services, error } = await supabase
           .from('client_services')
-          .select('*');
+          .select('*')
+          .eq('user_id', userId);
 
         if (error) {
+          console.error('Supabase error:', error);
           toast({
             title: "Error loading services",
             description: error.message,
@@ -24,6 +47,7 @@ export const useServices = () => {
           });
           throw error;
         }
+
         return services as ClientService[];
       } catch (error) {
         console.error('Error fetching services:', error);
@@ -35,6 +59,7 @@ export const useServices = () => {
         throw error;
       }
     },
+    enabled: !!userId, // Only run query when we have a userId
     retry: 3,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
