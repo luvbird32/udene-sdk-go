@@ -119,3 +119,51 @@ export interface RewardsTransactionsTable {
     updated_at?: string | null;
   };
 }
+
+export interface AffiliateActivitiesTable {
+  Row: {
+    id: string;
+    affiliate_id: string;
+    click_id: string | null;
+    conversion_id: string | null;
+    ip_address: string | null;
+    user_agent: string | null;
+    transaction_amount: number | null;
+    commission_amount: number | null;
+    status: string | null;
+    risk_score: number | null;
+    fraud_indicators: Json | null;
+    created_at: string | null;
+    updated_at: string | null;
+  };
+  Insert: {
+    id?: string;
+    affiliate_id: string;
+    click_id?: string | null;
+    conversion_id?: string | null;
+    ip_address?: string | null;
+    user_agent?: string | null;
+    transaction_amount?: number | null;
+    commission_amount?: number | null;
+    status?: string | null;
+    risk_score?: number | null;
+    fraud_indicators?: Json | null;
+    created_at?: string | null;
+    updated_at?: string | null;
+  };
+  Update: {
+    id?: string;
+    affiliate_id?: string;
+    click_id?: string | null;
+    conversion_id?: string | null;
+    ip_address?: string | null;
+    user_agent?: string | null;
+    transaction_amount?: number | null;
+    commission_amount?: number | null;
+    status?: string | null;
+    risk_score?: number | null;
+    fraud_indicators?: Json | null;
+    created_at?: string | null;
+    updated_at?: string | null;
+  };
+}
