@@ -6,9 +6,7 @@ import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
-import { Database } from "@/integrations/supabase/types";
-
-type InvestigationLog = Database['public']['Tables']['service_investigation_logs']['Row'];
+import { InvestigationLogInsert } from "@/integrations/supabase/types/investigation";
 
 interface NewInvestigationDialogProps {
   open: boolean;
@@ -48,18 +46,20 @@ export const NewInvestigationDialog = ({ open, onOpenChange }: NewInvestigationD
       if (servicesError) throw servicesError;
       if (!services) throw new Error("No active service found");
 
+      const newLog: InvestigationLogInsert = {
+        user_id: user.id,
+        service_id: services.id,
+        investigation_type: type,
+        notes,
+        status: 'pending',
+        findings: {},
+        sanitization_steps: [],
+        manual_actions: []
+      };
+
       const { error } = await supabase
         .from('service_investigation_logs')
-        .insert({
-          user_id: user.id,
-          service_id: services.id,
-          investigation_type: type,
-          notes,
-          status: 'pending',
-          findings: {},
-          sanitization_steps: [],
-          manual_actions: []
-        });
+        .insert(newLog);
 
       if (error) throw error;
 

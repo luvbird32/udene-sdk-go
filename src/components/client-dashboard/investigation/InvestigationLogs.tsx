@@ -7,9 +7,7 @@ import { useState } from "react";
 import { NewInvestigationDialog } from "./NewInvestigationDialog";
 import { InvestigationLogList } from "./InvestigationLogList";
 import { useToast } from "@/components/ui/use-toast";
-import { Database } from "@/integrations/supabase/types";
-
-type InvestigationLog = Database['public']['Tables']['service_investigation_logs']['Row'];
+import { InvestigationLog } from "@/integrations/supabase/types/investigation";
 
 export const InvestigationLogs = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
