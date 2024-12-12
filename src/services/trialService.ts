@@ -1,5 +1,12 @@
 import { supabase } from "@/integrations/supabase/client";
-import type { TrialUsage, TrialUsageInsert } from "@/integrations/supabase/types";
+import type { Tables } from "@/integrations/supabase/types";
+
+type TrialUsage = Tables<'trial_usage'>;
+type TrialUsageInsert = Omit<TrialUsage, 'id' | 'created_at' | 'updated_at'> & {
+  id?: string;
+  created_at?: string | null;
+  updated_at?: string | null;
+};
 
 export const createTrialUsage = async (userId: string, trialType: string) => {
   try {
