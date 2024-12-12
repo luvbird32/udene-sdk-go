@@ -1,7 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { AffiliateActivity } from "@/integrations/supabase/types/affiliate";
 
-export const createAffiliateActivity = async (activityData: Partial<AffiliateActivity>) => {
+export const createAffiliateActivity = async (activityData: Partial<Omit<AffiliateActivity, 'affiliate_id'>> & { affiliate_id: string }) => {
   try {
     // First create the activity record
     const { data: activity, error: createError } = await supabase
