@@ -9,7 +9,7 @@ import { FraudAlertsTable, EmailReputationTable } from './tables/fraud-tables';
 import { TransactionsTable, RewardsTransactionsTable, AffiliateActivitiesTable } from './tables/transaction-tables';
 import { MLModelsTable, TrainingDatasetsTable } from './tables/ml-tables';
 import { UserActivitiesTable, UserNotificationsTable } from './tables/user-tables';
-import { SecurityAssessmentsTable, ComplianceReportsTable } from './tables/security-tables';
+import { SecurityProgramsTable, SecurityAssessmentsTable } from './tables/security-tables';
 import { WebhooksTable, WebhookDeliveriesTable } from './tables/webhook-tables';
 import { ReferralTrackingTable } from './tables/referral-tables';
 import { TrialUsageTable } from './tables/trial-tables';
@@ -44,8 +44,8 @@ export interface Database {
       training_datasets: TrainingDatasetsTable;
       user_activities: UserActivitiesTable;
       user_notifications: UserNotificationsTable;
+      product_security_programs: SecurityProgramsTable;
       security_assessments: SecurityAssessmentsTable;
-      compliance_reports: ComplianceReportsTable;
       webhooks: WebhooksTable;
       webhook_deliveries: WebhookDeliveriesTable;
       affiliate_activities: AffiliateActivitiesTable;
