@@ -19,7 +19,7 @@ export const HeroSection = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row justify-center gap-4 items-center">
-          <Link to="/dashboard">
+          <Link to="/client-dashboard">
             <Button className="bg-green-600 hover:bg-green-700 text-white px-8 py-6 rounded-lg flex items-center gap-2 text-lg transition-all duration-300 hover:scale-105">
               Start Free Trial <ArrowRight className="w-5 h-5" />
             </Button>
