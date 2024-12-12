@@ -73,67 +73,62 @@ export const WebhookForm = () => {
   });
 
   return (
-    <Card className="p-6">
-      <div className="space-y-4">
-        <div className="flex items-center gap-2">
-          <Webhook className="h-5 w-5" />
-          <h3 className="text-lg font-semibold">Add New Webhook</h3>
-        </div>
+    <div className="space-y-4">
+      <div>
+        <Label htmlFor="url">Webhook URL</Label>
+        <Input
+          id="url"
+          placeholder="https://your-domain.com/webhook"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          className="font-mono"
+        />
+      </div>
 
-        <div className="space-y-4">
-          <div>
-            <Label htmlFor="url">Webhook URL</Label>
-            <Input
-              id="url"
-              placeholder="https://your-domain.com/webhook"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-            />
-          </div>
+      <div>
+        <Label htmlFor="description">Description (optional)</Label>
+        <Textarea
+          id="description"
+          placeholder="Describe the purpose of this webhook"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </div>
 
-          <div>
-            <Label htmlFor="description">Description (optional)</Label>
-            <Textarea
-              id="description"
-              placeholder="Describe the purpose of this webhook"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Events</Label>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {AVAILABLE_EVENTS.map((event) => (
-                <div key={event} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={event}
-                    checked={selectedEvents.includes(event)}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        setSelectedEvents([...selectedEvents, event]);
-                      } else {
-                        setSelectedEvents(selectedEvents.filter(e => e !== event));
-                      }
-                    }}
-                  />
-                  <Label htmlFor={event} className="text-sm">
-                    {event.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                  </Label>
-                </div>
-              ))}
+      <div className="space-y-2">
+        <Label>Events to Subscribe</Label>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-4 border rounded-lg">
+          {AVAILABLE_EVENTS.map((event) => (
+            <div key={event} className="flex items-center space-x-2">
+              <Checkbox
+                id={event}
+                checked={selectedEvents.includes(event)}
+                onCheckedChange={(checked) => {
+                  if (checked) {
+                    setSelectedEvents([...selectedEvents, event]);
+                  } else {
+                    setSelectedEvents(selectedEvents.filter(e => e !== event));
+                  }
+                }}
+              />
+              <Label 
+                htmlFor={event} 
+                className="text-sm cursor-pointer"
+              >
+                {event.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+              </Label>
             </div>
-          </div>
-
-          <Button 
-            onClick={() => createWebhook.mutate()}
-            disabled={!url.trim() || selectedEvents.length === 0}
-            className="w-full"
-          >
-            Create Webhook
-          </Button>
+          ))}
         </div>
       </div>
-    </Card>
+
+      <Button 
+        onClick={() => createWebhook.mutate()}
+        disabled={!url.trim() || selectedEvents.length === 0}
+        className="w-full"
+      >
+        Create Webhook
+      </Button>
+    </div>
   );
 };

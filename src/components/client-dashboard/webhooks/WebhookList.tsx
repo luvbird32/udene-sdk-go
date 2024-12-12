@@ -3,8 +3,10 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { Webhook, Server, Trash } from "lucide-react";
+import { Server, Trash } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 interface WebhookData {
   id: string;
@@ -79,54 +81,74 @@ export const WebhookList = () => {
   });
 
   if (isLoading) {
-    return <div className="flex justify-center p-4">Loading webhooks...</div>;
+    return (
+      <Card className="p-6">
+        <div className="space-y-4">
+          <div className="animate-pulse h-12 bg-muted rounded-lg" />
+          <div className="animate-pulse h-12 bg-muted rounded-lg" />
+          <div className="animate-pulse h-12 bg-muted rounded-lg" />
+        </div>
+      </Card>
+    );
   }
 
   return (
-    <div className="space-y-4">
-      {webhooks?.map((webhook) => (
-        <div key={webhook.id} className="flex items-center justify-between p-4 border rounded-lg">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <Server className="h-4 w-4" />
-              <span className="font-medium">{webhook.url}</span>
+    <Card className="p-6">
+      <div className="flex items-center gap-2 mb-4">
+        <Server className="h-4 w-4 text-muted-foreground" />
+        <h4 className="font-medium">Configured Webhooks</h4>
+      </div>
+
+      <div className="space-y-4">
+        {webhooks?.map((webhook) => (
+          <div key={webhook.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <Server className="h-4 w-4" />
+                <span className="font-medium">{webhook.url}</span>
+              </div>
+              {webhook.description && (
+                <p className="text-sm text-muted-foreground">{webhook.description}</p>
+              )}
+              <div className="flex gap-2 flex-wrap">
+                {webhook.events.map((event) => (
+                  <Badge
+                    key={event}
+                    variant="secondary"
+                    className="text-xs"
+                  >
+                    {event.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                  </Badge>
+                ))}
+              </div>
             </div>
-            {webhook.description && (
-              <p className="text-sm text-muted-foreground">{webhook.description}</p>
-            )}
-            <div className="flex gap-2 flex-wrap">
-              {webhook.events.map((event) => (
-                <span
-                  key={event}
-                  className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full"
-                >
-                  {event}
-                </span>
-              ))}
+            <div className="flex items-center gap-4">
+              <Switch
+                checked={webhook.is_active}
+                onCheckedChange={(checked) => 
+                  toggleWebhook.mutate({ id: webhook.id, isActive: checked })
+                }
+              />
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => deleteWebhook.mutate(webhook.id)}
+              >
+                <Trash className="h-4 w-4" />
+              </Button>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <Switch
-              checked={webhook.is_active}
-              onCheckedChange={(checked) => 
-                toggleWebhook.mutate({ id: webhook.id, isActive: checked })
-              }
-            />
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => deleteWebhook.mutate(webhook.id)}
-            >
-              <Trash className="h-4 w-4" />
-            </Button>
+        ))}
+        {(!webhooks || webhooks.length === 0) && (
+          <div className="text-center p-8 border-2 border-dashed rounded-lg">
+            <Server className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+            <p className="text-muted-foreground font-medium">No webhooks configured</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              Add your first webhook endpoint above to start receiving event notifications.
+            </p>
           </div>
-        </div>
-      ))}
-      {(!webhooks || webhooks.length === 0) && (
-        <div className="text-center p-4 text-muted-foreground">
-          No webhooks configured yet.
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </Card>
   );
 };
