@@ -1,6 +1,6 @@
 import React from 'react';
 import { ServiceCard } from './ServiceCard';
-import { FRAUD_DETECTION_SERVICES } from './serviceConfig';
+import { FRAUD_DETECTION_SERVICES } from './config';
 import type { ClientService } from '@/types/services';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
