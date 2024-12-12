@@ -2,11 +2,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 
 type TrialUsage = Tables<'trial_usage'>;
-type TrialUsageInsert = Omit<TrialUsage, 'id' | 'created_at' | 'updated_at'> & {
-  id?: string;
-  created_at?: string | null;
-  updated_at?: string | null;
-};
+type TrialUsageInsert = Omit<TrialUsage, 'id' | 'created_at' | 'updated_at'>;
 
 export const createTrialUsage = async (userId: string, trialType: string) => {
   try {
@@ -18,7 +14,11 @@ export const createTrialUsage = async (userId: string, trialType: string) => {
       trial_type: trialType,
       start_date: startDate,
       end_date: endDate,
-      status: 'active'
+      status: 'active',
+      risk_score: 0, // Default risk score
+      ip_addresses: [], // Empty array for IP addresses
+      device_fingerprints: [], // Empty array for device fingerprints
+      usage_patterns: {} // Empty object for usage patterns
     };
 
     const { data: trial, error: createError } = await supabase
