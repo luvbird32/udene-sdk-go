@@ -7,7 +7,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { useAIActivityMonitoring } from '@/hooks/useAIActivityMonitoring';
 
 export const ServiceManager = () => {
-  const { data: activeServices, isLoading } = useServices();
+  const { data: services, isLoading } = useServices();
   const toggleService = useServiceToggle();
   useAIActivityMonitoring();
 
@@ -27,10 +27,7 @@ export const ServiceManager = () => {
     <TooltipProvider delayDuration={300}>
       <div className="space-y-6">
         <ServiceHeader />
-        <ServiceList 
-          activeServices={activeServices} 
-          handleToggle={handleToggle}
-        />
+        <ServiceList services={services} onToggle={handleToggle} />
       </div>
     </TooltipProvider>
   );

@@ -10,11 +10,13 @@ interface ServiceCardProps {
 }
 
 export const ServiceCard = ({ service, hasPromoCode }: ServiceCardProps) => {
-  const { mutate: toggleService, isLoading } = useServiceToggle(service.id);
+  const { mutate: toggleService, isLoading } = useServiceToggle();
 
   const handleToggle = (checked: boolean) => {
-    toggleService({ serviceId: service.id, isActive: checked });
+    toggleService({ serviceType: service.service_type, isActive: checked });
   };
+
+  const serviceSettings = service.settings as { description?: string } | null;
 
   return (
     <Card className="relative">
@@ -28,7 +30,7 @@ export const ServiceCard = ({ service, hasPromoCode }: ServiceCardProps) => {
       <CardHeader>
         <CardTitle>{service.service_type}</CardTitle>
         <CardDescription>
-          {service.settings?.description || "No description available"}
+          {serviceSettings?.description || "No description available"}
         </CardDescription>
       </CardHeader>
       <CardContent>
