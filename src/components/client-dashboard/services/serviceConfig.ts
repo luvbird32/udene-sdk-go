@@ -12,6 +12,18 @@ export const FRAUD_DETECTION_SERVICES = [
     ]
   },
   {
+    type: 'shadow_ai_prevention',
+    title: 'Shadow AI Prevention',
+    description: 'Specialized protection against unauthorized and malicious AI system usage',
+    features: [
+      'AI Pattern Detection',
+      'LLM Usage Monitoring',
+      'Prompt Injection Prevention',
+      'AI-driven Automation Detection',
+      'Model Architecture Recognition'
+    ]
+  },
+  {
     type: 'transaction_monitoring',
     title: 'Transaction Monitoring',
     description: 'Real-time monitoring of transactions for fraud detection',
