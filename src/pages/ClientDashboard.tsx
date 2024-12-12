@@ -27,6 +27,7 @@ import { AffiliateMonitoring } from "@/components/client-dashboard/analytics/Aff
 import { TrialAbuseMonitoring } from "@/components/client-dashboard/analytics/TrialAbuseMonitoring";
 import { FraudPatterns } from "@/components/dashboard/FraudPatterns";
 import { ThemeToggle } from "@/components/client-dashboard/ThemeToggle";
+import { SecurityProgramList } from "@/components/client-dashboard/security/SecurityProgramList";
 
 const ClientDashboard = () => {
   const { toast } = useToast();
@@ -110,6 +111,10 @@ const ClientDashboard = () => {
             <UserRound className="h-4 w-4 mr-2" />
             Profile
           </TabsTrigger>
+          <TabsTrigger value="security">
+            <Shield className="h-4 w-4 mr-2" />
+            Security Programs
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard" className="space-y-6">
@@ -169,6 +174,13 @@ const ClientDashboard = () => {
 
         <TabsContent value="profile" className="space-y-6">
           <ClientProfile />
+        </TabsContent>
+
+        <TabsContent value="security" className="space-y-6">
+          <div className="grid gap-6">
+            <h2 className="text-2xl font-bold">Security Programs</h2>
+            <SecurityProgramList />
+          </div>
         </TabsContent>
       </Tabs>
     </div>

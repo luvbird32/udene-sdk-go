@@ -539,6 +539,54 @@ export type Database = {
         }
         Relationships: []
       }
+      product_security_programs: {
+        Row: {
+          audit_frequency: string | null
+          compliance_requirements: Json | null
+          created_at: string | null
+          description: string | null
+          id: string
+          last_audit_date: string | null
+          name: string
+          next_audit_date: string | null
+          risk_assessment: Json | null
+          security_controls: Json | null
+          status: string
+          type: string
+          updated_at: string | null
+        }
+        Insert: {
+          audit_frequency?: string | null
+          compliance_requirements?: Json | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          last_audit_date?: string | null
+          name: string
+          next_audit_date?: string | null
+          risk_assessment?: Json | null
+          security_controls?: Json | null
+          status?: string
+          type: string
+          updated_at?: string | null
+        }
+        Update: {
+          audit_frequency?: string | null
+          compliance_requirements?: Json | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          last_audit_date?: string | null
+          name?: string
+          next_audit_date?: string | null
+          risk_assessment?: Json | null
+          security_controls?: Json | null
+          status?: string
+          type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           account_type: string
@@ -698,6 +746,59 @@ export type Database = {
             columns: ["transaction_id"]
             isOneToOne: false
             referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      security_assessments: {
+        Row: {
+          assessment_type: string
+          assigned_to: string | null
+          completed_date: string | null
+          created_at: string | null
+          due_date: string | null
+          findings: Json | null
+          id: string
+          program_id: string | null
+          remediation_plan: Json | null
+          risk_level: string | null
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          assessment_type: string
+          assigned_to?: string | null
+          completed_date?: string | null
+          created_at?: string | null
+          due_date?: string | null
+          findings?: Json | null
+          id?: string
+          program_id?: string | null
+          remediation_plan?: Json | null
+          risk_level?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          assessment_type?: string
+          assigned_to?: string | null
+          completed_date?: string | null
+          created_at?: string | null
+          due_date?: string | null
+          findings?: Json | null
+          id?: string
+          program_id?: string | null
+          remediation_plan?: Json | null
+          risk_level?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "security_assessments_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "product_security_programs"
             referencedColumns: ["id"]
           },
         ]
