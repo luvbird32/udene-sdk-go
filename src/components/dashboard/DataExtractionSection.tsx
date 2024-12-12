@@ -6,15 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { Download, RefreshCw } from "lucide-react";
+import { Tables } from "@/integrations/supabase/types/database";
 
-interface Extraction {
-  id: string;
-  extraction_type: string;
-  status: string;
-  file_url: string | null;
-  record_count: number | null;
-  created_at: string;
-}
+type Extraction = Tables<'admin_data_extractions'>;
 
 export const DataExtractionSection = () => {
   const { toast } = useToast();

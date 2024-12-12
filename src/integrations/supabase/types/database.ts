@@ -1,6 +1,8 @@
 import { ProfileTable } from './tables/profile';
 import { ClientServicesTable } from './tables/client-services';
 import { EventTriggersTable } from './tables/event-triggers';
+import { AdminDataExtractionsTable } from './tables/admin-data-extractions';
+import { WhitelistTable } from './tables/whitelist';
 
 export type Json =
   | string
@@ -16,6 +18,8 @@ export interface Database {
       profiles: ProfileTable;
       client_services: ClientServicesTable;
       event_triggers: EventTriggersTable;
+      admin_data_extractions: AdminDataExtractionsTable;
+      whitelist: WhitelistTable;
       api_keys: {
         Row: {
           id: string;

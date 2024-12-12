@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { Tables } from "@/integrations/supabase/types/database";
 
 export const FeedbackManagement = () => {
   const { toast } = useToast();
@@ -54,10 +55,9 @@ export const FeedbackManagement = () => {
       if (error) throw error;
 
       if (feedbackStatus === "confirmed_legitimate") {
-        // Add to whitelist if confirmed legitimate
         const { error: whitelistError } = await supabase
           .from("whitelist")
-          .upsert({
+          .insert({
             entity_type: "customer",
             entity_id: selectedTransaction.customer_id,
             reason: `Confirmed legitimate transaction ${selectedTransaction.id}`,
