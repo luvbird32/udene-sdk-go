@@ -1,13 +1,15 @@
 import React from 'react';
 import { ServiceHeader } from './ServiceHeader';
 import { ServiceList } from './ServiceList';
-import { useServiceManager } from './useServiceManager';
+import { useServices } from './hooks/useServices';
+import { useServiceToggle } from './hooks/useServiceToggle';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { useAIActivityMonitoring } from '@/hooks/useAIActivityMonitoring';
 
 export const ServiceManager = () => {
-  const { activeServices, isLoading, toggleService } = useServiceManager();
-  useAIActivityMonitoring(); // Add AI activity monitoring
+  const { data: activeServices, isLoading } = useServices();
+  const toggleService = useServiceToggle();
+  useAIActivityMonitoring();
 
   if (isLoading) {
     return <div className="grid gap-4 animate-pulse">
