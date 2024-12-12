@@ -25,11 +25,7 @@ export const ThemeToggle = () => {
     <Button
       variant="outline"
       size="icon"
-      className={`w-10 h-10 transition-colors ${
-        theme === "dark" 
-          ? "border-2 border-white bg-transparent hover:bg-white/10" 
-          : "border-2 border-black bg-transparent hover:bg-black/10"
-      }`}
+      className="w-10 h-10 border-2 transition-colors hover:bg-accent"
       onClick={toggleTheme}
       aria-label="Toggle theme"
     >
