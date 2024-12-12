@@ -75,7 +75,7 @@ export const getPromoCodeHistory = async (userId: string) => {
   }
 };
 
-export const createPromoCode = async (promoCodeData: Partial<PromoCodeInsert>) => {
+export const createPromoCode = async (promoCodeData: Omit<PromoCodeInsert, 'times_used' | 'risk_score'> & { code: string }) => {
   try {
     const { data, error } = await supabase
       .from('promo_codes')
