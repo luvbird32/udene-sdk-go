@@ -1,5 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import type { AffiliateActivity } from "@/integrations/supabase/types/fraud";
+import type { AffiliateActivity } from "@/integrations/supabase/types/affiliate";
 
 export const createAffiliateActivity = async (activityData: Partial<AffiliateActivity>) => {
   try {
