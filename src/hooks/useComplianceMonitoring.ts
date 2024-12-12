@@ -31,7 +31,7 @@ export const useComplianceMonitoring = () => {
 
   // Create compliance report mutation
   const createReport = useMutation({
-    mutationFn: (reportData: Partial<ComplianceReport>) => 
+    mutationFn: (reportData: Pick<ComplianceReport, 'report_type' | 'report_period' | 'generated_by'>) => 
       complianceMonitoringService.createComplianceReport(reportData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['compliance-reports'] });
@@ -75,7 +75,7 @@ export const useComplianceMonitoring = () => {
 
   // Create security assessment mutation
   const createAssessment = useMutation({
-    mutationFn: (assessmentData: Partial<SecurityAssessment>) =>
+    mutationFn: (assessmentData: Pick<SecurityAssessment, 'assessment_type' | 'program_id' | 'status'>) =>
       complianceMonitoringService.createSecurityAssessment(assessmentData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['security-assessments'] });
