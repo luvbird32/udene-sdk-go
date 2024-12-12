@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import ClientDashboard from "./pages/ClientDashboard";
@@ -80,18 +80,12 @@ function App() {
             path="/dashboard"
             element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />}
           />
-          <Route
-            path="/client-dashboard"
-            element={isAuthenticated ? <ClientDashboard /> : <Navigate to="/login" replace />}
-          />
+          <Route path="/client-dashboard" element={<ClientDashboard />} />
           <Route
             path="/settings"
             element={isAuthenticated ? <Settings /> : <Navigate to="/login" replace />}
           />
-          <Route
-            path="/client-settings"
-            element={isAuthenticated ? <ClientSettings /> : <Navigate to="/login" replace />}
-          />
+          <Route path="/client-settings" element={<ClientSettings />} />
           <Route
             path="/users"
             element={isAuthenticated ? <Users /> : <Navigate to="/login" replace />}

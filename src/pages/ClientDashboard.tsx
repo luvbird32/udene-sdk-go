@@ -30,27 +30,29 @@ const ClientDashboard = () => {
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
     queryKey: ["client-metrics"],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("No user found");
+      try {
+        const { data: recentTransactions, error: transactionsError } = await supabase
+          .from('transactions')
+          .select('risk_score, is_fraudulent')
+          .order('created_at', { ascending: false })
+          .limit(100);
 
-      const { data: recentTransactions, error: transactionsError } = await supabase
-        .from('transactions')
-        .select('risk_score, is_fraudulent')
-        .order('created_at', { ascending: false })
-        .limit(100);
+        if (transactionsError) throw transactionsError;
 
-      if (transactionsError) throw transactionsError;
+        const validTransactions = recentTransactions?.filter(t => t?.risk_score != null) ?? [];
+        const avgRiskScore = validTransactions.length > 0
+          ? validTransactions.reduce((acc, t) => acc + (t.risk_score ?? 0), 0) / validTransactions.length
+          : 0;
 
-      const validTransactions = recentTransactions?.filter(t => t?.risk_score != null) ?? [];
-      const avgRiskScore = validTransactions.length > 0
-        ? validTransactions.reduce((acc, t) => acc + (t.risk_score ?? 0), 0) / validTransactions.length
-        : 0;
-
-      return {
-        riskScore: Math.round(avgRiskScore),
-        totalTransactions: validTransactions.length,
-        flaggedTransactions: validTransactions.filter(t => t.is_fraudulent).length
-      };
+        return {
+          riskScore: Math.round(avgRiskScore),
+          totalTransactions: validTransactions.length,
+          flaggedTransactions: validTransactions.filter(t => t.is_fraudulent).length
+        };
+      } catch (error) {
+        console.error('Error fetching metrics:', error);
+        throw error;
+      }
     },
     refetchInterval: 30000,
   });
