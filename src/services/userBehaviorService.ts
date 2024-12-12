@@ -22,7 +22,7 @@ interface BehaviorPattern {
   timestamp: string;
 }
 
-interface ActivityMetadata {
+export interface ActivityMetadata {
   confidence: number;
   indicators: Record<string, unknown>;
 }
@@ -100,7 +100,7 @@ export const userBehaviorService = {
     if (error) throw error;
 
     return (patterns || []).map(pattern => {
-      const metadata = pattern.metadata as ActivityMetadata;
+      const metadata = pattern.metadata as unknown as ActivityMetadata;
       return {
         patternType: pattern.activity_type,
         confidence: metadata?.confidence || 0,
@@ -117,11 +117,11 @@ export const userBehaviorService = {
   ) {
     const { data, error } = await supabase
       .from('user_activities')
-      .insert([{
+      .insert({
         profile_id: userId,
         activity_type: activityType,
-        metadata: metadata
-      }])
+        metadata: metadata as unknown as Json
+      })
       .select()
       .single();
 

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { userBehaviorService } from "@/services/userBehaviorService";
+import { userBehaviorService, ActivityMetadata } from "@/services/userBehaviorService";
 import { useToast } from "@/components/ui/use-toast";
 import { useCurrentUser } from "./useCurrentUser";
 
@@ -32,7 +32,7 @@ export const useUserBehavior = () => {
       metadata 
     }: { 
       activityType: string; 
-      metadata: Record<string, any>; 
+      metadata: ActivityMetadata; 
     }) => {
       if (!currentUser?.id) throw new Error("No user found");
       return userBehaviorService.logUserActivity(
