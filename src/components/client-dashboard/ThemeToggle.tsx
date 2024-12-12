@@ -25,14 +25,14 @@ export const ThemeToggle = () => {
     <Button
       variant="outline"
       size="icon"
-      className="glass-button w-10 h-10"
+      className="w-10 h-10 border transition-colors dark:bg-transparent dark:border-white dark:hover:bg-white/10 bg-transparent border-black hover:bg-black/10"
       onClick={toggleTheme}
       aria-label="Toggle theme"
     >
       {theme === "dark" ? (
-        <Sun className="h-5 w-5 text-amber-400 dark:text-amber-300" />
+        <Sun className="h-5 w-5 text-green-400" />
       ) : (
-        <Moon className="h-5 w-5 text-indigo-600 dark:text-indigo-300" />
+        <Moon className="h-5 w-5 text-green-600" />
       )}
     </Button>
   );
