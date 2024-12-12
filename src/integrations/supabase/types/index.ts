@@ -8,3 +8,6 @@ export * from './security';
 export * from './api';
 export * from './webhooks';
 export * from './ml';
+export * from './user-tables';
+export * from './security-tables';
+export * from './webhook-tables';

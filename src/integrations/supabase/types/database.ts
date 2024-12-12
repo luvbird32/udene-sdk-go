@@ -8,6 +8,9 @@ import { AIActivityMonitoringTable, MetricsTable, AuditLogsTable } from './table
 import { FraudAlertsTable, EmailReputationTable } from './tables/fraud-tables';
 import { TransactionsTable, RewardsTransactionsTable } from './tables/transaction-tables';
 import { MLModelsTable, TrainingDatasetsTable } from './tables/ml-tables';
+import { UserActivitiesTable, UserNotificationsTable } from './tables/user-tables';
+import { SecurityProgramsTable, ComplianceReportsTable } from './tables/security-tables';
+import { WebhooksTable, WebhookDeliveriesTable } from './tables/webhook-tables';
 
 export type Json =
   | string
@@ -37,6 +40,12 @@ export interface Database {
       rewards_transactions: RewardsTransactionsTable;
       ml_models: MLModelsTable;
       training_datasets: TrainingDatasetsTable;
+      user_activities: UserActivitiesTable;
+      user_notifications: UserNotificationsTable;
+      product_security_programs: SecurityProgramsTable;
+      compliance_reports: ComplianceReportsTable;
+      webhooks: WebhooksTable;
+      webhook_deliveries: WebhookDeliveriesTable;
     };
     Views: {
       [_ in never]: never
