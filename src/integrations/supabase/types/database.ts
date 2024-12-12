@@ -1,3 +1,7 @@
+import { ProfileTable } from './tables/profile';
+import { ClientServicesTable } from './tables/client-services';
+import { EventTriggersTable } from './tables/event-triggers';
+
 export type Json =
   | string
   | number
@@ -9,50 +13,9 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      profiles: {
-        Row: {
-          id: string;
-          username: string | null;
-          avatar_url: string | null;
-          created_at: string | null;
-          updated_at: string | null;
-          role: string;
-          account_type: string;
-          organization_id: string | null;
-          organization_name: string | null;
-          organization_role: string | null;
-          status: string;
-          settings: Json | null;
-        };
-        Insert: {
-          id: string;
-          username?: string | null;
-          avatar_url?: string | null;
-          created_at?: string | null;
-          updated_at?: string | null;
-          role?: string;
-          account_type?: string;
-          organization_id?: string | null;
-          organization_name?: string | null;
-          organization_role?: string | null;
-          status?: string;
-          settings?: Json | null;
-        };
-        Update: {
-          id?: string;
-          username?: string | null;
-          avatar_url?: string | null;
-          created_at?: string | null;
-          updated_at?: string | null;
-          role?: string;
-          account_type?: string;
-          organization_id?: string | null;
-          organization_name?: string | null;
-          organization_role?: string | null;
-          status?: string;
-          settings?: Json | null;
-        };
-      };
+      profiles: ProfileTable;
+      client_services: ClientServicesTable;
+      event_triggers: EventTriggersTable;
       api_keys: {
         Row: {
           id: string;
@@ -891,13 +854,13 @@ export interface Database {
       };
     };
     Views: {
-      [_ in never]: never;
+      [_ in never]: never
     };
     Functions: {
-      [_ in never]: never;
+      [_ in never]: never
     };
     Enums: {
-      [_ in never]: never;
+      [_ in never]: never
     };
   };
 }
