@@ -1,4 +1,4 @@
-export type { Json, Database, Tables, TablesInsert, TablesUpdate } from './database';
+export type { Json, Database } from './database';
 export * from './auth';
 export * from './monitoring';
 export * from './fraud';
