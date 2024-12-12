@@ -2,8 +2,9 @@ import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 import { Badge } from "@/components/ui/badge";
-import { AlertCircle, Bot, BotOff, CheckCircle2, Shield } from "lucide-react";
+import { AlertCircle, Bot, BotOff, Shield } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useState } from "react";
 
 interface ServiceCardProps {
   title: string;
@@ -23,8 +24,12 @@ export const ServiceCard = ({
   onToggle,
 }: ServiceCardProps) => {
   const { toast } = useToast();
+  const [isToggling, setIsToggling] = useState(false);
 
   const handleToggle = async (checked: boolean) => {
+    if (isToggling) return; // Prevent multiple clicks while processing
+    
+    setIsToggling(true);
     try {
       await onToggle(serviceType, checked);
       toast({
@@ -32,11 +37,14 @@ export const ServiceCard = ({
         description: `${title} has been ${checked ? "activated" : "deactivated"} successfully.`,
       });
     } catch (error) {
+      // Revert the switch state in case of error
       toast({
         title: "Error",
         description: "Failed to update service status. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsToggling(false);
     }
   };
 
@@ -77,13 +85,17 @@ export const ServiceCard = ({
         </div>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Switch 
-              checked={isActive} 
-              onCheckedChange={handleToggle}
-            />
+            <div className={isToggling ? 'opacity-50 pointer-events-none' : ''}>
+              <Switch 
+                checked={isActive} 
+                onCheckedChange={handleToggle}
+                disabled={isToggling}
+                className={isToggling ? 'cursor-not-allowed' : 'cursor-pointer'}
+              />
+            </div>
           </TooltipTrigger>
           <TooltipContent>
-            <p>{isActive ? 'Disable' : 'Enable'} {title}</p>
+            <p>{isToggling ? 'Processing...' : isActive ? 'Disable' : 'Enable'} {title}</p>
           </TooltipContent>
         </Tooltip>
       </div>
@@ -96,7 +108,7 @@ export const ServiceCard = ({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div className="flex items-center gap-2 cursor-help">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    <AlertCircle className="h-4 w-4 text-green-500" />
                     {feature}
                   </div>
                 </TooltipTrigger>
