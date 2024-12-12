@@ -369,8 +369,11 @@ export type Database = {
       fraud_alerts: {
         Row: {
           alert_type: string
+          behavioral_indicators: Json | null
           created_at: string | null
           description: string
+          domain_risk_score: number | null
+          email_data: Json | null
           id: string
           severity: string
           status: string
@@ -379,8 +382,11 @@ export type Database = {
         }
         Insert: {
           alert_type: string
+          behavioral_indicators?: Json | null
           created_at?: string | null
           description: string
+          domain_risk_score?: number | null
+          email_data?: Json | null
           id?: string
           severity: string
           status?: string
@@ -389,8 +395,11 @@ export type Database = {
         }
         Update: {
           alert_type?: string
+          behavioral_indicators?: Json | null
           created_at?: string | null
           description?: string
+          domain_risk_score?: number | null
+          email_data?: Json | null
           id?: string
           severity?: string
           status?: string
