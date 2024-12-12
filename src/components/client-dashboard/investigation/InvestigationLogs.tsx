@@ -15,12 +15,16 @@ export const InvestigationLogs = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
 
-  const { data: logs, isLoading } = useQuery({
+  const { data: logs, isLoading, error } = useQuery({
     queryKey: ["investigation-logs"],
     queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("User not authenticated");
+
       const { data, error } = await supabase
         .from('service_investigation_logs')
-        .select('*, client_services(*)')
+        .select('*')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
       if (error) {
@@ -35,6 +39,14 @@ export const InvestigationLogs = () => {
       return data as InvestigationLog[];
     },
   });
+
+  if (error) {
+    return (
+      <div className="p-4 text-center text-red-500">
+        Error loading investigation logs
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (

@@ -1,6 +1,5 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
@@ -16,23 +15,48 @@ interface NewInvestigationDialogProps {
 export const NewInvestigationDialog = ({ open, onOpenChange }: NewInvestigationDialogProps) => {
   const [type, setType] = useState("");
   const [notes, setNotes] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!type) {
+      toast({
+        title: "Error",
+        description: "Please select an investigation type",
+        variant: "destructive",
+      });
+      return;
+    }
     
+    setIsSubmitting(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
+
+      // Get the user's active service
+      const { data: services, error: servicesError } = await supabase
+        .from('client_services')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('is_active', true)
+        .single();
+
+      if (servicesError) throw servicesError;
+      if (!services) throw new Error("No active service found");
 
       const { error } = await supabase
         .from('service_investigation_logs')
         .insert({
           user_id: user.id,
+          service_id: services.id,
           investigation_type: type,
           notes,
-          service_id: "default", // You'll need to update this based on your needs
+          status: 'pending',
+          findings: {},
+          sanitization_steps: [],
+          manual_actions: []
         });
 
       if (error) throw error;
@@ -52,6 +76,8 @@ export const NewInvestigationDialog = ({ open, onOpenChange }: NewInvestigationD
         description: error instanceof Error ? error.message : "Failed to create investigation",
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -74,6 +100,9 @@ export const NewInvestigationDialog = ({ open, onOpenChange }: NewInvestigationD
                 <SelectItem value="fraud">Fraud Investigation</SelectItem>
                 <SelectItem value="compliance">Compliance Review</SelectItem>
                 <SelectItem value="performance">Performance Analysis</SelectItem>
+                <SelectItem value="incident">Incident Response</SelectItem>
+                <SelectItem value="audit">Security Audit</SelectItem>
+                <SelectItem value="threat">Threat Assessment</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -83,13 +112,18 @@ export const NewInvestigationDialog = ({ open, onOpenChange }: NewInvestigationD
             <Textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Enter investigation details..."
+              placeholder="Enter investigation details, observations, and initial findings..."
               className="min-h-[100px]"
             />
           </div>
 
           <DialogFooter>
-            <Button type="submit">Create Investigation</Button>
+            <Button 
+              type="submit" 
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Creating..." : "Create Investigation"}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

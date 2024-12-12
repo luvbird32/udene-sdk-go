@@ -1,8 +1,13 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Eye, AlertCircle } from "lucide-react";
+import { Eye, AlertCircle, Clock, User, FileText } from "lucide-react";
 import { format } from "date-fns";
 import { Database } from "@/integrations/supabase/types";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 type InvestigationLog = Database['public']['Tables']['service_investigation_logs']['Row'];
 
@@ -24,6 +29,18 @@ export const InvestigationLogList = ({ logs }: InvestigationLogListProps) => {
     }
   };
 
+  const formatFindings = (findings: any) => {
+    if (!findings) return "No findings recorded";
+    try {
+      const findingsObj = typeof findings === 'string' ? JSON.parse(findings) : findings;
+      return Object.entries(findingsObj)
+        .map(([key, value]) => `${key}: ${value}`)
+        .join(', ');
+    } catch {
+      return "Unable to parse findings";
+    }
+  };
+
   return (
     <div className="space-y-4">
       {logs.map((log) => (
@@ -32,22 +49,66 @@ export const InvestigationLogList = ({ logs }: InvestigationLogListProps) => {
           className="border rounded-lg p-4 hover:bg-accent transition-colors"
         >
           <div className="flex justify-between items-start">
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="font-medium">{log.investigation_type}</h3>
-                <Badge variant="outline" className={getStatusColor(log.status)}>
-                  {log.status}
-                </Badge>
+            <div className="space-y-3 flex-1">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <h3 className="font-medium text-lg">{log.investigation_type}</h3>
+                  <Badge variant="outline" className={getStatusColor(log.status)}>
+                    {log.status}
+                  </Badge>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Clock className="h-4 w-4" />
+                  {format(new Date(log.created_at || ''), "MMM d, yyyy 'at' HH:mm")}
+                </div>
               </div>
-              <p className="text-sm text-muted-foreground mt-1">
-                Created on {format(new Date(log.created_at || ''), "MMM d, yyyy")}
-              </p>
-              <p className="mt-2 text-sm">{log.notes}</p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <h4 className="text-sm font-medium mb-1">Notes</h4>
+                  <p className="text-sm text-muted-foreground">{log.notes || "No notes provided"}</p>
+                </div>
+
+                <div>
+                  <h4 className="text-sm font-medium mb-1">Findings</h4>
+                  <p className="text-sm text-muted-foreground">{formatFindings(log.findings)}</p>
+                </div>
+              </div>
+
+              {log.sanitization_steps && log.sanitization_steps.length > 0 && (
+                <div>
+                  <h4 className="text-sm font-medium mb-1">Sanitization Steps</h4>
+                  <ul className="list-disc list-inside text-sm text-muted-foreground">
+                    {(log.sanitization_steps as string[]).map((step, index) => (
+                      <li key={index}>{step}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
-            <Button variant="ghost" size="sm">
-              <Eye className="h-4 w-4 mr-2" />
-              View Details
-            </Button>
+
+            <div className="flex flex-col gap-2">
+              <HoverCard>
+                <HoverCardTrigger asChild>
+                  <Button variant="ghost" size="sm">
+                    <Eye className="h-4 w-4 mr-2" />
+                    View Details
+                  </Button>
+                </HoverCardTrigger>
+                <HoverCardContent className="w-80">
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Investigation Details</h4>
+                    <div className="text-sm">
+                      <p><strong>ID:</strong> {log.id}</p>
+                      <p><strong>Service ID:</strong> {log.service_id}</p>
+                      <p><strong>Created:</strong> {format(new Date(log.created_at || ''), "PPpp")}</p>
+                      <p><strong>Updated:</strong> {format(new Date(log.updated_at || ''), "PPpp")}</p>
+                      <p><strong>Status:</strong> {log.status}</p>
+                    </div>
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+            </div>
           </div>
         </div>
       ))}
