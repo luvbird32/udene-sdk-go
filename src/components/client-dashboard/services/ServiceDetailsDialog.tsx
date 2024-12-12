@@ -1,7 +1,13 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Info, Shield, CheckCircle2, AlertTriangle, Clock, Settings, Lock } from "lucide-react";
+import { Shield } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { DialogOverview } from "./components/dialog/DialogOverview";
+import { DialogFeatures } from "./components/dialog/DialogFeatures";
+import { DialogImplementation } from "./components/dialog/DialogImplementation";
+import { DialogSecurity } from "./components/dialog/DialogSecurity";
+import { DialogBestPractices } from "./components/dialog/DialogBestPractices";
+import { DialogSupport } from "./components/dialog/DialogSupport";
 
 interface ServiceDetailsDialogProps {
   open: boolean;
@@ -30,115 +36,17 @@ export const ServiceDetailsDialog = ({ open, onOpenChange, service }: ServiceDet
         
         <ScrollArea className="pr-4 h-[calc(80vh-120px)] overflow-y-auto">
           <div className="space-y-6 pr-2">
-            {/* Overview Section */}
-            <div className="space-y-2">
-              <div className="flex items-start gap-2">
-                <Info className="h-5 w-5 text-muted-foreground mt-1" />
-                <div>
-                  <h4 className="font-medium">Overview</h4>
-                  <p className="text-muted-foreground">{service.description}</p>
-                </div>
-              </div>
-            </div>
-
+            <DialogOverview description={service.description} />
             <Separator />
-
-            {/* Key Features Section */}
-            <div className="space-y-3">
-              <h4 className="font-medium flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-green-500" />
-                Key Features
-              </h4>
-              <ul className="space-y-2">
-                {service.features.map((feature, index) => (
-                  <li key={index} className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span className="text-sm">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
+            <DialogFeatures features={service.features} />
             <Separator />
-
-            {/* Implementation Details */}
-            <div className="space-y-3">
-              <h4 className="font-medium flex items-center gap-2">
-                <Settings className="h-4 w-4 text-blue-500" />
-                Implementation Details
-              </h4>
-              <div className="text-sm text-muted-foreground space-y-2">
-                <p>This service integrates seamlessly with your existing infrastructure:</p>
-                <ul className="list-disc list-inside ml-4 space-y-1">
-                  <li>Real-time monitoring and alerts</li>
-                  <li>Customizable settings and thresholds</li>
-                  <li>Detailed analytics and reporting</li>
-                  <li>API integration available</li>
-                  <li>Automated response mechanisms</li>
-                  <li>Custom rules engine</li>
-                </ul>
-              </div>
-            </div>
-
+            <DialogImplementation />
             <Separator />
-
-            {/* Security Measures */}
-            <div className="space-y-3">
-              <h4 className="font-medium flex items-center gap-2">
-                <Lock className="h-4 w-4 text-indigo-500" />
-                Security Measures
-              </h4>
-              <div className="text-sm text-muted-foreground space-y-2">
-                <p>Enhanced security features include:</p>
-                <ul className="list-disc list-inside ml-4 space-y-1">
-                  <li>End-to-end encryption</li>
-                  <li>Regular security audits</li>
-                  <li>Compliance with industry standards</li>
-                  <li>Multi-factor authentication support</li>
-                  <li>Access control and permissions</li>
-                </ul>
-              </div>
-            </div>
-
+            <DialogSecurity />
             <Separator />
-
-            {/* Best Practices */}
-            <div className="space-y-3">
-              <h4 className="font-medium flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-yellow-500" />
-                Best Practices
-              </h4>
-              <div className="text-sm text-muted-foreground space-y-2">
-                <p>For optimal results, we recommend:</p>
-                <ul className="list-disc list-inside ml-4 space-y-1">
-                  <li>Regular monitoring of alerts and notifications</li>
-                  <li>Periodic review of security settings</li>
-                  <li>Keeping integration endpoints up to date</li>
-                  <li>Following security guidelines</li>
-                  <li>Regular staff training on security protocols</li>
-                </ul>
-              </div>
-            </div>
-
+            <DialogBestPractices />
             <Separator />
-
-            {/* Support and Resources */}
-            <div className="space-y-3">
-              <h4 className="font-medium flex items-center gap-2">
-                <Clock className="h-4 w-4 text-rose-500" />
-                Support and Resources
-              </h4>
-              <div className="text-sm text-muted-foreground space-y-2">
-                <p>We provide comprehensive support:</p>
-                <ul className="list-disc list-inside ml-4 space-y-1">
-                  <li>24/7 technical support</li>
-                  <li>Detailed documentation</li>
-                  <li>Regular updates and improvements</li>
-                  <li>Community forums and knowledge base</li>
-                  <li>Dedicated account manager</li>
-                </ul>
-              </div>
-            </div>
+            <DialogSupport />
           </div>
         </ScrollArea>
       </DialogContent>
