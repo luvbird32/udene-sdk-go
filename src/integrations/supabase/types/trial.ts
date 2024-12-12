@@ -1,6 +1,6 @@
 import { Json } from './database';
 
-export type TrialUsage = {
+export interface TrialUsage {
   id: string;
   user_id: string;
   trial_type: string;
@@ -13,12 +13,12 @@ export type TrialUsage = {
   status?: string | null;
   created_at?: string | null;
   updated_at?: string | null;
-};
+}
 
-export type TrialUsageInsert = Omit<TrialUsage, 'id' | 'created_at' | 'updated_at'> & {
+export interface TrialUsageInsert extends Omit<TrialUsage, 'id' | 'created_at' | 'updated_at'> {
   id?: string;
   created_at?: string | null;
   updated_at?: string | null;
-};
+}
 
-export type TrialUsageUpdate = Partial<TrialUsage>;
+export interface TrialUsageUpdate extends Partial<TrialUsage> {}

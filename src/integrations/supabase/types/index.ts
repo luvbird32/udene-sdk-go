@@ -12,10 +12,3 @@ export * from './client-services';
 export * from './investigation';
 export * from './affiliate';
 export * from './trial';
-
-// Explicitly export types from trial module
-export type { 
-  TrialUsage, 
-  TrialUsageInsert, 
-  TrialUsageUpdate 
-} from './trial';
