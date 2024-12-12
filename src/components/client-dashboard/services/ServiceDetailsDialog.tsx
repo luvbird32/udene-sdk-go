@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Info, Shield, CheckCircle2, AlertTriangle, Clock, Settings, Lock } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
@@ -23,6 +23,9 @@ export const ServiceDetailsDialog = ({ open, onOpenChange, service }: ServiceDet
             <Shield className="h-5 w-5 text-primary" />
             {service.title}
           </DialogTitle>
+          <DialogDescription>
+            Detailed information about {service.title} and its features
+          </DialogDescription>
         </DialogHeader>
         
         <ScrollArea className="pr-4">
