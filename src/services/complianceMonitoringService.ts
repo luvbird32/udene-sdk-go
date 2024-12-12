@@ -64,12 +64,12 @@ export const complianceMonitoringService = {
   },
 
   // Create a new compliance report
-  async createComplianceReport(reportData: Partial<ComplianceReport>) {
+  async createComplianceReport(reportData: Pick<ComplianceReport, 'report_type' | 'report_period' | 'generated_by'>) {
     console.log('Creating compliance report:', reportData);
     
     const { data, error } = await supabase
       .from('compliance_reports')
-      .insert([reportData])
+      .insert(reportData)
       .select()
       .single();
 
@@ -118,12 +118,12 @@ export const complianceMonitoringService = {
   },
 
   // Create security assessment
-  async createSecurityAssessment(assessmentData: Partial<SecurityAssessment>) {
+  async createSecurityAssessment(assessmentData: Pick<SecurityAssessment, 'assessment_type' | 'program_id' | 'status'>) {
     console.log('Creating security assessment:', assessmentData);
     
     const { data, error } = await supabase
       .from('security_assessments')
-      .insert([assessmentData])
+      .insert(assessmentData)
       .select()
       .single();
 
