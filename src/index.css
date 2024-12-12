@@ -35,8 +35,8 @@
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
     --muted: 240 3.7% 15.9%;
@@ -55,8 +55,10 @@
   * {
     @apply border-border;
   }
+  
   body {
-    @apply bg-background text-foreground font-['Inter'];
+    @apply bg-background text-foreground font-['Inter'] antialiased;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
   }
   
   /* Force dark mode on landing page */
@@ -70,21 +72,21 @@
   }
 }
 
-/* Glass effects */
+/* Enhanced Glass effects */
 .glass-card {
-  @apply backdrop-blur-xl border shadow-xl;
+  @apply backdrop-blur-xl border shadow-xl transition-all duration-300;
 }
 
 [data-landing-page="true"] .glass-card {
-  @apply bg-black/30 border-white/10;
+  @apply bg-black/30 border-white/10 hover:bg-black/40;
 }
 
 [data-landing-page="false"]:not(.dark) .glass-card {
-  @apply bg-white/70 border-gray-200/50;
+  @apply bg-white/70 border-gray-200/50 hover:bg-white/80;
 }
 
 .glass-nav {
-  @apply fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-b;
+  @apply fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-b transition-all duration-300;
 }
 
 [data-landing-page="true"] .glass-nav {
@@ -95,7 +97,7 @@
   @apply bg-white/70 border-gray-200/50;
 }
 
-/* Animations */
+/* Refined Animations */
 @keyframes fall {
   0% { transform: translateY(-100%); opacity: 1; }
   100% { transform: translateY(1000%); opacity: 0; }
@@ -157,4 +159,24 @@
   );
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
+}
+
+/* Theme transition utilities */
+.theme-transition {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+/* Card hover effects */
+.hover-card {
+  @apply transform transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
+}
+
+/* Button hover effects */
+.hover-button {
+  @apply transform transition-all duration-200 hover:scale-105 active:scale-95;
+}
+
+/* Focus ring utilities */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary/50;
 }
