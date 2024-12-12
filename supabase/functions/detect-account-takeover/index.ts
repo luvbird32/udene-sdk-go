@@ -1,6 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
-
-import { Database } from '../_shared/database.types';
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -12,169 +11,133 @@ interface AccountTakeoverRequest {
   ipAddress: string;
   deviceFingerprint: string;
   userAgent: string;
-  loginTimestamp: string;
-  geoLocation?: string;
-  behavioralData?: {
-    typingPattern?: string;
-    mouseMovements?: string[];
-    timeOnPage?: number;
+  timestamp: string;
+  geoLocation?: {
+    country?: string;
+    city?: string;
+    latitude?: number;
+    longitude?: number;
   };
 }
 
-const supabase = createClient<Database>(
-  Deno.env.get('SUPABASE_URL') ?? '',
-  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-);
-
-async function calculateRiskScore(data: AccountTakeoverRequest): Promise<number> {
-  let riskScore = 0;
-
-  // Check login velocity from IP
-  const { data: recentLogins } = await supabase
-    .from('user_activities')
-    .select('*')
-    .eq('profile_id', data.userId)
-    .eq('activity_type', 'login')
-    .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
-    .order('created_at', { ascending: false });
-
-  if (recentLogins && recentLogins.length > 10) {
-    riskScore += 30; // High login frequency
-  }
-
-  // Check if IP is new for this user
-  const { data: knownIPs } = await supabase
-    .from('user_activities')
-    .select('metadata->ip_address')
-    .eq('profile_id', data.userId)
-    .eq('activity_type', 'login')
-    .neq('metadata->ip_address', data.ipAddress);
-
-  if (knownIPs && knownIPs.length === 0) {
-    riskScore += 20; // New IP address
-  }
-
-  // Check for suspicious location changes
-  if (data.geoLocation) {
-    const { data: lastLogin } = await supabase
-      .from('user_activities')
-      .select('metadata->geo_location')
-      .eq('profile_id', data.userId)
-      .eq('activity_type', 'login')
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .single();
-
-    if (lastLogin && lastLogin.metadata?.geo_location !== data.geoLocation) {
-      riskScore += 25; // Location change
-    }
-  }
-
-  // Check for unusual timing
-  const loginHour = new Date(data.loginTimestamp).getHours();
-  if (loginHour >= 0 && loginHour <= 5) {
-    riskScore += 15; // Unusual login time
-  }
-
-  return Math.min(riskScore, 100);
-}
-
-async function logAccountTakeoverAttempt(
-  data: AccountTakeoverRequest,
-  riskScore: number,
-  isSuspicious: boolean
-) {
-  // Log the activity
-  await supabase.from('user_activities').insert({
-    profile_id: data.userId,
-    activity_type: 'login_security',
-    description: isSuspicious ? 'Suspicious login attempt detected' : 'Login attempt analyzed',
-    metadata: {
-      ip_address: data.ipAddress,
-      device_fingerprint: data.deviceFingerprint,
-      user_agent: data.userAgent,
-      risk_score: riskScore,
-      geo_location: data.geoLocation,
-      behavioral_data: data.behavioralData,
-      timestamp: data.loginTimestamp,
-    },
-  });
-
-  // If suspicious, create a fraud alert
-  if (isSuspicious) {
-    await supabase.from('fraud_alerts').insert({
-      alert_type: 'account_takeover',
-      severity: riskScore > 75 ? 'high' : 'medium',
-      description: `Suspicious login attempt detected with risk score ${riskScore}`,
-      behavioral_indicators: {
-        ip_address: data.ipAddress,
-        device_fingerprint: data.deviceFingerprint,
-        user_agent: data.userAgent,
-        geo_location: data.geoLocation,
-        behavioral_data: data.behavioralData,
-      },
-    });
-  }
-}
-
-Deno.serve(async (req) => {
+serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { userId, ipAddress, deviceFingerprint, userAgent, loginTimestamp, geoLocation, behavioralData } = 
-      await req.json() as AccountTakeoverRequest;
-
-    console.log('Processing account takeover detection for user:', userId);
-
-    // Calculate risk score based on various factors
-    const riskScore = await calculateRiskScore({
-      userId,
-      ipAddress,
-      deviceFingerprint,
-      userAgent,
-      loginTimestamp,
-      geoLocation,
-      behavioralData,
-    });
-
-    const isSuspicious = riskScore > 50;
-
-    // Log the attempt and create alerts if necessary
-    await logAccountTakeoverAttempt(
-      {
-        userId,
-        ipAddress,
-        deviceFingerprint,
-        userAgent,
-        loginTimestamp,
-        geoLocation,
-        behavioralData,
-      },
-      riskScore,
-      isSuspicious
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
+
+    const requestData: AccountTakeoverRequest = await req.json();
+    const { userId, ipAddress, deviceFingerprint, userAgent, timestamp, geoLocation } = requestData;
+
+    // Get recent login attempts for this user
+    const timeWindow = new Date();
+    timeWindow.setHours(timeWindow.getHours() - 24);
+
+    const { data: recentActivity, error: activityError } = await supabaseClient
+      .from('user_activities')
+      .select('*')
+      .eq('profile_id', userId)
+      .gte('created_at', timeWindow.toISOString())
+      .order('created_at', { ascending: false });
+
+    if (activityError) {
+      console.error('Error fetching user activities:', activityError);
+      throw activityError;
+    }
+
+    // Calculate risk factors
+    let riskScore = 0;
+    const riskFactors: Record<string, boolean> = {
+      unusualLocation: false,
+      rapidLoginAttempts: false,
+      newDevice: false,
+      suspiciousIp: false
+    };
+
+    // Check login velocity
+    if (recentActivity && recentActivity.length > 10) {
+      riskScore += 25;
+      riskFactors.rapidLoginAttempts = true;
+    }
+
+    // Check for new device
+    const knownDevices = recentActivity?.filter(a => 
+      a.metadata?.deviceFingerprint === deviceFingerprint
+    );
+    if (!knownDevices?.length) {
+      riskScore += 20;
+      riskFactors.newDevice = true;
+    }
+
+    // Log the activity
+    const { error: logError } = await supabaseClient
+      .from('user_activities')
+      .insert({
+        profile_id: userId,
+        activity_type: 'login_attempt',
+        description: 'Login attempt analysis',
+        metadata: {
+          ipAddress,
+          deviceFingerprint,
+          userAgent,
+          geoLocation,
+          riskFactors
+        }
+      });
+
+    if (logError) {
+      console.error('Error logging activity:', logError);
+      throw logError;
+    }
+
+    // Create fraud alert if risk score is high
+    if (riskScore >= 45) {
+      const { error: alertError } = await supabaseClient
+        .from('fraud_alerts')
+        .insert({
+          alert_type: 'account_takeover',
+          severity: riskScore >= 75 ? 'high' : 'medium',
+          description: 'Suspicious login activity detected',
+          behavioral_indicators: riskFactors
+        });
+
+      if (alertError) {
+        console.error('Error creating fraud alert:', alertError);
+        throw alertError;
+      }
+    }
 
     return new Response(
       JSON.stringify({
         riskScore,
-        isSuspicious,
-        requiresAdditionalVerification: riskScore > 75,
+        riskFactors,
+        isHighRisk: riskScore >= 45,
+        timestamp: new Date().toISOString()
       }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200,
+      { 
+        headers: { 
+          ...corsHeaders,
+          'Content-Type': 'application/json'
+        } 
       }
     );
+
   } catch (error) {
     console.error('Error in account takeover detection:', error);
     return new Response(
       JSON.stringify({ error: 'Internal server error' }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500,
+      { 
+        headers: { 
+          ...corsHeaders,
+          'Content-Type': 'application/json'
+        },
+        status: 500
       }
     );
   }
