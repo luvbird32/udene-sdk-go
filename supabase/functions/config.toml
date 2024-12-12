@@ -7,11 +7,19 @@ SUPABASE_SERVICE_ROLE_KEY = "env"
 SUPABASE_DB_URL = "env"
 
 [[functions]]
+name = "detect-account-takeover"
+verify_jwt = false
+
+[[functions]]
 name = "detect-fraud"
 verify_jwt = false
 
 [[functions]]
 name = "detect-reward-fraud"
+verify_jwt = false
+
+[[functions]]
+name = "detect-promo-fraud"
 verify_jwt = false
 
 [[functions]]

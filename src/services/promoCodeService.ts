@@ -1,8 +1,9 @@
 import { supabase } from "@/integrations/supabase/client";
-import type { Tables } from "@/integrations/supabase/types";
+import type { Tables, TablesInsert } from "@/integrations/supabase/types";
 
 type PromoCode = Tables<'promo_codes'>;
 type PromoCodeUsage = Tables<'promo_code_usage'>;
+type PromoCodeInsert = TablesInsert<'promo_codes'>;
 
 interface ValidationResult {
   isValid: boolean;
@@ -50,7 +51,7 @@ export const validatePromoCode = async (
 
 export const getPromoCodeHistory = async (userId: string) => {
   try {
-    const { data, error } = await supabase
+    const { data: usageData, error: usageError } = await supabase
       .from('promo_code_usage')
       .select(`
         *,
@@ -62,19 +63,19 @@ export const getPromoCodeHistory = async (userId: string) => {
       .eq('user_id', userId)
       .order('usage_timestamp', { ascending: false });
 
-    if (error) {
-      console.error('Error fetching promo code history:', error);
-      throw error;
+    if (usageError) {
+      console.error('Error fetching promo code history:', usageError);
+      throw usageError;
     }
 
-    return data;
+    return usageData;
   } catch (error) {
     console.error('Error in getPromoCodeHistory:', error);
     throw error;
   }
 };
 
-export const createPromoCode = async (promoCodeData: Partial<PromoCode>) => {
+export const createPromoCode = async (promoCodeData: Partial<PromoCodeInsert>) => {
   try {
     const { data, error } = await supabase
       .from('promo_codes')

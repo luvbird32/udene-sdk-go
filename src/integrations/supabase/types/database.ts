@@ -14,6 +14,7 @@ import { WebhooksTable, WebhookDeliveriesTable } from './tables/webhook-tables';
 import { ReferralTrackingTable } from './tables/referral-tables';
 import { TrialUsageTable } from './tables/trial-tables';
 import { InvestigationLogsTable } from './tables/investigation-logs';
+import { PromoCodeTable, PromoCodeUsageTable } from './tables/promo-tables';
 
 export type Json =
   | string
@@ -54,6 +55,8 @@ export interface Database {
       referral_tracking: ReferralTrackingTable;
       trial_usage: TrialUsageTable;
       service_investigation_logs: InvestigationLogsTable;
+      promo_codes: PromoCodeTable;
+      promo_code_usage: PromoCodeUsageTable;
     };
     Views: {
       [_ in never]: never
