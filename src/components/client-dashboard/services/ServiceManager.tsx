@@ -13,6 +13,10 @@ export const ServiceManager = () => {
   const toggleService = useServiceToggle();
   useAIActivityMonitoring();
 
+  const handleToggle = async (serviceType: string, isActive: boolean) => {
+    await toggleService.mutateAsync({ serviceType, isActive });
+  };
+
   if (isLoading) {
     return (
       <div className="space-y-6">
