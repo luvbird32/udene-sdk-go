@@ -10,4 +10,5 @@ export * from './webhooks';
 export * from './ml';
 export * from './client-services';
 export * from './investigation';
-export * from './affiliate';  // Add this line
+export * from './affiliate';
+export * from './trial';

@@ -1,20 +1,22 @@
 import { supabase } from "@/integrations/supabase/client";
-import type { TrialUsage } from "@/integrations/supabase/types/trial";
+import { TrialUsage, TrialUsageInsert } from "@/integrations/supabase/types";
 
 export const createTrialUsage = async (userId: string, trialType: string) => {
   try {
     const startDate = new Date().toISOString();
     const endDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(); // 30 days trial
 
+    const trialData: TrialUsageInsert = {
+      user_id: userId,
+      trial_type: trialType,
+      start_date: startDate,
+      end_date: endDate,
+      status: 'active'
+    };
+
     const { data: trial, error: createError } = await supabase
       .from('trial_usage')
-      .insert({
-        user_id: userId,
-        trial_type: trialType,
-        start_date: startDate,
-        end_date: endDate,
-        status: 'active'
-      })
+      .insert(trialData)
       .select()
       .single();
 
@@ -36,7 +38,7 @@ export const createTrialUsage = async (userId: string, trialType: string) => {
   }
 };
 
-export const getTrialUsage = async (userId: string) => {
+export const getTrialUsage = async (userId: string): Promise<TrialUsage[]> => {
   try {
     const { data, error } = await supabase
       .from('trial_usage')
@@ -45,14 +47,14 @@ export const getTrialUsage = async (userId: string) => {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    return data;
+    return data || [];
   } catch (error) {
     console.error('Error fetching trial usage:', error);
     throw error;
   }
 };
 
-export const updateTrialStatus = async (trialId: string, status: string) => {
+export const updateTrialStatus = async (trialId: string, status: string): Promise<TrialUsage | null> => {
   try {
     const { data, error } = await supabase
       .from('trial_usage')
