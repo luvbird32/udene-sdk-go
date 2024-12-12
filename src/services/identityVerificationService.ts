@@ -1,8 +1,8 @@
 import { supabase } from "@/integrations/supabase/client";
-import type { IdentityVerification, VerificationAttempt } from "@/types/verification";
+import type { IdentityVerification, IdentityVerificationInsert, VerificationAttempt, VerificationAttemptInsert } from "@/types/verification";
 
 export const identityVerificationService = {
-  async createVerification(data: Partial<IdentityVerification>) {
+  async createVerification(data: IdentityVerificationInsert) {
     const { data: verification, error } = await supabase
       .from('identity_verifications')
       .insert([data])
@@ -10,7 +10,7 @@ export const identityVerificationService = {
       .single();
 
     if (error) throw error;
-    return verification;
+    return verification as IdentityVerification;
   },
 
   async getVerifications(userId: string) {
@@ -21,7 +21,7 @@ export const identityVerificationService = {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    return verifications;
+    return verifications as IdentityVerification[];
   },
 
   async getVerificationById(id: string) {
@@ -32,7 +32,7 @@ export const identityVerificationService = {
       .single();
 
     if (error) throw error;
-    return verification;
+    return verification as IdentityVerification;
   },
 
   async updateVerification(id: string, data: Partial<IdentityVerification>) {
@@ -44,10 +44,10 @@ export const identityVerificationService = {
       .single();
 
     if (error) throw error;
-    return verification;
+    return verification as IdentityVerification;
   },
 
-  async logVerificationAttempt(data: Partial<VerificationAttempt>) {
+  async logVerificationAttempt(data: VerificationAttemptInsert) {
     const { data: attempt, error } = await supabase
       .from('verification_attempts')
       .insert([data])
@@ -55,7 +55,7 @@ export const identityVerificationService = {
       .single();
 
     if (error) throw error;
-    return attempt;
+    return attempt as VerificationAttempt;
   },
 
   async getVerificationAttempts(verificationId: string) {
@@ -66,6 +66,6 @@ export const identityVerificationService = {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    return attempts;
+    return attempts as VerificationAttempt[];
   }
 };

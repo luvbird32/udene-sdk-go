@@ -16,6 +16,7 @@ import { TrialUsageTable } from './tables/trial-tables';
 import { InvestigationLogsTable } from './tables/investigation-logs';
 import { PromoCodeTable, PromoCodeUsageTable } from './tables/promo-tables';
 import { DeviceFingerprintTable, DeviceFingerprintHistoryTable } from './tables/device-fingerprint-tables';
+import { IdentityVerificationsTable, VerificationAttemptsTable } from './tables/verification-tables';
 
 export type Json =
   | string
@@ -60,6 +61,8 @@ export interface Database {
       promo_code_usage: PromoCodeUsageTable;
       device_fingerprints: DeviceFingerprintTable;
       device_fingerprint_history: DeviceFingerprintHistoryTable;
+      identity_verifications: IdentityVerificationsTable;
+      verification_attempts: VerificationAttemptsTable;
     };
     Views: {
       [_ in never]: never
