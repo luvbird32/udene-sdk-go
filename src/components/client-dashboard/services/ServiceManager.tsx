@@ -3,9 +3,11 @@ import { ServiceHeader } from './ServiceHeader';
 import { ServiceList } from './ServiceList';
 import { useServiceManager } from './useServiceManager';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { useAIActivityMonitoring } from '@/hooks/useAIActivityMonitoring';
 
 export const ServiceManager = () => {
   const { activeServices, isLoading, toggleService } = useServiceManager();
+  useAIActivityMonitoring(); // Add AI activity monitoring
 
   if (isLoading) {
     return <div className="grid gap-4 animate-pulse">

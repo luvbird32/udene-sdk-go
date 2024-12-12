@@ -1,119 +1,58 @@
 export const FRAUD_DETECTION_SERVICES = [
   {
-    type: "bot_prevention",
-    title: "Bot Prevention",
-    description: "Advanced bot detection and prevention system to protect against automated attacks",
+    type: 'bot_prevention',
+    title: 'Bot & AI Protection',
+    description: 'Advanced detection and prevention of automated threats and shadow AI usage',
     features: [
-      "Real-time behavior analysis",
-      "Mouse movement pattern detection",
-      "Keyboard input monitoring",
-      "Session anomaly detection",
-      "Automated threat blocking"
+      'Bot Detection',
+      'Shadow AI Detection',
+      'Behavioral Analysis',
+      'Pattern Recognition',
+      'Real-time Monitoring'
     ]
   },
   {
-    type: "transaction_monitoring",
-    title: "Transaction Monitoring",
-    description: "Real-time monitoring of transactions for suspicious patterns and behaviors",
+    type: 'transaction_monitoring',
+    title: 'Transaction Monitoring',
+    description: 'Real-time monitoring of transactions for fraud detection',
     features: [
-      "Real-time transaction screening",
-      "Pattern recognition",
-      "Velocity checks",
-      "Amount threshold monitoring"
+      'Risk Scoring',
+      'Anomaly Detection',
+      'Transaction History Analysis',
+      'Alerts and Notifications'
     ]
   },
   {
-    type: "device_intelligence",
-    title: "Device Intelligence",
-    description: "Advanced device fingerprinting and risk assessment",
+    type: 'user_behavior_analysis',
+    title: 'User Behavior Analysis',
+    description: 'Analyzing user behavior to detect potential fraud',
     features: [
-      "Device fingerprinting",
-      "Location verification",
-      "VPN/Proxy detection",
-      "Bot detection"
+      'Behavioral Patterns',
+      'Session Replay',
+      'User Risk Scoring',
+      'Real-time Alerts'
     ]
   },
   {
-    type: "behavioral_analytics",
-    title: "Behavioral Analytics",
-    description: "Analysis of user behavior patterns to detect anomalies",
+    type: 'compliance_monitoring',
+    title: 'Compliance Monitoring',
+    description: 'Ensuring compliance with regulations and standards',
     features: [
-      "User behavior profiling",
-      "Session analysis",
-      "Navigation pattern monitoring",
-      "Anomaly detection"
+      'Audit Trails',
+      'Regulatory Reporting',
+      'Data Privacy Checks',
+      'Automated Compliance Alerts'
     ]
   },
   {
-    type: "reward_fraud",
-    title: "Reward Program Protection",
-    description: "Specialized detection for loyalty and reward program abuse",
+    type: 'api_security',
+    title: 'API Security',
+    description: 'Protecting APIs from unauthorized access and abuse',
     features: [
-      "Points fraud detection",
-      "Multiple account detection",
-      "Rapid redemption monitoring",
-      "Program abuse prevention"
-    ]
-  },
-  {
-    type: "romance_scam",
-    title: "Romance Scam Detection",
-    description: "Advanced detection of romance and relationship-based fraud patterns",
-    features: [
-      "Message pattern analysis",
-      "Relationship progression monitoring",
-      "Financial request detection",
-      "Cross-platform behavior tracking"
-    ]
-  },
-  {
-    type: "freetrial_abuse",
-    title: "Free Trial Abuse Prevention",
-    description: "Detect and prevent exploitation of free trial offerings",
-    features: [
-      "Multiple account correlation",
-      "Payment method validation",
-      "Device fingerprint tracking",
-      "Usage pattern analysis"
-    ]
-  },
-  {
-    type: "referral_fraud",
-    title: "Referral Program Protection",
-    description: "Prevent abuse and exploitation of referral programs",
-    features: [
-      "Self-referral detection",
-      "Fake account identification",
-      "Referral chain analysis",
-      "Reward distribution monitoring"
-    ]
-  },
-  {
-    type: "affiliate_fraud",
-    title: "Affiliate Program Protection",
-    description: "Detect and prevent fraudulent affiliate marketing activities",
-    features: [
-      "Click fraud detection",
-      "Cookie stuffing prevention",
-      "Traffic quality analysis",
-      "Commission pattern monitoring"
-    ]
-  },
-  {
-    type: "bec_prevention",
-    title: "Business Email Compromise Prevention",
-    description: "Advanced detection and prevention of business email compromise attacks",
-    features: [
-      "Email pattern analysis",
-      "Domain spoofing detection",
-      "Behavioral anomaly detection",
-      "Real-time monitoring",
-      "Executive impersonation prevention",
-      "Vendor email compromise detection",
-      "Payment fraud prevention",
-      "Multi-factor authentication triggers",
-      "Suspicious IP detection",
-      "Email header analysis"
+      'Rate Limiting',
+      'IP Whitelisting',
+      'API Key Management',
+      'Threat Detection'
     ]
   }
 ];

@@ -93,6 +93,48 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_activity_monitoring: {
+        Row: {
+          activity_type: string
+          created_at: string | null
+          detection_patterns: Json | null
+          id: string
+          ip_address: string | null
+          metadata: Json | null
+          risk_score: number | null
+          tool_signature: string | null
+          updated_at: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          activity_type: string
+          created_at?: string | null
+          detection_patterns?: Json | null
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          risk_score?: number | null
+          tool_signature?: string | null
+          updated_at?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          activity_type?: string
+          created_at?: string | null
+          detection_patterns?: Json | null
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          risk_score?: number | null
+          tool_signature?: string | null
+          updated_at?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       api_credits: {
         Row: {
           created_at: string | null
