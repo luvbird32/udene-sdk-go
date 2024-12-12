@@ -895,6 +895,56 @@ export type Database = {
           },
         ]
       }
+      service_investigation_logs: {
+        Row: {
+          created_at: string | null
+          findings: Json | null
+          id: string
+          investigation_type: string
+          manual_actions: Json | null
+          notes: string | null
+          sanitization_steps: Json | null
+          service_id: string
+          status: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          findings?: Json | null
+          id?: string
+          investigation_type: string
+          manual_actions?: Json | null
+          notes?: string | null
+          sanitization_steps?: Json | null
+          service_id: string
+          status?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          findings?: Json | null
+          id?: string
+          investigation_type?: string
+          manual_actions?: Json | null
+          notes?: string | null
+          sanitization_steps?: Json | null
+          service_id?: string
+          status?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_investigation_logs_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "client_services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       training_datasets: {
         Row: {
           created_at: string | null

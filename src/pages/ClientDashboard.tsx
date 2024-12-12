@@ -11,7 +11,7 @@ import { RiskDistribution } from "@/components/client-dashboard/analytics/RiskDi
 import { BusinessIntelligence } from "@/components/client-dashboard/analytics/BusinessIntelligence";
 import { ReportManager } from "@/components/client-dashboard/reporting/ReportManager";
 import { useToast } from "@/components/ui/use-toast";
-import { Settings, Shield, Code, UserRound, Webhook, FileText, Layers } from "lucide-react";
+import { Settings, Shield, Code, UserRound, Webhook, FileText, Layers, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
@@ -20,12 +20,7 @@ import { ClientProfile } from "@/components/client-dashboard/ClientProfile";
 import { WebhookManager } from "@/components/client-dashboard/webhooks/WebhookManager";
 import { TriggerManager } from "@/components/client-dashboard/triggers/TriggerManager";
 import { ServiceManager } from "@/components/client-dashboard/services/ServiceManager";
-import { ReferralFraudMonitoring } from "@/components/client-dashboard/analytics/ReferralFraudMonitoring";
-import { RomanceScamMonitoring } from "@/components/client-dashboard/analytics/RomanceScamMonitoring";
-import { RewardProgramMonitoring } from "@/components/client-dashboard/analytics/RewardProgramMonitoring";
-import { AffiliateMonitoring } from "@/components/client-dashboard/analytics/AffiliateMonitoring";
-import { TrialAbuseMonitoring } from "@/components/client-dashboard/analytics/TrialAbuseMonitoring";
-import { FraudPatterns } from "@/components/dashboard/FraudPatterns";
+import { InvestigationLogs } from "@/components/client-dashboard/investigation/InvestigationLogs";
 import { ThemeToggle } from "@/components/client-dashboard/ThemeToggle";
 import { SecurityProgramList } from "@/components/client-dashboard/security/SecurityProgramList";
 
@@ -111,9 +106,9 @@ const ClientDashboard = () => {
             <UserRound className="h-4 w-4 mr-2" />
             Profile
           </TabsTrigger>
-          <TabsTrigger value="security">
-            <Shield className="h-4 w-4 mr-2" />
-            Security Programs
+          <TabsTrigger value="investigations">
+            <Search className="h-4 w-4 mr-2" />
+            Investigations
           </TabsTrigger>
         </TabsList>
 
@@ -176,11 +171,8 @@ const ClientDashboard = () => {
           <ClientProfile />
         </TabsContent>
 
-        <TabsContent value="security" className="space-y-6">
-          <div className="grid gap-6">
-            <h2 className="text-2xl font-bold">Security Programs</h2>
-            <SecurityProgramList />
-          </div>
+        <TabsContent value="investigations" className="space-y-6">
+          <InvestigationLogs />
         </TabsContent>
       </Tabs>
     </div>
