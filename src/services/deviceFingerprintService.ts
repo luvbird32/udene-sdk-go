@@ -1,5 +1,8 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
+import type { TablesInsert } from "@/integrations/supabase/types";
+
+type DeviceFingerprintInsert = TablesInsert<'device_fingerprints'>;
 
 interface DeviceFingerprint {
   fingerprint_hash: string;
@@ -27,7 +30,7 @@ export const createDeviceFingerprint = async (fingerprint: DeviceFingerprint) =>
     .insert([{
       ...fingerprint,
       user_id: user.id
-    }])
+    }] as DeviceFingerprintInsert[])
     .select()
     .single();
 
