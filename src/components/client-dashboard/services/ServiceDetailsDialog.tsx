@@ -17,8 +17,8 @@ interface ServiceDetailsDialogProps {
 export const ServiceDetailsDialog = ({ open, onOpenChange, service }: ServiceDetailsDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] max-h-[80vh]">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-hidden">
+        <DialogHeader className="sticky top-0 bg-background z-10 pb-2">
           <DialogTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5 text-primary" />
             {service.title}
@@ -28,8 +28,8 @@ export const ServiceDetailsDialog = ({ open, onOpenChange, service }: ServiceDet
           </DialogDescription>
         </DialogHeader>
         
-        <ScrollArea className="pr-4">
-          <div className="space-y-6">
+        <ScrollArea className="pr-4 h-[calc(80vh-120px)] overflow-y-auto">
+          <div className="space-y-6 pr-2">
             {/* Overview Section */}
             <div className="space-y-2">
               <div className="flex items-start gap-2">
