@@ -6,6 +6,29 @@
 
 @layer base {
   :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5% 64.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
@@ -25,38 +48,87 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
-    --radius: 0.5rem;
   }
+}
 
+@layer base {
+  * {
+    @apply border-border;
+  }
   body {
     @apply bg-background text-foreground font-['Inter'];
+  }
+  
+  /* Light mode styles */
+  :root:not(.dark) body {
+    @apply bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50;
+  }
+  
+  /* Dark mode styles */
+  .dark body {
     @apply bg-gradient-to-br from-black via-gray-900 to-black;
   }
 }
 
 .glass-card {
   @apply backdrop-blur-xl border shadow-xl;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+}
+
+.dark .glass-card {
   @apply bg-black/30 border-white/10;
+}
+
+:root:not(.dark) .glass-card {
+  @apply bg-white/70 border-gray-200/50;
 }
 
 .glass-nav {
   @apply fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-b;
+}
+
+.dark .glass-nav {
   @apply bg-black/20 border-white/10;
+}
+
+:root:not(.dark) .glass-nav {
+  @apply bg-white/70 border-gray-200/50;
 }
 
 .glass-button {
   @apply backdrop-blur-md transition-all duration-300;
+}
+
+.dark .glass-button {
   @apply bg-white/10 hover:bg-white/20 border-white/20;
+}
+
+:root:not(.dark) .glass-button {
+  @apply bg-white/80 hover:bg-white/90 border-gray-200/50;
 }
 
 .glass-input {
   @apply backdrop-blur-md transition-all duration-300;
+}
+
+.dark .glass-input {
   @apply bg-black/20 border-white/20 focus:border-white/40;
+}
+
+:root:not(.dark) .glass-input {
+  @apply bg-white/80 border-gray-200/50 focus:border-gray-300;
 }
 
 .glass-section {
   @apply relative backdrop-blur-sm border-y;
+}
+
+.dark .glass-section {
   @apply bg-gradient-to-br from-black/40 via-black/20 to-black/40 border-white/10;
+}
+
+:root:not(.dark) .glass-section {
+  @apply bg-gradient-to-br from-white/40 via-white/20 to-white/40 border-gray-200/50;
 }
 
 @keyframes fall {
