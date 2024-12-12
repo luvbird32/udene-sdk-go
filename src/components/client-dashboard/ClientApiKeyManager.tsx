@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Loader2, Copy, Check, Trash } from "lucide-react";
 import { generateSecureApiKey } from "@/utils/apiKeyUtils";
 import { useCurrentUser } from "@/hooks/useCurrentUser";

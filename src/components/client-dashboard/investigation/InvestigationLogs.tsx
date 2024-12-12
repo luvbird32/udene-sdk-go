@@ -2,11 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 import { Plus, FileText, Info } from "lucide-react";
 import { useState } from "react";
 import { NewInvestigationDialog } from "./NewInvestigationDialog";
 import { InvestigationLogList } from "./InvestigationLogList";
-import { useToast } from "@/components/ui/use-toast";
 import { InvestigationLog } from "@/integrations/supabase/types/investigation";
 
 export const InvestigationLogs = () => {

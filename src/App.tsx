@@ -10,7 +10,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { supabase } from "./integrations/supabase/client";
 import { AuthFormWrapper } from "./components/auth/AuthFormWrapper";
-import { useToast } from "./components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 const queryClient = new QueryClient({
   defaultOptions: {
