@@ -3,10 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 export const TrialAbuseMonitoring = () => {
+  const { toast } = useToast();
+  
   const { data: trialStats, isLoading } = useQuery({
     queryKey: ["trial-abuse-stats"],
     queryFn: async () => {
@@ -16,7 +19,14 @@ export const TrialAbuseMonitoring = () => {
         .order('created_at', { ascending: false })
         .limit(100);
 
-      if (error) throw error;
+      if (error) {
+        toast({
+          title: "Error",
+          description: "Failed to fetch trial usage data",
+          variant: "destructive",
+        });
+        throw error;
+      }
 
       const stats = (data || []).reduce((acc: any, curr) => {
         const status = curr.status === 'active' ? 
