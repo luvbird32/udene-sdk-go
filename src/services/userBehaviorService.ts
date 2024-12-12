@@ -1,7 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 
-export interface UserBehaviorMetrics {
+interface UserBehaviorMetrics {
   velocity: number;
   deviceCount: number;
   locationCount: number;
@@ -15,11 +15,16 @@ export interface UserBehaviorMetrics {
   }>;
 }
 
-export interface BehaviorPattern {
+interface BehaviorPattern {
   patternType: string;
   confidence: number;
-  indicators: Json;
+  indicators: Record<string, unknown>;
   timestamp: string;
+}
+
+interface ActivityMetadata {
+  confidence: number;
+  indicators: Record<string, unknown>;
 }
 
 export const userBehaviorService = {
@@ -94,18 +99,21 @@ export const userBehaviorService = {
 
     if (error) throw error;
 
-    return (patterns || []).map(pattern => ({
-      patternType: pattern.activity_type,
-      confidence: pattern.metadata?.confidence || 0,
-      indicators: pattern.metadata?.indicators || {},
-      timestamp: pattern.created_at
-    }));
+    return (patterns || []).map(pattern => {
+      const metadata = pattern.metadata as ActivityMetadata;
+      return {
+        patternType: pattern.activity_type,
+        confidence: metadata?.confidence || 0,
+        indicators: metadata?.indicators || {},
+        timestamp: pattern.created_at
+      };
+    });
   },
 
   async logUserActivity(
     userId: string, 
     activityType: string, 
-    metadata: Record<string, any>
+    metadata: ActivityMetadata
   ) {
     const { data, error } = await supabase
       .from('user_activities')
