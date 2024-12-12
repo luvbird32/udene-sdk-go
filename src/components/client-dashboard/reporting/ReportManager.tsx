@@ -8,6 +8,10 @@ import { DateRangeSelector } from "./DateRangeSelector";
 import { ReportTypeSelector } from "./ReportTypeSelector";
 import { ScheduleSection } from "./ScheduleSection";
 import { ExportActions } from "./ExportActions";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { FileText, Info } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface DateRange {
   from: Date;
@@ -24,7 +28,7 @@ export const ReportManager = () => {
   const [scheduleName, setScheduleName] = useState("");
   const [scheduleFrequency, setScheduleFrequency] = useState("daily");
 
-  const { data: savedTemplates } = useQuery({
+  const { data: savedTemplates, isLoading: templatesLoading } = useQuery({
     queryKey: ["report-templates"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -148,15 +152,52 @@ export const ReportManager = () => {
     document.body.removeChild(link);
   };
 
+  if (templatesLoading) {
+    return (
+      <Card className="p-6 space-y-6">
+        <div className="flex justify-between items-center mb-6">
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-48" />
+            <Skeleton className="h-4 w-72" />
+          </div>
+          <div className="space-x-2">
+            <Skeleton className="h-10 w-32 inline-block" />
+            <Skeleton className="h-10 w-32 inline-block" />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Skeleton className="h-[120px]" />
+          <Skeleton className="h-[120px]" />
+          <Skeleton className="h-[120px]" />
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <Card className="p-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold">Report Management</h3>
+        <div className="flex items-center gap-3">
+          <FileText className="h-5 w-5 text-primary" />
+          <div>
+            <h3 className="text-lg font-semibold">Report Management</h3>
+            <p className="text-sm text-muted-foreground">Generate and schedule custom reports</p>
+          </div>
+          <Badge variant="outline" className="ml-2">Beta</Badge>
+        </div>
         <ExportActions 
           onExportCSV={() => exportReport('csv')}
           onExportPDF={() => exportReport('pdf')}
         />
       </div>
+
+      <Alert>
+        <Info className="h-4 w-4" />
+        <AlertTitle>Getting Started</AlertTitle>
+        <AlertDescription>
+          Select a date range and report type to begin. You can save report templates for future use or schedule regular report generation.
+        </AlertDescription>
+      </Alert>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <DateRangeSelector 
@@ -168,17 +209,21 @@ export const ReportManager = () => {
           onReportTypeChange={setReportType}
         />
         <div>
-          <label className="block text-sm font-medium mb-2">Templates</label>
+          <label className="block text-sm font-medium mb-2">Saved Templates</label>
           <Select>
             <SelectTrigger>
-              <SelectValue placeholder="Load template" />
+              <SelectValue placeholder={savedTemplates?.length ? "Load template" : "No templates saved"} />
             </SelectTrigger>
             <SelectContent>
-              {savedTemplates?.map((template) => (
-                <SelectItem key={template.id} value={template.id}>
-                  {template.report_type}
-                </SelectItem>
-              ))}
+              {savedTemplates?.length === 0 ? (
+                <SelectItem value="none" disabled>No saved templates</SelectItem>
+              ) : (
+                savedTemplates?.map((template) => (
+                  <SelectItem key={template.id} value={template.id}>
+                    {template.report_type}
+                  </SelectItem>
+                ))
+              )}
             </SelectContent>
           </Select>
         </div>
