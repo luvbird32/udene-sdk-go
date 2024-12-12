@@ -27,8 +27,8 @@ export const ThemeToggle = () => {
       size="icon"
       className={`w-10 h-10 transition-colors ${
         theme === "dark" 
-          ? "bg-transparent border-white hover:bg-white/10" 
-          : "bg-transparent border-black hover:bg-black/10"
+          ? "border-2 border-white bg-transparent hover:bg-white/10" 
+          : "border-2 border-black bg-transparent hover:bg-black/10"
       }`}
       onClick={toggleTheme}
       aria-label="Toggle theme"
