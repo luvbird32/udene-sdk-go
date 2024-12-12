@@ -54,5 +54,60 @@ export const FRAUD_DETECTION_SERVICES = [
       'API Key Management',
       'Threat Detection'
     ]
+  },
+  {
+    type: 'email_security',
+    title: 'Email Security',
+    description: 'Advanced email fraud and phishing protection',
+    features: [
+      'Email Authentication',
+      'Phishing Detection',
+      'Domain Monitoring',
+      'DMARC Enforcement'
+    ]
+  },
+  {
+    type: 'device_fingerprinting',
+    title: 'Device Fingerprinting',
+    description: 'Identify and track suspicious devices',
+    features: [
+      'Device Recognition',
+      'Browser Fingerprinting',
+      'Hardware Analysis',
+      'Location Tracking'
+    ]
+  },
+  {
+    type: 'identity_verification',
+    title: 'Identity Verification',
+    description: 'Multi-factor identity verification system',
+    features: [
+      'Document Verification',
+      'Biometric Authentication',
+      'Identity Scoring',
+      'Fraud Prevention'
+    ]
+  },
+  {
+    type: 'payment_protection',
+    title: 'Payment Protection',
+    description: 'Secure payment processing and fraud prevention',
+    features: [
+      'Payment Verification',
+      'Chargeback Prevention',
+      'Risk Assessment',
+      'Transaction Monitoring'
+    ]
+  },
+  {
+    type: 'account_takeover',
+    title: 'Account Takeover Protection',
+    description: 'Prevent unauthorized account access and hijacking',
+    features: [
+      'Login Monitoring',
+      'Suspicious Activity Detection',
+      'Password Security',
+      'Session Management'
+    ]
   }
 ];
