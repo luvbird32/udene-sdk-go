@@ -15,7 +15,7 @@ export const InvestigationLogs = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
 
-  const { data: logs, isLoading, error } = useQuery<InvestigationLog[]>({
+  const { data: logs, isLoading, error } = useQuery({
     queryKey: ["investigation-logs"],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -36,7 +36,7 @@ export const InvestigationLogs = () => {
         throw error;
       }
 
-      return data;
+      return data as InvestigationLog[];
     },
   });
 

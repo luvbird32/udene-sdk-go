@@ -38,7 +38,6 @@ export const NewInvestigationDialog = ({ open, onOpenChange }: NewInvestigationD
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
 
-      // Get the user's active service
       const { data: services, error: servicesError } = await supabase
         .from('client_services')
         .select('id')
