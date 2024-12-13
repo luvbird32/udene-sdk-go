@@ -9,7 +9,7 @@ import { Loader2, Copy, Check, Trash } from "lucide-react";
 import { generateSecureApiKey } from "@/utils/apiKeyUtils";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 
-interface ClientApiKey {
+interface UdeneApiKey {
   id: string;
   key_value: string;
   name: string;
@@ -29,7 +29,7 @@ export const ClientApiKeyManager = () => {
 
   // Fetch existing API keys
   const { data: apiKeys, isLoading } = useQuery({
-    queryKey: ['client-api-keys'],
+    queryKey: ['udene-api-keys'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('client_api_keys')
@@ -37,7 +37,7 @@ export const ClientApiKeyManager = () => {
         .order('created_at', { ascending: false });
       
       if (error) throw error;
-      return data as ClientApiKey[];
+      return data as UdeneApiKey[];
     }
   });
 
@@ -67,10 +67,10 @@ export const ClientApiKeyManager = () => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['client-api-keys'] });
+      queryClient.invalidateQueries({ queryKey: ['udene-api-keys'] });
       toast({
         title: "API Key Generated",
-        description: "Your new API key has been created successfully.",
+        description: "Your new Udene API key has been created successfully.",
       });
       setProjectName("");
       setProjectDescription("");
@@ -95,10 +95,10 @@ export const ClientApiKeyManager = () => {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['client-api-keys'] });
+      queryClient.invalidateQueries({ queryKey: ['udene-api-keys'] });
       toast({
         title: "API Key Deleted",
-        description: "The API key has been deleted successfully.",
+        description: "The Udene API key has been deleted successfully.",
       });
     },
     onError: (error) => {
@@ -128,7 +128,7 @@ export const ClientApiKeyManager = () => {
   return (
     <div className="space-y-6">
       <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Generate New API Key</h3>
+        <h3 className="text-lg font-semibold mb-4">Generate New Udene API Key</h3>
         <div className="space-y-4">
           <div>
             <Input
@@ -160,7 +160,7 @@ export const ClientApiKeyManager = () => {
       </Card>
 
       <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Your API Keys</h3>
+        <h3 className="text-lg font-semibold mb-4">Your Udene API Keys</h3>
         {isLoading ? (
           <div className="flex justify-center">
             <Loader2 className="h-6 w-6 animate-spin" />
@@ -202,7 +202,7 @@ export const ClientApiKeyManager = () => {
             ))}
             {(!apiKeys || apiKeys.length === 0) && (
               <p className="text-center text-muted-foreground">
-                No API keys generated yet.
+                No Udene API keys generated yet.
               </p>
             )}
           </div>

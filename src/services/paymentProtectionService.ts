@@ -8,7 +8,7 @@ export interface PaymentRiskAssessment {
   verificationRequired: boolean;
 }
 
-export const paymentProtectionService = {
+export const udenePaymentProtectionService = {
   async assessTransaction(transactionData: Partial<Transaction>): Promise<PaymentRiskAssessment> {
     try {
       const { data: response, error } = await supabase.functions.invoke('assess-payment-risk', {

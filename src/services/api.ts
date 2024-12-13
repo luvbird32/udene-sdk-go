@@ -1,7 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { getItem, setItem } from "@/utils/indexedDB";
 
-export interface FraudMetrics {
+export interface UdeneMetrics {
   riskScore: number;
   activeUsers: number;
   alertCount: number;
@@ -19,7 +19,7 @@ export interface Activity {
   timestamp: string;
 }
 
-export const getFraudMetrics = async (): Promise<FraudMetrics> => {
+export const getFraudMetrics = async (): Promise<UdeneMetrics> => {
   try {
     // Try to get cached metrics first
     const cachedMetrics = await getItem('apiResponses', 'fraudMetrics');
@@ -121,53 +121,6 @@ export const getRecentActivity = async (): Promise<Activity[]> => {
   }
 };
 
-export const predictFraud = async (transactionData: any) => {
-  try {
-    // Regular fraud detection
-    const { data: fraudData, error: fraudError } = await supabase.functions.invoke('detect-fraud', {
-      body: { transaction: transactionData }
-    });
-
-    if (fraudError) throw fraudError;
-
-    // Reward fraud detection if transaction includes rewards
-    if (transactionData.rewards) {
-      const { data: rewardFraudData, error: rewardError } = await supabase.functions.invoke('detect-reward-fraud', {
-        body: { 
-          userId: transactionData.customer_id,
-          transactionData 
-        }
-      });
-
-      if (rewardError) throw rewardError;
-
-      // Combine regular fraud and reward fraud scores
-      return {
-        ...fraudData,
-        rewardFraudScore: rewardFraudData.fraudScore,
-        rewardRiskFactors: rewardFraudData.riskFactors,
-        recommendation: fraudData.recommendation === 'block' || rewardFraudData.recommendation === 'block' 
-          ? 'block' 
-          : 'allow'
-      };
-    }
-
-    return fraudData;
-  } catch (error) {
-    console.error('Error predicting fraud:', error);
-    throw error;
-  }
-};
-
-interface ApiKey {
-  id: string;
-  key_value: string;
-  status: 'active' | 'inactive' | 'revoked';
-  name: string;
-  created_at?: string;
-  updated_at?: string;
-}
-
 export const validateApiKey = async (apiKey: string): Promise<boolean> => {
   if (!apiKey?.trim()) {
     console.log('Empty API key provided');
@@ -175,7 +128,7 @@ export const validateApiKey = async (apiKey: string): Promise<boolean> => {
   }
 
   try {
-    console.log("Checking API key in database");
+    console.log("Checking Udene API key in database");
     const { data, error } = await supabase
       .from('api_keys')
       .select('status')
@@ -183,28 +136,28 @@ export const validateApiKey = async (apiKey: string): Promise<boolean> => {
       .single();
 
     if (error) {
-      console.error('API key validation error:', error);
+      console.error('Udene API key validation error:', error);
       return false;
     }
 
     if (!data) {
-      console.log('No API key found');
+      console.log('No Udene API key found');
       return false;
     }
 
     const isValid = data.status === 'active';
-    console.log('API key validation result:', isValid);
+    console.log('Udene API key validation result:', isValid);
     return isValid;
   } catch (error) {
-    console.error('API key validation failed:', error);
+    console.error('Udene API key validation failed:', error);
     return false;
   }
 };
 
 export const setApiKey = (apiKey: string): void => {
-  localStorage.setItem("fraud_api_key", apiKey);
+  localStorage.setItem("udene_api_key", apiKey);
 };
 
 export const clearApiKey = (): void => {
-  localStorage.removeItem("fraud_api_key");
+  localStorage.removeItem("udene_api_key");
 };
