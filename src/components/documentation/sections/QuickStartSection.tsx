@@ -2,18 +2,18 @@ import { Info } from "lucide-react";
 import { CodeBlock } from "../code-block/CodeBlock";
 
 const quickStartCode = `# Set your API key as an environment variable
-export FRAUD_API_KEY=your_api_key_here
+export UDENE_API_KEY=your_api_key_here
 
 # Make your first API request
-curl -X GET "https://api.example.com/v1/metrics" \\
-  -H "Authorization: Bearer $FRAUD_API_KEY"`;
+curl -X GET "https://udene.net/v1/metrics" \\
+  -H "Authorization: Bearer $UDENE_API_KEY"`;
 
 export const QuickStartSection = () => {
   return (
     <div className="space-y-4">
       <h3 className="text-xl font-semibold">Quick Start Guide</h3>
       <p className="text-muted-foreground">
-        Get started with our Fraud Detection API in minutes. First, set up your API key:
+        Get started with Udene's Fraud Detection API in minutes. First, set up your API key:
       </p>
       
       <CodeBlock code={quickStartCode} />
