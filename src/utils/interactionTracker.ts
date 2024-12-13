@@ -1,6 +1,7 @@
 import { throttle } from 'lodash';
 import { supabase } from '@/integrations/supabase/client';
 import { API_CONFIG } from '@/config/api';
+import { Json } from '@/integrations/supabase/types';
 
 interface InteractionData {
   timestamp: number;
@@ -40,18 +41,25 @@ class InteractionTracker {
         return;
       }
 
-      // Get bot detection status
-      const { data: botDetection } = await supabase
+      // Convert buffer to a JSON-serializable format
+      const serializedInteractions = this.buffer.map(interaction => ({
+        timestamp: interaction.timestamp,
+        type: interaction.type,
+        data: JSON.stringify(interaction.data)
+      }));
+
+      // Insert audit log with properly typed data
+      const { data: auditLog } = await supabase
         .from('audit_logs')
         .insert({
           event_type: 'interaction_tracking',
-          user_id: user.id, // Set the user_id from the authenticated user
+          user_id: user.id,
           entity_type: 'user_interaction',
           entity_id: user.id,
           changes: {
-            interactions: this.buffer,
+            interactions: serializedInteractions,
             deviceInfo: this.getDeviceInfo()
-          }
+          } as Json
         });
 
       await fetch(`${API_CONFIG.BASE_URL}/track`, {
