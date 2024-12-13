@@ -1,4 +1,4 @@
-# Getting Started with Fraud Detection API
+# Getting Started with Udene API
 
 ## Prerequisites
 - API key (obtain from your dashboard)
@@ -10,29 +10,29 @@
 
 ```bash
 # JavaScript
-npm install @fraud/js-sdk
+npm install @udene/sdk
 
 # Python
-pip install fraud-sdk
+pip install udene-sdk
 
 # Java
-maven install fraud-sdk
+maven install udene-sdk
 ```
 
 2. Initialize the client:
 
 ```javascript
 // JavaScript
-const { FraudClient } = require('@fraud/js-sdk');
-const client = new FraudClient('your_api_key');
+const { UdeneClient } = require('@udene/sdk');
+const client = new UdeneClient('your_api_key');
 
 // Python
-from fraud_sdk import FraudClient
-client = FraudClient('your_api_key')
+from udene_sdk import UdeneClient
+client = UdeneClient('your_api_key')
 
 // Java
-import com.fraud.sdk.FraudClient;
-FraudClient client = new FraudClient("your_api_key");
+import com.udene.sdk.UdeneClient;
+UdeneClient client = new UdeneClient("your_api_key");
 ```
 
 3. Make your first API call:
