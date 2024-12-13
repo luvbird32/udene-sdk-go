@@ -21,12 +21,15 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   },
 });
 
-// Add error handling for failed requests
-supabase.handleFailedRequest = async (error: any) => {
+// Create a wrapper function to handle failed requests
+export const handleSupabaseError = async (error: any) => {
   console.error('Supabase request failed:', error);
   if (error.message === 'Load failed') {
-    // Attempt to refresh the client
-    await supabase.auth.refreshSession();
+    // Attempt to refresh the session
+    const { error: refreshError } = await supabase.auth.refreshSession();
+    if (refreshError) {
+      console.error('Failed to refresh session:', refreshError);
+    }
   }
   return null;
 };

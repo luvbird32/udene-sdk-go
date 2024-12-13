@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, handleSupabaseError } from "@/integrations/supabase/client";
 import { getItem, setItem } from "@/utils/indexedDB";
 
 export interface UdeneMetrics {
@@ -89,7 +89,8 @@ export const getFraudMetrics = async (): Promise<UdeneMetrics> => {
 
         return metrics;
       } catch (error) {
-        if (retries > 0 && error.message === 'Load failed') {
+        if (retries > 0) {
+          await handleSupabaseError(error);
           // Wait for 1 second before retrying
           await new Promise(resolve => setTimeout(resolve, 1000));
           return fetchWithRetry(retries - 1);
