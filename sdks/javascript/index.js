@@ -6,9 +6,20 @@ class UdeneClient {
       baseURL,
       headers: {
         'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-Client-Version': '1.0.0',
+        'X-SDK-Type': 'javascript'
       }
     });
+
+    // Add response interceptor for error handling
+    this.client.interceptors.response.use(
+      response => response,
+      error => {
+        console.error('SDK Error:', error?.response?.data || error.message);
+        throw error;
+      }
+    );
   }
 
   async getMetrics() {

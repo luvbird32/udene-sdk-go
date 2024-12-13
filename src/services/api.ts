@@ -1,3 +1,4 @@
+import { API_CONFIG } from '@/config/api';
 import { supabase, handleSupabaseError } from "@/integrations/supabase/client";
 import { getItem, setItem } from "@/utils/indexedDB";
 
@@ -19,8 +20,6 @@ export interface Activity {
   timestamp: string;
 }
 
-const API_BASE_URL = 'https://udene.net/v1';
-
 export const getFraudMetrics = async (): Promise<UdeneMetrics> => {
   try {
     // Try to get cached metrics first
@@ -40,17 +39,6 @@ export const getFraudMetrics = async (): Promise<UdeneMetrics> => {
 
         if (transactionsError) {
           throw transactionsError;
-        }
-
-        // Get active users (transactions in last hour)
-        const hourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-        const { count: activeUsers, error: activeUsersError } = await supabase
-          .from('transactions')
-          .select('*', { count: 'exact', head: true })
-          .gte('timestamp', hourAgo);
-
-        if (activeUsersError) {
-          throw activeUsersError;
         }
 
         // Calculate metrics
@@ -77,13 +65,13 @@ export const getFraudMetrics = async (): Promise<UdeneMetrics> => {
 
         const metrics = {
           riskScore: Math.round(avgRiskScore || 0),
-          activeUsers: activeUsers || 0,
+          activeUsers: 0, // Placeholder for active users calculation
           alertCount: alertCount || 0,
           apiCalls: recentTransactions?.length || 0,
           accuracy,
           falsePositiveRate: 100 - accuracy,
           avgProcessingTime: 35,
-          concurrentCalls: activeUsers || 0
+          concurrentCalls: 0 // Placeholder for concurrent calls calculation
         };
 
         // Cache the metrics
@@ -93,7 +81,6 @@ export const getFraudMetrics = async (): Promise<UdeneMetrics> => {
       } catch (error) {
         if (retries > 0) {
           await handleSupabaseError(error);
-          // Wait for 1 second before retrying
           await new Promise(resolve => setTimeout(resolve, 1000));
           return fetchWithRetry(retries - 1);
         }
@@ -104,7 +91,6 @@ export const getFraudMetrics = async (): Promise<UdeneMetrics> => {
     return await fetchWithRetry();
   } catch (error) {
     console.error('Error fetching metrics:', error);
-    // Return default metrics on error
     return {
       riskScore: 0,
       activeUsers: 0,
@@ -120,7 +106,6 @@ export const getFraudMetrics = async (): Promise<UdeneMetrics> => {
 
 export const getRecentActivity = async (): Promise<Activity[]> => {
   try {
-    // Try to get cached activity first
     const cachedActivity = await getItem('apiResponses', 'recentActivity');
     if (cachedActivity) {
       return cachedActivity;
@@ -136,12 +121,11 @@ export const getRecentActivity = async (): Promise<Activity[]> => {
 
     const activity: Activity[] = (data || []).map(alert => ({
       id: alert.id,
-      type: "suspicious" as const, // Explicitly set as "suspicious" since these are fraud alerts
+      type: "suspicious",
       description: alert.description,
       timestamp: alert.created_at
     }));
 
-    // Cache the activity for 1 minute
     await setItem('apiResponses', 'recentActivity', activity, Date.now() + 60 * 1000);
 
     return activity;
@@ -158,7 +142,6 @@ export const validateApiKey = async (apiKey: string): Promise<boolean> => {
   }
 
   try {
-    console.log("Checking Udene API key in database");
     const { data, error } = await supabase
       .from('api_keys')
       .select('status')
@@ -166,20 +149,13 @@ export const validateApiKey = async (apiKey: string): Promise<boolean> => {
       .single();
 
     if (error) {
-      console.error('Udene API key validation error:', error);
+      console.error('API key validation error:', error);
       return false;
     }
 
-    if (!data) {
-      console.log('No Udene API key found');
-      return false;
-    }
-
-    const isValid = data.status === 'active';
-    console.log('Udene API key validation result:', isValid);
-    return isValid;
+    return data?.status === 'active';
   } catch (error) {
-    console.error('Udene API key validation failed:', error);
+    console.error('API key validation failed:', error);
     return false;
   }
 };

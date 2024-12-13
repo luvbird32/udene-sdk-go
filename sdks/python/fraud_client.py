@@ -5,7 +5,9 @@ class UdeneClient:
         self.base_url = base_url
         self.headers = {
             'Authorization': f'Bearer {api_key}',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-Client-Version': '1.0.0',
+            'X-SDK-Type': 'python'
         }
 
     def get_metrics(self):
