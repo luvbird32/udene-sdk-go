@@ -1,53 +1,41 @@
 openapi: 3.0.0
 info:
-  title: Fraud Detection API
+  title: Udene Fraud Detection API
   version: '1.0'
   description: API for real-time fraud detection and monitoring
 servers:
   - url: https://udene.net/v1
     description: Production server
 paths:
-  /predict:
-    post:
-      summary: Predict fraud probability
+  /metrics:
+    get:
+      summary: Get fraud detection metrics
       security:
         - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FraudPredictionRequest'
       responses:
         '200':
-          description: Fraud prediction result
+          description: Current fraud detection metrics
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FraudPredictionResponse'
+                $ref: '#/components/schemas/MetricsResponse'
 
-  /privacy/data-request:
-    post:
-      summary: Submit data access or deletion request (GDPR/CCPA)
+  /activity:
+    get:
+      summary: Get recent fraud events
       security:
         - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PrivacyRequest'
       responses:
         '200':
-          description: Request processed successfully
+          description: Recent fraud events and activities
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PrivacyResponse'
+                $ref: '#/components/schemas/ActivityResponse'
 
-  /privacy/retention-policy:
-    put:
-      summary: Update data retention policy
+  /track:
+    post:
+      summary: Track user interactions
       security:
         - BearerAuth: []
       requestBody:
@@ -55,115 +43,80 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RetentionPolicy'
+              $ref: '#/components/schemas/TrackInteractionRequest'
       responses:
         '200':
-          description: Policy updated successfully
+          description: Interaction tracked successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackInteractionResponse'
 
 components:
   schemas:
-    FraudPredictionRequest:
+    MetricsResponse:
       type: object
       properties:
-        transaction_amount:
+        riskScore:
           type: number
           format: float
-        merchant_id:
-          type: string
-        customer_id:
-          type: string
-        timestamp:
-          type: string
-          format: date-time
-        location:
-          type: string
-        device_id:
-          type: string
-        ip_address:
-          type: string
-        transaction_type:
-          type: string
-        card_present:
-          type: boolean
-        recurring:
-          type: boolean
-      required:
-        - transaction_amount
-        - merchant_id
-        - customer_id
-        - timestamp
-        - location
-        - device_id
-        - ip_address
-        - transaction_type
-        - card_present
-        - recurring
+        activeUsers:
+          type: integer
+        alertCount:
+          type: integer
+        apiCalls:
+          type: integer
+        accuracy:
+          type: number
+          format: float
+        falsePositiveRate:
+          type: number
+          format: float
+        avgProcessingTime:
+          type: number
+        concurrentCalls:
+          type: integer
 
-    FraudPredictionResponse:
+    ActivityResponse:
       type: object
       properties:
-        probability:
-          type: number
-          format: float
-          description: Probability of fraud (0-1)
-        is_fraudulent:
-          type: boolean
-          description: True if transaction is likely fraudulent
-        confidence:
-          type: number
-          format: float
-          description: Confidence in the prediction (0-1)
+        activities:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              type:
+                type: string
+                enum: [suspicious, normal]
+              description:
+                type: string
+              timestamp:
+                type: string
+                format: date-time
 
-    PrivacyRequest:
+    TrackInteractionRequest:
       type: object
       properties:
-        requestType:
-          type: string
-          enum: [access, deletion]
         userId:
           type: string
-        email:
+        action:
           type: string
-        region:
-          type: string
-          enum: [EU, California, Other]
+        metadata:
+          type: object
+          additionalProperties: true
       required:
-        - requestType
         - userId
-        - email
-        - region
+        - action
 
-    PrivacyResponse:
+    TrackInteractionResponse:
       type: object
       properties:
-        requestId:
-          type: string
-        estimatedCompletionTime:
-          type: string
-          format: date-time
-        status:
-          type: string
-          enum: [pending, processing, completed]
-
-    RetentionPolicy:
-      type: object
-      properties:
-        dataType:
-          type: string
-          enum: [transaction, userProfile, fraudAlert]
-        retentionPeriod:
-          type: integer
-          description: Retention period in days
-        anonymizationEnabled:
+        success:
           type: boolean
-        region:
+        transactionId:
           type: string
-          enum: [EU, California, Global]
-      required:
-        - dataType
-        - retentionPeriod
-        - anonymizationEnabled
-        - region
 
   securitySchemes:
     BearerAuth:
