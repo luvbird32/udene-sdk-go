@@ -5,6 +5,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+const API_BASE_URL = 'https://udene.net/v1';
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -15,7 +17,6 @@ serve(async (req) => {
     const { features } = await req.json()
     
     // Mock ML prediction response
-    // This will be replaced with actual ML logic in the future
     const mockPrediction = {
       probability: 0.75,
       is_fraudulent: true,

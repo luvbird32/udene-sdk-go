@@ -19,6 +19,8 @@ export interface Activity {
   timestamp: string;
 }
 
+const API_BASE_URL = 'https://udene.net/v1';
+
 export const getFraudMetrics = async (): Promise<UdeneMetrics> => {
   try {
     // Try to get cached metrics first

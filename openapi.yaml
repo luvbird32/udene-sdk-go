@@ -4,7 +4,7 @@ info:
   version: '1.0'
   description: API for real-time fraud detection and monitoring
 servers:
-  - url: https://api.example.com/v1
+  - url: https://udene.net/v1
     description: Production server
 paths:
   /predict:
@@ -165,4 +165,8 @@ components:
         - anonymizationEnabled
         - region
 
-  # ... keep existing code (security schemes)
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
