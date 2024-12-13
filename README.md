@@ -7,7 +7,7 @@
 export FRAUD_API_KEY=your_api_key_here
 
 # Make your first API request
-curl -X GET "https://api.example.com/v1/metrics" \
+curl -X GET "https://udene.net/v1/metrics" \
   -H "Authorization: Bearer $FRAUD_API_KEY"
 ```
 

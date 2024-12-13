@@ -67,5 +67,11 @@
         }
       }
     }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://udene.net/v1"
+    }
   ]
 }

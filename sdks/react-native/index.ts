@@ -36,15 +36,7 @@ export class UdeneClient {
   }
 
   async trackInteraction(data: any) {
-    const deviceInfo = {
-      platform: this.platform,
-      // Add any React Native specific device info here
-    };
-    
-    const response = await this.client.post('/track', {
-      ...data,
-      deviceInfo
-    });
+    const response = await this.client.post('/track', data);
     return response.data;
   }
 
