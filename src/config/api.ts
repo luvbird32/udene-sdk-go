@@ -2,7 +2,7 @@ export const API_CONFIG = {
   BASE_URL: 'https://udene.net/v1',
   ENDPOINTS: {
     METRICS: '/metrics',
-    ACTIVITY: '/activity', 
+    ACTIVITY: '/activity',
     TRACK: '/track'
   }
 } as const;
