@@ -2,7 +2,9 @@ import { useToast } from "@/hooks/use-toast";
 import { generateSecureApiKey } from "@/utils/apiKeyUtils";
 import { supabase } from "@/integrations/supabase/client";
 
-export const useApiKeyMutations = (queryClient: any, tableName: string) => {
+type TableName = 'api_keys' | 'client_api_keys';
+
+export const useApiKeyMutations = (queryClient: any, tableName: TableName) => {
   const { toast } = useToast();
 
   const createApiKey = async (projectName: string, projectDescription: string, userId?: string) => {

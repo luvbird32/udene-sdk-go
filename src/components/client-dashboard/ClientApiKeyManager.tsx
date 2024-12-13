@@ -6,6 +6,7 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { ApiKeyForm } from "@/components/shared/ApiKeyForm";
 import { ApiKeyList } from "@/components/shared/ApiKeyList";
 import { useApiKeyMutations } from "@/utils/apiKeyManagerUtils";
+import { supabase } from "@/integrations/supabase/client";
 
 export const ClientApiKeyManager = () => {
   const [isGenerating, setIsGenerating] = useState(false);

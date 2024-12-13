@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ApiKeyForm } from "@/components/shared/ApiKeyForm";
 import { ApiKeyList } from "@/components/shared/ApiKeyList";
 import { useApiKeyMutations } from "@/utils/apiKeyManagerUtils";
+import { supabase } from "@/integrations/supabase/client";
 
 export const ApiKeyManager = () => {
   const [isGenerating, setIsGenerating] = useState(false);
