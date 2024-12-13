@@ -1,14 +1,12 @@
-import { Card } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { useToast } from "@/components/ui/use-toast";
-import { Info } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { Card } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 import { ServiceDetailsDialog } from "./ServiceDetailsDialog";
-import { ServiceIcon } from "./components/ServiceIcon";
+import { ServiceHeader } from "./components/ServiceHeader";
+import { ServiceToggle } from "./components/ServiceToggle";
 import { ServiceFeatures } from "./components/ServiceFeatures";
 import { ServiceStatus } from "./components/ServiceStatus";
+import { ServiceActions } from "./components/ServiceActions";
 
 interface ServiceCardProps {
   title: string;
@@ -56,44 +54,25 @@ export const ServiceCard = ({
     <>
       <Card className="p-6 space-y-4">
         <div className="flex items-start justify-between">
-          <div className="flex items-start gap-3">
-            <ServiceIcon serviceType={serviceType} isActive={isActive} />
-            <div>
-              <h3 className="text-lg font-semibold">{title}</h3>
-              <p className="text-sm text-muted-foreground mt-1">{description}</p>
-            </div>
-          </div>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className={isToggling ? 'opacity-50 pointer-events-none' : ''}>
-                <Switch 
-                  checked={isActive} 
-                  onCheckedChange={handleToggle}
-                  disabled={isToggling}
-                  className={isToggling ? 'cursor-not-allowed' : 'cursor-pointer'}
-                />
-              </div>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{isToggling ? 'Processing...' : isActive ? 'Disable' : 'Enable'} {title}</p>
-            </TooltipContent>
-          </Tooltip>
+          <ServiceHeader 
+            title={title}
+            description={description}
+            serviceType={serviceType}
+            isActive={isActive}
+          />
+          <ServiceToggle 
+            isActive={isActive}
+            isToggling={isToggling}
+            onToggle={handleToggle}
+            serviceName={title}
+          />
         </div>
         
         <ServiceFeatures features={features} />
 
         <div className="flex items-center justify-between">
           <ServiceStatus isActive={isActive} serviceType={serviceType} />
-          
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex items-center gap-1"
-            onClick={() => setShowDetails(true)}
-          >
-            <Info className="h-4 w-4" />
-            Learn More
-          </Button>
+          <ServiceActions onShowDetails={() => setShowDetails(true)} />
         </div>
       </Card>
 
