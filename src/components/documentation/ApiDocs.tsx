@@ -5,6 +5,10 @@ import { Code, BookOpen, Link, Info, Smartphone } from "lucide-react";
 import { JavaScriptSDK } from "./sdk-sections/JavaScriptSDK";
 import { ReactNativeSDK } from "./sdk-sections/ReactNativeSDK";
 import { PythonSDK } from "./sdk-sections/PythonSDK";
+import { SwiftSDK } from "./sdk-sections/SwiftSDK";
+import { KotlinSDK } from "./sdk-sections/KotlinSDK";
+import { RubySDK } from "./sdk-sections/RubySDK";
+import { GoSDK } from "./sdk-sections/GoSDK";
 import { QuickStartSection } from "./sections/QuickStartSection";
 import { AuthenticationSection } from "./sections/AuthenticationSection";
 import { EndpointsSection } from "./sections/EndpointsSection";
@@ -57,6 +61,10 @@ export const ApiDocs = () => {
                 <JavaScriptSDK />
                 <ReactNativeSDK />
                 <PythonSDK />
+                <SwiftSDK />
+                <KotlinSDK />
+                <RubySDK />
+                <GoSDK />
               </div>
             </div>
           </TabsContent>
