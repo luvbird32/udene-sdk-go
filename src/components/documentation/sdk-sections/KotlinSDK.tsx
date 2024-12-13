@@ -12,10 +12,10 @@ class FraudDetection {
 
     suspend fun getMetrics() {
         try {
-            val metrics = client.getMetrics()
-            println("Current risk score: ${metrics.riskScore}")
-        } catch (e: RateLimitException) {
-            println("Rate limit exceeded. Retry after: ${e.retryAfter} seconds")
+            val response = client.getMetrics()
+            println("Current risk score: \${response.riskScore}")
+        } catch (exception: RateLimitException) {
+            println("Rate limit exceeded. Retry after: \${exception.retryAfter} seconds")
         }
     }
 
@@ -32,8 +32,8 @@ class FraudDetection {
         try {
             client.trackInteraction(data)
             println("Interaction tracked successfully")
-        } catch (e: FraudApiException) {
-            println("Error: ${e.message}")
+        } catch (exception: FraudApiException) {
+            println("Error: \${exception.message}")
         }
     }
 }`;
