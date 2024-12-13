@@ -4,6 +4,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { ReferralChart } from "./referral/ReferralChart";
 import { ReferralHeader } from "./referral/ReferralHeader";
 
+interface ReferralStat {
+  name: string;
+  value: number;
+}
+
 export const ReferralFraudMonitoring = () => {
   const { data: referralStats, isLoading } = useQuery({
     queryKey: ["referral-fraud-stats"],
@@ -16,13 +21,16 @@ export const ReferralFraudMonitoring = () => {
 
       if (error) throw error;
 
-      const stats = (data || []).reduce((acc: any, curr) => {
+      const stats = (data || []).reduce<Record<string, number>>((acc, curr) => {
         const riskLevel = curr.risk_score >= 70 ? 'High' : curr.risk_score >= 40 ? 'Medium' : 'Low';
         acc[riskLevel] = (acc[riskLevel] || 0) + 1;
         return acc;
       }, {});
 
-      return Object.entries(stats).map(([name, value]) => ({ name, value }));
+      return Object.entries(stats).map(([name, value]): ReferralStat => ({ 
+        name, 
+        value 
+      }));
     },
     refetchInterval: 30000,
   });
