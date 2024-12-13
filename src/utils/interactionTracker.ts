@@ -33,19 +33,26 @@ class InteractionTracker {
     if (this.buffer.length === 0) return;
 
     try {
+      // First get the current user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        console.log('No authenticated user found, skipping audit log');
+        return;
+      }
+
+      // Get bot detection status
       const { data: botDetection } = await supabase
         .from('audit_logs')
-        .select('*')
-        .eq('event_type', 'bot_detected')
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single();
-
-      const deviceInfo = {
-        ...this.getDeviceInfo(),
-        botDetected: !!botDetection,
-        botIndicators: botDetection?.changes || null
-      };
+        .insert({
+          event_type: 'interaction_tracking',
+          user_id: user.id, // Set the user_id from the authenticated user
+          entity_type: 'user_interaction',
+          entity_id: user.id,
+          changes: {
+            interactions: this.buffer,
+            deviceInfo: this.getDeviceInfo()
+          }
+        });
 
       await fetch(`${API_CONFIG.BASE_URL}/track`, {
         method: 'POST',
@@ -54,7 +61,7 @@ class InteractionTracker {
         },
         body: JSON.stringify({
           interactions: this.buffer,
-          deviceInfo
+          deviceInfo: this.getDeviceInfo()
         }),
       });
       
