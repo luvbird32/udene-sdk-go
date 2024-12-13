@@ -1,17 +1,14 @@
 import { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { ReportHeader } from "./components/ReportHeader";
 import { ReportGuide } from "./components/ReportGuide";
 import { ReportControls } from "./components/ReportControls";
-import { ScheduleControls } from "./components/ScheduleControls";
-import { ExportActions } from "./ExportActions";
-
-interface DateRange {
-  from: Date;
-  to: Date;
-}
+import { ReportDateRange } from "./components/ReportDateRange";
+import { ReportScheduling } from "./components/ReportScheduling";
+import { ReportActions } from "./components/ReportActions";
+import type { DateRange } from "react-day-picker";
 
 export const ReportManager = () => {
   const { toast } = useToast();
@@ -23,37 +20,6 @@ export const ReportManager = () => {
   const [scheduleName, setScheduleName] = useState("");
   const [scheduleFrequency, setScheduleFrequency] = useState("daily");
 
-  const exportReport = async (format: 'csv' | 'pdf') => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("User not authenticated");
-
-      const { data, error } = await supabase
-        .from('transactions')
-        .select('*')
-        .gte('created_at', dateRange.from.toISOString())
-        .lte('created_at', dateRange.to.toISOString());
-
-      if (error) throw error;
-
-      if (format === 'csv') {
-        const csvContent = convertToCSV(data);
-        downloadFile(csvContent, 'report.csv', 'text/csv');
-      } else {
-        toast({
-          title: "PDF Export",
-          description: "PDF export functionality coming soon!",
-        });
-      }
-    } catch (error) {
-      toast({
-        title: "Export Failed",
-        description: error instanceof Error ? error.message : "Failed to export report",
-        variant: "destructive",
-      });
-    }
-  };
-
   const saveTemplate = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -63,7 +29,7 @@ export const ReportManager = () => {
         .from('compliance_reports')
         .insert({
           report_type: reportType,
-          report_period: `[${dateRange.from.toISOString()},${dateRange.to.toISOString()}]`,
+          report_period: `[${dateRange.from?.toISOString()},${dateRange.to?.toISOString()}]`,
           status: 'template',
           generated_by: user.id,
         });
@@ -92,7 +58,7 @@ export const ReportManager = () => {
         .from('compliance_reports')
         .insert({
           report_type: reportType,
-          report_period: `[${dateRange.from.toISOString()},${dateRange.to.toISOString()}]`,
+          report_period: `[${dateRange.from?.toISOString()},${dateRange.to?.toISOString()}]`,
           status: 'scheduled',
           generated_by: user.id,
         });
@@ -112,54 +78,36 @@ export const ReportManager = () => {
     }
   };
 
-  const convertToCSV = (data: any[]) => {
-    const headers = Object.keys(data[0]).join(',');
-    const rows = data.map(row => 
-      Object.values(row).map(value => 
-        typeof value === 'string' ? `"${value}"` : value
-      ).join(',')
-    );
-    return [headers, ...rows].join('\n');
-  };
-
-  const downloadFile = (content: string, filename: string, type: string) => {
-    const blob = new Blob([content], { type });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   return (
     <Card className="p-6">
-      <div className="flex justify-between items-start">
+      <div className="space-y-6">
         <ReportHeader />
-        <ExportActions 
-          onExportCSV={() => exportReport('csv')}
-          onExportPDF={() => exportReport('pdf')}
+        <ReportGuide />
+        
+        <ReportControls 
+          dateRange={dateRange}
+          reportType={reportType}
+          onDateRangeChange={setDateRange}
+          onReportTypeChange={setReportType}
+        />
+
+        <ReportDateRange 
+          dateRange={dateRange}
+          onDateRangeChange={setDateRange}
+        />
+
+        <ReportScheduling 
+          scheduleName={scheduleName}
+          scheduleFrequency={scheduleFrequency}
+          onScheduleNameChange={setScheduleName}
+          onScheduleFrequencyChange={setScheduleFrequency}
+        />
+
+        <ReportActions 
+          onSaveTemplate={saveTemplate}
+          onScheduleReport={scheduleReport}
         />
       </div>
-
-      <ReportGuide />
-
-      <ReportControls 
-        dateRange={dateRange}
-        reportType={reportType}
-        onDateRangeChange={setDateRange}
-        onReportTypeChange={setReportType}
-      />
-
-      <ScheduleControls 
-        scheduleName={scheduleName}
-        scheduleFrequency={scheduleFrequency}
-        onScheduleNameChange={setScheduleName}
-        onScheduleFrequencyChange={setScheduleFrequency}
-        onSaveTemplate={saveTemplate}
-        onScheduleReport={scheduleReport}
-      />
     </Card>
   );
 };
