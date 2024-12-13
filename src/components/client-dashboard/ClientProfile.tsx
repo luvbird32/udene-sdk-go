@@ -10,7 +10,7 @@ import { useProfileData } from "./profile/useProfileData";
 
 const ProfileContent = () => {
   const { toast } = useToast();
-  const { isEditing, formData, setFormData } = useProfile();
+  const { isEditing, formData, setFormData, setIsEditing } = useProfile();
   const { data: profile, refetch } = useProfileData();
 
   const handleSubmit = async (e: React.FormEvent) => {

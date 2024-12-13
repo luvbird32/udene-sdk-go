@@ -1,4 +1,5 @@
 export interface ProfilePreferences {
+  [key: string]: any; // Add index signature to make it compatible with Json
   notifications: {
     email: boolean;
     sms: boolean;
@@ -17,21 +18,21 @@ export interface ProfileFormData {
 
 export interface Profile {
   id: string;
-  username: string;
-  avatar_url: string;
-  created_at: string;
-  updated_at: string;
+  username: string | null;
+  avatar_url: string | null;
+  created_at: string | null;
+  updated_at: string | null;
   role: string;
   account_type: string;
-  organization_id: string;
-  organization_name: string;
-  organization_role: string;
+  organization_id: string | null;
+  organization_name: string | null;
+  organization_role: string | null;
   status: string;
   settings: any;
-  phone_number: string;
+  phone_number: string | null;
   timezone: string;
-  email_verified: boolean;
-  last_login: string;
+  email_verified: boolean | null;
+  last_login: string | null;
   preferences: ProfilePreferences;
   security_settings: any;
 }
