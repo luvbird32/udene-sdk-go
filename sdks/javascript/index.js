@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 class UdeneClient {
-  constructor(apiKey, baseURL = 'https://api.udene.com/v1') {
+  constructor(apiKey, baseURL = 'https://udene.net/v1') {
     this.client = axios.create({
       baseURL,
       headers: {

@@ -11,7 +11,7 @@ export class UdeneClient {
   private client: AxiosInstance;
   private platform: string;
 
-  constructor({ apiKey, baseURL = 'https://api.udene.com/v1', platform }: UdeneClientConfig) {
+  constructor({ apiKey, baseURL = 'https://udene.net/v1', platform }: UdeneClientConfig) {
     this.client = axios.create({
       baseURL,
       headers: {
