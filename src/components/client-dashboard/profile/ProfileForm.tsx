@@ -86,9 +86,19 @@ export const ProfileForm = ({ formData, setFormData, onSubmit, isEditing, setIsE
         setFormData={setFormData} 
       />
 
-      <Button type="submit" className="w-full">
-        Save Changes
-      </Button>
+      <div className="flex gap-4">
+        <Button type="submit" className="flex-1">
+          Save Changes
+        </Button>
+        <Button 
+          type="button" 
+          variant="outline" 
+          onClick={() => setIsEditing(false)}
+          className="flex-1"
+        >
+          Cancel
+        </Button>
+      </div>
     </form>
   );
 };

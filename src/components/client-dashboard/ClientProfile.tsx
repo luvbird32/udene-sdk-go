@@ -10,7 +10,7 @@ import { useProfileData } from "./profile/useProfileData";
 
 const ProfileContent = () => {
   const { toast } = useToast();
-  const { isEditing, formData } = useProfile();
+  const { isEditing, formData, setFormData } = useProfile();
   const { data: profile, refetch } = useProfileData();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,7 +28,7 @@ const ProfileContent = () => {
           organization_role: formData.organization_role,
           phone_number: formData.phone_number,
           timezone: formData.timezone,
-          preferences: formData.preferences as any,
+          preferences: formData.preferences,
           updated_at: new Date().toISOString(),
         })
         .eq("id", user.id);
@@ -57,7 +57,13 @@ const ProfileContent = () => {
     <Card className="p-6 space-y-6">
       <ProfileHeader />
       {isEditing ? (
-        <ProfileForm onSubmit={handleSubmit} />
+        <ProfileForm 
+          formData={formData}
+          setFormData={setFormData}
+          onSubmit={handleSubmit}
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
+        />
       ) : (
         <ProfileDisplay profile={profile} />
       )}
