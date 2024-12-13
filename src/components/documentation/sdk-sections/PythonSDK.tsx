@@ -1,22 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Copy, Check } from "lucide-react";
-import { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { CodeBlock } from "../code-block/CodeBlock";
 
 export const PythonSDK = () => {
-  const { toast } = useToast();
-  const [copiedSnippet, setCopiedSnippet] = useState<string | null>(null);
-
-  const handleCopyCode = (code: string, snippetId: string) => {
-    navigator.clipboard.writeText(code);
-    setCopiedSnippet(snippetId);
-    toast({
-      title: "Code copied",
-      description: "The code snippet has been copied to your clipboard",
-    });
-    setTimeout(() => setCopiedSnippet(null), 2000);
-  };
-
   const pythonCode = `# Install the SDK
 pip install fraud-sdk
 
@@ -41,23 +25,7 @@ client.track_interaction(
   return (
     <div className="space-y-4">
       <h4 className="text-lg font-semibold">Python</h4>
-      <div className="relative">
-        <pre className="bg-muted p-4 rounded-md overflow-x-auto">
-          <code className="text-sm font-mono">{pythonCode}</code>
-        </pre>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-2 right-2"
-          onClick={() => handleCopyCode(pythonCode, 'python')}
-        >
-          {copiedSnippet === 'python' ? (
-            <Check className="h-4 w-4" />
-          ) : (
-            <Copy className="h-4 w-4" />
-          )}
-        </Button>
-      </div>
+      <CodeBlock code={pythonCode} language="python" />
     </div>
   );
 };
