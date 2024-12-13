@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { SecurityProgramCard } from "./SecurityProgramCard";
+import { OpenSourceSecurity } from "./OpenSourceSecurity";
 import { Card } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { SecurityProgram } from "@/integrations/supabase/types/security";
@@ -28,15 +29,19 @@ export const SecurityProgramList = () => {
   }
 
   return (
-    <div className="space-y-4">
-      {programs?.map((program) => (
-        <SecurityProgramCard key={program.id} program={program} />
-      ))}
-      {(!programs || programs.length === 0) && (
-        <Card className="p-6 text-center text-muted-foreground">
-          No security programs found.
-        </Card>
-      )}
+    <div className="space-y-6">
+      <OpenSourceSecurity />
+      
+      <div className="space-y-4">
+        {programs?.map((program) => (
+          <SecurityProgramCard key={program.id} program={program} />
+        ))}
+        {(!programs || programs.length === 0) && (
+          <Card className="p-6 text-center text-muted-foreground">
+            No security programs found.
+          </Card>
+        )}
+      </div>
     </div>
   );
 };

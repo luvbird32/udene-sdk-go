@@ -682,6 +682,48 @@ export type Database = {
         }
         Relationships: []
       }
+      open_source_scans: {
+        Row: {
+          created_at: string | null
+          dependencies_scanned: number | null
+          id: string
+          package_manager: string
+          project_id: string
+          remediation_steps: Json | null
+          scan_results: Json | null
+          scan_type: string
+          severity_breakdown: Json | null
+          updated_at: string | null
+          vulnerabilities_found: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          dependencies_scanned?: number | null
+          id?: string
+          package_manager: string
+          project_id: string
+          remediation_steps?: Json | null
+          scan_results?: Json | null
+          scan_type: string
+          severity_breakdown?: Json | null
+          updated_at?: string | null
+          vulnerabilities_found?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          dependencies_scanned?: number | null
+          id?: string
+          package_manager?: string
+          project_id?: string
+          remediation_steps?: Json | null
+          scan_results?: Json | null
+          scan_type?: string
+          severity_breakdown?: Json | null
+          updated_at?: string | null
+          vulnerabilities_found?: number | null
+        }
+        Relationships: []
+      }
       organizations: {
         Row: {
           created_at: string | null
