@@ -1,7 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { paymentProtectionService } from "@/services/paymentProtectionService";
+import { udenePaymentProtectionService } from "@/services/paymentProtectionService";
 import { Transaction } from "@/types/supabase";
 import { useToast } from "@/components/ui/use-toast";
+import { PaymentRiskAssessment } from "@/services/paymentProtectionService";
 
 export const usePaymentProtection = (userId?: string) => {
   const queryClient = useQueryClient();
@@ -9,14 +10,14 @@ export const usePaymentProtection = (userId?: string) => {
 
   const transactionHistory = useQuery({
     queryKey: ['transaction-history', userId],
-    queryFn: () => userId ? paymentProtectionService.getTransactionHistory(userId) : null,
+    queryFn: () => userId ? udenePaymentProtectionService.getTransactionHistory(userId) : null,
     enabled: !!userId,
   });
 
   const assessTransaction = useMutation({
     mutationFn: (transactionData: Partial<Transaction>) => 
-      paymentProtectionService.assessTransaction(transactionData),
-    onSuccess: (data) => {
+      udenePaymentProtectionService.assessTransaction(transactionData),
+    onSuccess: (data: PaymentRiskAssessment) => {
       if (data.recommendation === 'block') {
         toast({
           title: "High Risk Transaction Detected",
@@ -42,7 +43,7 @@ export const usePaymentProtection = (userId?: string) => {
 
   const logVerification = useMutation({
     mutationFn: ({ transactionId, verificationData }: { transactionId: string, verificationData: any }) =>
-      paymentProtectionService.logVerificationAttempt(transactionId, verificationData),
+      udenePaymentProtectionService.logVerificationAttempt(transactionId, verificationData),
   });
 
   return {
