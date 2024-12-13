@@ -1,7 +1,7 @@
 import requests
 
-class FraudClient:
-    def __init__(self, api_key, base_url='https://api.example.com/v1'):
+class UdeneClient:
+    def __init__(self, api_key, base_url='https://api.udene.com/v1'):
         self.base_url = base_url
         self.headers = {
             'Authorization': f'Bearer {api_key}',

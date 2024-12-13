@@ -1,17 +1,17 @@
 import { Platform } from 'react-native';
 import axios, { AxiosInstance } from 'axios';
 
-interface FraudClientConfig {
+interface UdeneClientConfig {
   apiKey: string;
   baseURL?: string;
   platform?: 'ios' | 'android';
 }
 
-export class FraudClient {
+export class UdeneClient {
   private client: AxiosInstance;
   private platform: string;
 
-  constructor({ apiKey, baseURL = 'https://api.example.com/v1', platform }: FraudClientConfig) {
+  constructor({ apiKey, baseURL = 'https://api.udene.com/v1', platform }: UdeneClientConfig) {
     this.client = axios.create({
       baseURL,
       headers: {

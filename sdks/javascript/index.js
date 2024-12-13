@@ -1,7 +1,7 @@
 const axios = require('axios');
 
-class FraudClient {
-  constructor(apiKey, baseURL = 'https://api.example.com/v1') {
+class UdeneClient {
+  constructor(apiKey, baseURL = 'https://api.udene.com/v1') {
     this.client = axios.create({
       baseURL,
       headers: {
@@ -27,4 +27,4 @@ class FraudClient {
   }
 }
 
-module.exports = { FraudClient };
+module.exports = { UdeneClient };
