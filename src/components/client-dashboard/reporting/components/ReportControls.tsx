@@ -1,16 +1,12 @@
 import { DateRangeSelector } from "../DateRangeSelector";
 import { ReportTypeSelector } from "../ReportTypeSelector";
 import { SavedTemplates } from "./SavedTemplates";
-
-interface DateRange {
-  from: Date;
-  to: Date;
-}
+import type { DateRange } from "react-day-picker";
 
 interface ReportControlsProps {
-  dateRange: DateRange;
+  dateRange: DateRange | undefined;
   reportType: string;
-  onDateRangeChange: (range: DateRange) => void;
+  onDateRangeChange: (range: DateRange | undefined) => void;
   onReportTypeChange: (type: string) => void;
 }
 

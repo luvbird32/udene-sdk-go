@@ -12,7 +12,7 @@ import type { DateRange } from "react-day-picker";
 
 export const ReportManager = () => {
   const { toast } = useToast();
-  const [dateRange, setDateRange] = useState<DateRange>({
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: new Date(new Date().setMonth(new Date().getMonth() - 1)),
     to: new Date()
   });
@@ -24,12 +24,13 @@ export const ReportManager = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
+      if (!dateRange?.from || !dateRange?.to) throw new Error("Date range is required");
 
       const { error } = await supabase
         .from('compliance_reports')
         .insert({
           report_type: reportType,
-          report_period: `[${dateRange.from?.toISOString()},${dateRange.to?.toISOString()}]`,
+          report_period: `[${dateRange.from.toISOString()},${dateRange.to.toISOString()}]`,
           status: 'template',
           generated_by: user.id,
         });
@@ -53,12 +54,13 @@ export const ReportManager = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
+      if (!dateRange?.from || !dateRange?.to) throw new Error("Date range is required");
 
       const { error } = await supabase
         .from('compliance_reports')
         .insert({
           report_type: reportType,
-          report_period: `[${dateRange.from?.toISOString()},${dateRange.to?.toISOString()}]`,
+          report_period: `[${dateRange.from.toISOString()},${dateRange.to.toISOString()}]`,
           status: 'scheduled',
           generated_by: user.id,
         });
