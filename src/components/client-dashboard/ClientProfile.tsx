@@ -41,6 +41,8 @@ const ProfileContent = () => {
         title: "Profile Updated",
         description: "Your profile has been successfully updated.",
       });
+      
+      setIsEditing(false);
     } catch (error) {
       console.error("Error updating profile:", error);
       toast({
