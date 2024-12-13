@@ -1,66 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
-import { UserRound } from "lucide-react";
-import { Profile } from "@/types/supabase";
+import { supabase } from "@/integrations/supabase/client";
+import { ProfileProvider } from "./profile/ProfileContext";
+import { ProfileHeader } from "./profile/ProfileHeader";
 import { ProfileForm } from "./profile/ProfileForm";
 import { ProfileDisplay } from "./profile/ProfileDisplay";
-import { ProfileFormData, ProfilePreferences } from "@/types/profile";
+import { useProfile } from "./profile/ProfileContext";
+import { useProfileData } from "./profile/useProfileData";
 
-export const ClientProfile = () => {
+const ProfileContent = () => {
   const { toast } = useToast();
-  const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState<ProfileFormData>({
-    username: "",
-    organization_name: "",
-    organization_role: "",
-    phone_number: "",
-    timezone: "",
-    preferences: {
-      notifications: {
-        email: true,
-        sms: false
-      },
-      theme: "light"
-    }
-  });
-
-  const { data: profile, refetch } = useQuery({
-    queryKey: ["client-profile"],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("No user found");
-
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user.id)
-        .single();
-
-      if (error) throw error;
-      
-      // First cast to unknown, then to ProfilePreferences to ensure type safety
-      const rawPreferences = data.preferences as unknown;
-      const preferences: ProfilePreferences = (rawPreferences as ProfilePreferences) || {
-        notifications: { email: true, sms: false },
-        theme: "light"
-      };
-      
-      setFormData({
-        username: data.username || "",
-        organization_name: data.organization_name || "",
-        organization_role: data.organization_role || "",
-        phone_number: data.phone_number || "",
-        timezone: data.timezone || "UTC",
-        preferences
-      });
-      
-      return { ...data, preferences };
-    },
-  });
+  const { isEditing, formData } = useProfile();
+  const { data: profile, refetch } = useProfileData();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,7 +36,6 @@ export const ClientProfile = () => {
       if (error) throw error;
 
       await refetch();
-      setIsEditing(false);
       
       toast({
         title: "Profile Updated",
@@ -105,30 +55,20 @@ export const ClientProfile = () => {
 
   return (
     <Card className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <UserRound className="h-5 w-5 text-primary" />
-          <h2 className="text-lg font-semibold">Profile Information</h2>
-        </div>
-        <Button
-          variant="outline"
-          onClick={() => setIsEditing(!isEditing)}
-        >
-          {isEditing ? "Cancel" : "Edit Profile"}
-        </Button>
-      </div>
-
+      <ProfileHeader />
       {isEditing ? (
-        <ProfileForm
-          formData={formData}
-          setFormData={setFormData}
-          onSubmit={handleSubmit}
-          isEditing={isEditing}
-          setIsEditing={setIsEditing}
-        />
+        <ProfileForm onSubmit={handleSubmit} />
       ) : (
-        <ProfileDisplay profile={profile as Profile & { preferences: ProfilePreferences }} />
+        <ProfileDisplay profile={profile} />
       )}
     </Card>
+  );
+};
+
+export const ClientProfile = () => {
+  return (
+    <ProfileProvider>
+      <ProfileContent />
+    </ProfileProvider>
   );
 };
