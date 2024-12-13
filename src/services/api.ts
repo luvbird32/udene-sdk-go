@@ -137,7 +137,7 @@ export const getRecentActivity = async (): Promise<Activity[]> => {
 
 export const validateApiKey = async (apiKey: string): Promise<boolean> => {
   if (!apiKey?.trim()) {
-    console.log('Empty API key provided');
+    console.log('Empty Udene API key provided');
     return false;
   }
 
@@ -149,13 +149,13 @@ export const validateApiKey = async (apiKey: string): Promise<boolean> => {
       .single();
 
     if (error) {
-      console.error('API key validation error:', error);
+      console.error('Udene API key validation error:', error);
       return false;
     }
 
     return data?.status === 'active';
   } catch (error) {
-    console.error('API key validation failed:', error);
+    console.error('Udene API key validation failed:', error);
     return false;
   }
 };

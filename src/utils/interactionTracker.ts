@@ -1,5 +1,6 @@
 import { throttle } from 'lodash';
 import { supabase } from '@/integrations/supabase/client';
+import { API_CONFIG } from '@/config/api';
 
 interface InteractionData {
   timestamp: number;
@@ -40,14 +41,13 @@ class InteractionTracker {
         .limit(1)
         .single();
 
-      // If bot was detected, add this information to the interaction data
       const deviceInfo = {
         ...this.getDeviceInfo(),
         botDetected: !!botDetection,
         botIndicators: botDetection?.changes || null
       };
 
-      await fetch('/api/v1/track', {
+      await fetch(`${API_CONFIG.BASE_URL}/track`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ class InteractionTracker {
       
       this.buffer = [];
     } catch (error) {
-      console.error('Failed to send interaction data:', error);
+      console.error('Failed to send Udene interaction data:', error);
     }
   }
 

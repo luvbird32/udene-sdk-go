@@ -18,7 +18,7 @@ export const udenePaymentProtectionService = {
       if (error) throw error;
       return response;
     } catch (error) {
-      console.error('Error assessing payment risk:', error);
+      console.error('Error assessing payment risk with Udene:', error);
       throw error;
     }
   },
@@ -34,7 +34,7 @@ export const udenePaymentProtectionService = {
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Error fetching transaction history:', error);
+      console.error('Error fetching Udene transaction history:', error);
       throw error;
     }
   },
@@ -54,7 +54,7 @@ export const udenePaymentProtectionService = {
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Error logging verification attempt:', error);
+      console.error('Error logging Udene verification attempt:', error);
       throw error;
     }
   }
