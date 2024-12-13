@@ -13,7 +13,7 @@ public class UdeneClient {
     private final ObjectMapper mapper;
 
     public UdeneClient(String apiKey) {
-        this(apiKey, "https://api.udene.com/v1");
+        this(apiKey, "https://udene.net/v1");
     }
 
     public UdeneClient(String apiKey, String baseUrl) {
@@ -36,5 +36,19 @@ public class UdeneClient {
         return mapper.readValue(response.body(), UdeneMetrics.class);
     }
 
-    // Additional methods for activity and tracking...
+    public void trackInteraction(UdeneInteraction interaction) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(baseUrl + "/track"))
+            .header("Authorization", "Bearer " + apiKey)
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(interaction)))
+            .build();
+
+        HttpResponse<String> response = client.send(request, 
+            HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException("Failed to track interaction: " + response.body());
+        }
+    }
 }

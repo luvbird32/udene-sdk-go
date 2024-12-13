@@ -5,7 +5,7 @@ public class FraudClient {
     private let apiKey: String
     private let session: URLSession
     
-    public init(apiKey: String, baseURL: String = "https://api.example.com/v1") {
+    public init(apiKey: String, baseURL: String = "https://udene.net/v1") {
         self.apiKey = apiKey
         self.baseURL = baseURL
         
@@ -64,9 +64,24 @@ public class FraudClient {
         }
         
         let task = session.dataTask(with: request) { data, response, error in
-            // ... handle response similar to getMetrics
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let responseData = data else {
+                completion(.failure(FraudError.noData))
+                return
+            }
+            
+            do {
+                let response = try JSONDecoder().decode(InteractionResponse.self, from: responseData)
+                completion(.success(response))
+            } catch {
+                completion(.failure(error))
+            }
         }
-        task.resume()
+        task.resume();
     }
 }
 

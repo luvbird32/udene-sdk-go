@@ -11,7 +11,7 @@ import java.io.IOException
 
 class FraudClient(
     private val apiKey: String,
-    private val baseURL: String = "https://api.example.com/v1"
+    private val baseURL: String = "https://udene.net/v1"
 ) {
     private val client = OkHttpClient.Builder()
         .addInterceptor { chain ->
