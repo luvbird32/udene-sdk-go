@@ -1,32 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { ClientMetrics } from "@/components/client-dashboard/ClientMetrics";
-import { ApiCreditsDisplay } from "@/components/client-dashboard/ApiCreditsDisplay";
-import { TransactionHistory } from "@/components/client-dashboard/TransactionHistory";
-import { RiskOverview } from "@/components/client-dashboard/RiskOverview";
-import { TrendAnalysis } from "@/components/client-dashboard/analytics/TrendAnalysis";
-import { GeographicDistribution } from "@/components/client-dashboard/analytics/GeographicDistribution";
-import { PeakTransactionTimes } from "@/components/client-dashboard/analytics/PeakTransactionTimes";
-import { RiskDistribution } from "@/components/client-dashboard/analytics/RiskDistribution";
-import { BusinessIntelligence } from "@/components/client-dashboard/analytics/BusinessIntelligence";
+import { ServiceManager } from "@/components/client-dashboard/services/ServiceManager";
 import { ReportManager } from "@/components/client-dashboard/reporting/ReportManager";
-import { useToast } from "@/components/ui/use-toast";
-import { Settings, Shield, Code, UserRound, Webhook, FileText, Layers, Search } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiDocs } from "@/components/documentation/ApiDocs";
 import { ClientApiKeyManager } from "@/components/client-dashboard/ClientApiKeyManager";
 import { ClientProfile } from "@/components/client-dashboard/ClientProfile";
 import { WebhookManager } from "@/components/client-dashboard/webhooks/WebhookManager";
 import { TriggerManager } from "@/components/client-dashboard/triggers/TriggerManager";
-import { ServiceManager } from "@/components/client-dashboard/services/ServiceManager";
 import { InvestigationLogs } from "@/components/client-dashboard/investigation/InvestigationLogs";
-import { ThemeToggle } from "@/components/client-dashboard/ThemeToggle";
-import { SecurityProgramList } from "@/components/client-dashboard/security/SecurityProgramList";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { DashboardHeader } from "@/components/client-dashboard/tabs/DashboardHeader";
+import { DashboardTabs } from "@/components/client-dashboard/tabs/DashboardTabs";
+import { DashboardOverview } from "@/components/client-dashboard/tabs/DashboardOverview";
 
 const ClientDashboard = () => {
-  const { toast } = useToast();
-  
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
     queryKey: ["client-metrics"],
     queryFn: async () => {
@@ -59,85 +46,17 @@ const ClientDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background p-6">
-      <header className="mb-8 flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">Fraud Detection Dashboard</h1>
-          <p className="text-muted-foreground mt-2">
-            Monitor your transaction security and risk metrics
-          </p>
-        </div>
-        <div className="flex gap-4 items-center">
-          <ThemeToggle />
-          <Link 
-            to="/client-settings" 
-            className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent transition-colors"
-          >
-            <Settings className="h-5 w-5" />
-            <span>Settings</span>
-          </Link>
-        </div>
-      </header>
+      <DashboardHeader />
 
       <Tabs defaultValue="dashboard" className="space-y-6">
-        <TabsList>
-          <TabsTrigger value="dashboard">
-            <Shield className="h-4 w-4 mr-2" />
-            Dashboard
-          </TabsTrigger>
-          <TabsTrigger value="services">
-            <Layers className="h-4 w-4 mr-2" />
-            Services
-          </TabsTrigger>
-          <TabsTrigger value="reports">
-            <FileText className="h-4 w-4 mr-2" />
-            Reports
-          </TabsTrigger>
-          <TabsTrigger value="api">
-            <Code className="h-4 w-4 mr-2" />
-            API & SDKs
-          </TabsTrigger>
-          <TabsTrigger value="webhooks">
-            <Webhook className="h-4 w-4 mr-2" />
-            Webhooks
-          </TabsTrigger>
-          <TabsTrigger value="triggers">
-            <Settings className="h-4 w-4 mr-2" />
-            Triggers
-          </TabsTrigger>
-          <TabsTrigger value="profile">
-            <UserRound className="h-4 w-4 mr-2" />
-            Profile
-          </TabsTrigger>
-          <TabsTrigger value="investigations">
-            <Search className="h-4 w-4 mr-2" />
-            Investigations
-          </TabsTrigger>
-        </TabsList>
+        <DashboardTabs />
 
         <TabsContent value="dashboard" className="space-y-6">
-          <ApiCreditsDisplay />
-          <ClientMetrics 
+          <DashboardOverview 
             metrics={metrics}
-            isLoading={metricsLoading}
-            error={metricsError}
+            metricsLoading={metricsLoading}
+            metricsError={metricsError}
           />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <TrendAnalysis />
-            <GeographicDistribution />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <PeakTransactionTimes />
-            <RiskDistribution />
-          </div>
-
-          <BusinessIntelligence />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <TransactionHistory />
-            <RiskOverview />
-          </div>
         </TabsContent>
 
         <TabsContent value="services" className="space-y-6">
