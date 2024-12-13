@@ -3,6 +3,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Loader2, Shield, AlertTriangle } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { OpenSourceScanTable } from "@/integrations/supabase/types/tables/open-source-security";
+
+type OpenSourceScan = OpenSourceScanTable['Row'];
 
 export const OpenSourceSecurity = () => {
   const { data: scans, isLoading } = useQuery({
@@ -15,7 +18,7 @@ export const OpenSourceSecurity = () => {
         .limit(5);
 
       if (error) throw error;
-      return data;
+      return data as OpenSourceScan[];
     },
   });
 
@@ -102,7 +105,7 @@ export const OpenSourceSecurity = () => {
   );
 };
 
-const calculateSecurityScore = (severityBreakdown: Record<string, number>): number => {
+const calculateSecurityScore = (severityBreakdown: NonNullable<OpenSourceScan['severity_breakdown']>): number => {
   const weights = {
     critical: 10,
     high: 5,

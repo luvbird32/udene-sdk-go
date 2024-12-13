@@ -17,6 +17,7 @@ import { InvestigationLogsTable } from './tables/investigation-logs';
 import { PromoCodeTable, PromoCodeUsageTable } from './tables/promo-tables';
 import { DeviceFingerprintTable, DeviceFingerprintHistoryTable } from './tables/device-fingerprint-tables';
 import { IdentityVerificationsTable, VerificationAttemptsTable } from './tables/verification-tables';
+import { OpenSourceScanTable } from './tables/open-source-security';
 
 export type Json =
   | string
@@ -63,6 +64,7 @@ export interface Database {
       device_fingerprint_history: DeviceFingerprintHistoryTable;
       identity_verifications: IdentityVerificationsTable;
       verification_attempts: VerificationAttemptsTable;
+      open_source_scans: OpenSourceScanTable;
     };
     Views: {
       [_ in never]: never
