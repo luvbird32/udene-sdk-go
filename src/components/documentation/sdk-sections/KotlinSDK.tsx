@@ -2,20 +2,20 @@ import { CodeBlock } from "../code-block/CodeBlock";
 
 export const KotlinSDK = () => {
   const kotlinCode = `// Add dependency to build.gradle
-// implementation 'com.fraud:fraud-sdk:1.0.0'
+// implementation 'com.udene:udene-sdk:1.0.0'
 
-import com.fraud.sdk.FraudClient
-import com.fraud.sdk.models.*
+import com.udene.sdk.UdeneClient
+import com.udene.sdk.models.*
 
 class FraudDetection {
-    private val client = FraudClient("your_api_key")
+    private val client = UdeneClient("your_api_key")
 
     suspend fun getMetrics() {
         try {
-            val response = client.getMetrics()
-            println("Current risk score: ${response.riskScore}")
-        } catch (exception: RateLimitException) {
-            println("Rate limit exceeded. Retry after: ${exception.retryAfter} seconds")
+            val metrics = client.getMetrics()
+            println("Current risk score: \${metrics.riskScore}")
+        } catch (e: RateLimitException) {
+            println("Rate limit exceeded. Retry after: \${e.retryAfter} seconds")
         }
     }
 
@@ -32,8 +32,8 @@ class FraudDetection {
         try {
             client.trackInteraction(data)
             println("Interaction tracked successfully")
-        } catch (exception: FraudApiException) {
-            println("Error: ${exception.message}")
+        } catch (e: UdeneApiException) {
+            println("Error: \${e.message}")
         }
     }
 }`;

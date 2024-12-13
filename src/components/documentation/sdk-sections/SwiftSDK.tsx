@@ -2,20 +2,20 @@ import { CodeBlock } from "../code-block/CodeBlock";
 
 export const SwiftSDK = () => {
   const swiftCode = `// Install via CocoaPods
-// pod 'FraudSDK'
+// pod 'UdeneSDK'
 
-import FraudSDK
+import UdeneSDK
 
 // Initialize the client
-let client = FraudClient(apiKey: "your_api_key")
+let client = UdeneClient(apiKey: "your_api_key")
 
 // Example: Get fraud metrics
 client.getMetrics { result in
     switch result {
     case .success(let metrics):
-        print("Current risk score: \(metrics.riskScore)")
+        print("Current risk score: \\(metrics.riskScore)")
     case .failure(let error):
-        print("Error: \(error)")
+        print("Error: \\(error)")
     }
 }
 
@@ -34,7 +34,7 @@ client.trackInteraction(
     case .success:
         print("Interaction tracked successfully")
     case .failure(let error):
-        print("Error: \(error)")
+        print("Error: \\(error)")
     }
 }`;
 

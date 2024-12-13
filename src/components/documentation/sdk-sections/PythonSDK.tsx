@@ -2,11 +2,11 @@ import { CodeBlock } from "../code-block/CodeBlock";
 
 export const PythonSDK = () => {
   const pythonCode = `# Install the SDK
-pip install fraud-sdk
+pip install udene-sdk
 
 # Initialize the client
-from fraud_sdk import FraudClient
-client = FraudClient('your_api_key')
+from udene_sdk import UdeneClient
+client = UdeneClient('your_api_key')
 
 # Example: Get fraud metrics
 metrics = client.get_metrics()

@@ -2,22 +2,22 @@ import { CodeBlock } from "../code-block/CodeBlock";
 
 export const GoSDK = () => {
   const goCode = `// Install the package
-// go get github.com/fraud/fraud-sdk-go
+// go get github.com/udene/udene-sdk-go
 
 package main
 
 import (
     "fmt"
-    "github.com/fraud/fraud-sdk-go"
+    "github.com/udene/udene-sdk-go"
 )
 
 func main() {
-    client := fraud.NewClient("your_api_key")
+    client := udene.NewClient("your_api_key")
 
     // Example: Get fraud metrics
     metrics, err := client.GetMetrics()
     if err != nil {
-        if rateErr, ok := err.(*fraud.RateLimitError); ok {
+        if rateErr, ok := err.(*udene.RateLimitError); ok {
             fmt.Printf("Rate limit exceeded. Retry after: %d seconds\\n", rateErr.RetryAfter)
             return
         }
@@ -27,7 +27,7 @@ func main() {
     fmt.Printf("Current risk score: %f\\n", metrics.RiskScore)
 
     // Example: Track user interaction
-    interaction := &fraud.InteractionData{
+    interaction := &udene.InteractionData{
         UserID: "user_123",
         Action: "login",
         Metadata: map[string]interface{}{

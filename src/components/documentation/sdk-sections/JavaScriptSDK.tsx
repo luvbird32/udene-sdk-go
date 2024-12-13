@@ -2,11 +2,11 @@ import { CodeBlock } from "../code-block/CodeBlock";
 
 export const JavaScriptSDK = () => {
   const jsCode = `// Install the SDK
-npm install fraud-sdk
+npm install @udene/sdk
 
 // Initialize the client
-import { FraudClient } from 'fraud-sdk';
-const client = new FraudClient('your_api_key');
+import { UdeneClient } from '@udene/sdk';
+const client = new UdeneClient('your_api_key');
 
 // Example: Get fraud metrics
 const metrics = await client.getMetrics();
