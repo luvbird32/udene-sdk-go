@@ -1,13 +1,17 @@
-import { Database } from './database';
+import type { Tables, TablesInsert, TablesUpdate } from './database';
 
-export type SecurityProgram = Database['public']['Tables']['product_security_programs']['Row'];
-export type SecurityProgramInsert = Database['public']['Tables']['product_security_programs']['Insert'];
-export type SecurityProgramUpdate = Database['public']['Tables']['product_security_programs']['Update'];
+export type SecurityProgram = Tables<'product_security_programs'>;
+export type SecurityProgramInsert = TablesInsert<'product_security_programs'>;
+export type SecurityProgramUpdate = TablesUpdate<'product_security_programs'>;
 
-export type SecurityAssessment = Database['public']['Tables']['security_assessments']['Row'];
-export type SecurityAssessmentInsert = Database['public']['Tables']['security_assessments']['Insert'];
-export type SecurityAssessmentUpdate = Database['public']['Tables']['security_assessments']['Update'];
+export type SecurityAssessment = Tables<'security_assessments'>;
+export type SecurityAssessmentInsert = TablesInsert<'security_assessments'>;
+export type SecurityAssessmentUpdate = TablesUpdate<'security_assessments'>;
 
-export type ComplianceReport = Database['public']['Tables']['compliance_reports']['Row'];
-export type ComplianceReportInsert = Database['public']['Tables']['compliance_reports']['Insert'];
-export type ComplianceReportUpdate = Database['public']['Tables']['compliance_reports']['Update'];
+export type OpenSourceScan = Tables<'open_source_scans'>;
+export type OpenSourceScanInsert = TablesInsert<'open_source_scans'>;
+export type OpenSourceScanUpdate = TablesUpdate<'open_source_scans'>;
+
+export type ComplianceReport = Tables<'compliance_reports'>;
+export type ComplianceReportInsert = TablesInsert<'compliance_reports'>;
+export type ComplianceReportUpdate = TablesUpdate<'compliance_reports'>;

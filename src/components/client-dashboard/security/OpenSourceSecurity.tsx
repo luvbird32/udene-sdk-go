@@ -3,9 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Loader2, Shield, AlertTriangle } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { OpenSourceScanTable } from "@/integrations/supabase/types/tables/open-source-security";
-
-type OpenSourceScan = OpenSourceScanTable['Row'];
+import { OpenSourceScan } from "@/integrations/supabase/types/security";
 
 export const OpenSourceSecurity = () => {
   const { data: scans, isLoading } = useQuery({
