@@ -1,36 +1,36 @@
-import { Shield, BookOpen, Computer, Lock, Zap, ChartBar, Bell, Cloud, Users } from "lucide-react";
+import { Shield, Zap, ChartBar, Bell, Cloud, Users } from "lucide-react";
 
 export const Features = () => {
   const features = [
     {
       icon: Shield,
-      title: "Real-time Protection",
-      description: "Instant threat detection and automated response system to protect your business 24/7"
+      title: "Comprehensive Protection",
+      description: "Multi-layered security with AI-powered threat detection, covering everything from bot prevention to transaction monitoring"
     },
     {
       icon: Zap,
-      title: "AI-Powered Analysis",
-      description: "Advanced machine learning algorithms for pattern recognition and fraud prevention"
+      title: "Real-time Detection",
+      description: "Instant identification of suspicious activities across all services, from romance scams to affiliate fraud"
     },
     {
       icon: ChartBar,
       title: "Advanced Analytics",
-      description: "Comprehensive dashboards and reports for deep insights into security trends"
+      description: "Deep insights into fraud patterns with machine learning-powered risk scoring and behavioral analysis"
     },
     {
       icon: Bell,
-      title: "Instant Alerts",
-      description: "Real-time notifications and alerts for suspicious activities and potential threats"
+      title: "Smart Alerts",
+      description: "Intelligent notification system for suspicious activities, unusual patterns, and potential security threats"
     },
     {
       icon: Cloud,
-      title: "Cloud Security",
-      description: "Enterprise-grade cloud infrastructure with multiple layers of protection"
+      title: "Enterprise Integration",
+      description: "Seamless integration with your existing infrastructure through our robust API and comprehensive SDKs"
     },
     {
       icon: Users,
-      title: "Team Collaboration",
-      description: "Built-in tools for security team coordination and incident response"
+      title: "Collaborative Security",
+      description: "Built-in tools for team coordination and automated response systems for efficient threat management"
     }
   ];
 
@@ -42,7 +42,7 @@ export const Features = () => {
             Enterprise-Grade Protection
           </h2>
           <p className="text-xl text-green-300/80 max-w-3xl mx-auto">
-            Our comprehensive security platform provides cutting-edge protection against modern cyber threats
+            Comprehensive security platform with advanced fraud detection across all business operations
           </p>
         </div>
 
