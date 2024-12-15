@@ -7,14 +7,13 @@ import { PricingPlans } from "@/components/landing/PricingPlans";
 import { Footer } from "@/components/landing/Footer";
 import { MatrixBackground } from "@/components/landing/MatrixBackground";
 import { Header } from "@/components/landing/Header";
+import { Compliance } from "@/components/landing/Compliance";
+import { Terms } from "@/components/landing/Terms";
 import { useEffect } from "react";
 
 const Landing = () => {
   useEffect(() => {
-    // Add data attribute to body when landing page mounts
     document.body.setAttribute('data-landing-page', 'true');
-    
-    // Cleanup when component unmounts
     return () => {
       document.body.setAttribute('data-landing-page', 'false');
     };
@@ -35,6 +34,12 @@ const Landing = () => {
       </div>
       <div id="use-cases">
         <UseCases />
+      </div>
+      <div id="compliance">
+        <Compliance />
+      </div>
+      <div id="terms">
+        <Terms />
       </div>
       <div id="pricing">
         <PricingPlans />

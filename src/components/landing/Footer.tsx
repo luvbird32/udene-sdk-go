@@ -24,10 +24,10 @@ export const Footer = () => {
       { name: "Contact", href: "/contact" },
     ],
     legal: [
+      { name: "Terms", href: "#terms" },
       { name: "Privacy", href: "/privacy" },
-      { name: "Terms", href: "/terms" },
+      { name: "Compliance", href: "#compliance" },
       { name: "Security", href: "/security" },
-      { name: "Compliance", href: "/compliance" },
     ],
   };
 
