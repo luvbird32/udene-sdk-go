@@ -15,39 +15,60 @@ export const ApiCreditsDisplay = () => {
 
   const initializeCredits = useMutation({
     mutationFn: async (userId: string) => {
-      // First check if credits already exist to prevent duplicate entries
-      const { data: existingCredits } = await supabase
-        .from('api_credits')
-        .select('*')
-        .eq('user_id', userId)
-        .maybeSingle();
+      try {
+        console.log('Initializing credits for user:', userId);
+        
+        // First check if credits already exist to prevent duplicate entries
+        const { data: existingCredits, error: checkError } = await supabase
+          .from('api_credits')
+          .select('*')
+          .eq('user_id', userId)
+          .maybeSingle();
 
-      if (existingCredits) return existingCredits;
+        if (checkError) {
+          console.error('Error checking existing credits:', checkError);
+          throw checkError;
+        }
 
-      const { error: insertError } = await supabase
-        .from('api_credits')
-        .insert([{ 
-          user_id: userId,
-          total_credits: 1000,
-          used_credits: 0,
-          is_trial: true,
-          trial_start_date: new Date().toISOString(),
-          trial_end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-        }]);
+        if (existingCredits) {
+          console.log('Credits already exist for user:', userId);
+          return existingCredits;
+        }
 
-      if (insertError) {
-        console.error('Error initializing credits:', insertError);
-        throw insertError;
+        console.log('Creating new credits for user:', userId);
+        const { error: insertError } = await supabase
+          .from('api_credits')
+          .insert([{ 
+            user_id: userId,
+            total_credits: 1000,
+            used_credits: 0,
+            is_trial: true,
+            trial_start_date: new Date().toISOString(),
+            trial_end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+          }]);
+
+        if (insertError) {
+          console.error('Error inserting credits:', insertError);
+          throw insertError;
+        }
+
+        const { data: newCredits, error: fetchError } = await supabase
+          .from('api_credits')
+          .select('*')
+          .eq('user_id', userId)
+          .single();
+
+        if (fetchError) {
+          console.error('Error fetching new credits:', fetchError);
+          throw fetchError;
+        }
+
+        console.log('Successfully created credits:', newCredits);
+        return newCredits;
+      } catch (error) {
+        console.error('Error in initializeCredits:', error);
+        throw error;
       }
-
-      const { data: newCredits, error: fetchError } = await supabase
-        .from('api_credits')
-        .select('*')
-        .eq('user_id', userId)
-        .single();
-
-      if (fetchError) throw fetchError;
-      return newCredits;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["api-credits"] });
@@ -57,7 +78,7 @@ export const ApiCreditsDisplay = () => {
       });
     },
     onError: (error) => {
-      console.error('Error in initializeCredits:', error);
+      console.error('Error in initializeCredits mutation:', error);
       toast({
         title: "Error",
         description: "Failed to initialize API credits. Please try again.",
@@ -66,30 +87,49 @@ export const ApiCreditsDisplay = () => {
     },
   });
 
-  const { data: credits, isError, isLoading } = useQuery({
+  const { data: credits, isError, isLoading, error } = useQuery({
     queryKey: ["api-credits"],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("No user found");
+      try {
+        console.log('Fetching user session...');
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        
+        if (userError) {
+          console.error('Error getting user:', userError);
+          throw userError;
+        }
 
-      const { data, error } = await supabase
-        .from('api_credits')
-        .select('*')
-        .eq('user_id', user.id)
-        .maybeSingle();
+        if (!user) {
+          console.error('No user found');
+          throw new Error("No user found");
+        }
 
-      if (!data && !error) {
-        return await initializeCredits.mutateAsync(user.id);
-      }
+        console.log('Fetching credits for user:', user.id);
+        const { data, error } = await supabase
+          .from('api_credits')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle();
 
-      if (error) {
-        console.error('Error fetching credits:', error);
+        if (error) {
+          console.error('Error fetching credits:', error);
+          throw error;
+        }
+
+        if (!data) {
+          console.log('No credits found, initializing...');
+          return await initializeCredits.mutateAsync(user.id);
+        }
+
+        console.log('Credits fetched successfully:', data);
+        return data;
+      } catch (error) {
+        console.error('Error in credits query:', error);
         throw error;
       }
-
-      return data;
     },
-    retry: 1,
+    retry: 2,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
     refetchInterval: 30000,
   });
 
@@ -112,7 +152,7 @@ export const ApiCreditsDisplay = () => {
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>
-            Failed to load API credits. Please try again later.
+            {error?.message || 'Failed to load API credits. Please try again later.'}
           </AlertDescription>
         </Alert>
       </Card>
