@@ -15,7 +15,16 @@ export const ApiCreditsDisplay = () => {
 
   const initializeCredits = useMutation({
     mutationFn: async (userId: string) => {
-      const { error } = await supabase
+      // First check if credits already exist to prevent duplicate entries
+      const { data: existingCredits } = await supabase
+        .from('api_credits')
+        .select('*')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+      if (existingCredits) return existingCredits;
+
+      const { error: insertError } = await supabase
         .from('api_credits')
         .insert([{ 
           user_id: userId,
@@ -26,23 +35,38 @@ export const ApiCreditsDisplay = () => {
           trial_end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
         }]);
 
-      if (error) throw error;
+      if (insertError) {
+        console.error('Error initializing credits:', insertError);
+        throw insertError;
+      }
 
-      const { data: newData, error: fetchError } = await supabase
+      const { data: newCredits, error: fetchError } = await supabase
         .from('api_credits')
         .select('*')
         .eq('user_id', userId)
         .single();
 
       if (fetchError) throw fetchError;
-      return newData;
+      return newCredits;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["api-credits"] });
+      toast({
+        title: "Credits Initialized",
+        description: "Your free trial credits have been initialized successfully.",
+      });
+    },
+    onError: (error) => {
+      console.error('Error in initializeCredits:', error);
+      toast({
+        title: "Error",
+        description: "Failed to initialize API credits. Please try again.",
+        variant: "destructive",
+      });
     },
   });
 
-  const { data: credits, isError } = useQuery({
+  const { data: credits, isError, isLoading } = useQuery({
     queryKey: ["api-credits"],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -58,11 +82,28 @@ export const ApiCreditsDisplay = () => {
         return await initializeCredits.mutateAsync(user.id);
       }
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error) {
+        console.error('Error fetching credits:', error);
+        throw error;
+      }
+
       return data;
     },
+    retry: 1,
     refetchInterval: 30000,
   });
+
+  if (isLoading) {
+    return (
+      <Card className="p-6">
+        <div className="animate-pulse space-y-4">
+          <div className="h-4 bg-muted rounded w-1/4"></div>
+          <div className="h-8 bg-muted rounded"></div>
+          <div className="h-4 bg-muted rounded w-3/4"></div>
+        </div>
+      </Card>
+    );
+  }
 
   if (isError) {
     return (
