@@ -2,6 +2,15 @@ import { Card } from "@/components/ui/card";
 import { Shield, Activity, AlertTriangle } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
+/**
+ * Props for the MetricCard component
+ * @interface MetricCardProps
+ * @property {string} title - The title of the metric card
+ * @property {number | string} value - The value to display
+ * @property {React.ElementType} icon - The icon component to display
+ * @property {string} description - A description of the metric
+ * @property {boolean} [isLoading] - Whether the card is in a loading state
+ */
 interface MetricCardProps {
   title: string;
   value: number | string;
@@ -10,6 +19,11 @@ interface MetricCardProps {
   isLoading?: boolean;
 }
 
+/**
+ * MetricCard component displays a single metric with an icon and loading state
+ * @param {MetricCardProps} props - The props for the component
+ * @returns {JSX.Element} A card displaying a metric with optional loading state
+ */
 const MetricCard = ({ title, value, icon: Icon, description, isLoading }: MetricCardProps) => (
   <Card className="p-6">
     <div className="flex items-start justify-between">
@@ -27,6 +41,16 @@ const MetricCard = ({ title, value, icon: Icon, description, isLoading }: Metric
   </Card>
 );
 
+/**
+ * Props for the ClientMetrics component
+ * @interface ClientMetricsProps
+ * @property {Object} [metrics] - The metrics data to display
+ * @property {number} metrics.riskScore - The current risk assessment score
+ * @property {number} metrics.totalTransactions - Total number of processed transactions
+ * @property {number} metrics.flaggedTransactions - Number of transactions requiring attention
+ * @property {boolean} isLoading - Whether the metrics are loading
+ * @property {Error | null} error - Any error that occurred while loading metrics
+ */
 interface ClientMetricsProps {
   metrics?: {
     riskScore: number;
@@ -37,6 +61,11 @@ interface ClientMetricsProps {
   error: Error | null;
 }
 
+/**
+ * ClientMetrics component displays key metrics for the client dashboard
+ * @param {ClientMetricsProps} props - The props for the component
+ * @returns {JSX.Element} A grid of metric cards showing key client metrics
+ */
 export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps) => {
   if (error) {
     return (

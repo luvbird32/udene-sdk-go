@@ -16,8 +16,15 @@
 ## Code Style
 - Follow ESLint configuration
 - Use TypeScript strictly
-- Write JSDoc comments
+- Write JSDoc comments for all components, functions, and types
 - Max line length: 100 characters
+
+## Documentation Standards
+- All components must have JSDoc comments explaining their purpose and props
+- Utility functions must be documented with parameters and return types
+- Add README.md files in key directories explaining their purpose
+- Keep documentation up to date with code changes
+- Include examples for complex functionality
 
 ## Pull Requests
 1. Update your branch with main
