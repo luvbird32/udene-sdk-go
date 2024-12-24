@@ -1,24 +1,10 @@
-import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { AlertTriangle, Globe, Monitor, Cpu } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { AlertTriangle } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import type { Json } from "@/integrations/supabase/types";
-
-interface DeviceFingerprint {
-  id: string;
-  risk_score: number | null;
-  is_suspicious: boolean | null;
-  last_seen: string | null;
-  network_info: Json;
-  hardware_info: Json;
-  device_fingerprint_history: Array<{
-    id: string;
-    changes: Json;
-  }> | null;
-}
+import { DeviceCard } from "./device/DeviceCard";
+import type { DeviceFingerprint } from "./types";
 
 export const FlaggedDevices = () => {
   const { data: flaggedDevices, isLoading } = useQuery({
@@ -59,56 +45,7 @@ export const FlaggedDevices = () => {
       <ScrollArea className="h-[400px] pr-4">
         <div className="space-y-4">
           {flaggedDevices?.map((device) => (
-            <Card key={device.id} className="p-4 border-destructive/20">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Monitor className="h-4 w-4 text-muted-foreground" />
-                    <span className="font-medium">Device ID: {device.id.slice(-8)}</span>
-                  </div>
-                  <Badge variant="destructive">
-                    Risk Score: {device.risk_score}
-                  </Badge>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger className="flex items-center gap-2">
-                        <Globe className="h-4 w-4 text-muted-foreground" />
-                        <span className="truncate">
-                          {(device.network_info as { ip_address?: string })?.ip_address || 'Unknown IP'}
-                        </span>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>IP Address</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger className="flex items-center gap-2">
-                        <Cpu className="h-4 w-4 text-muted-foreground" />
-                        <span className="truncate">
-                          {(device.hardware_info as { platform?: string })?.platform || 'Unknown Platform'}
-                        </span>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Hardware Info</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-
-                <div className="text-sm text-muted-foreground">
-                  <p>Last seen: {new Date(device.last_seen || '').toLocaleString()}</p>
-                  {device.device_fingerprint_history?.length > 0 && (
-                    <p>Changes detected: {device.device_fingerprint_history.length}</p>
-                  )}
-                </div>
-              </div>
-            </Card>
+            <DeviceCard key={device.id} device={device} />
           ))}
 
           {(!flaggedDevices || flaggedDevices.length === 0) && (
