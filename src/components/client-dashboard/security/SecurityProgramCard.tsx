@@ -7,13 +7,10 @@ import { Shield, AlertTriangle, Clock } from "lucide-react";
 import { format } from "date-fns";
 
 interface SecurityProgramCardProps {
-  program: SecurityProgram & {
-    compliance_requirements: string[];
-  };
+  program: SecurityProgram;
 }
 
 export const SecurityProgramCard = ({ program }: SecurityProgramCardProps) => {
-  // Fetch real-time assessment data
   const { data: assessments } = useQuery({
     queryKey: ["security-assessments", program.id],
     queryFn: async () => {
@@ -68,7 +65,7 @@ export const SecurityProgramCard = ({ program }: SecurityProgramCardProps) => {
         <Badge className={getStatusColor(program.status)}>{program.status}</Badge>
       </div>
 
-      {program.compliance_requirements && program.compliance_requirements.length > 0 && (
+      {Array.isArray(program.compliance_requirements) && program.compliance_requirements.length > 0 && (
         <div className="space-y-2">
           <h4 className="text-sm font-medium">Compliance Requirements</h4>
           <div className="flex flex-wrap gap-2">

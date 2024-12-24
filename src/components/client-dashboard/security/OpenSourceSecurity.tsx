@@ -5,21 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Package, Shield, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
-interface SeverityBreakdown {
-  critical: number;
-  high: number;
-  medium: number;
-  low: number;
-}
-
-interface OpenSourceScan {
-  id: string;
-  dependencies_scanned: number | null;
-  severity_breakdown: SeverityBreakdown;
-  remediation_steps: string[];
-  created_at: string | null;
-}
+import { OpenSourceScan } from "@/integrations/supabase/types/security";
 
 export const OpenSourceSecurity = () => {
   const { toast } = useToast();
@@ -32,7 +18,7 @@ export const OpenSourceSecurity = () => {
         .select('*')
         .order('created_at', { ascending: false })
         .limit(1)
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error("Error fetching open source scan:", error);
@@ -44,10 +30,13 @@ export const OpenSourceSecurity = () => {
         throw error;
       }
 
-      // Ensure the severity_breakdown and remediation_steps are properly typed
+      if (!data) {
+        return null;
+      }
+
       return {
         ...data,
-        severity_breakdown: data.severity_breakdown as SeverityBreakdown,
+        severity_breakdown: data.severity_breakdown as OpenSourceScan['severity_breakdown'],
         remediation_steps: Array.isArray(data.remediation_steps) ? data.remediation_steps : []
       } as OpenSourceScan;
     },
@@ -68,7 +57,8 @@ export const OpenSourceSecurity = () => {
     );
   }
 
-  const totalVulnerabilities = latestScan ? Object.values(latestScan.severity_breakdown).reduce((a, b) => a + b, 0) : 0;
+  const totalVulnerabilities = latestScan ? 
+    Object.values(latestScan.severity_breakdown).reduce((a, b) => a + b, 0) : 0;
 
   return (
     <Card className="p-6 space-y-6">
@@ -147,7 +137,7 @@ export const OpenSourceSecurity = () => {
                 <h4 className="text-sm font-medium">Recommended Actions</h4>
               </div>
               <ul className="space-y-1 text-sm text-muted-foreground">
-                {latestScan.remediation_steps.map((step: string, index: number) => (
+                {latestScan.remediation_steps.map((step, index) => (
                   <li key={index} className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-primary" />
                     {step}
