@@ -5,23 +5,18 @@ import { AlertTriangle, Globe, Monitor, Cpu } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import type { Json } from "@/integrations/supabase/types";
 
 interface DeviceFingerprint {
   id: string;
-  risk_score: number;
-  is_suspicious: boolean;
-  last_seen: string;
-  network_info: {
-    ip_address: string;
-    [key: string]: any;
-  };
-  hardware_info: {
-    platform: string;
-    [key: string]: any;
-  };
+  risk_score: number | null;
+  is_suspicious: boolean | null;
+  last_seen: string | null;
+  network_info: Json;
+  hardware_info: Json;
   device_fingerprint_history: Array<{
     id: string;
-    changes: any;
+    changes: Json;
   }> | null;
 }
 
@@ -81,7 +76,9 @@ export const FlaggedDevices = () => {
                     <Tooltip>
                       <TooltipTrigger className="flex items-center gap-2">
                         <Globe className="h-4 w-4 text-muted-foreground" />
-                        <span className="truncate">{device.network_info.ip_address}</span>
+                        <span className="truncate">
+                          {(device.network_info as { ip_address?: string })?.ip_address || 'Unknown IP'}
+                        </span>
                       </TooltipTrigger>
                       <TooltipContent>
                         <p>IP Address</p>
@@ -94,7 +91,7 @@ export const FlaggedDevices = () => {
                       <TooltipTrigger className="flex items-center gap-2">
                         <Cpu className="h-4 w-4 text-muted-foreground" />
                         <span className="truncate">
-                          {device.hardware_info.platform || 'Unknown Platform'}
+                          {(device.hardware_info as { platform?: string })?.platform || 'Unknown Platform'}
                         </span>
                       </TooltipTrigger>
                       <TooltipContent>
@@ -105,7 +102,7 @@ export const FlaggedDevices = () => {
                 </div>
 
                 <div className="text-sm text-muted-foreground">
-                  <p>Last seen: {new Date(device.last_seen).toLocaleString()}</p>
+                  <p>Last seen: {new Date(device.last_seen || '').toLocaleString()}</p>
                   {device.device_fingerprint_history?.length > 0 && (
                     <p>Changes detected: {device.device_fingerprint_history.length}</p>
                   )}
