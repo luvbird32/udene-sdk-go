@@ -9,29 +9,10 @@ interface RiskLevelData {
   value: number;
 }
 
-interface RomanceScamStats {
-  riskLevels: {
-    High: number;
-    Medium: number;
-    Low: number;
-  };
-  patterns: {
-    highVelocity: number;
-    profileChanges: number;
-    multipleDevices: number;
-  };
-  recentTransactions: Array<{
-    message_velocity: number;
-    profile_changes: Record<string, unknown>;
-    interaction_patterns: Record<string, unknown>;
-    risk_score: number;
-  }>;
-}
-
 const COLORS = ['#ef4444', '#f97316', '#22c55e'];
 
 export const RomanceScamMonitoring = () => {
-  const { data, isLoading } = useRomanceScamData<RomanceScamStats>();
+  const { data, isLoading } = useRomanceScamData();
 
   if (isLoading) {
     return (
@@ -46,7 +27,7 @@ export const RomanceScamMonitoring = () => {
 
   const chartData: RiskLevelData[] = data ? Object.entries(data.riskLevels).map(([name, value]) => ({
     name,
-    value
+    value: value as number
   })) : [];
 
   return (
