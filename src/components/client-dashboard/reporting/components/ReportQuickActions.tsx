@@ -16,10 +16,21 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-export const ReportQuickActions = () => {
+interface ReportQuickActionsProps {
+  onStartScan?: () => void;
+  isScanning?: boolean;
+}
+
+export const ReportQuickActions = ({ onStartScan, isScanning = false }: ReportQuickActionsProps) => {
   const { toast } = useToast();
 
   const handleAction = (action: string) => {
+    if (action === "Start New Scan" && onStartScan) {
+      onStartScan();
+      return;
+    }
+
+    // For other actions, show toast notification
     toast({
       title: "Action Triggered",
       description: `${action} action has been triggered.`,
@@ -36,6 +47,7 @@ export const ReportQuickActions = () => {
             variant="outline" 
             className="flex items-center gap-2"
             onClick={() => handleAction("Start New Scan")}
+            disabled={isScanning}
           >
             <Play className="h-4 w-4" />
             Start New Scan
@@ -45,6 +57,7 @@ export const ReportQuickActions = () => {
             variant="outline" 
             className="flex items-center gap-2"
             onClick={() => handleAction("Pause Scan")}
+            disabled={!isScanning}
           >
             <Pause className="h-4 w-4" />
             Pause Scan
@@ -54,6 +67,7 @@ export const ReportQuickActions = () => {
             variant="outline" 
             className="flex items-center gap-2"
             onClick={() => handleAction("Stop Scan")}
+            disabled={!isScanning}
           >
             <StopCircle className="h-4 w-4" />
             Stop Scan
@@ -63,6 +77,7 @@ export const ReportQuickActions = () => {
             variant="outline" 
             className="flex items-center gap-2"
             onClick={() => handleAction("Resume Scan")}
+            disabled={!isScanning}
           >
             <RefreshCw className="h-4 w-4" />
             Resume Scan
