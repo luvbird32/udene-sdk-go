@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { User } from "@supabase/supabase-js";
 
 interface AuthResponse {
   isLoading: boolean;
+  user: User | null;
   handleLogin: (email: string, password: string) => Promise<void>;
   handleSignUp: (email: string, password: string) => Promise<void>;
 }
@@ -13,6 +15,23 @@ export const useAuth = (): AuthResponse => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  // Initialize user state
+  useState(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+    });
+
+    // Subscribe to auth state changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  });
 
   const validateCredentials = (email: string, password: string): boolean => {
     if (!email || !password) {
@@ -82,6 +101,7 @@ export const useAuth = (): AuthResponse => {
 
       if (data.user) {
         console.log("Login successful, user:", data.user.id);
+        setUser(data.user);
         toast({
           title: "Success",
           description: "Login successful! Redirecting...",
@@ -141,6 +161,7 @@ export const useAuth = (): AuthResponse => {
 
       if (existingUser?.user) {
         console.log("User created successfully:", existingUser.user.id);
+        setUser(existingUser.user);
         toast({
           title: "Success",
           description: "Account created successfully! You can now log in.",
@@ -163,6 +184,7 @@ export const useAuth = (): AuthResponse => {
 
   return {
     isLoading,
+    user,
     handleLogin,
     handleSignUp,
   };
