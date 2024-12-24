@@ -4,20 +4,26 @@ import { supabase } from "@/integrations/supabase/client";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import type { TrialUsage } from "@/integrations/supabase/types/trial";
+
+interface TrialStats {
+  name: string;
+  value: number;
+}
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 export const TrialAbuseMonitoring = () => {
   const { toast } = useToast();
   
-  const { data: trialStats, isLoading } = useQuery({
+  const { data: trialStats, isLoading } = useQuery<TrialStats[]>({
     queryKey: ["trial-abuse-stats"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('trial_usage')
         .select('*')
         .order('created_at', { ascending: false })
-        .limit(100);
+        .limit(100) as { data: TrialUsage[] | null, error: Error | null };
 
       if (error) {
         toast({
@@ -28,9 +34,9 @@ export const TrialAbuseMonitoring = () => {
         throw error;
       }
 
-      const stats = (data || []).reduce((acc: any, curr) => {
+      const stats = (data || []).reduce((acc: Record<string, number>, curr) => {
         const status = curr.status === 'active' ? 
-          (curr.risk_score >= 70 ? 'High Risk' : 'Active') : 
+          (curr.risk_score && curr.risk_score >= 70 ? 'High Risk' : 'Active') : 
           'Terminated';
         acc[status] = (acc[status] || 0) + 1;
         return acc;

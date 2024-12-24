@@ -4,10 +4,34 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recha
 import { Badge } from "@/components/ui/badge";
 import { HeartCrack } from "lucide-react";
 
+interface RiskLevelData {
+  name: string;
+  value: number;
+}
+
+interface RomanceScamStats {
+  riskLevels: {
+    High: number;
+    Medium: number;
+    Low: number;
+  };
+  patterns: {
+    highVelocity: number;
+    profileChanges: number;
+    multipleDevices: number;
+  };
+  recentTransactions: Array<{
+    message_velocity: number;
+    profile_changes: Record<string, unknown>;
+    interaction_patterns: Record<string, unknown>;
+    risk_score: number;
+  }>;
+}
+
 const COLORS = ['#ef4444', '#f97316', '#22c55e'];
 
 export const RomanceScamMonitoring = () => {
-  const { data, isLoading } = useRomanceScamData();
+  const { data, isLoading } = useRomanceScamData<RomanceScamStats>();
 
   if (isLoading) {
     return (
@@ -20,7 +44,7 @@ export const RomanceScamMonitoring = () => {
     );
   }
 
-  const chartData = data ? Object.entries(data.riskLevels).map(([name, value]) => ({
+  const chartData: RiskLevelData[] = data ? Object.entries(data.riskLevels).map(([name, value]) => ({
     name,
     value
   })) : [];
