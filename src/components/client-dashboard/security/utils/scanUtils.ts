@@ -1,6 +1,7 @@
 import { format } from "date-fns";
+import { Json } from "@/integrations/supabase/types";
 
-interface VulnerabilityDetail {
+export interface VulnerabilityDetail {
   id: string;
   name: string;
   description: string;
@@ -87,10 +88,10 @@ const generateVulnerabilityDetail = (severity: 'critical' | 'high' | 'medium' | 
 
 export const generateMockScanResults = (): ScanResult => {
   // Generate random counts for each severity level
-  const critical = Math.floor(Math.random() * 2); // 0-1 critical issues
-  const high = Math.floor(Math.random() * 3); // 0-2 high issues
-  const medium = Math.floor(Math.random() * 4); // 0-3 medium issues
-  const low = Math.floor(Math.random() * 5); // 0-4 low issues
+  const critical = Math.floor(Math.random() * 2);
+  const high = Math.floor(Math.random() * 3);
+  const medium = Math.floor(Math.random() * 4);
+  const low = Math.floor(Math.random() * 5);
 
   // Generate detailed findings
   const findings: VulnerabilityDetail[] = [
