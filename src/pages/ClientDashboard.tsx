@@ -21,7 +21,6 @@ const ClientDashboard = () => {
     queryKey: ["client-metrics"],
     queryFn: async () => {
       try {
-        // First check if we have an authenticated session
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         
         if (sessionError) {
