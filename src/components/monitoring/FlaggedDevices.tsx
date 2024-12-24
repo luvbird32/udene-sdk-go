@@ -6,6 +6,25 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
+interface DeviceFingerprint {
+  id: string;
+  risk_score: number;
+  is_suspicious: boolean;
+  last_seen: string;
+  network_info: {
+    ip_address: string;
+    [key: string]: any;
+  };
+  hardware_info: {
+    platform: string;
+    [key: string]: any;
+  };
+  device_fingerprint_history: Array<{
+    id: string;
+    changes: any;
+  }> | null;
+}
+
 export const FlaggedDevices = () => {
   const { data: flaggedDevices, isLoading } = useQuery({
     queryKey: ["flagged-devices"],
@@ -20,7 +39,7 @@ export const FlaggedDevices = () => {
         .order('risk_score', { ascending: false });
 
       if (error) throw error;
-      return data;
+      return data as DeviceFingerprint[];
     },
   });
 
