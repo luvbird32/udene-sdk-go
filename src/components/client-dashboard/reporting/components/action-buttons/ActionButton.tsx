@@ -16,13 +16,10 @@ export const ActionButton = ({
   disabled = false,
   variant = "outline" 
 }: ActionButtonProps) => {
-  const baseClasses = "flex items-center gap-2";
-  const variantClasses = variant === "destructive" ? "text-destructive hover:text-destructive" : "";
-  
   return (
     <Button 
       variant={variant}
-      className={`${baseClasses} ${variantClasses}`}
+      className="flex items-center gap-2"
       onClick={onClick}
       disabled={disabled}
     >
