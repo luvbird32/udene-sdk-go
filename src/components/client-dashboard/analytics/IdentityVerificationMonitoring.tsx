@@ -5,10 +5,15 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recha
 import { Badge } from "@/components/ui/badge";
 import { Shield } from "lucide-react";
 
+interface VerificationStat {
+  name: string;
+  value: number;
+}
+
 const COLORS = ['#10B981', '#F59E0B', '#EF4444'];
 
 export const IdentityVerificationMonitoring = () => {
-  const { data: verificationStats, isLoading } = useQuery({
+  const { data: verificationStats, isLoading } = useQuery<VerificationStat[]>({
     queryKey: ["identity-verification-stats"],
     queryFn: async () => {
       console.log("Fetching identity verification stats...");
@@ -20,7 +25,7 @@ export const IdentityVerificationMonitoring = () => {
 
       if (error) throw error;
 
-      const stats = (data || []).reduce((acc: any, curr) => {
+      const stats = (data || []).reduce((acc: Record<string, number>, curr) => {
         acc[curr.status] = (acc[curr.status] || 0) + 1;
         return acc;
       }, {});
@@ -44,6 +49,8 @@ export const IdentityVerificationMonitoring = () => {
     );
   }
 
+  const totalVerifications = verificationStats?.reduce((acc, curr) => acc + curr.value, 0) || 0;
+
   return (
     <Card className="p-4">
       <div className="flex items-center justify-between mb-4">
@@ -52,7 +59,7 @@ export const IdentityVerificationMonitoring = () => {
           <h3 className="font-semibold">Identity Verification Status</h3>
         </div>
         <Badge variant="outline">
-          {verificationStats?.reduce((acc: number, curr: any) => acc + curr.value, 0) || 0} Total
+          {totalVerifications} Total
         </Badge>
       </div>
 
@@ -60,7 +67,7 @@ export const IdentityVerificationMonitoring = () => {
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={verificationStats}
+              data={verificationStats || []}
               cx="50%"
               cy="50%"
               labelLine={false}

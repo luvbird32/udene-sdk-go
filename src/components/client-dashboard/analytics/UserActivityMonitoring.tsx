@@ -6,8 +6,13 @@ import { Badge } from "@/components/ui/badge";
 import { Activity } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+interface ActivityStat {
+  type: string;
+  count: number;
+}
+
 export const UserActivityMonitoring = () => {
-  const { data: activityStats, isLoading } = useQuery({
+  const { data: activityStats, isLoading } = useQuery<ActivityStat[]>({
     queryKey: ["user-activity-stats"],
     queryFn: async () => {
       console.log("Fetching user activity stats...");
@@ -19,7 +24,7 @@ export const UserActivityMonitoring = () => {
 
       if (error) throw error;
 
-      const stats = (data || []).reduce((acc: any, curr) => {
+      const stats = (data || []).reduce((acc: Record<string, number>, curr) => {
         acc[curr.activity_type] = (acc[curr.activity_type] || 0) + 1;
         return acc;
       }, {});
@@ -43,6 +48,8 @@ export const UserActivityMonitoring = () => {
     );
   }
 
+  const totalActivities = activityStats?.reduce((acc, curr) => acc + curr.count, 0) || 0;
+
   return (
     <Card className="p-4">
       <div className="flex items-center justify-between mb-4">
@@ -51,13 +58,13 @@ export const UserActivityMonitoring = () => {
           <h3 className="font-semibold">User Activity Analysis</h3>
         </div>
         <Badge variant="outline">
-          {activityStats?.reduce((acc: number, curr: any) => acc + curr.count, 0) || 0} Activities
+          {totalActivities} Activities
         </Badge>
       </div>
 
       <div className="h-[200px] mb-4">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={activityStats}>
+          <BarChart data={activityStats || []}>
             <XAxis dataKey="type" />
             <YAxis />
             <Tooltip />
@@ -68,7 +75,7 @@ export const UserActivityMonitoring = () => {
 
       <ScrollArea className="h-[100px]">
         <div className="space-y-2">
-          {activityStats?.map((stat: any, index: number) => (
+          {activityStats?.map((stat, index) => (
             <div key={index} className="flex items-center justify-between p-2 bg-muted rounded-lg">
               <span className="text-sm">{stat.type}</span>
               <span className="text-sm font-medium">{stat.count} activities</span>
