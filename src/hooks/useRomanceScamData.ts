@@ -34,31 +34,44 @@ export const useRomanceScamData = () => {
 
       if (error) throw error;
 
-      // Group by risk levels
-      const riskLevels = (transactions || []).reduce((acc: Record<string, number>, tx) => {
-        const riskLevel = tx.risk_score >= 70 ? 'High' : tx.risk_score >= 40 ? 'Medium' : 'Low';
-        acc[riskLevel] = (acc[riskLevel] || 0) + 1;
-        return acc;
-      }, {});
+      // Initialize risk levels with default values
+      const riskLevels = {
+        High: 0,
+        Medium: 0,
+        Low: 0
+      };
 
-      // Analyze patterns
-      const patterns = (transactions || []).reduce((acc: Record<string, number>, tx) => {
-        if (tx.message_velocity > 50) acc.highVelocity = (acc.highVelocity || 0) + 1;
+      // Initialize patterns with default values
+      const patterns = {
+        highVelocity: 0,
+        profileChanges: 0,
+        multipleDevices: 0
+      };
+
+      // Process transactions
+      (transactions || []).forEach(tx => {
+        // Update risk levels
+        const riskLevel = tx.risk_score >= 70 ? 'High' : tx.risk_score >= 40 ? 'Medium' : 'Low';
+        riskLevels[riskLevel as keyof typeof riskLevels]++;
+
+        // Update patterns
+        if (tx.message_velocity > 50) patterns.highVelocity++;
         if (tx.profile_changes && Object.keys(tx.profile_changes).length > 0) {
-          acc.profileChanges = (acc.profileChanges || 0) + 1;
+          patterns.profileChanges++;
         }
         const interactionPatterns = tx.interaction_patterns as InteractionPatterns;
         if (interactionPatterns?.multiple_devices) {
-          acc.multipleDevices = (acc.multipleDevices || 0) + 1;
+          patterns.multipleDevices++;
         }
-        return acc;
-      }, {});
+      });
 
-      return {
+      const result: RomanceScamStats = {
         riskLevels,
         patterns,
-        recentTransactions: transactions
-      } as RomanceScamStats;
+        recentTransactions: transactions || []
+      };
+
+      return result;
     },
     refetchInterval: 30000,
   });
