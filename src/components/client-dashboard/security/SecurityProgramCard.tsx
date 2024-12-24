@@ -7,7 +7,9 @@ import { Shield, AlertTriangle, Clock } from "lucide-react";
 import { format } from "date-fns";
 
 interface SecurityProgramCardProps {
-  program: SecurityProgram;
+  program: SecurityProgram & {
+    compliance_requirements: string[];
+  };
 }
 
 export const SecurityProgramCard = ({ program }: SecurityProgramCardProps) => {
@@ -66,7 +68,7 @@ export const SecurityProgramCard = ({ program }: SecurityProgramCardProps) => {
         <Badge className={getStatusColor(program.status)}>{program.status}</Badge>
       </div>
 
-      {program.compliance_requirements?.length > 0 && (
+      {program.compliance_requirements && program.compliance_requirements.length > 0 && (
         <div className="space-y-2">
           <h4 className="text-sm font-medium">Compliance Requirements</h4>
           <div className="flex flex-wrap gap-2">

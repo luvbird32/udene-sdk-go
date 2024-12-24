@@ -6,6 +6,21 @@ import { Progress } from "@/components/ui/progress";
 import { Package, Shield, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+interface SeverityBreakdown {
+  critical: number;
+  high: number;
+  medium: number;
+  low: number;
+}
+
+interface OpenSourceScan {
+  id: string;
+  dependencies_scanned: number | null;
+  severity_breakdown: SeverityBreakdown;
+  remediation_steps: string[];
+  created_at: string | null;
+}
+
 export const OpenSourceSecurity = () => {
   const { toast } = useToast();
 
@@ -29,7 +44,12 @@ export const OpenSourceSecurity = () => {
         throw error;
       }
 
-      return data;
+      // Ensure the severity_breakdown and remediation_steps are properly typed
+      return {
+        ...data,
+        severity_breakdown: data.severity_breakdown as SeverityBreakdown,
+        remediation_steps: Array.isArray(data.remediation_steps) ? data.remediation_steps : []
+      } as OpenSourceScan;
     },
     refetchInterval: 30000,
   });
@@ -48,7 +68,7 @@ export const OpenSourceSecurity = () => {
     );
   }
 
-  const totalVulnerabilities = latestScan ? Object.values(latestScan.severity_breakdown).reduce((a: number, b: number) => a + b, 0) : 0;
+  const totalVulnerabilities = latestScan ? Object.values(latestScan.severity_breakdown).reduce((a, b) => a + b, 0) : 0;
 
   return (
     <Card className="p-6 space-y-6">
