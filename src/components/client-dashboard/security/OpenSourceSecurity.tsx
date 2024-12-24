@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Package, Shield, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { OpenSourceScan } from "@/integrations/supabase/types/security";
+import { OpenSourceScan, SeverityBreakdown } from "@/integrations/supabase/types/security";
 
 export const OpenSourceSecurity = () => {
   const { toast } = useToast();
@@ -34,9 +34,20 @@ export const OpenSourceSecurity = () => {
         return null;
       }
 
+      // Ensure severity_breakdown has the correct shape
+      const severityBreakdown: SeverityBreakdown = {
+        critical: 0,
+        high: 0,
+        medium: 0,
+        low: 0,
+        ...(typeof data.severity_breakdown === 'object' && data.severity_breakdown !== null
+          ? data.severity_breakdown as SeverityBreakdown
+          : {})
+      };
+
       return {
         ...data,
-        severity_breakdown: data.severity_breakdown as OpenSourceScan['severity_breakdown'],
+        severity_breakdown: severityBreakdown,
         remediation_steps: Array.isArray(data.remediation_steps) ? data.remediation_steps : []
       } as OpenSourceScan;
     },
