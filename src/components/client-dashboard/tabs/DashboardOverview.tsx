@@ -7,6 +7,7 @@ import { GeographicDistribution } from "@/components/client-dashboard/analytics/
 import { PeakTransactionTimes } from "@/components/client-dashboard/analytics/PeakTransactionTimes";
 import { RiskDistribution } from "@/components/client-dashboard/analytics/RiskDistribution";
 import { BusinessIntelligence } from "@/components/client-dashboard/analytics/BusinessIntelligence";
+import { FlaggedDevices } from "@/components/monitoring/FlaggedDevices";
 
 interface DashboardOverviewProps {
   metrics: any;
@@ -31,10 +32,13 @@ export const DashboardOverview = ({ metrics, metricsLoading, metricsError }: Das
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <PeakTransactionTimes />
-        <RiskDistribution />
+        <FlaggedDevices />
       </div>
 
-      <BusinessIntelligence />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <RiskDistribution />
+        <BusinessIntelligence />
+      </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <TransactionHistory />
