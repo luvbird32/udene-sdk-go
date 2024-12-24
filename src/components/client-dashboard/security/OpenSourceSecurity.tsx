@@ -34,16 +34,23 @@ export const OpenSourceSecurity = () => {
         return null;
       }
 
-      // Ensure severity_breakdown has the correct shape
-      const severityBreakdown: SeverityBreakdown = {
+      // Parse severity_breakdown with type safety
+      let severityBreakdown: SeverityBreakdown = {
         critical: 0,
         high: 0,
         medium: 0,
-        low: 0,
-        ...(typeof data.severity_breakdown === 'object' && data.severity_breakdown !== null
-          ? data.severity_breakdown as SeverityBreakdown
-          : {})
+        low: 0
       };
+
+      if (data.severity_breakdown && typeof data.severity_breakdown === 'object') {
+        const breakdown = data.severity_breakdown as Record<string, number>;
+        severityBreakdown = {
+          critical: breakdown.critical || 0,
+          high: breakdown.high || 0,
+          medium: breakdown.medium || 0,
+          low: breakdown.low || 0
+        };
+      }
 
       return {
         ...data,
