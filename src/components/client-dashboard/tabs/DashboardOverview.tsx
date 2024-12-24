@@ -8,6 +8,9 @@ import { PeakTransactionTimes } from "@/components/client-dashboard/analytics/Pe
 import { RiskDistribution } from "@/components/client-dashboard/analytics/RiskDistribution";
 import { BusinessIntelligence } from "@/components/client-dashboard/analytics/BusinessIntelligence";
 import { FlaggedDevices } from "@/components/monitoring/FlaggedDevices";
+import { AffiliateMonitoring } from "@/components/client-dashboard/analytics/AffiliateMonitoring";
+import { TrialAbuseMonitoring } from "@/components/client-dashboard/analytics/TrialAbuseMonitoring";
+import { RewardProgramMonitoring } from "@/components/client-dashboard/analytics/RewardProgramMonitoring";
 
 interface DashboardOverviewProps {
   metrics: any;
@@ -31,19 +34,26 @@ export const DashboardOverview = ({ metrics, metricsLoading, metricsError }: Das
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <PeakTransactionTimes />
+        <AffiliateMonitoring />
+        <RewardProgramMonitoring />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <TrialAbuseMonitoring />
         <FlaggedDevices />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <PeakTransactionTimes />
         <RiskDistribution />
-        <BusinessIntelligence />
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <TransactionHistory />
+        <BusinessIntelligence />
         <RiskOverview />
       </div>
+      
+      <TransactionHistory />
     </div>
   );
 };
