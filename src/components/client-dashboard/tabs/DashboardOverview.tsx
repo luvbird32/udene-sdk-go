@@ -11,6 +11,9 @@ import { FlaggedDevices } from "@/components/monitoring/FlaggedDevices";
 import { AffiliateMonitoring } from "@/components/client-dashboard/analytics/AffiliateMonitoring";
 import { TrialAbuseMonitoring } from "@/components/client-dashboard/analytics/TrialAbuseMonitoring";
 import { RewardProgramMonitoring } from "@/components/client-dashboard/analytics/RewardProgramMonitoring";
+import { DeviceFingerprintMonitoring } from "@/components/client-dashboard/analytics/DeviceFingerprintMonitoring";
+import { IdentityVerificationMonitoring } from "@/components/client-dashboard/analytics/IdentityVerificationMonitoring";
+import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
 
 interface DashboardOverviewProps {
   metrics: any;
@@ -20,8 +23,9 @@ interface DashboardOverviewProps {
 
 export const DashboardOverview = ({ metrics, metricsLoading, metricsError }: DashboardOverviewProps) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <ApiCreditsDisplay />
+      
       <ClientMetrics 
         metrics={metrics}
         isLoading={metricsLoading}
@@ -44,16 +48,24 @@ export const DashboardOverview = ({ metrics, metricsLoading, metricsError }: Das
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <PeakTransactionTimes />
-        <RiskDistribution />
+        <DeviceFingerprintMonitoring />
+        <IdentityVerificationMonitoring />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <UserActivityMonitoring />
+        <PeakTransactionTimes />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <RiskDistribution />
         <BusinessIntelligence />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <TransactionHistory />
         <RiskOverview />
       </div>
-      
-      <TransactionHistory />
     </div>
   );
 };
