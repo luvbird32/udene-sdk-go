@@ -2,10 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Package, Shield, AlertTriangle } from "lucide-react";
+import { Package, Shield } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { OpenSourceScan, SeverityBreakdown } from "@/integrations/supabase/types/security";
+import { SeverityBreakdownDisplay } from "./components/SeverityBreakdownDisplay";
+import { RemediationSteps } from "./components/RemediationSteps";
 
 export const OpenSourceSecurity = () => {
   const { toast } = useToast();
@@ -34,7 +35,6 @@ export const OpenSourceSecurity = () => {
         return null;
       }
 
-      // Parse severity_breakdown with type safety
       let severityBreakdown: SeverityBreakdown = {
         critical: 0,
         high: 0,
@@ -101,69 +101,13 @@ export const OpenSourceSecurity = () => {
               <span className="font-medium">{latestScan.dependencies_scanned}</span>
             </div>
 
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-sm">
-                <span>Critical</span>
-                <span className="text-red-500">{latestScan.severity_breakdown.critical}</span>
-              </div>
-              <Progress 
-                value={(latestScan.severity_breakdown.critical / totalVulnerabilities) * 100} 
-                className="h-2 bg-red-100"
-              >
-                <div className="h-full bg-red-500 transition-all" />
-              </Progress>
-
-              <div className="flex items-center justify-between text-sm">
-                <span>High</span>
-                <span className="text-orange-500">{latestScan.severity_breakdown.high}</span>
-              </div>
-              <Progress 
-                value={(latestScan.severity_breakdown.high / totalVulnerabilities) * 100} 
-                className="h-2 bg-orange-100"
-              >
-                <div className="h-full bg-orange-500 transition-all" />
-              </Progress>
-
-              <div className="flex items-center justify-between text-sm">
-                <span>Medium</span>
-                <span className="text-yellow-500">{latestScan.severity_breakdown.medium}</span>
-              </div>
-              <Progress 
-                value={(latestScan.severity_breakdown.medium / totalVulnerabilities) * 100} 
-                className="h-2 bg-yellow-100"
-              >
-                <div className="h-full bg-yellow-500 transition-all" />
-              </Progress>
-
-              <div className="flex items-center justify-between text-sm">
-                <span>Low</span>
-                <span className="text-blue-500">{latestScan.severity_breakdown.low}</span>
-              </div>
-              <Progress 
-                value={(latestScan.severity_breakdown.low / totalVulnerabilities) * 100} 
-                className="h-2 bg-blue-100"
-              >
-                <div className="h-full bg-blue-500 transition-all" />
-              </Progress>
-            </div>
+            <SeverityBreakdownDisplay 
+              severityBreakdown={latestScan.severity_breakdown}
+              totalVulnerabilities={totalVulnerabilities}
+            />
           </div>
 
-          {latestScan.remediation_steps && latestScan.remediation_steps.length > 0 && (
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-muted-foreground" />
-                <h4 className="text-sm font-medium">Recommended Actions</h4>
-              </div>
-              <ul className="space-y-1 text-sm text-muted-foreground">
-                {latestScan.remediation_steps.map((step, index) => (
-                  <li key={index} className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                    {step}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <RemediationSteps steps={latestScan.remediation_steps} />
         </>
       )}
     </Card>
