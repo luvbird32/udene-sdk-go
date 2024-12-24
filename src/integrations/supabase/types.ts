@@ -1508,6 +1508,54 @@ export type Database = {
           },
         ]
       }
+      vulnerability_scans: {
+        Row: {
+          created_at: string | null
+          end_time: string | null
+          findings: Json | null
+          id: string
+          scan_config: Json | null
+          scan_type: string
+          severity_breakdown: Json | null
+          start_time: string | null
+          status: string
+          target_url: string | null
+          total_vulnerabilities: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          end_time?: string | null
+          findings?: Json | null
+          id?: string
+          scan_config?: Json | null
+          scan_type: string
+          severity_breakdown?: Json | null
+          start_time?: string | null
+          status?: string
+          target_url?: string | null
+          total_vulnerabilities?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          end_time?: string | null
+          findings?: Json | null
+          id?: string
+          scan_config?: Json | null
+          scan_type?: string
+          severity_breakdown?: Json | null
+          start_time?: string | null
+          status?: string
+          target_url?: string | null
+          total_vulnerabilities?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       webhook_deliveries: {
         Row: {
           created_at: string | null
