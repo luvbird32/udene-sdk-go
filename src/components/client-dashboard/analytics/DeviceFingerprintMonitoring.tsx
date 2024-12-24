@@ -6,8 +6,14 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Smartphone, Shield, AlertTriangle } from "lucide-react";
 
+// Define an interface for the device stats
+interface DeviceStat {
+  date: string;
+  count: number;
+}
+
 export const DeviceFingerprintMonitoring = () => {
-  const { data: deviceStats, isLoading } = useQuery({
+  const { data: deviceStats, isLoading } = useQuery<DeviceStat[]>({
     queryKey: ["device-fingerprint-stats"],
     queryFn: async () => {
       console.log("Fetching device fingerprint stats...");
@@ -19,7 +25,7 @@ export const DeviceFingerprintMonitoring = () => {
 
       if (error) throw error;
 
-      const stats = (data || []).reduce((acc: any, curr) => {
+      const stats = (data || []).reduce((acc: Record<string, number>, curr) => {
         const date = new Date(curr.created_at).toLocaleDateString();
         acc[date] = (acc[date] || 0) + 1;
         return acc;
@@ -58,7 +64,7 @@ export const DeviceFingerprintMonitoring = () => {
 
       <div className="h-[200px] mb-4">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={deviceStats}>
+          <LineChart data={deviceStats || []}>
             <XAxis dataKey="date" />
             <YAxis />
             <Tooltip />
