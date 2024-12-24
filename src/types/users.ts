@@ -7,3 +7,16 @@ export interface User {
   status: "active" | "inactive" | "blocked" | "suspended" | "investigating";
   lastStatusChange?: string;
 }
+
+export interface ThreatReport {
+  id: string;
+  reported_user_id: string;
+  reporter_id: string;
+  threat_type: string;
+  description: string | null;
+  evidence: Record<string, any>;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  status: 'pending' | 'investigating' | 'resolved' | 'dismissed';
+  created_at: string;
+  updated_at: string;
+}

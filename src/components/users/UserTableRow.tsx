@@ -2,6 +2,7 @@ import { User } from "@/types/users";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { UserActions } from "./UserActions";
+import { ReportThreatDialog } from "./ReportThreatDialog";
 import { 
   Tooltip,
   TooltipContent,
@@ -35,7 +36,7 @@ export const UserTableRow = ({ user, onRoleChange, onStatusToggle }: UserTableRo
   const getStatusBadgeVariant = () => {
     switch (user.status) {
       case "active":
-        return "secondary";  // Changed from 'success' to 'secondary'
+        return "secondary";
       case "blocked":
         return "destructive";
       case "suspended":
@@ -74,11 +75,15 @@ export const UserTableRow = ({ user, onRoleChange, onStatusToggle }: UserTableRo
       <TableCell>
         {new Date(user.lastActive).toLocaleDateString()}
       </TableCell>
-      <TableCell>
+      <TableCell className="space-x-2">
         <UserActions 
           user={user}
           onRoleChange={onRoleChange}
           onStatusToggle={onStatusToggle}
+        />
+        <ReportThreatDialog 
+          userId={user.id}
+          userName={user.name || "Unknown User"}
         />
       </TableCell>
     </TableRow>

@@ -1425,6 +1425,45 @@ export type Database = {
         }
         Relationships: []
       }
+      user_threat_reports: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          evidence: Json | null
+          id: string
+          reported_user_id: string | null
+          reporter_id: string | null
+          severity: string | null
+          status: string | null
+          threat_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          evidence?: Json | null
+          id?: string
+          reported_user_id?: string | null
+          reporter_id?: string | null
+          severity?: string | null
+          status?: string | null
+          threat_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          evidence?: Json | null
+          id?: string
+          reported_user_id?: string | null
+          reporter_id?: string | null
+          severity?: string | null
+          status?: string | null
+          threat_type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       verification_attempts: {
         Row: {
           attempt_data: Json | null
