@@ -6,17 +6,38 @@ import { VulnerabilityScanning } from "./VulnerabilityScanning";
 import { Card } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { SecurityProgram } from "@/integrations/supabase/types/security";
+import { useToast } from "@/hooks/use-toast";
 
 export const SecurityProgramList = () => {
+  const { toast } = useToast();
+  
   const { data: programs, isLoading } = useQuery({
     queryKey: ["security-programs"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('product_security_programs')
-        .select('*')
+        .select(`
+          *,
+          security_assessments (
+            id,
+            assessment_type,
+            status,
+            findings,
+            risk_level,
+            due_date
+          )
+        `)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching security programs:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch security programs. Please try again.",
+          variant: "destructive",
+        });
+        throw error;
+      }
       return data as SecurityProgram[];
     },
   });
