@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { InteractionPatterns } from "@/types/fraud";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface RomanceScamStats {
   riskLevels: {
@@ -56,7 +57,7 @@ export const useRomanceScamData = () => {
 
         // Update patterns
         if (tx.message_velocity > 50) patterns.highVelocity++;
-        if (tx.profile_changes && Object.keys(tx.profile_changes).length > 0) {
+        if (tx.profile_changes && Object.keys(tx.profile_changes as Record<string, unknown>).length > 0) {
           patterns.profileChanges++;
         }
         const interactionPatterns = tx.interaction_patterns as InteractionPatterns;
@@ -68,7 +69,12 @@ export const useRomanceScamData = () => {
       const result: RomanceScamStats = {
         riskLevels,
         patterns,
-        recentTransactions: transactions || []
+        recentTransactions: (transactions || []).map(tx => ({
+          message_velocity: tx.message_velocity,
+          profile_changes: tx.profile_changes as Record<string, unknown>,
+          interaction_patterns: tx.interaction_patterns as InteractionPatterns,
+          risk_score: tx.risk_score
+        }))
       };
 
       return result;
