@@ -1514,7 +1514,11 @@ export type Database = {
           end_time: string | null
           findings: Json | null
           id: string
+          last_error: string | null
           scan_config: Json | null
+          scan_duration: unknown | null
+          scan_engine: string | null
+          scan_parameters: Json | null
           scan_type: string
           severity_breakdown: Json | null
           start_time: string | null
@@ -1529,7 +1533,11 @@ export type Database = {
           end_time?: string | null
           findings?: Json | null
           id?: string
+          last_error?: string | null
           scan_config?: Json | null
+          scan_duration?: unknown | null
+          scan_engine?: string | null
+          scan_parameters?: Json | null
           scan_type: string
           severity_breakdown?: Json | null
           start_time?: string | null
@@ -1544,7 +1552,11 @@ export type Database = {
           end_time?: string | null
           findings?: Json | null
           id?: string
+          last_error?: string | null
           scan_config?: Json | null
+          scan_duration?: unknown | null
+          scan_engine?: string | null
+          scan_parameters?: Json | null
           scan_type?: string
           severity_breakdown?: Json | null
           start_time?: string | null
