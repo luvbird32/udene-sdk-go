@@ -8,6 +8,9 @@ import { WebhookManager } from "@/components/client-dashboard/webhooks/WebhookMa
 import { TriggerManager } from "@/components/client-dashboard/triggers/TriggerManager";
 import { InvestigationLogs } from "@/components/client-dashboard/investigation/InvestigationLogs";
 import { DashboardOverview } from "./DashboardOverview";
+import { SecurityProgramList } from "@/components/client-dashboard/security/SecurityProgramList";
+import { OpenSourceSecurity } from "@/components/client-dashboard/security/OpenSourceSecurity";
+import { VulnerabilityScanning } from "@/components/client-dashboard/security/VulnerabilityScanning";
 
 interface DashboardTabContentProps {
   metrics: any;
@@ -28,6 +31,12 @@ export const DashboardTabContent = ({ metrics, metricsLoading, metricsError }: D
 
       <TabsContent value="services" className="space-y-6">
         <ServiceManager />
+      </TabsContent>
+
+      <TabsContent value="security" className="space-y-6">
+        <SecurityProgramList />
+        <OpenSourceSecurity />
+        <VulnerabilityScanning />
       </TabsContent>
 
       <TabsContent value="reports" className="space-y-6">

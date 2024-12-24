@@ -12,6 +12,10 @@ export const DashboardTabs = () => {
         <Layers className="h-4 w-4 mr-2" />
         Services
       </TabsTrigger>
+      <TabsTrigger value="security">
+        <Shield className="h-4 w-4 mr-2" />
+        Security
+      </TabsTrigger>
       <TabsTrigger value="reports">
         <FileText className="h-4 w-4 mr-2" />
         Reports
