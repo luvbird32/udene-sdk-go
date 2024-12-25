@@ -1,6 +1,26 @@
 /**
- * @component ScanHeader
- * @description Header component for displaying scan information and total vulnerabilities found
+ * ScanHeader Component
+ * 
+ * Displays the header section of a security scan result, showing the scan type
+ * and total number of vulnerabilities found.
+ * 
+ * Features:
+ * - Scan type indicator
+ * - Total vulnerability count
+ * - Visual status indicators
+ * - Responsive layout
+ * 
+ * @param {Object} props
+ * @param {number} props.totalVulnerabilities - Total number of vulnerabilities found
+ * @param {string} props.scanType - Type of security scan performed
+ * 
+ * @example
+ * ```tsx
+ * <ScanHeader 
+ *   totalVulnerabilities={5}
+ *   scanType="Open Source"
+ * />
+ * ```
  */
 import React from 'react';
 
