@@ -1,30 +1,4 @@
-import { format } from "date-fns";
-import { Json } from "@/integrations/supabase/types";
-
-export interface VulnerabilityDetail {
-  id: string;
-  name: string;
-  description: string;
-  severity: 'critical' | 'high' | 'medium' | 'low';
-  cve_id?: string;
-  affected_component: string;
-  remediation_steps: string[];
-  references: string[];
-  discovered_at: string;
-}
-
-interface ScanResult {
-  status: string;
-  end_time: string;
-  total_vulnerabilities: number;
-  severity_breakdown: {
-    critical: number;
-    high: number;
-    medium: number;
-    low: number;
-  };
-  findings: VulnerabilityDetail[];
-}
+import { VulnerabilityDetail, VulnerabilityScan } from "../types";
 
 export const calculateScanProgress = (status: string, endTime: string | null) => {
   switch (status) {
@@ -39,7 +13,7 @@ export const calculateScanProgress = (status: string, endTime: string | null) =>
   }
 };
 
-const generateVulnerabilityDetail = (severity: 'critical' | 'high' | 'medium' | 'low'): VulnerabilityDetail => {
+export const generateVulnerabilityDetail = (severity: 'critical' | 'high' | 'medium' | 'low'): VulnerabilityDetail => {
   const vulnerabilityTemplates = {
     critical: {
       name: 'Remote Code Execution Vulnerability',
@@ -86,14 +60,12 @@ const generateVulnerabilityDetail = (severity: 'critical' | 'high' | 'medium' | 
   };
 };
 
-export const generateMockScanResults = (): ScanResult => {
-  // Generate random counts for each severity level
+export const generateMockScanResults = (): Partial<VulnerabilityScan> => {
   const critical = Math.floor(Math.random() * 2);
   const high = Math.floor(Math.random() * 3);
   const medium = Math.floor(Math.random() * 4);
   const low = Math.floor(Math.random() * 5);
 
-  // Generate detailed findings
   const findings: VulnerabilityDetail[] = [
     ...Array(critical).fill(null).map(() => generateVulnerabilityDetail('critical')),
     ...Array(high).fill(null).map(() => generateVulnerabilityDetail('high')),
