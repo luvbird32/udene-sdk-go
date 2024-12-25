@@ -1,6 +1,5 @@
-import { API_CONFIG } from '@/config/api';
-import { supabase, handleSupabaseError } from "@/integrations/supabase/client";
 import { getItem, setItem } from "@/utils/indexedDB";
+import { supabase, handleSupabaseError } from "@/integrations/supabase/client";
 
 export interface UdeneMetrics {
   riskScore: number;
@@ -11,13 +10,6 @@ export interface UdeneMetrics {
   falsePositiveRate: number;
   avgProcessingTime: number;
   concurrentCalls: number;
-}
-
-export interface Activity {
-  id: string;
-  type: "suspicious" | "normal";
-  description: string;
-  timestamp: string;
 }
 
 export const getFraudMetrics = async (): Promise<UdeneMetrics> => {
@@ -65,13 +57,13 @@ export const getFraudMetrics = async (): Promise<UdeneMetrics> => {
 
         const metrics = {
           riskScore: Math.round(avgRiskScore || 0),
-          activeUsers: 0, // Placeholder for active users calculation
+          activeUsers: 0,
           alertCount: alertCount || 0,
           apiCalls: recentTransactions?.length || 0,
           accuracy,
           falsePositiveRate: 100 - accuracy,
           avgProcessingTime: 35,
-          concurrentCalls: 0 // Placeholder for concurrent calls calculation
+          concurrentCalls: 0
         };
 
         // Cache the metrics
@@ -102,68 +94,4 @@ export const getFraudMetrics = async (): Promise<UdeneMetrics> => {
       concurrentCalls: 0
     };
   }
-};
-
-export const getRecentActivity = async (): Promise<Activity[]> => {
-  try {
-    const cachedActivity = await getItem('apiResponses', 'recentActivity');
-    if (cachedActivity) {
-      return cachedActivity;
-    }
-
-    const { data, error } = await supabase
-      .from('fraud_alerts')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(5);
-
-    if (error) throw error;
-
-    const activity: Activity[] = (data || []).map(alert => ({
-      id: alert.id,
-      type: "suspicious",
-      description: alert.description,
-      timestamp: alert.created_at
-    }));
-
-    await setItem('apiResponses', 'recentActivity', activity, Date.now() + 60 * 1000);
-
-    return activity;
-  } catch (error) {
-    console.error('Error fetching activity:', error);
-    throw error;
-  }
-};
-
-export const validateApiKey = async (apiKey: string): Promise<boolean> => {
-  if (!apiKey?.trim()) {
-    console.log('Empty Udene API key provided');
-    return false;
-  }
-
-  try {
-    const { data, error } = await supabase
-      .from('api_keys')
-      .select('status')
-      .eq('key_value', apiKey)
-      .single();
-
-    if (error) {
-      console.error('Udene API key validation error:', error);
-      return false;
-    }
-
-    return data?.status === 'active';
-  } catch (error) {
-    console.error('Udene API key validation failed:', error);
-    return false;
-  }
-};
-
-export const setApiKey = (apiKey: string): void => {
-  localStorage.setItem("udene_api_key", apiKey);
-};
-
-export const clearApiKey = (): void => {
-  localStorage.removeItem("udene_api_key");
 };
