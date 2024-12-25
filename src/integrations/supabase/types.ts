@@ -339,6 +339,30 @@ export type Database = {
         }
         Relationships: []
       }
+      database_metrics: {
+        Row: {
+          active_queries: number
+          cache_hit_ratio: number
+          current_connections: number
+          id: string
+          timestamp: string | null
+        }
+        Insert: {
+          active_queries?: number
+          cache_hit_ratio?: number
+          current_connections?: number
+          id?: string
+          timestamp?: string | null
+        }
+        Update: {
+          active_queries?: number
+          cache_hit_ratio?: number
+          current_connections?: number
+          id?: string
+          timestamp?: string | null
+        }
+        Relationships: []
+      }
       device_fingerprint_history: {
         Row: {
           change_type: string
@@ -509,6 +533,24 @@ export type Database = {
           name?: string
           updated_at?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      extracted_data: {
+        Row: {
+          created_at: string | null
+          data: Json
+          id: string
+        }
+        Insert: {
+          created_at?: string | null
+          data?: Json
+          id?: string
+        }
+        Update: {
+          created_at?: string | null
+          data?: Json
+          id?: string
         }
         Relationships: []
       }
@@ -1192,6 +1234,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      table_info: {
+        Row: {
+          id: string
+          last_analyzed: string | null
+          row_count: number
+          table_name: string
+        }
+        Insert: {
+          id?: string
+          last_analyzed?: string | null
+          row_count?: number
+          table_name: string
+        }
+        Update: {
+          id?: string
+          last_analyzed?: string | null
+          row_count?: number
+          table_name?: string
+        }
+        Relationships: []
       }
       training_datasets: {
         Row: {

@@ -1,15 +1,15 @@
 import { Button } from "@/components/ui/button";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Profile } from "@/types/supabase";
 import { MoreHorizontal } from "lucide-react";
-import { User } from "@/types/users";
 
 interface UserActionsProps {
-  user: User;
+  user: Profile;
   onRoleChange: (userId: string, newRole: string) => Promise<void>;
   onStatusToggle: (userId: string, newStatus: string) => Promise<void>;
 }
@@ -23,11 +23,14 @@ export const UserActions = ({ user, onRoleChange, onStatusToggle }: UserActionsP
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => onRoleChange(user.id, user.role === 'admin' ? 'user' : 'admin')}>
-          {user.role === 'admin' ? 'Remove Admin' : 'Make Admin'}
+        <DropdownMenuItem onClick={() => onRoleChange(user.id, "admin")}>
+          Make Admin
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onStatusToggle(user.id, user.status === 'active' ? 'inactive' : 'active')}>
-          {user.status === 'active' ? 'Deactivate' : 'Activate'}
+        <DropdownMenuItem onClick={() => onRoleChange(user.id, "user")}>
+          Make User
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => onStatusToggle(user.id, user.status === "active" ? "suspended" : "active")}>
+          {user.status === "active" ? "Suspend User" : "Activate User"}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

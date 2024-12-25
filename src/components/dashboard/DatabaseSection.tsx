@@ -9,7 +9,7 @@ interface DatabaseMetrics {
   timestamp: string;
 }
 
-export const DatabaseSection = () => {
+const DatabaseSection = () => {
   const { data: dbMetrics, isLoading, error } = useQuery({
     queryKey: ["database-metrics"],
     queryFn: async () => {

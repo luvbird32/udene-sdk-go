@@ -16,7 +16,7 @@ export const DataExtractionSection = () => {
     queryKey: ["table-info"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('table_info')
+        .from('admin_data_extractions')
         .select('*');
 
       if (error) throw error;
@@ -29,17 +29,16 @@ export const DataExtractionSection = () => {
       setIsExtracting(true);
       
       const { data, error } = await supabase
-        .from('extracted_data')
-        .select('data')
-        .limit(1000)
-        .single();
+        .from('admin_data_extractions')
+        .select('*')
+        .limit(1000);
 
       if (error) throw error;
 
       // Convert data to selected format
       const formattedData = format === 'csv' 
-        ? convertToCSV(data.data)
-        : JSON.stringify(data.data, null, 2);
+        ? convertToCSV(data)
+        : JSON.stringify(data, null, 2);
 
       // Create and trigger download
       const blob = new Blob([formattedData], { 
@@ -124,7 +123,7 @@ export const DataExtractionSection = () => {
 
         {tableInfo && (
           <div className="text-sm text-muted-foreground">
-            Available tables: {tableInfo.length}
+            Available extractions: {tableInfo.length}
           </div>
         )}
       </div>
