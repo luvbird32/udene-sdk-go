@@ -1,8 +1,34 @@
+/**
+ * TransactionItem Component
+ * 
+ * Renders an individual transaction item with amount, timestamp, and fraud status.
+ * Uses memoization to optimize rendering performance.
+ * 
+ * Features:
+ * - Formatted amount display
+ * - Formatted timestamp
+ * - Visual fraud status indicator
+ * - Memoized rendering
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * const transaction = {
+ *   id: '1',
+ *   amount: 100,
+ *   created_at: '2024-03-01T12:00:00Z',
+ *   is_fraudulent: false
+ * };
+ * 
+ * <TransactionItem transaction={transaction} />
+ * ```
+ */
 import { memo } from "react";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 
 interface TransactionItemProps {
+  /** Transaction data to display */
   transaction: {
     id: string;
     amount: number;
@@ -31,7 +57,6 @@ export const TransactionItem = memo(function TransactionItem({ transaction }: Tr
     </div>
   );
 }, (prevProps, nextProps) => {
-  // Custom comparison function for memo
   return (
     prevProps.transaction.id === nextProps.transaction.id &&
     prevProps.transaction.amount === nextProps.transaction.amount &&

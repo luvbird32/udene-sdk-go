@@ -1,7 +1,30 @@
+/**
+ * CreditUsageProgress Component
+ * 
+ * Displays a visual progress bar showing API credit usage with detailed statistics.
+ * Shows both used and total credits along with a percentage-based progress bar.
+ * 
+ * Features:
+ * - Visual progress indicator
+ * - Credit usage statistics
+ * - Responsive design
+ * - Automatic percentage calculation
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <CreditUsageProgress
+ *   usedCredits={500}
+ *   totalCredits={1000}
+ * />
+ * ```
+ */
 import { Progress } from "@/components/ui/progress";
 
 interface CreditUsageProgressProps {
+  /** Number of credits used */
   usedCredits: number;
+  /** Total available credits */
   totalCredits: number;
 }
 
