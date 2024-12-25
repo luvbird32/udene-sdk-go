@@ -1,3 +1,23 @@
+/**
+ * LogActions Component
+ * 
+ * Provides action buttons and detailed information for investigation logs.
+ * Includes a hover card with additional details about the investigation.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * const log = {
+ *   id: "123",
+ *   service_id: "456",
+ *   status: "in_progress",
+ *   created_at: "2024-03-01T12:00:00Z",
+ *   updated_at: "2024-03-01T12:30:00Z"
+ * };
+ * 
+ * <LogActions log={log} />
+ * ```
+ */
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import {
@@ -11,6 +31,7 @@ import { Database } from "@/integrations/supabase/types";
 type InvestigationLog = Database['public']['Tables']['service_investigation_logs']['Row'];
 
 interface LogActionsProps {
+  /** Investigation log entry containing details about the investigation */
   log: InvestigationLog;
 }
 

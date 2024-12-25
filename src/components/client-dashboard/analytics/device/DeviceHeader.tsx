@@ -1,7 +1,20 @@
+/**
+ * DeviceHeader Component
+ * 
+ * Displays the header section of the device fingerprint analysis dashboard,
+ * including a title and the total count of tracked devices.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <DeviceHeader deviceCount={42} />
+ * ```
+ */
 import { Smartphone } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface DeviceHeaderProps {
+  /** The total number of unique devices being tracked */
   deviceCount: number;
 }
 

@@ -1,7 +1,27 @@
+/**
+ * InvestigationTypeSelect Component
+ * 
+ * A select input component for choosing the type of security investigation
+ * to perform. Provides a list of predefined investigation types with
+ * proper styling and accessibility features.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * const [type, setType] = useState("");
+ * 
+ * <InvestigationTypeSelect 
+ *   value={type}
+ *   onValueChange={(newValue) => setType(newValue)}
+ * />
+ * ```
+ */
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface InvestigationTypeSelectProps {
+  /** Currently selected investigation type */
   value: string;
+  /** Callback function when selection changes */
   onValueChange: (value: string) => void;
 }
 
