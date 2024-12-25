@@ -1,3 +1,23 @@
+/**
+ * TriggerList Component
+ * 
+ * Displays and manages a list of event triggers with real-time updates.
+ * Provides functionality for creating, updating, and deleting triggers.
+ * 
+ * Features:
+ * - Real-time trigger status updates
+ * - Toggle trigger activation
+ * - Delete trigger functionality
+ * - Loading state handling
+ * - Empty state display
+ * - Toast notifications for actions
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <TriggerList />
+ * ```
+ */
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";

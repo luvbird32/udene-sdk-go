@@ -1,3 +1,22 @@
+/**
+ * WebhookManager Component
+ * 
+ * Manages webhook configurations for real-time event notifications.
+ * Provides interface for creating, viewing, and managing webhooks.
+ * 
+ * Features:
+ * - Webhook URL configuration
+ * - Event type selection
+ * - Real-time webhook status
+ * - Webhook list management
+ * - Beta feature indicator
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <WebhookManager />
+ * ```
+ */
 import { WebhookForm } from "./WebhookForm";
 import { WebhookList } from "./WebhookList";
 import { Card } from "@/components/ui/card";
