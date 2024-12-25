@@ -1,16 +1,20 @@
-import { Card } from "@/components/ui/card";
-import { Package } from "lucide-react";
-
+/**
+ * @component LoadingScanState
+ * @description Displays a loading state while security scan results are being fetched.
+ * Shows a placeholder animation and message to indicate that scan data is loading.
+ *
+ * @example
+ * ```tsx
+ * // Use when fetching scan results
+ * if (isLoading) {
+ *   return <LoadingScanState />;
+ * }
+ * ```
+ */
 export const LoadingScanState = () => {
   return (
-    <Card className="p-6">
-      <div className="flex items-center gap-2 mb-4">
-        <Package className="h-5 w-5 text-muted-foreground" />
-        <h3 className="font-semibold">Open Source Security</h3>
-      </div>
-      <div className="h-[200px] flex items-center justify-center">
-        <p className="text-muted-foreground">Loading scan results...</p>
-      </div>
-    </Card>
+    <div className="text-center p-4 text-muted-foreground">
+      Loading scan results...
+    </div>
   );
 };

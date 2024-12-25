@@ -1,18 +1,36 @@
-import { Loader2 } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
-import { calculateScanProgress } from "../../utils/scanUtils";
-
-interface SeverityBreakdown {
-  critical: number;
-  high: number;
-  medium: number;
-  low: number;
-}
+/**
+ * @component ScanStats
+ * @description Displays statistical information about a security scan, including
+ * status, total vulnerabilities found, and severity breakdown. Also shows completion
+ * time if the scan has finished.
+ *
+ * @param {Object} props - Component props
+ * @param {string} props.status - Current status of the scan (e.g., "completed", "in_progress")
+ * @param {number} props.totalVulnerabilities - Total number of vulnerabilities detected
+ * @param {Object} props.severityBreakdown - Distribution of vulnerabilities by severity level
+ * @param {string | null} props.endTime - Timestamp when the scan completed (if finished)
+ *
+ * @example
+ * ```tsx
+ * <ScanStats
+ *   status="completed"
+ *   totalVulnerabilities={12}
+ *   severityBreakdown={{ critical: 2, high: 3, medium: 4, low: 3 }}
+ *   endTime="2024-03-15T10:30:00Z"
+ * />
+ * ```
+ */
+import { format } from "date-fns";
 
 interface ScanStatsProps {
   status: string;
   totalVulnerabilities: number;
-  severityBreakdown: SeverityBreakdown;
+  severityBreakdown: {
+    critical: number;
+    high: number;
+    medium: number;
+    low: number;
+  };
   endTime: string | null;
 }
 
@@ -23,53 +41,29 @@ export const ScanStats = ({
   endTime 
 }: ScanStatsProps) => {
   return (
-    <div className="space-y-2">
-      <div className="flex justify-between text-sm">
-        <span className="flex items-center gap-2">
-          Status: {status} 
-          {status === 'in_progress' && (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          )}
-        </span>
-        <span className="font-medium">
-          {totalVulnerabilities} vulnerabilities found
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <span className="text-sm font-medium">Status: {status}</span>
+        <span className="text-sm font-medium">
+          Total Vulnerabilities: {totalVulnerabilities}
         </span>
       </div>
-
-      <div className="grid grid-cols-2 gap-2 text-sm">
-        <div className="flex justify-between">
-          <span>Critical:</span>
-          <span className="text-red-500 font-medium">
-            {severityBreakdown.critical}
-          </span>
+      
+      <div className="grid grid-cols-2 gap-4">
+        <div className="text-sm">
+          <p>Critical: {severityBreakdown.critical}</p>
+          <p>High: {severityBreakdown.high}</p>
         </div>
-        <div className="flex justify-between">
-          <span>High:</span>
-          <span className="text-orange-500 font-medium">
-            {severityBreakdown.high}
-          </span>
-        </div>
-        <div className="flex justify-between">
-          <span>Medium:</span>
-          <span className="text-yellow-500 font-medium">
-            {severityBreakdown.medium}
-          </span>
-        </div>
-        <div className="flex justify-between">
-          <span>Low:</span>
-          <span className="text-green-500 font-medium">
-            {severityBreakdown.low}
-          </span>
+        <div className="text-sm">
+          <p>Medium: {severityBreakdown.medium}</p>
+          <p>Low: {severityBreakdown.low}</p>
         </div>
       </div>
 
-      {status === 'in_progress' && (
-        <div className="space-y-1">
-          <Progress value={calculateScanProgress(status, endTime)} className="h-2" />
-          <p className="text-xs text-muted-foreground text-center">
-            Scanning in progress...
-          </p>
-        </div>
+      {endTime && (
+        <p className="text-sm text-muted-foreground">
+          Completed: {format(new Date(endTime), 'PPp')}
+        </p>
       )}
     </div>
   );
