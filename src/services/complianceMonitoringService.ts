@@ -24,10 +24,16 @@ export const complianceMonitoringService = {
   },
 
   async getSecurityAssessments(programId: string) {
-    const { data, error } = await supabase
+    const query = supabase
       .from('security_assessments')
-      .select('*')
-      .eq('program_id', programId);
+      .select('*');
+      
+    // If programId is not "all", filter by program_id
+    if (programId !== "all") {
+      query.eq('program_id', programId);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.error('Error fetching security assessments:', error);

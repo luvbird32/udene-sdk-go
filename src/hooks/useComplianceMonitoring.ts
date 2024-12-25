@@ -29,18 +29,17 @@ export const useComplianceMonitoring = () => {
 
   const getAssessments = useQuery({
     queryKey: ['security-assessments'],
-    queryFn: async () => {
-      const assessments = await complianceMonitoringService.getSecurityAssessments();
-      return assessments;
-    },
-    onError: (error) => {
-      console.error('Error fetching assessments:', error);
-      toast({
-        title: "Error",
-        description: "Failed to fetch security assessments. Please try again.",
-        variant: "destructive",
-      });
-    },
+    queryFn: () => complianceMonitoringService.getSecurityAssessments("all"), // Added "all" as default parameter
+    meta: {
+      errorHandler: (error: Error) => {
+        console.error('Error fetching assessments:', error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch security assessments. Please try again.",
+          variant: "destructive",
+        });
+      }
+    }
   });
 
   return {
