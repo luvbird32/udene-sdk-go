@@ -69,7 +69,10 @@ export const OpenSourceSecurity = () => {
 
   return (
     <Card className="p-6 space-y-6">
-      <ScanHeader totalVulnerabilities={totalVulnerabilities} />
+      <ScanHeader 
+        totalVulnerabilities={totalVulnerabilities}
+        scanType="Open Source"
+      />
 
       {latestScan && (
         <ScanResults 

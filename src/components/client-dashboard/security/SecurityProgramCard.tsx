@@ -8,12 +8,15 @@ import { format } from "date-fns";
 import { getStatusColor } from "./utils/statusUtils";
 import { ComplianceRequirements } from "./components/program-card/ComplianceRequirements";
 import { RecentAssessments } from "./components/program-card/RecentAssessments";
+import { useState } from "react";
 
 interface SecurityProgramCardProps {
   program: SecurityProgram;
 }
 
 export const SecurityProgramCard = ({ program }: SecurityProgramCardProps) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  
   const { data: assessments } = useQuery({
     queryKey: ["security-assessments", program.id],
     queryFn: async () => {
@@ -42,7 +45,11 @@ export const SecurityProgramCard = ({ program }: SecurityProgramCardProps) => {
         <Badge className={getStatusColor(program.status)}>{program.status}</Badge>
       </div>
 
-      <ComplianceRequirements requirements={program.compliance_requirements} />
+      <ComplianceRequirements 
+        requirements={program.compliance_requirements} 
+        isExpanded={isExpanded}
+        onToggle={() => setIsExpanded(!isExpanded)}
+      />
       
       {assessments && <RecentAssessments assessments={assessments} />}
 
