@@ -1,3 +1,28 @@
+/**
+ * RewardProgramMonitoring Component
+ * 
+ * Monitors and analyzes reward program activities for potential abuse
+ * and fraudulent behavior.
+ * 
+ * Key Metrics:
+ * - Points earned/redeemed
+ * - Transaction patterns
+ * - User behavior analysis
+ * - Risk scoring
+ * 
+ * Protection Features:
+ * - Velocity checks
+ * - Pattern recognition
+ * - Multiple account detection
+ * - Suspicious redemption monitoring
+ * 
+ * Visualization:
+ * - Bar chart showing program type distribution
+ * - Transaction volume analysis
+ * - Risk level indicators
+ * 
+ * Updates every 30 seconds to maintain current program insights.
+ */
 import { Card } from "@/components/ui/card";
 import { useRewardProgramData } from "@/hooks/useRewardProgramData";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";

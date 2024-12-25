@@ -1,10 +1,3 @@
-import { Card } from "@/components/ui/card";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { LoadingState } from "./shared/LoadingState";
-import { DeviceHeader } from "./device/DeviceHeader";
-import { DeviceAnalytics } from "./device/DeviceAnalytics";
-
 /**
  * DeviceFingerprintMonitoring Component
  * 
@@ -32,6 +25,13 @@ import { DeviceAnalytics } from "./device/DeviceAnalytics";
  * - Automated fraud operations
  * - Account sharing or theft
  */
+import { Card } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { LoadingState } from "./shared/LoadingState";
+import { DeviceHeader } from "./device/DeviceHeader";
+import { DeviceAnalytics } from "./device/DeviceAnalytics";
+
 export const DeviceFingerprintMonitoring = () => {
   const { data: deviceStats, isLoading } = useQuery({
     queryKey: ["device-fingerprint-stats"],

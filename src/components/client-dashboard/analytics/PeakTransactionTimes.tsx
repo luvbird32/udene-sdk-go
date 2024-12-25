@@ -1,9 +1,3 @@
-import { Card } from "@/components/ui/card";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { format } from "date-fns";
-
 /**
  * PeakTransactionTimes Component
  * 
@@ -25,6 +19,12 @@ import { format } from "date-fns";
  * Data is refreshed every 30 seconds to maintain current
  * insights into transaction timing patterns.
  */
+import { Card } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { format } from "date-fns";
+
 export const PeakTransactionTimes = () => {
   const { data: peakTimes, isLoading } = useQuery({
     queryKey: ["peak-transaction-times"],

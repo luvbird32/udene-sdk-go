@@ -1,9 +1,3 @@
-import { Card } from "@/components/ui/card";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { Badge } from "@/components/ui/badge";
-
 /**
  * AffiliateMonitoring Component
  * 
@@ -24,12 +18,16 @@ import { Badge } from "@/components/ui/badge";
  * The data is refreshed every 30 seconds to provide near real-time monitoring
  * of affiliate activities and early fraud detection.
  */
+import { Card } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { Badge } from "@/components/ui/badge";
+
 export const AffiliateMonitoring = () => {
-  // Query hook for fetching and monitoring affiliate statistics
   const { data: affiliateStats, isLoading } = useQuery({
     queryKey: ["affiliate-fraud-stats"],
     queryFn: async () => {
-      // Fetch the last 100 affiliate activities for pattern analysis
       const { data, error } = await supabase
         .from('affiliate_activities')
         .select('*')
@@ -38,15 +36,12 @@ export const AffiliateMonitoring = () => {
 
       if (error) throw error;
 
-      // Transform the data for visualization, combining risk scores
-      // and transaction amounts for correlation analysis
       return data?.map(activity => ({
         date: new Date(activity.created_at).toLocaleDateString(),
         riskScore: activity.risk_score || 0,
         amount: activity.transaction_amount || 0
       }));
     },
-    // Regular refresh interval for real-time monitoring
     refetchInterval: 30000,
   });
 
