@@ -32,17 +32,26 @@ export const mockTransactions: Transaction[] = [
 
 type TransactionResponse = PostgrestFilterBuilder<
   Database['public'],
-  Database['public']['Tables']['transactions'],
+  Database['public']['Tables']['transactions']['Row'],
   Transaction[]
 >;
 
+const createBaseResponse = () => ({
+  data: null,
+  error: null,
+  count: null,
+  status: 200,
+  statusText: 'OK'
+});
+
 export const createMockResponse = (data: Transaction[] = mockTransactions): TransactionResponse => {
-  const response = {
+  const baseResponse = {
+    ...createBaseResponse(),
     data,
-    error: null,
-    count: null,
-    status: 200,
-    statusText: 'OK',
+  };
+
+  const response = {
+    ...baseResponse,
     then: () => Promise.resolve(response),
     catch: () => Promise.resolve(response),
     finally: () => Promise.resolve(response),
@@ -80,6 +89,11 @@ export const createMockResponse = (data: Transaction[] = mockTransactions): Tran
     not: () => response,
     filter: () => response,
     or: () => response,
+    // Add missing methods from PostgrestFilterBuilder
+    execute: () => Promise.resolve(response),
+    abortSignal: () => response,
+    returns: () => response,
+    csv: () => response,
   } as unknown as TransactionResponse;
 
   return response;
