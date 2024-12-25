@@ -1,14 +1,12 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { SecurityProgram } from "@/integrations/supabase/types/security";
 import { Shield, Clock } from "lucide-react";
 import { format } from "date-fns";
 import { getStatusColor } from "./utils/statusUtils";
 import { ComplianceRequirements } from "./components/program-card/ComplianceRequirements";
 import { RecentAssessments } from "./components/program-card/RecentAssessments";
 import { useState } from "react";
+import { SecurityProgram } from "@/integrations/supabase/types/security";
 
 interface SecurityProgramCardProps {
   program: SecurityProgram;
@@ -17,20 +15,10 @@ interface SecurityProgramCardProps {
 export const SecurityProgramCard = ({ program }: SecurityProgramCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   
-  const { data: assessments } = useQuery({
-    queryKey: ["security-assessments", program.id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('security_assessments')
-        .select('*')
-        .eq('program_id', program.id)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      return data;
-    },
-    refetchInterval: 30000,
-  });
+  // Safely handle risk assessment data
+  const riskScore = program.risk_assessment && typeof program.risk_assessment === 'object' 
+    ? (program.risk_assessment as { score?: number })?.score ?? 0
+    : 0;
 
   return (
     <Card className="p-6 space-y-4">
@@ -42,16 +30,25 @@ export const SecurityProgramCard = ({ program }: SecurityProgramCardProps) => {
           </div>
           <p className="text-sm text-muted-foreground">{program.description}</p>
         </div>
-        <Badge className={getStatusColor(program.status)}>{program.status}</Badge>
+        <div className="flex items-center gap-2">
+          <Badge className={getStatusColor(program.status)}>{program.status}</Badge>
+          {riskScore > 0 && (
+            <Badge variant={riskScore > 70 ? "destructive" : riskScore > 30 ? "warning" : "default"}>
+              Risk: {riskScore}%
+            </Badge>
+          )}
+        </div>
       </div>
 
       <ComplianceRequirements 
-        requirements={program.compliance_requirements} 
+        requirements={program.compliance_requirements as string[] || []} 
         isExpanded={isExpanded}
         onToggle={() => setIsExpanded(!isExpanded)}
       />
       
-      {assessments && <RecentAssessments assessments={assessments} />}
+      {program.security_assessments && (
+        <RecentAssessments assessments={program.security_assessments} />
+      )}
 
       {program.next_audit_date && (
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
