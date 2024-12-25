@@ -1,11 +1,9 @@
 import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Badge } from "@/components/ui/badge";
-import { Smartphone } from "lucide-react";
-import { DeviceStatsChart } from "./device/DeviceStatsChart";
-import { DeviceStatsList } from "./device/DeviceStatsList";
 import { LoadingState } from "./shared/LoadingState";
+import { DeviceHeader } from "./device/DeviceHeader";
+import { DeviceAnalytics } from "./device/DeviceAnalytics";
 
 /**
  * DeviceFingerprintMonitoring Component
@@ -67,21 +65,8 @@ export const DeviceFingerprintMonitoring = () => {
 
   return (
     <Card className="p-4">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <Smartphone className="h-5 w-5 text-muted-foreground" />
-          <h3 className="font-semibold">Device Fingerprint Analysis</h3>
-        </div>
-        <Badge variant="outline">
-          {deviceStats?.length || 0} Devices Tracked
-        </Badge>
-      </div>
-
-      <div className="h-[200px] mb-4">
-        <DeviceStatsChart data={deviceStats || []} />
-      </div>
-
-      <DeviceStatsList stats={deviceStats || []} />
+      <DeviceHeader deviceCount={deviceStats?.length || 0} />
+      <DeviceAnalytics data={deviceStats || []} />
     </Card>
   );
 };
