@@ -3,11 +3,19 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { ClientSettingsData } from "@/components/settings/types";
+
+interface ClientSettings {
+  notification_preferences: {
+    email: boolean;
+    sms: boolean;
+  };
+  risk_threshold: number;
+  contact_email: string;
+}
 
 export const ClientSettingsForm = () => {
   const { toast } = useToast();
@@ -28,11 +36,11 @@ export const ClientSettingsForm = () => {
         .single();
 
       if (error) throw error;
-      return (data?.settings || {}) as ClientSettingsData;
+      return (data?.settings || {}) as ClientSettings;
     },
   });
 
-  const [formData, setFormData] = useState<ClientSettingsData>({
+  const [formData, setFormData] = useState<ClientSettings>({
     notification_preferences: {
       email: true,
       sms: false,
@@ -43,10 +51,7 @@ export const ClientSettingsForm = () => {
 
   useEffect(() => {
     if (settings) {
-      setFormData({
-        ...formData,
-        ...settings,
-      });
+      setFormData(settings);
     }
   }, [settings]);
 
@@ -62,7 +67,7 @@ export const ClientSettingsForm = () => {
       const { error: updateError } = await supabase
         .from('profiles')
         .update({
-          settings: formData as any, // Cast to any to satisfy TypeScript
+          settings: formData,
           updated_at: new Date().toISOString(),
         })
         .eq('id', user.id);
@@ -110,7 +115,7 @@ export const ClientSettingsForm = () => {
         <Input
           id="contact_email"
           type="email"
-          value={formData.contact_email || ''}
+          value={formData.contact_email}
           onChange={(e) => setFormData({ ...formData, contact_email: e.target.value })}
           placeholder="Enter contact email for notifications"
         />
@@ -123,7 +128,7 @@ export const ClientSettingsForm = () => {
           type="number"
           min="0"
           max="100"
-          value={formData.risk_threshold || 75}
+          value={formData.risk_threshold}
           onChange={(e) => setFormData({ ...formData, risk_threshold: Number(e.target.value) })}
         />
         <p className="text-sm text-muted-foreground">
