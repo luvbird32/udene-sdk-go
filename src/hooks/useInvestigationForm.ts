@@ -12,12 +12,14 @@ export const useInvestigationForm = ({ onSuccess }: UseInvestigationFormProps) =
   const [type, setType] = useState("");
   const [notes, setNotes] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<string | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!type) {
+      setErrors("Please select an investigation type");
       toast({
         title: "Error",
         description: "Please select an investigation type",
@@ -67,10 +69,13 @@ export const useInvestigationForm = ({ onSuccess }: UseInvestigationFormProps) =
       onSuccess();
       setType("");
       setNotes("");
+      setErrors(null);
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to create investigation";
+      setErrors(errorMessage);
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to create investigation",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -85,5 +90,6 @@ export const useInvestigationForm = ({ onSuccess }: UseInvestigationFormProps) =
     setNotes,
     isSubmitting,
     handleSubmit,
+    errors,
   };
 };

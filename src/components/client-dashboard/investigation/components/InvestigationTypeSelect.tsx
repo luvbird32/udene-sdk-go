@@ -23,14 +23,16 @@ interface InvestigationTypeSelectProps {
   value: string;
   /** Callback function when selection changes */
   onValueChange: (value: string) => void;
+  /** Error message to display */
+  error?: string;
 }
 
-export const InvestigationTypeSelect = ({ value, onValueChange }: InvestigationTypeSelectProps) => {
+export const InvestigationTypeSelect = ({ value, onValueChange, error }: InvestigationTypeSelectProps) => {
   return (
     <div className="space-y-2">
       <label className="text-sm font-medium">Investigation Type</label>
       <Select value={value} onValueChange={onValueChange}>
-        <SelectTrigger>
+        <SelectTrigger className={error ? "border-red-500" : undefined}>
           <SelectValue placeholder="Select type" />
         </SelectTrigger>
         <SelectContent>
@@ -43,6 +45,7 @@ export const InvestigationTypeSelect = ({ value, onValueChange }: InvestigationT
           <SelectItem value="threat">Threat Assessment</SelectItem>
         </SelectContent>
       </Select>
+      {error && <p className="text-sm text-red-500">{error}</p>}
     </div>
   );
 };
