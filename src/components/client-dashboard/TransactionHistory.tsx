@@ -10,7 +10,9 @@ import { AlertCircle, Loader2 } from "lucide-react";
 
 export const TransactionHistory = () => {
   const { toast } = useToast();
+  
   const fetchTransactions = useCallback(async () => {
+    console.log("Fetching recent transactions...");
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error("No user found");
 
@@ -20,19 +22,25 @@ export const TransactionHistory = () => {
       .order('created_at', { ascending: false })
       .limit(10);
 
-    if (error) throw error;
+    if (error) {
+      console.error("Error fetching transactions:", error);
+      throw error;
+    }
+
+    console.log("Transactions fetched:", data);
     return data;
   }, []);
 
   const { data: transactions, isLoading, error } = useQuery({
     queryKey: ["recent-transactions"],
     queryFn: fetchTransactions,
-    refetchInterval: 30000,
+    refetchInterval: 30000, // Refresh every 30 seconds
     meta: {
       errorHandler: (error: Error) => {
+        console.error("Transaction fetch error:", error);
         toast({
           title: "Error",
-          description: "Failed to load transaction history",
+          description: "Failed to load transaction history. Please try again later.",
           variant: "destructive",
         });
       },
