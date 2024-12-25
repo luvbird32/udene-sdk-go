@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { userBehaviorService, ActivityMetadata } from "@/services/userBehaviorService";
+import { getUserBehaviorMetrics } from "@/services/behaviorMetrics";
+import { getBehaviorPatterns, logUserActivity } from "@/services/behaviorPatterns";
 import { useToast } from "@/components/ui/use-toast";
 import { useCurrentUser } from "./useCurrentUser";
 
@@ -12,7 +13,7 @@ export const useUserBehavior = () => {
     queryKey: ["user-behavior-metrics", currentUser?.id],
     queryFn: () => {
       if (!currentUser?.id) throw new Error("No user found");
-      return userBehaviorService.getUserBehaviorMetrics(currentUser.id);
+      return getUserBehaviorMetrics(currentUser.id);
     },
     enabled: !!currentUser?.id,
   });
@@ -21,7 +22,7 @@ export const useUserBehavior = () => {
     queryKey: ["user-behavior-patterns", currentUser?.id],
     queryFn: () => {
       if (!currentUser?.id) throw new Error("No user found");
-      return userBehaviorService.getBehaviorPatterns(currentUser.id);
+      return getBehaviorPatterns(currentUser.id);
     },
     enabled: !!currentUser?.id,
   });
@@ -32,10 +33,10 @@ export const useUserBehavior = () => {
       metadata 
     }: { 
       activityType: string; 
-      metadata: ActivityMetadata; 
+      metadata: any; 
     }) => {
       if (!currentUser?.id) throw new Error("No user found");
-      return userBehaviorService.logUserActivity(
+      return logUserActivity(
         currentUser.id,
         activityType,
         metadata
