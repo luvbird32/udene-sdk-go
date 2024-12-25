@@ -17,6 +17,9 @@ export const IdentityVerificationMonitoring = () => {
     queryKey: ["identity-verification-stats"],
     queryFn: async () => {
       console.log("Fetching identity verification stats...");
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
+
       const { data, error } = await supabase
         .from('identity_verifications')
         .select('status')

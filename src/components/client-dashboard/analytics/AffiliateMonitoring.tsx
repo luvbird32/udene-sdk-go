@@ -28,6 +28,9 @@ export const AffiliateMonitoring = () => {
   const { data: affiliateStats, isLoading } = useQuery({
     queryKey: ["affiliate-fraud-stats"],
     queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
+
       const { data, error } = await supabase
         .from('affiliate_activities')
         .select('*')

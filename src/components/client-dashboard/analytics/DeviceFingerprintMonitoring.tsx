@@ -37,6 +37,9 @@ export const DeviceFingerprintMonitoring = () => {
     queryKey: ["device-fingerprint-stats"],
     queryFn: async () => {
       console.log("Fetching device fingerprint stats...");
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
+
       const { data, error } = await supabase
         .from('device_fingerprints')
         .select('created_at')
