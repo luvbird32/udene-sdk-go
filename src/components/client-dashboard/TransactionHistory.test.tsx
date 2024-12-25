@@ -3,7 +3,10 @@ import { TransactionHistory } from './TransactionHistory';
 import { describe, it, expect, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { PostgrestFilterBuilder } from '@supabase/postgrest-js';
+import { PostgrestFilterBuilder, PostgrestBuilder } from '@supabase/postgrest-js';
+import { Database } from '@/integrations/supabase/types';
+
+type TransactionRow = Database['public']['Tables']['transactions']['Row'];
 
 // Mock the Supabase client
 vi.mock('@/integrations/supabase/client', () => ({
@@ -32,7 +35,7 @@ vi.mock('@/integrations/supabase/client', () => ({
             error: null
           })
         })
-      }) as unknown as PostgrestFilterBuilder<any>
+      }) as unknown as PostgrestFilterBuilder<Database, TransactionRow, TransactionRow>
     })
   }
 }));
@@ -86,7 +89,7 @@ describe('TransactionHistory', () => {
             error: null
           })
         })
-      }) as unknown as PostgrestFilterBuilder<any>
+      }) as unknown as PostgrestFilterBuilder<Database, TransactionRow, TransactionRow>
     }));
 
     render(
