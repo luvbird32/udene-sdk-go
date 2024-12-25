@@ -19,7 +19,7 @@ export const IdentityVerificationMonitoring = () => {
       console.log("Fetching identity verification stats...");
       const { data, error } = await supabase
         .from('identity_verifications')
-        .select('*')
+        .select('status')
         .order('created_at', { ascending: false })
         .limit(100);
 

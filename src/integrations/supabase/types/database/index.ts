@@ -1,13 +1,13 @@
-import { Tables } from '../tables';
-import { Json } from '../core';
+import type { Json } from '../core';
 
 export interface Database {
   public: {
     Tables: {
-      [K in keyof Tables]: {
-        Row: Tables[K];
-        Insert: Omit<Tables[K], 'id' | 'created_at' | 'updated_at'>;
-        Update: Partial<Tables[K]>;
+      [K: string]: {
+        Row: any;
+        Insert: any;
+        Update: any;
+        Relationships: any[];
       };
     };
     Views: {
@@ -17,9 +17,6 @@ export interface Database {
       [_ in never]: never;
     };
     Enums: {
-      [_ in never]: never;
-    };
-    CompositeTypes: {
       [_ in never]: never;
     };
   };

@@ -18,7 +18,7 @@ export const UserActivityMonitoring = () => {
       console.log("Fetching user activity stats...");
       const { data, error } = await supabase
         .from('user_activities')
-        .select('*')
+        .select('activity_type')
         .order('created_at', { ascending: false })
         .limit(100);
 

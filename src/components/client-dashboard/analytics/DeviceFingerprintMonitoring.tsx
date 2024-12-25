@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Smartphone, Shield, AlertTriangle } from "lucide-react";
 
-// Define an interface for the device stats
 interface DeviceStat {
   date: string;
   count: number;
@@ -19,7 +18,7 @@ export const DeviceFingerprintMonitoring = () => {
       console.log("Fetching device fingerprint stats...");
       const { data, error } = await supabase
         .from('device_fingerprints')
-        .select('*')
+        .select('created_at')
         .order('created_at', { ascending: false })
         .limit(100);
 
