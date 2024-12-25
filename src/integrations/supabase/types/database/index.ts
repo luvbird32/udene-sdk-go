@@ -30,4 +30,4 @@ export interface Database {
 }
 
 export type { Json };
-export type { Tables, TablesInsert, TablesUpdate } from '../core';
+export type { Tables };
