@@ -3,10 +3,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { SecurityProgramCard } from "./SecurityProgramCard";
 import { OpenSourceSecurity } from "./OpenSourceSecurity";
 import { VulnerabilityScanning } from "./VulnerabilityScanning";
-import { Card } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
 import { SecurityProgram } from "@/integrations/supabase/types/security";
 import { useToast } from "@/hooks/use-toast";
+import { LoadingProgram } from "./components/LoadingProgram";
+import { EmptyProgramState } from "./components/EmptyProgramState";
 
 export const SecurityProgramList = () => {
   const { toast } = useToast();
@@ -43,11 +43,7 @@ export const SecurityProgramList = () => {
   });
 
   if (isLoading) {
-    return (
-      <Card className="p-6 flex justify-center items-center">
-        <Loader2 className="h-6 w-6 animate-spin" />
-      </Card>
-    );
+    return <LoadingProgram />;
   }
 
   return (
@@ -59,11 +55,7 @@ export const SecurityProgramList = () => {
         {programs?.map((program) => (
           <SecurityProgramCard key={program.id} program={program} />
         ))}
-        {(!programs || programs.length === 0) && (
-          <Card className="p-6 text-center text-muted-foreground">
-            No security programs found.
-          </Card>
-        )}
+        {(!programs || programs.length === 0) && <EmptyProgramState />}
       </div>
     </div>
   );
