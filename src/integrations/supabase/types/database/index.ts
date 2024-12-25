@@ -31,3 +31,5 @@ export interface Database {
 
 export type { Json };
 export type { Tables };
+export type TablesInsert<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Insert'];
+export type TablesUpdate<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Update'];
