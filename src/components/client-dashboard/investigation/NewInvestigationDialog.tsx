@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { InvestigationTypeSelect } from "./components/InvestigationTypeSelect";
 import { InvestigationNotes } from "./components/InvestigationNotes";
 import { useInvestigationForm } from "@/hooks/useInvestigationForm";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 interface NewInvestigationDialogProps {
   open: boolean;
@@ -17,6 +19,7 @@ export const NewInvestigationDialog = ({ open, onOpenChange }: NewInvestigationD
     setNotes,
     isSubmitting,
     handleSubmit,
+    errors,
   } = useInvestigationForm({
     onSuccess: () => onOpenChange(false),
   });
@@ -29,13 +32,39 @@ export const NewInvestigationDialog = ({ open, onOpenChange }: NewInvestigationD
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <InvestigationTypeSelect value={type} onValueChange={setType} />
-          <InvestigationNotes value={notes} onChange={(e) => setNotes(e.target.value)} />
+          {errors && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{errors}</AlertDescription>
+            </Alert>
+          )}
+
+          <InvestigationTypeSelect 
+            value={type} 
+            onValueChange={setType}
+            error={!type && errors ? "Please select an investigation type" : undefined}
+          />
+          
+          <InvestigationNotes 
+            value={notes} 
+            onChange={(e) => setNotes(e.target.value)}
+            maxLength={500}
+            showCount
+          />
+
+          <div className="bg-muted/50 p-4 rounded-lg">
+            <h4 className="text-sm font-medium mb-2">Investigation Preview</h4>
+            <div className="text-sm text-muted-foreground space-y-2">
+              <p><strong>Type:</strong> {type || "Not selected"}</p>
+              <p><strong>Initial Status:</strong> Pending</p>
+              <p><strong>Notes Length:</strong> {notes.length}/500 characters</p>
+            </div>
+          </div>
 
           <DialogFooter>
             <Button 
               type="submit" 
-              disabled={isSubmitting}
+              disabled={isSubmitting || !type}
             >
               {isSubmitting ? "Creating..." : "Create Investigation"}
             </Button>
