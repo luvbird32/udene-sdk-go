@@ -4,6 +4,8 @@ import { describe, it, expect, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Transaction } from '@/integrations/supabase/types/transactions';
+import { PostgrestFilterBuilder } from '@supabase/postgrest-js';
+import { Database } from '@/integrations/supabase/types';
 
 // Mock the Supabase client
 vi.mock('@/integrations/supabase/client', () => ({
@@ -15,42 +17,40 @@ vi.mock('@/integrations/supabase/client', () => ({
       select: () => ({
         order: () => ({
           limit: () => ({
-            eq: () => ({
-              data: [
-                {
-                  id: '1',
-                  amount: 100,
-                  created_at: '2024-01-01T00:00:00Z',
-                  is_fraudulent: false,
-                  merchant_id: 'merchant-1',
-                  customer_id: 'customer-1',
-                  timestamp: '2024-01-01T00:00:00Z',
-                  location: 'Test Location',
-                  device_id: 'device-1',
-                  ip_address: '127.0.0.1',
-                  transaction_type: 'purchase',
-                  card_present: true,
-                  recurring: false
-                },
-                {
-                  id: '2',
-                  amount: 200,
-                  created_at: '2024-01-02T00:00:00Z',
-                  is_fraudulent: true,
-                  merchant_id: 'merchant-2',
-                  customer_id: 'customer-2',
-                  timestamp: '2024-01-02T00:00:00Z',
-                  location: 'Test Location 2',
-                  device_id: 'device-2',
-                  ip_address: '127.0.0.2',
-                  transaction_type: 'purchase',
-                  card_present: true,
-                  recurring: false
-                }
-              ] as Transaction[],
-              error: null
-            })
-          })
+            data: [
+              {
+                id: '1',
+                amount: 100,
+                created_at: '2024-01-01T00:00:00Z',
+                is_fraudulent: false,
+                merchant_id: 'merchant-1',
+                customer_id: 'customer-1',
+                timestamp: '2024-01-01T00:00:00Z',
+                location: 'Test Location',
+                device_id: 'device-1',
+                ip_address: '127.0.0.1',
+                transaction_type: 'purchase',
+                card_present: true,
+                recurring: false
+              },
+              {
+                id: '2',
+                amount: 200,
+                created_at: '2024-01-02T00:00:00Z',
+                is_fraudulent: true,
+                merchant_id: 'merchant-2',
+                customer_id: 'customer-2',
+                timestamp: '2024-01-02T00:00:00Z',
+                location: 'Test Location 2',
+                device_id: 'device-2',
+                ip_address: '127.0.0.2',
+                transaction_type: 'purchase',
+                card_present: true,
+                recurring: false
+              }
+            ] as Transaction[],
+            error: null
+          }) as unknown as PostgrestFilterBuilder<Database['public'], Database['public']['Tables']['transactions'], Transaction[]>
         })
       })
     })
@@ -101,11 +101,9 @@ describe('TransactionHistory', () => {
       select: () => ({
         order: () => ({
           limit: () => ({
-            eq: () => Promise.resolve({
-              data: [],
-              error: null
-            })
-          })
+            data: [],
+            error: null
+          }) as unknown as PostgrestFilterBuilder<Database['public'], Database['public']['Tables']['transactions'], Transaction[]>
         })
       })
     }));
