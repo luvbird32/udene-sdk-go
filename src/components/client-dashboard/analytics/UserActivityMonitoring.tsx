@@ -1,36 +1,34 @@
 import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Badge } from "@/components/ui/badge";
 import { Activity } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
-
-interface ActivityStat {
-  type: string;
-  count: number;
-}
 
 export const UserActivityMonitoring = () => {
-  const { data: activityStats, isLoading } = useQuery<ActivityStat[]>({
+  const { data: activityData, isLoading } = useQuery({
     queryKey: ["user-activity-stats"],
     queryFn: async () => {
-      console.log("Fetching user activity stats...");
-      const { data, error } = await supabase
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
+
+      const { data: activities, error } = await supabase
         .from('user_activities')
-        .select('activity_type')
-        .order('created_at', { ascending: false })
+        .select('activity_type, created_at')
+        .order('created_at', { ascending: true })
         .limit(100);
 
       if (error) throw error;
 
-      const stats = (data || []).reduce((acc: Record<string, number>, curr) => {
-        acc[curr.activity_type] = (acc[curr.activity_type] || 0) + 1;
+      // Group activities by date
+      const groupedActivities = activities?.reduce((acc: Record<string, number>, curr) => {
+        const date = new Date(curr.created_at).toLocaleDateString();
+        acc[date] = (acc[date] || 0) + 1;
         return acc;
       }, {});
 
-      return Object.entries(stats).map(([type, count]) => ({
-        type,
+      return Object.entries(groupedActivities || {}).map(([date, count]) => ({
+        date,
         count
       }));
     },
@@ -40,49 +38,33 @@ export const UserActivityMonitoring = () => {
   if (isLoading) {
     return (
       <Card className="p-4">
-        <h3 className="font-semibold mb-4">User Activity Analysis</h3>
-        <div className="h-[300px] flex items-center justify-center">
+        <h3 className="font-semibold mb-4">User Activity Monitoring</h3>
+        <div className="h-[200px] flex items-center justify-center">
           <p className="text-muted-foreground">Loading activity data...</p>
         </div>
       </Card>
     );
   }
 
-  const totalActivities = activityStats?.reduce((acc, curr) => acc + curr.count, 0) || 0;
-
   return (
     <Card className="p-4">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-2">
-          <Activity className="h-5 w-5 text-muted-foreground" />
-          <h3 className="font-semibold">User Activity Analysis</h3>
+          <Activity className="h-5 w-5 text-primary" />
+          <h3 className="font-semibold">User Activity Monitoring</h3>
         </div>
-        <Badge variant="outline">
-          {totalActivities} Activities
-        </Badge>
+        <Badge variant="outline">Last 100 Activities</Badge>
       </div>
-
-      <div className="h-[200px] mb-4">
+      <div className="h-[200px]">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={activityStats || []}>
-            <XAxis dataKey="type" />
+          <LineChart data={activityData}>
+            <XAxis dataKey="date" />
             <YAxis />
             <Tooltip />
-            <Bar dataKey="count" fill="#8884d8" />
-          </BarChart>
+            <Line type="monotone" dataKey="count" stroke="#8884d8" />
+          </LineChart>
         </ResponsiveContainer>
       </div>
-
-      <ScrollArea className="h-[100px]">
-        <div className="space-y-2">
-          {activityStats?.map((stat, index) => (
-            <div key={index} className="flex items-center justify-between p-2 bg-muted rounded-lg">
-              <span className="text-sm">{stat.type}</span>
-              <span className="text-sm font-medium">{stat.count} activities</span>
-            </div>
-          ))}
-        </div>
-      </ScrollArea>
     </Card>
   );
 };

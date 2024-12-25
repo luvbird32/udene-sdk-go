@@ -18,7 +18,8 @@
  * ```
  */
 import { Card } from "@/components/ui/card";
-import { useRomanceScamData } from "@/hooks/useRomanceScamData";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 import { Badge } from "@/components/ui/badge";
 import { HeartCrack } from "lucide-react";
@@ -31,7 +32,41 @@ interface RiskLevelData {
 const COLORS = ['#ef4444', '#f97316', '#22c55e'];
 
 export const RomanceScamMonitoring = () => {
-  const { data, isLoading } = useRomanceScamData();
+  const { data, isLoading } = useQuery({
+    queryKey: ["romance-scam-stats"],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
+
+      const { data: transactions, error } = await supabase
+        .from('transactions')
+        .select('risk_score')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (error) throw error;
+
+      // Calculate risk level distribution
+      const riskLevels = {
+        "High Risk": 0,
+        "Medium Risk": 0,
+        "Low Risk": 0
+      };
+
+      transactions?.forEach(transaction => {
+        if (transaction.risk_score >= 70) {
+          riskLevels["High Risk"]++;
+        } else if (transaction.risk_score >= 40) {
+          riskLevels["Medium Risk"]++;
+        } else {
+          riskLevels["Low Risk"]++;
+        }
+      });
+
+      return { riskLevels };
+    },
+    refetchInterval: 30000,
+  });
 
   if (isLoading) {
     return (

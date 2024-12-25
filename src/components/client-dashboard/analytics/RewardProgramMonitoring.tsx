@@ -24,13 +24,38 @@
  * Updates every 30 seconds to maintain current program insights.
  */
 import { Card } from "@/components/ui/card";
-import { useRewardProgramData } from "@/hooks/useRewardProgramData";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Badge } from "@/components/ui/badge";
 import { Gift } from "lucide-react";
 
 export const RewardProgramMonitoring = () => {
-  const { data, isLoading } = useRewardProgramData();
+  const { data, isLoading } = useQuery({
+    queryKey: ["reward-program-stats"],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
+
+      const { data: rewards, error } = await supabase
+        .from('rewards_transactions')
+        .select('program_type, points_earned')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (error) throw error;
+
+      // Aggregate data by program type
+      const programTypes = rewards?.reduce((acc: Record<string, number>, curr) => {
+        const type = curr.program_type || 'Unknown';
+        acc[type] = (acc[type] || 0) + (curr.points_earned || 0);
+        return acc;
+      }, {});
+
+      return programTypes;
+    },
+    refetchInterval: 30000,
+  });
 
   if (isLoading) {
     return (
@@ -43,7 +68,7 @@ export const RewardProgramMonitoring = () => {
     );
   }
 
-  const chartData = data ? Object.entries(data.programTypes).map(([name, value]) => ({
+  const chartData = data ? Object.entries(data).map(([name, value]) => ({
     name,
     value
   })) : [];
