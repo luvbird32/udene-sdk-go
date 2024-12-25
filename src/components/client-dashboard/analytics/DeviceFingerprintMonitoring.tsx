@@ -1,10 +1,11 @@
 import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Smartphone } from "lucide-react";
+import { DeviceStatsChart } from "./device/DeviceStatsChart";
+import { DeviceStatsList } from "./device/DeviceStatsList";
+import { LoadingState } from "./shared/LoadingState";
 
 /**
  * DeviceFingerprintMonitoring Component
@@ -46,7 +47,6 @@ export const DeviceFingerprintMonitoring = () => {
 
       if (error) throw error;
 
-      // Aggregate device statistics by date
       const stats = (data || []).reduce((acc: Record<string, number>, curr) => {
         const date = new Date(curr.created_at).toLocaleDateString();
         acc[date] = (acc[date] || 0) + 1;
@@ -62,14 +62,7 @@ export const DeviceFingerprintMonitoring = () => {
   });
 
   if (isLoading) {
-    return (
-      <Card className="p-4">
-        <h3 className="font-semibold mb-4">Device Fingerprint Analysis</h3>
-        <div className="h-[300px] flex items-center justify-center">
-          <p className="text-muted-foreground">Loading device data...</p>
-        </div>
-      </Card>
-    );
+    return <LoadingState title="Device Fingerprint Analysis" />;
   }
 
   return (
@@ -85,26 +78,10 @@ export const DeviceFingerprintMonitoring = () => {
       </div>
 
       <div className="h-[200px] mb-4">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={deviceStats || []}>
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="count" stroke="#8884d8" />
-          </LineChart>
-        </ResponsiveContainer>
+        <DeviceStatsChart data={deviceStats || []} />
       </div>
 
-      <ScrollArea className="h-[100px]">
-        <div className="space-y-2">
-          {deviceStats?.slice(0, 3).map((stat, index) => (
-            <div key={index} className="flex items-center justify-between p-2 bg-muted rounded-lg">
-              <span className="text-sm">{stat.date}</span>
-              <span className="text-sm font-medium">{stat.count} devices</span>
-            </div>
-          ))}
-        </div>
-      </ScrollArea>
+      <DeviceStatsList stats={deviceStats || []} />
     </Card>
   );
 };
