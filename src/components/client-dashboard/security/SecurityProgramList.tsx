@@ -47,15 +47,20 @@ export const SecurityProgramList = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <OpenSourceSecurity />
-      <VulnerabilityScanning />
+    <div className="space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <OpenSourceSecurity />
+        <VulnerabilityScanning />
+      </div>
       
-      <div className="space-y-4">
-        {programs?.map((program) => (
-          <SecurityProgramCard key={program.id} program={program} />
-        ))}
-        {(!programs || programs.length === 0) && <EmptyProgramState />}
+      <div className="space-y-6">
+        <h2 className="text-2xl font-semibold">Security Programs</h2>
+        <div className="grid gap-6">
+          {programs?.map((program) => (
+            <SecurityProgramCard key={program.id} program={program} />
+          ))}
+          {(!programs || programs.length === 0) && <EmptyProgramState />}
+        </div>
       </div>
     </div>
   );
