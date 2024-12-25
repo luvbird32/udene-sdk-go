@@ -1,18 +1,8 @@
-import { Card } from "@/components/ui/card";
 import { Shield, Activity, AlertTriangle } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-
-interface MetricCardProps {
-  title: string;
-  value: number | string;
-  icon: React.ElementType;
-  description: string;
-  isLoading?: boolean;
-}
+import { MetricCard } from "./metrics/MetricCard";
+import { MetricsError } from "./metrics/MetricsError";
+import { EmptyMetrics } from "./metrics/EmptyMetrics";
+import { useMetricsData } from "./metrics/useMetricsData";
 
 interface ClientMetricsProps {
   metrics?: {
@@ -24,88 +14,18 @@ interface ClientMetricsProps {
   error?: Error | null;
 }
 
-const MetricCard = ({ title, value, icon: Icon, description, isLoading }: MetricCardProps) => (
-  <Card className="p-6">
-    <div className="flex items-start justify-between">
-      <div>
-        <p className="text-sm font-medium text-muted-foreground">{title}</p>
-        {isLoading ? (
-          <Skeleton className="h-8 w-24 mt-2" />
-        ) : (
-          <h3 className="text-2xl font-bold mt-2">{value}</h3>
-        )}
-        <p className="text-sm text-muted-foreground mt-2">{description}</p>
-      </div>
-      <Icon className="h-5 w-5 text-muted-foreground" />
-    </div>
-  </Card>
-);
-
 export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps) => {
-  const { toast } = useToast();
-  const { data: metricsData, isLoading: metricsLoading, error: metricsError } = useQuery({
-    queryKey: ["client-metrics"],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("No user found");
-
-      const { data: transactions } = await supabase
-        .from('transactions')
-        .select('risk_score, is_fraudulent')
-        .order('created_at', { ascending: false });
-
-      if (!transactions) return null;
-
-      const totalTransactions = transactions.length;
-      const flaggedTransactions = transactions.filter(t => t.is_fraudulent).length;
-      
-      const validRiskScores = transactions.filter(t => 
-        typeof t.risk_score === 'number' && !isNaN(t.risk_score)
-      );
-
-      const averageRiskScore = validRiskScores.length > 0
-        ? Math.round(validRiskScores.reduce((acc, t) => acc + t.risk_score!, 0) / validRiskScores.length)
-        : 0;
-
-      return {
-        riskScore: averageRiskScore,
-        totalTransactions,
-        flaggedTransactions
-      };
-    },
-    refetchInterval: 30000,
-    meta: {
-      errorHandler: (error: Error) => {
-        toast({
-          title: "Error",
-          description: "Failed to load metrics data",
-          variant: "destructive",
-        });
-      },
-    },
-  });
+  const { data: metricsData, isLoading: metricsLoading, error: metricsError } = useMetricsData();
 
   if (error || metricsError) {
-    return (
-      <Alert variant="destructive">
-        <AlertDescription>
-          Error loading metrics: {(error || metricsError)?.message}
-        </AlertDescription>
-      </Alert>
-    );
+    return <MetricsError error={error || metricsError} />;
   }
 
   const displayMetrics = metrics || metricsData;
   const isLoadingState = isLoading || metricsLoading;
 
   if (!displayMetrics && !isLoadingState) {
-    return (
-      <Alert>
-        <AlertDescription>
-          No metrics data available. Start processing transactions to see your metrics.
-        </AlertDescription>
-      </Alert>
-    );
+    return <EmptyMetrics />;
   }
 
   return (
