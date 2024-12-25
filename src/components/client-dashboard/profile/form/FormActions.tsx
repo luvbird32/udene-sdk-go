@@ -1,6 +1,14 @@
-import { Button } from "@/components/ui/button";
-
+/**
+ * @component FormActions
+ * @description Provides action buttons for the profile form, including Save and Cancel functionality.
+ * 
+ * @example
+ * ```tsx
+ * <FormActions setIsEditing={handleSetEditing} />
+ * ```
+ */
 interface FormActionsProps {
+  /** Function to toggle edit mode */
   setIsEditing: (editing: boolean) => void;
 }
 

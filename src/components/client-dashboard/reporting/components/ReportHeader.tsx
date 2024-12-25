@@ -1,6 +1,12 @@
-import { FileText } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-
+/**
+ * @component ReportHeader
+ * @description Displays the header section of the reporting interface with title and description.
+ * 
+ * @example
+ * ```tsx
+ * <ReportHeader />
+ * ```
+ */
 export const ReportHeader = () => {
   return (
     <div className="flex items-center gap-3 mb-6">

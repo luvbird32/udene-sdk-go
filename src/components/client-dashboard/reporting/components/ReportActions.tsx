@@ -1,9 +1,19 @@
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Calendar, Clock } from "lucide-react";
-
+/**
+ * @component ReportActions
+ * @description Provides action buttons for saving templates and scheduling reports.
+ * 
+ * @example
+ * ```tsx
+ * <ReportActions
+ *   onSaveTemplate={handleSaveTemplate}
+ *   onScheduleReport={handleScheduleReport}
+ * />
+ * ```
+ */
 interface ReportActionsProps {
+  /** Handler for saving report template */
   onSaveTemplate: () => Promise<void>;
+  /** Handler for scheduling report generation */
   onScheduleReport: () => Promise<void>;
 }
 

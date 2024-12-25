@@ -1,6 +1,12 @@
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Info } from "lucide-react";
-
+/**
+ * @component ReportGuide
+ * @description Displays an informational alert with guidance on how to use the reporting system.
+ * 
+ * @example
+ * ```tsx
+ * <ReportGuide />
+ * ```
+ */
 export const ReportGuide = () => {
   return (
     <Alert className="mb-6">

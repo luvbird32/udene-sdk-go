@@ -1,10 +1,19 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ProfileFormData } from "@/types/profile";
-
+/**
+ * @component ContactFields
+ * @description Form fields for user contact information including phone number and timezone selection.
+ * 
+ * @example
+ * ```tsx
+ * <ContactFields
+ *   formData={profileData}
+ *   setFormData={handleFormDataChange}
+ * />
+ * ```
+ */
 interface ContactFieldsProps {
+  /** Current form data */
   formData: ProfileFormData;
+  /** Function to update form data */
   setFormData: (data: ProfileFormData) => void;
 }
 
