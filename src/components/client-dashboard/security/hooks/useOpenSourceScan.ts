@@ -1,3 +1,26 @@
+/**
+ * useOpenSourceScan Hook
+ * 
+ * Custom hook for fetching and managing open source security scan data.
+ * Provides real-time updates and error handling for scan results.
+ * 
+ * Features:
+ * - Automatic data refresh every 30 seconds
+ * - Error handling with toast notifications
+ * - Type-safe data handling
+ * - Severity breakdown calculation
+ * 
+ * @returns {Object} Hook result object
+ * @returns {OpenSourceScan | null} result.data - The latest scan data
+ * @returns {boolean} result.isLoading - Loading state indicator
+ * 
+ * @example
+ * ```tsx
+ * const { data: latestScan, isLoading } = useOpenSourceScan();
+ * if (isLoading) return <LoadingState />;
+ * return <div>{latestScan?.vulnerabilities_found} vulnerabilities found</div>;
+ * ```
+ */
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
