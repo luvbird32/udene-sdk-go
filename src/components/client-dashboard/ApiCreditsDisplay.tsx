@@ -167,16 +167,6 @@ export const ApiCreditsDisplay = () => {
   const isLowCredits = (credits.total_credits - credits.used_credits) < (credits.total_credits * 0.1);
   const isTrialExpiring = credits.is_trial && daysRemaining <= 5;
 
-  if (isLowCredits || isTrialExpiring) {
-    toast({
-      title: isLowCredits ? "Low API Credits" : "Trial Period Ending Soon",
-      description: isLowCredits 
-        ? "You're running low on API credits. Consider upgrading your plan."
-        : `Your trial period will end in ${daysRemaining} days.`,
-      variant: "destructive",
-    });
-  }
-
   return (
     <Card className="p-6 space-y-4">
       <div className="flex items-center justify-between">
