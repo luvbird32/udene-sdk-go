@@ -29,6 +29,9 @@ export const LogItem = ({ log }: LogItemProps) => {
     }
   };
 
+  // Check if sanitization_steps is an array and has items
+  const hasSanitizationSteps = Array.isArray(log.sanitization_steps) && log.sanitization_steps.length > 0;
+
   return (
     <Card className="p-4">
       <div className="flex items-start justify-between">
@@ -62,9 +65,9 @@ export const LogItem = ({ log }: LogItemProps) => {
         <p className="mt-4 text-sm text-muted-foreground">{log.notes}</p>
       )}
 
-      {log.sanitization_steps && log.sanitization_steps.length > 0 && (
+      {hasSanitizationSteps && (
         <div className="mt-4">
-          <SanitizationSteps steps={log.sanitization_steps} />
+          <SanitizationSteps steps={log.sanitization_steps as Json[]} />
         </div>
       )}
 
