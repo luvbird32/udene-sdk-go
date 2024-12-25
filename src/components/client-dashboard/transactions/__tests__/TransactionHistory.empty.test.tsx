@@ -3,7 +3,7 @@ import { TransactionHistory } from '../TransactionHistory';
 import { describe, it, expect, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { createEmptyMockResponse } from './testUtils';
+import { createEmptyMockResponse } from './testUtils/mockResponses';
 
 vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
