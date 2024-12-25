@@ -16,7 +16,12 @@ interface ScanStatsProps {
   endTime: string | null;
 }
 
-export const ScanStats = ({ status, totalVulnerabilities, severityBreakdown, endTime }: ScanStatsProps) => {
+export const ScanStats = ({ 
+  status, 
+  totalVulnerabilities, 
+  severityBreakdown, 
+  endTime 
+}: ScanStatsProps) => {
   return (
     <div className="space-y-2">
       <div className="flex justify-between text-sm">
