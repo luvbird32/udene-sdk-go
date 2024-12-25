@@ -1,35 +1,29 @@
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
-
-const COLORS = ['#ef4444', '#f97316', '#22c55e'];
-
-interface TrialStatsChartProps {
-  data: Array<{
-    name: string;
-    value: number;
-  }>;
-}
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { TrialStatsChartProps } from "./types";
 
 export const TrialStatsChart = ({ data }: TrialStatsChartProps) => {
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      <PieChart>
-        <Pie
-          data={data}
-          cx="50%"
-          cy="50%"
-          labelLine={false}
-          label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
-          outerRadius={80}
-          fill="#8884d8"
-          dataKey="value"
-        >
-          {data.map((_, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))}
-        </Pie>
-        <Tooltip />
-        <Legend />
-      </PieChart>
-    </ResponsiveContainer>
+    <div className="h-[200px] w-full">
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={data}>
+          <XAxis 
+            dataKey="name" 
+            fontSize={12}
+            tickLine={false}
+          />
+          <YAxis 
+            fontSize={12}
+            tickLine={false}
+            axisLine={false}
+          />
+          <Tooltip />
+          <Bar 
+            dataKey="value" 
+            fill="hsl(var(--destructive))" 
+            radius={[4, 4, 0, 0]}
+          />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
   );
 };

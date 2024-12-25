@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { TrialStatData } from "./types";
 
 export const useTrialStats = () => {
   return useQuery({
@@ -25,7 +26,7 @@ export const useTrialStats = () => {
         return acc;
       }, {});
 
-      return Object.entries(stats).map(([name, value]) => ({
+      return Object.entries(stats).map(([name, value]): TrialStatData => ({
         name,
         value
       }));
