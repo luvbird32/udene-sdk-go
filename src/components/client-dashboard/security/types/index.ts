@@ -10,6 +10,13 @@ export interface VulnerabilityDetail {
   discovered_at: string;
 }
 
+export interface SeverityBreakdown {
+  critical: number;
+  high: number;
+  medium: number;
+  low: number;
+}
+
 export interface VulnerabilityScan {
   id: string;
   scan_type: string;
@@ -17,18 +24,6 @@ export interface VulnerabilityScan {
   start_time: string;
   end_time: string | null;
   total_vulnerabilities: number;
-  severity_breakdown: {
-    critical: number;
-    high: number;
-    medium: number;
-    low: number;
-  };
+  severity_breakdown: SeverityBreakdown;
   findings: VulnerabilityDetail[];
-}
-
-export interface SeverityBreakdown {
-  critical: number;
-  high: number;
-  medium: number;
-  low: number;
 }
