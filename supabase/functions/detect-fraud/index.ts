@@ -1,5 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { handleTrialSignup } from './handlers/trialHandler.ts'
+import { handleReferral } from './handlers/referralHandler.ts'
+import { createFraudAlert } from './services/alertManager.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -23,75 +26,16 @@ serve(async (req) => {
     
     switch (transaction_type) {
       case 'trial_signup':
-        // Get historical trial data
-        const { data: trialHistory } = await supabase
-          .from('trial_usage')
-          .select('*')
-          .eq('user_id', data.user_id)
-          .order('created_at', { ascending: false })
-        
-        // Store trial data
-        const { data: trial, error: trialError } = await supabase
-          .from('trial_usage')
-          .insert({
-            user_id: data.user_id,
-            trial_type: data.trial_type,
-            start_date: new Date().toISOString(),
-            end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-            ip_addresses: [data.ip_address],
-            device_fingerprints: [data.device_fingerprint],
-            usage_patterns: {}
-          })
-          .select()
-          .single()
-          
-        if (trialError) throw trialError
-        
-        // Analyze trial patterns
-        const trialRisk = await analyzeFraudRisk('trial', data, trialHistory || [])
-        riskAnalysis = trialRisk
+        riskAnalysis = await handleTrialSignup(supabase, data)
         break
         
       case 'referral':
-        // Get historical referral data
-        const { data: referralHistory } = await supabase
-          .from('referral_tracking')
-          .select('*')
-          .or(`referrer_id.eq.${data.referrer_id},referred_id.eq.${data.referrer_id}`)
-          .order('created_at', { ascending: false })
-        
-        // Store referral data
-        const { data: referral, error: referralError } = await supabase
-          .from('referral_tracking')
-          .insert({
-            referrer_id: data.referrer_id,
-            referred_id: data.referred_id,
-            referral_code: data.referral_code,
-            ip_address: data.ip_address,
-            device_fingerprint: data.device_fingerprint
-          })
-          .select()
-          .single()
-          
-        if (referralError) throw referralError
-        
-        // Analyze referral patterns
-        const referralRisk = await analyzeFraudRisk('referral', data, referralHistory || [])
-        riskAnalysis = referralRisk
+        riskAnalysis = await handleReferral(supabase, data)
         break
     }
     
-    // Create fraud alert for high-risk activities
-    if (riskAnalysis.risk_score > 70) {
-      await supabase
-        .from('fraud_alerts')
-        .insert({
-          alert_type: `${transaction_type}_fraud`,
-          severity: riskAnalysis.risk_score > 85 ? 'high' : 'medium',
-          description: `High risk ${transaction_type} activity detected. Score: ${riskAnalysis.risk_score}`,
-          status: 'open'
-        })
-    }
+    // Create fraud alert if needed
+    await createFraudAlert(supabase, transaction_type, riskAnalysis.risk_score, data)
 
     return new Response(
       JSON.stringify(riskAnalysis),
@@ -109,28 +53,3 @@ serve(async (req) => {
     )
   }
 })
-
-async function analyzeFraudRisk(type: string, currentData: any, historicalData: any[]) {
-  // Call Python ML function for sophisticated analysis
-  const mlResponse = await fetch(
-    `${Deno.env.get('SUPABASE_URL')}/functions/v1/python-ml`,
-    {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        analysis_type: type,
-        current_data: currentData,
-        historical_data: historicalData
-      })
-    }
-  )
-
-  if (!mlResponse.ok) {
-    throw new Error('ML analysis failed')
-  }
-
-  return await mlResponse.json()
-}
