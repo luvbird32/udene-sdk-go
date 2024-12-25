@@ -1,3 +1,6 @@
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Info } from "lucide-react";
+
 /**
  * @component ReportGuide
  * @description Displays an informational alert with guidance on how to use the reporting system.

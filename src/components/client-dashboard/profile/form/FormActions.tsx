@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+
 /**
  * @component FormActions
  * @description Provides action buttons for the profile form, including Save and Cancel functionality.

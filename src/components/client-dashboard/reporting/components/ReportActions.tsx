@@ -1,3 +1,7 @@
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Calendar, Clock } from "lucide-react";
+
 /**
  * @component ReportActions
  * @description Provides action buttons for saving templates and scheduling reports.

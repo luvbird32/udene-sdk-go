@@ -1,3 +1,6 @@
+import { FileText } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+
 /**
  * @component ReportHeader
  * @description Displays the header section of the reporting interface with title and description.

@@ -1,3 +1,7 @@
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ProfileFormData } from "@/types/profile";
+
 /**
  * @component BasicInfoFields
  * @description Form fields for basic user information including username, organization details, and role.

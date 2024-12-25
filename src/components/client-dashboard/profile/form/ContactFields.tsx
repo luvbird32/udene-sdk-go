@@ -1,3 +1,8 @@
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ProfileFormData } from "@/types/profile";
+
 /**
  * @component ContactFields
  * @description Form fields for user contact information including phone number and timezone selection.
