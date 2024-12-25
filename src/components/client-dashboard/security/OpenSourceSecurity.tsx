@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Package, Shield } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { OpenSourceScan, SeverityBreakdown } from "@/integrations/supabase/types/security";
+import { OpenSourceScan } from "@/integrations/supabase/types/security";
 import { SeverityBreakdownDisplay } from "./components/SeverityBreakdownDisplay";
 import { RemediationSteps } from "./components/RemediationSteps";
+import { ScanHeader } from "./components/ScanHeader";
+import { DependencyInfo } from "./components/DependencyInfo";
 
 export const OpenSourceSecurity = () => {
   const { toast } = useToast();
@@ -35,7 +35,7 @@ export const OpenSourceSecurity = () => {
         return null;
       }
 
-      let severityBreakdown: SeverityBreakdown = {
+      let severityBreakdown = {
         critical: 0,
         high: 0,
         medium: 0,
@@ -80,26 +80,12 @@ export const OpenSourceSecurity = () => {
 
   return (
     <Card className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Package className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold">Open Source Security</h3>
-        </div>
-        <Badge variant={totalVulnerabilities > 0 ? "destructive" : "secondary"}>
-          {totalVulnerabilities} {totalVulnerabilities === 1 ? 'vulnerability' : 'vulnerabilities'}
-        </Badge>
-      </div>
+      <ScanHeader totalVulnerabilities={totalVulnerabilities} />
 
       {latestScan && (
         <>
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm">Dependencies Scanned</span>
-              </div>
-              <span className="font-medium">{latestScan.dependencies_scanned}</span>
-            </div>
+            <DependencyInfo dependenciesScanned={latestScan.dependencies_scanned} />
 
             <SeverityBreakdownDisplay 
               severityBreakdown={latestScan.severity_breakdown}
