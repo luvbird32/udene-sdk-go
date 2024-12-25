@@ -7,6 +7,7 @@ import { SeverityBreakdownDisplay } from "./components/SeverityBreakdownDisplay"
 import { RemediationSteps } from "./components/RemediationSteps";
 import { ScanHeader } from "./components/ScanHeader";
 import { DependencyInfo } from "./components/DependencyInfo";
+import { Package } from "lucide-react"; // Add this import
 
 export const OpenSourceSecurity = () => {
   const { toast } = useToast();
