@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { DollarSign, ShieldCheck } from "lucide-react";
+import { Card } from "@/components/ui/card"; // Added import for Card component
 import { MetricCard } from "./components/MetricCard";
 import { DetectionAccuracy } from "./components/DetectionAccuracy";
 import { CustomerImpact } from "./components/CustomerImpact";
