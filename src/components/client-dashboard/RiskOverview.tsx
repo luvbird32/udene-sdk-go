@@ -13,6 +13,7 @@ export const RiskOverview = () => {
   const { data: riskData, isLoading, error } = useQuery({
     queryKey: ["risk-overview"],
     queryFn: async () => {
+      console.log("Fetching risk overview data...");
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("No user found");
 
@@ -22,7 +23,10 @@ export const RiskOverview = () => {
         .order('created_at', { ascending: true })
         .limit(20);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching risk data:", error);
+        throw error;
+      }
 
       return (data as Transaction[]).map(d => ({
         timestamp: new Date(d.created_at!).toLocaleDateString(),
@@ -31,9 +35,10 @@ export const RiskOverview = () => {
     },
     meta: {
       errorHandler: (error: Error) => {
+        console.error("Risk overview error:", error);
         toast({
           title: "Error",
-          description: "Failed to load risk overview data",
+          description: "Failed to load risk overview data. Please try again later.",
           variant: "destructive",
         });
       },
@@ -41,12 +46,20 @@ export const RiskOverview = () => {
   });
 
   if (isLoading) {
-    return <LoadingState title="Risk Score Trend" />;
+    return (
+      <Card className="p-6">
+        <h3 className="font-semibold mb-4">Risk Score Trend</h3>
+        <div className="h-[400px] flex items-center justify-center">
+          <LoadingState title="Loading risk data..." />
+        </div>
+      </Card>
+    );
   }
 
   if (error) {
     return (
       <Card className="p-6">
+        <h3 className="font-semibold mb-4">Risk Score Trend</h3>
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
@@ -60,9 +73,15 @@ export const RiskOverview = () => {
   if (!riskData || riskData.length === 0) {
     return (
       <Card className="p-6">
-        <div className="text-center py-8">
-          <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
-          <p className="text-muted-foreground">No risk data available</p>
+        <h3 className="font-semibold mb-4">Risk Score Trend</h3>
+        <div className="h-[400px] flex items-center justify-center">
+          <div className="text-center">
+            <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
+            <p className="text-muted-foreground">No risk data available</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              Risk data will appear here once transactions are processed.
+            </p>
+          </div>
         </div>
       </Card>
     );
