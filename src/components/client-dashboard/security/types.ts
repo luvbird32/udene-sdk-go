@@ -1,12 +1,3 @@
-import { Json } from "@/integrations/supabase/types";
-
-export interface SeverityBreakdown {
-  critical: number;
-  high: number;
-  medium: number;
-  low: number;
-}
-
 export interface VulnerabilityDetail {
   id: string;
   name: string;
@@ -26,15 +17,11 @@ export interface VulnerabilityScan {
   start_time: string;
   end_time: string | null;
   total_vulnerabilities: number;
-  severity_breakdown: SeverityBreakdown;
+  severity_breakdown: {
+    critical: number;
+    high: number;
+    medium: number;
+    low: number;
+  };
   findings: VulnerabilityDetail[];
-  scan_engine?: string;
-  scan_parameters?: Json;
-  scan_duration?: unknown;
-  last_error?: string;
-  scan_config?: Json;
-  target_url?: string;
-  created_at?: string;
-  updated_at?: string;
-  user_id: string;
 }
