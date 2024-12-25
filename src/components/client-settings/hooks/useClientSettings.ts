@@ -19,7 +19,6 @@ export const useClientSettings = () => {
 
       if (error) throw error;
       
-      // Ensure we return a properly typed object that matches ClientSettings
       const defaultSettings: ClientSettings = {
         notification_preferences: {
           email: true,
@@ -29,7 +28,8 @@ export const useClientSettings = () => {
         contact_email: '',
       };
 
-      return (data?.settings || defaultSettings) as ClientSettings;
+      // Cast the data to unknown first, then to ClientSettings
+      return (data?.settings as unknown as ClientSettings) || defaultSettings;
     },
   });
 
@@ -40,7 +40,7 @@ export const useClientSettings = () => {
     const { error: updateError } = await supabase
       .from('profiles')
       .update({
-        settings: newSettings as any, // Use type assertion since we know the structure is correct
+        settings: newSettings as unknown as Json,
         updated_at: new Date().toISOString(),
       })
       .eq('id', user.id);

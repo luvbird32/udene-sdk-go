@@ -25,7 +25,7 @@ export const ClientSettingsForm = () => {
 
   useEffect(() => {
     if (settings) {
-      setFormData(settings);
+      setFormData(settings as ClientSettings);
     }
   }, [settings]);
 

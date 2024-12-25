@@ -1,5 +1,7 @@
+import { Json } from "@/integrations/supabase/types/core";
+
 export interface ClientSettings {
-  [key: string]: any; // Add index signature to make it compatible with Json
+  [key: string]: Json | any; // Make it compatible with both Json and our specific types
   notification_preferences: {
     email: boolean;
     sms: boolean;
