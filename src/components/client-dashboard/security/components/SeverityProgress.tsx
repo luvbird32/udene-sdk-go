@@ -8,18 +8,15 @@ interface SeverityProgressProps {
 }
 
 export const SeverityProgress = ({ label, count, total, colorClass }: SeverityProgressProps) => {
+  const percentage = total > 0 ? (count / total) * 100 : 0;
+
   return (
-    <>
-      <div className="flex items-center justify-between text-sm">
-        <span>{label}</span>
-        <span className={colorClass}>{count}</span>
+    <div className="flex items-center">
+      <span className="mr-2">{label}</span>
+      <div className="flex-1">
+        <Progress value={percentage} className={`h-2 ${colorClass}`} />
       </div>
-      <Progress 
-        value={(count / total) * 100} 
-        className={`h-2 ${colorClass.replace('text-', 'bg-')}-100`}
-      >
-        <div className={`h-full ${colorClass.replace('text-', 'bg-')}-500 transition-all`} />
-      </Progress>
-    </>
+      <span className="ml-2">{count}</span>
+    </div>
   );
 };

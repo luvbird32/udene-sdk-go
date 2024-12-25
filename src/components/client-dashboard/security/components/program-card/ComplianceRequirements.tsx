@@ -1,20 +1,29 @@
-import { Badge } from "@/components/ui/badge";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 
 interface ComplianceRequirementsProps {
-  requirements: string[];
+  requirements: Array<string>;
+  isExpanded: boolean;
+  onToggle: () => void;
 }
 
-export const ComplianceRequirements = ({ requirements }: ComplianceRequirementsProps) => {
-  if (!Array.isArray(requirements) || requirements.length === 0) return null;
-
+export const ComplianceRequirements = ({ requirements, isExpanded, onToggle }: ComplianceRequirementsProps) => {
   return (
-    <div className="space-y-2">
-      <h4 className="text-sm font-medium">Compliance Requirements</h4>
-      <div className="flex flex-wrap gap-2">
-        {requirements.map((req: string, index: number) => (
-          <Badge key={index} variant="outline">{req}</Badge>
-        ))}
-      </div>
+    <div className="space-y-4">
+      <button onClick={onToggle} className="text-lg font-semibold">
+        {isExpanded ? "Hide Compliance Requirements" : "Show Compliance Requirements"}
+      </button>
+      {isExpanded && (
+        <Accordion type="single" collapsible>
+          {requirements.map((requirement, index) => (
+            <AccordionItem key={index} value={`item-${index}`}>
+              <AccordionTrigger>{requirement}</AccordionTrigger>
+              <AccordionContent>
+                <p>Details about {requirement} compliance requirement.</p>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      )}
     </div>
   );
 };
