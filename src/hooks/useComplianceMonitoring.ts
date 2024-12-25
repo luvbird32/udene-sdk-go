@@ -1,119 +1,50 @@
-import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { complianceMonitoringService, ComplianceMetrics } from '@/services/complianceMonitoringService';
-import { useToast } from '@/components/ui/use-toast';
-import { ComplianceReport, SecurityAssessment } from '@/integrations/supabase/types/security';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { complianceMonitoringService } from "@/services/complianceMonitoringService";
+import { SecurityAssessment } from "@/integrations/supabase/types/security";
+import { useToast } from "@/hooks/use-toast";
 
 export const useComplianceMonitoring = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [currentPage, setCurrentPage] = useState(1);
 
-  // Fetch compliance reports with pagination
-  const {
-    data: reportsData,
-    isLoading: isLoadingReports,
-    error: reportsError
-  } = useQuery({
-    queryKey: ['compliance-reports', currentPage],
-    queryFn: () => complianceMonitoringService.getComplianceReports(currentPage),
-  });
-
-  // Fetch compliance metrics
-  const {
-    data: metrics,
-    isLoading: isLoadingMetrics,
-    error: metricsError
-  } = useQuery({
-    queryKey: ['compliance-metrics'],
-    queryFn: complianceMonitoringService.getComplianceMetrics,
-  });
-
-  // Create compliance report mutation
-  const createReport = useMutation({
-    mutationFn: (reportData: Pick<ComplianceReport, 'report_type' | 'report_period' | 'generated_by'>) => 
-      complianceMonitoringService.createComplianceReport(reportData),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['compliance-reports'] });
-      queryClient.invalidateQueries({ queryKey: ['compliance-metrics'] });
-      toast({
-        title: "Success",
-        description: "Compliance report created successfully",
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: "Error",
-        description: "Failed to create compliance report",
-        variant: "destructive",
-      });
-      console.error('Error creating report:', error);
-    },
-  });
-
-  // Update report status mutation
-  const updateReportStatus = useMutation({
-    mutationFn: ({ reportId, status }: { reportId: string; status: string }) =>
-      complianceMonitoringService.updateReportStatus(reportId, status),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['compliance-reports'] });
-      queryClient.invalidateQueries({ queryKey: ['compliance-metrics'] });
-      toast({
-        title: "Success",
-        description: "Report status updated successfully",
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: "Error",
-        description: "Failed to update report status",
-        variant: "destructive",
-      });
-      console.error('Error updating report status:', error);
-    },
-  });
-
-  // Create security assessment mutation
   const createAssessment = useMutation({
-    mutationFn: (assessmentData: Pick<SecurityAssessment, 'assessment_type' | 'program_id' | 'status'>) =>
+    mutationFn: (assessmentData: Pick<SecurityAssessment, 'assessment_type' | 'program_id' | 'status'>) => 
       complianceMonitoringService.createSecurityAssessment(assessmentData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['security-assessments'] });
+      queryClient.invalidateQueries({ queryKey: ['security-programs'] });
       toast({
-        title: "Success",
-        description: "Security assessment created successfully",
+        title: "Assessment Created",
+        description: "Security assessment has been created successfully.",
       });
     },
     onError: (error) => {
+      console.error('Error creating assessment:', error);
       toast({
         title: "Error",
-        description: "Failed to create security assessment",
+        description: "Failed to create security assessment. Please try again.",
         variant: "destructive",
       });
-      console.error('Error creating assessment:', error);
+    },
+  });
+
+  const getAssessments = useQuery({
+    queryKey: ['security-assessments'],
+    queryFn: async () => {
+      const assessments = await complianceMonitoringService.getSecurityAssessments();
+      return assessments;
+    },
+    onError: (error) => {
+      console.error('Error fetching assessments:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch security assessments. Please try again.",
+        variant: "destructive",
+      });
     },
   });
 
   return {
-    // Reports data and pagination
-    reports: reportsData?.data || [],
-    totalReports: reportsData?.count || 0,
-    currentPage,
-    setCurrentPage,
-    isLoadingReports,
-    reportsError,
-
-    // Metrics
-    metrics: metrics as ComplianceMetrics,
-    isLoadingMetrics,
-    metricsError,
-
-    // Mutations
-    createReport: createReport.mutate,
-    isCreatingReport: createReport.isPending,
-    updateReportStatus: updateReportStatus.mutate,
-    isUpdatingStatus: updateReportStatus.isPending,
-    createAssessment: createAssessment.mutate,
-    isCreatingAssessment: createAssessment.isPending,
+    createAssessment,
+    getAssessments,
   };
 };

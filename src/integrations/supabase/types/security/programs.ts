@@ -1,4 +1,4 @@
-import { Json } from "../database";
+import { Json } from "../core";
 import { SecurityAssessment } from "./assessments";
 
 export interface SecurityProgram {
