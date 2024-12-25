@@ -57,7 +57,10 @@ export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps)
       // Calculate metrics from real transaction data
       const totalTransactions = transactions.length;
       const flaggedTransactions = transactions.filter(t => t.is_fraudulent).length;
-      const averageRiskScore = transactions.reduce((acc, t) => acc + (t.risk_score || 0), 0) / totalTransactions;
+      const validRiskScores = transactions.filter(t => t.risk_score != null);
+      const averageRiskScore = validRiskScores.length > 0
+        ? validRiskScores.reduce((acc, t) => acc + (t.risk_score || 0), 0) / validRiskScores.length
+        : 0;
 
       return {
         riskScore: Math.round(averageRiskScore),
@@ -83,7 +86,7 @@ export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps)
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <MetricCard
         title="Risk Score"
-        value={displayMetrics?.riskScore ?? 0}
+        value={displayMetrics?.riskScore !== undefined ? `${displayMetrics.riskScore}%` : '0%'}
         icon={Shield}
         description="Current risk assessment score"
         isLoading={isLoadingState}
