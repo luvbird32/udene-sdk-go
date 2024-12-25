@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ClientSettings } from "@/types/settings";
+import { Json } from "@/integrations/supabase/types/core"; // Add this import
 
 export const useClientSettings = () => {
   const queryClient = useQueryClient();
