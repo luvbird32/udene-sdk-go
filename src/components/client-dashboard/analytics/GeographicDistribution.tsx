@@ -28,19 +28,47 @@ import { Card } from "@/components/ui/card";
 import { LoadingState } from "./geographic/LoadingState";
 import { DistributionChart } from "./geographic/DistributionChart";
 import { useGeographicData } from "./geographic/useGeographicData";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 export const GeographicDistribution = () => {
-  const { data: distribution, isLoading } = useGeographicData();
+  const { data: distribution, isLoading, error } = useGeographicData();
 
   if (isLoading) {
     return <LoadingState />;
+  }
+
+  if (error) {
+    return (
+      <Card className="p-4">
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            Failed to load geographic distribution data. Please try again later.
+          </AlertDescription>
+        </Alert>
+      </Card>
+    );
+  }
+
+  if (!distribution || distribution.length === 0) {
+    return (
+      <Card className="p-4">
+        <div className="h-[300px] flex items-center justify-center">
+          <div className="text-center">
+            <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
+            <p className="text-muted-foreground">No geographic data available</p>
+          </div>
+        </div>
+      </Card>
+    );
   }
 
   return (
     <Card className="p-4">
       <h3 className="font-semibold mb-4">Geographic Distribution</h3>
       <div className="h-[300px]">
-        <DistributionChart distribution={distribution || []} />
+        <DistributionChart distribution={distribution} />
       </div>
     </Card>
   );

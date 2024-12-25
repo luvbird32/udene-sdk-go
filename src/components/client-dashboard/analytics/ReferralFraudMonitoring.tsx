@@ -15,17 +15,15 @@
  * 
  * Data is refreshed every 30 seconds to maintain current insights
  * into referral fraud patterns.
- * 
- * @example
- * ```tsx
- * <ReferralFraudMonitoring />
- * ```
  */
 import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ReferralChart } from "./referral/ReferralChart";
 import { ReferralHeader } from "./referral/ReferralHeader";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle, Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface ReferralStat {
   name: string;
@@ -33,7 +31,8 @@ interface ReferralStat {
 }
 
 export const ReferralFraudMonitoring = () => {
-  const { data: referralStats, isLoading } = useQuery({
+  const { toast } = useToast();
+  const { data: referralStats, isLoading, error } = useQuery({
     queryKey: ["referral-fraud-stats"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -55,6 +54,15 @@ export const ReferralFraudMonitoring = () => {
         value 
       }));
     },
+    meta: {
+      errorHandler: (error: Error) => {
+        toast({
+          title: "Error",
+          description: "Failed to load referral fraud data",
+          variant: "destructive",
+        });
+      },
+    },
     refetchInterval: 30000,
   });
 
@@ -63,7 +71,37 @@ export const ReferralFraudMonitoring = () => {
       <Card className="p-4">
         <ReferralHeader />
         <div className="h-[200px] flex items-center justify-center">
-          <p className="text-muted-foreground">Loading referral data...</p>
+          <div className="flex flex-col items-center gap-2">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <p className="text-sm text-muted-foreground">Loading referral data...</p>
+          </div>
+        </div>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="p-4">
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            Failed to load referral fraud data. Please try again later.
+          </AlertDescription>
+        </Alert>
+      </Card>
+    );
+  }
+
+  if (!referralStats || referralStats.length === 0) {
+    return (
+      <Card className="p-4">
+        <ReferralHeader />
+        <div className="h-[200px] flex items-center justify-center">
+          <div className="text-center">
+            <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
+            <p className="text-muted-foreground">No referral data available</p>
+          </div>
         </div>
       </Card>
     );
