@@ -1,26 +1,24 @@
 /**
- * @component ScanStats
- * @description Displays statistical information about a security scan, including
- * status, total vulnerabilities found, and severity breakdown. Also shows completion
- * time if the scan has finished.
- *
- * @param {Object} props - Component props
- * @param {string} props.status - Current status of the scan (e.g., "completed", "in_progress")
- * @param {number} props.totalVulnerabilities - Total number of vulnerabilities detected
- * @param {Object} props.severityBreakdown - Distribution of vulnerabilities by severity level
- * @param {string | null} props.endTime - Timestamp when the scan completed (if finished)
- *
- * @example
- * ```tsx
- * <ScanStats
- *   status="completed"
- *   totalVulnerabilities={12}
- *   severityBreakdown={{ critical: 2, high: 3, medium: 4, low: 3 }}
- *   endTime="2024-03-15T10:30:00Z"
- * />
- * ```
+ * ScanStats Component
+ * 
+ * Displays statistical information about a vulnerability scan, including
+ * status, total vulnerabilities, severity breakdown, and completion time.
+ * 
+ * Features:
+ * - Status indicator with appropriate styling
+ * - Vulnerability count summary
+ * - Severity distribution visualization
+ * - Scan completion timestamp
+ * 
+ * @param {Object} props
+ * @param {string} props.status - Current status of the scan
+ * @param {number} props.totalVulnerabilities - Total number of vulnerabilities found
+ * @param {Object} props.severityBreakdown - Distribution of vulnerabilities by severity
+ * @param {string | null} props.endTime - Timestamp when the scan completed
  */
 import { format } from "date-fns";
+import { Badge } from "@/components/ui/badge";
+import { SeverityBreakdownDisplay } from "../SeverityBreakdownDisplay";
 
 interface ScanStatsProps {
   status: string;
@@ -34,37 +32,32 @@ interface ScanStatsProps {
   endTime: string | null;
 }
 
-export const ScanStats = ({ 
-  status, 
-  totalVulnerabilities, 
-  severityBreakdown, 
-  endTime 
+export const ScanStats = ({
+  status,
+  totalVulnerabilities,
+  severityBreakdown,
+  endTime,
 }: ScanStatsProps) => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium">Status: {status}</span>
-        <span className="text-sm font-medium">
-          Total Vulnerabilities: {totalVulnerabilities}
-        </span>
-      </div>
-      
-      <div className="grid grid-cols-2 gap-4">
-        <div className="text-sm">
-          <p>Critical: {severityBreakdown.critical}</p>
-          <p>High: {severityBreakdown.high}</p>
-        </div>
-        <div className="text-sm">
-          <p>Medium: {severityBreakdown.medium}</p>
-          <p>Low: {severityBreakdown.low}</p>
-        </div>
+        <Badge 
+          variant={status === 'completed' ? 'default' : 'secondary'}
+          className="capitalize"
+        >
+          {status}
+        </Badge>
+        {endTime && (
+          <span className="text-sm text-muted-foreground">
+            Completed: {format(new Date(endTime), 'PPp')}
+          </span>
+        )}
       </div>
 
-      {endTime && (
-        <p className="text-sm text-muted-foreground">
-          Completed: {format(new Date(endTime), 'PPp')}
-        </p>
-      )}
+      <SeverityBreakdownDisplay 
+        severityBreakdown={severityBreakdown}
+        totalVulnerabilities={totalVulnerabilities}
+      />
     </div>
   );
 };

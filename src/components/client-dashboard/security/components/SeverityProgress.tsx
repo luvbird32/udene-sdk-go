@@ -1,30 +1,20 @@
 /**
  * SeverityProgress Component
  * 
- * Displays a progress bar for visualizing security severity levels.
- * Shows the proportion of vulnerabilities at each severity level.
+ * Displays a progress bar for a specific severity level of vulnerabilities,
+ * showing both the count and percentage of total vulnerabilities.
  * 
  * Features:
+ * - Visual progress indicator
  * - Color-coded severity levels
- * - Percentage-based progress visualization
- * - Numerical count display
- * - Label for severity level
+ * - Percentage calculation
+ * - Responsive design
  * 
  * @param {Object} props
  * @param {string} props.label - The severity level label (e.g., "Critical", "High")
  * @param {number} props.count - Number of vulnerabilities at this severity level
- * @param {number} props.total - Total number of vulnerabilities
+ * @param {number} props.total - Total number of vulnerabilities across all severities
  * @param {string} props.colorClass - Tailwind CSS color class for the severity level
- * 
- * @example
- * ```tsx
- * <SeverityProgress
- *   label="Critical"
- *   count={5}
- *   total={20}
- *   colorClass="text-red-500"
- * />
- * ```
  */
 import { Progress } from "@/components/ui/progress";
 
@@ -35,16 +25,23 @@ interface SeverityProgressProps {
   colorClass: string;
 }
 
-export const SeverityProgress = ({ label, count, total, colorClass }: SeverityProgressProps) => {
-  const percentage = total > 0 ? (count / total) * 100 : 0;
+export const SeverityProgress = ({ 
+  label, 
+  count, 
+  total, 
+  colorClass 
+}: SeverityProgressProps) => {
+  const percentage = total > 0 ? Math.round((count / total) * 100) : 0;
 
   return (
-    <div className="flex items-center">
-      <span className="mr-2">{label}</span>
-      <div className="flex-1">
-        <Progress value={percentage} className={`h-2 ${colorClass}`} />
+    <div className="space-y-2">
+      <div className="flex justify-between text-sm">
+        <span className={colorClass}>{label}</span>
+        <span className="text-muted-foreground">
+          {count} ({percentage}%)
+        </span>
       </div>
-      <span className="ml-2">{count}</span>
+      <Progress value={percentage} className={`h-2 ${colorClass}`} />
     </div>
   );
 };
