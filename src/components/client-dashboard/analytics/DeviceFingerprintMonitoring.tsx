@@ -1,39 +1,16 @@
-/**
- * DeviceFingerprintMonitoring Component
- * 
- * Monitors and analyzes device fingerprints for fraud detection.
- * This component tracks various aspects of device usage:
- * 
- * Key Metrics:
- * 1. Device Count: Number of unique devices detected
- * 2. Usage Patterns: Frequency and timing of device appearances
- * 3. Risk Indicators:
- *    - Multiple accounts using same device
- *    - Rapid device switching
- *    - Known fraudulent device patterns
- *    - Suspicious configuration changes
- * 
- * Device Fingerprint Analysis:
- * - Browser and OS information
- * - Hardware specifications
- * - Network characteristics
- * - Canvas and WebGL fingerprints
- * - Font and plugin analysis
- * 
- * The data refreshes every 30 seconds to detect:
- * - Device spoofing attempts
- * - Automated fraud operations
- * - Account sharing or theft
- */
 import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { LoadingState } from "./shared/LoadingState";
 import { DeviceHeader } from "./device/DeviceHeader";
 import { DeviceAnalytics } from "./device/DeviceAnalytics";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useToast } from "@/hooks/use-toast";
 
 export const DeviceFingerprintMonitoring = () => {
-  const { data: deviceStats, isLoading } = useQuery({
+  const { toast } = useToast();
+  const { data: deviceStats, isLoading, error } = useQuery({
     queryKey: ["device-fingerprint-stats"],
     queryFn: async () => {
       console.log("Fetching device fingerprint stats...");
@@ -59,6 +36,15 @@ export const DeviceFingerprintMonitoring = () => {
         count
       }));
     },
+    meta: {
+      errorHandler: (error: Error) => {
+        toast({
+          title: "Error",
+          description: "Failed to load device fingerprint data",
+          variant: "destructive",
+        });
+      },
+    },
     refetchInterval: 30000,
   });
 
@@ -66,10 +52,35 @@ export const DeviceFingerprintMonitoring = () => {
     return <LoadingState title="Device Fingerprint Analysis" />;
   }
 
+  if (error) {
+    return (
+      <Card className="p-4">
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            Failed to load device fingerprint data. Please try again later.
+          </AlertDescription>
+        </Alert>
+      </Card>
+    );
+  }
+
+  if (!deviceStats || deviceStats.length === 0) {
+    return (
+      <Card className="p-4">
+        <DeviceHeader deviceCount={0} />
+        <div className="text-center py-8">
+          <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
+          <p className="text-muted-foreground">No device data available</p>
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <Card className="p-4">
-      <DeviceHeader deviceCount={deviceStats?.length || 0} />
-      <DeviceAnalytics data={deviceStats || []} />
+      <DeviceHeader deviceCount={deviceStats.length} />
+      <DeviceAnalytics data={deviceStats} />
     </Card>
   );
 };
