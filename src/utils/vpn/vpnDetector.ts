@@ -1,7 +1,4 @@
-export interface IceServer {
-  ip: string;
-  type: string;
-}
+import { IceServer } from './types';
 
 export const detectVPNConnection = (): Promise<{
   isVPN: boolean;
@@ -25,27 +22,12 @@ export const detectVPNConnection = (): Promise<{
     pc.onicecandidate = (event) => {
       if (!event.candidate) {
         pc.close();
-        const result = {
+        resolve({
           isVPN: false,
           publicIP: null,
           localIPs: Array.from(localIPs),
           iceServers
-        };
-
-        // VPN detection logic
-        if (result.localIPs.length > 0) {
-          const hasVPNRange = result.localIPs.some(ip => {
-            // Common VPN IP ranges
-            return (
-              ip.startsWith('10.') ||
-              ip.startsWith('192.168.') ||
-              (ip.startsWith('172.') && parseInt(ip.split('.')[1]) >= 16 && parseInt(ip.split('.')[1]) <= 31)
-            );
-          });
-          result.isVPN = hasVPNRange;
-        }
-
-        resolve(result);
+        });
         return;
       }
 
@@ -94,46 +76,4 @@ export const detectVPNConnection = (): Promise<{
       }
     }, 5000);
   });
-};
-
-// Function to analyze VPN risk based on WebRTC detection
-export const analyzeVPNRisk = async (): Promise<{
-  riskLevel: 'low' | 'medium' | 'high';
-  details: string[];
-}> => {
-  try {
-    const vpnData = await detectVPNConnection();
-    const riskFactors: string[] = [];
-
-    if (vpnData.isVPN) {
-      riskFactors.push('VPN connection detected');
-    }
-
-    if (vpnData.localIPs.length > 2) {
-      riskFactors.push('Multiple network interfaces detected');
-    }
-
-    if (vpnData.iceServers.length > 1) {
-      riskFactors.push('Multiple public IPs detected');
-    }
-
-    // Determine risk level based on factors
-    let riskLevel: 'low' | 'medium' | 'high' = 'low';
-    if (riskFactors.length >= 2) {
-      riskLevel = 'high';
-    } else if (riskFactors.length === 1) {
-      riskLevel = 'medium';
-    }
-
-    return {
-      riskLevel,
-      details: riskFactors
-    };
-  } catch (error) {
-    console.error('Error analyzing VPN risk:', error);
-    return {
-      riskLevel: 'low',
-      details: ['Error analyzing VPN connection']
-    };
-  }
 };
