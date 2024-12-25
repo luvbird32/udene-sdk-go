@@ -12,6 +12,16 @@ interface MetricCardProps {
   isLoading?: boolean;
 }
 
+interface ClientMetricsProps {
+  metrics?: {
+    riskScore: number;
+    totalTransactions: number;
+    flaggedTransactions: number;
+  } | null;
+  isLoading?: boolean;
+  error?: Error | null;
+}
+
 const MetricCard = ({ title, value, icon: Icon, description, isLoading }: MetricCardProps) => (
   <Card className="p-6">
     <div className="flex items-start justify-between">
@@ -29,8 +39,8 @@ const MetricCard = ({ title, value, icon: Icon, description, isLoading }: Metric
   </Card>
 );
 
-export const ClientMetrics = () => {
-  const { data: metrics, isLoading, error } = useQuery({
+export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps) => {
+  const { data: metricsData, isLoading: metricsLoading, error: metricsError } = useQuery({
     queryKey: ["client-metrics"],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -58,36 +68,39 @@ export const ClientMetrics = () => {
     refetchInterval: 30000,
   });
 
-  if (error) {
+  if (error || metricsError) {
     return (
       <Card className="p-6 border-destructive">
-        <p className="text-destructive">Error loading metrics: {error.message}</p>
+        <p className="text-destructive">Error loading metrics: {(error || metricsError)?.message}</p>
       </Card>
     );
   }
+
+  const displayMetrics = metrics || metricsData;
+  const isLoadingState = isLoading || metricsLoading;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <MetricCard
         title="Risk Score"
-        value={metrics?.riskScore ?? 0}
+        value={displayMetrics?.riskScore ?? 0}
         icon={Shield}
         description="Current risk assessment score"
-        isLoading={isLoading}
+        isLoading={isLoadingState}
       />
       <MetricCard
         title="Total Transactions"
-        value={metrics?.totalTransactions ?? 0}
+        value={displayMetrics?.totalTransactions ?? 0}
         icon={Activity}
         description="Number of processed transactions"
-        isLoading={isLoading}
+        isLoading={isLoadingState}
       />
       <MetricCard
         title="Flagged Transactions"
-        value={metrics?.flaggedTransactions ?? 0}
+        value={displayMetrics?.flaggedTransactions ?? 0}
         icon={AlertTriangle}
         description="Transactions requiring attention"
-        isLoading={isLoading}
+        isLoading={isLoadingState}
       />
     </div>
   );

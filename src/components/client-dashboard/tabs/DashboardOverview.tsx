@@ -16,9 +16,13 @@ import { IdentityVerificationMonitoring } from "@/components/client-dashboard/an
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
 
 interface DashboardOverviewProps {
-  metrics: any;
-  metricsLoading: boolean;
-  metricsError: Error | null;
+  metrics?: {
+    riskScore: number;
+    totalTransactions: number;
+    flaggedTransactions: number;
+  } | null;
+  metricsLoading?: boolean;
+  metricsError?: Error | null;
 }
 
 export const DashboardOverview = ({ metrics, metricsLoading, metricsError }: DashboardOverviewProps) => {
