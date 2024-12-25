@@ -4,6 +4,27 @@ import { supabase } from "@/integrations/supabase/client";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { format } from "date-fns";
 
+/**
+ * PeakTransactionTimes Component
+ * 
+ * Analyzes and visualizes transaction timing patterns to:
+ * 1. Identify peak transaction hours
+ * 2. Detect unusual timing patterns
+ * 3. Monitor transaction velocity
+ * 
+ * Key Features:
+ * - Hourly transaction distribution
+ * - Visual representation of peak hours
+ * - Automatic detection of unusual timing patterns
+ * 
+ * Use Cases:
+ * - Fraud detection based on unusual transaction timing
+ * - Resource allocation during peak hours
+ * - Risk assessment based on transaction timing patterns
+ * 
+ * Data is refreshed every 30 seconds to maintain current
+ * insights into transaction timing patterns.
+ */
 export const PeakTransactionTimes = () => {
   const { data: peakTimes, isLoading } = useQuery({
     queryKey: ["peak-transaction-times"],
