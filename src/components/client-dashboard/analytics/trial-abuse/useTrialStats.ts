@@ -1,43 +1,34 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
-import type { TrialUsage } from "@/integrations/supabase/types/trial";
-
-interface TrialStats {
-  name: string;
-  value: number;
-}
 
 export const useTrialStats = () => {
-  const { toast } = useToast();
-
-  return useQuery<TrialStats[]>({
+  return useQuery({
     queryKey: ["trial-abuse-stats"],
     queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
+
       const { data, error } = await supabase
         .from('trial_usage')
         .select('*')
         .order('created_at', { ascending: false })
-        .limit(100) as { data: TrialUsage[] | null, error: Error | null };
+        .limit(100);
 
-      if (error) {
-        toast({
-          title: "Error",
-          description: "Failed to fetch trial usage data",
-          variant: "destructive",
-        });
-        throw error;
-      }
+      if (error) throw error;
 
+      // Group data by status and calculate risk levels
       const stats = (data || []).reduce((acc: Record<string, number>, curr) => {
-        const status = curr.status === 'active' ? 
-          (curr.risk_score && curr.risk_score >= 70 ? 'High Risk' : 'Active') : 
-          'Terminated';
-        acc[status] = (acc[status] || 0) + 1;
+        const riskLevel = curr.risk_score >= 70 ? 'High Risk' : 
+                         curr.risk_score >= 40 ? 'Medium Risk' : 
+                         'Low Risk';
+        acc[riskLevel] = (acc[riskLevel] || 0) + 1;
         return acc;
       }, {});
 
-      return Object.entries(stats).map(([name, value]) => ({ name, value }));
+      return Object.entries(stats).map(([name, value]) => ({
+        name,
+        value
+      }));
     },
     refetchInterval: 30000,
   });
