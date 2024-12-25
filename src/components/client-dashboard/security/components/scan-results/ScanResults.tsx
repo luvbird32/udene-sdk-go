@@ -36,6 +36,13 @@ interface ScanResultsProps {
 }
 
 export const ScanResults = ({ scan, totalVulnerabilities }: ScanResultsProps) => {
+  // Transform string array into RemediationStep array
+  const formattedSteps = scan.remediation_steps?.map((step: string) => ({
+    title: "Remediation Required",
+    description: step,
+    severity: "medium" as const
+  })) || [];
+
   return (
     <>
       <div className="space-y-4">
@@ -47,7 +54,7 @@ export const ScanResults = ({ scan, totalVulnerabilities }: ScanResultsProps) =>
         />
       </div>
 
-      <RemediationSteps steps={scan.remediation_steps} />
+      <RemediationSteps steps={formattedSteps} />
     </>
   );
 };

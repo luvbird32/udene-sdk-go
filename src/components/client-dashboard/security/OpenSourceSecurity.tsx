@@ -30,6 +30,13 @@ export const OpenSourceSecurity = () => {
   const totalVulnerabilities = latestScan ? 
     Object.values(latestScan.severity_breakdown).reduce((a, b) => a + b, 0) : 0;
 
+  // Transform string array into RemediationStep array
+  const formattedSteps = latestScan?.remediation_steps?.map((step: string) => ({
+    title: "Remediation Required",
+    description: step,
+    severity: "medium" as const
+  })) || [];
+
   return (
     <Card className="p-6 space-y-6">
       <ScanHeader 
@@ -43,7 +50,7 @@ export const OpenSourceSecurity = () => {
             scan={latestScan}
             totalVulnerabilities={totalVulnerabilities}
           />
-          <RemediationSteps steps={latestScan.remediation_steps} />
+          <RemediationSteps steps={formattedSteps} />
         </>
       )}
     </Card>
