@@ -1,3 +1,4 @@
+import React from 'react';
 import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,7 +10,7 @@ interface DatabaseMetrics {
   timestamp: string;
 }
 
-export default function DatabaseSection() {
+export const DatabaseSection = () => {
   const { data: dbMetrics, isLoading, error } = useQuery({
     queryKey: ["database-metrics"],
     queryFn: async () => {
@@ -58,4 +59,6 @@ export default function DatabaseSection() {
       </div>
     </Card>
   );
-}
+};
+
+export default DatabaseSection;

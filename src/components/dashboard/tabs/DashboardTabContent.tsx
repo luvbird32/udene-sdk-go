@@ -5,7 +5,7 @@ import { ClientAnalytics } from "@/components/dashboard/analytics/ClientAnalytic
 import { UsageAnalytics } from "@/components/dashboard/analytics/UsageAnalytics";
 import { SecuritySection } from "@/components/dashboard/SecuritySection";
 import { InfrastructureSection } from "@/components/dashboard/InfrastructureSection";
-import { DatabaseSection } from "@/components/dashboard/DatabaseSection";
+import DatabaseSection from "@/components/dashboard/DatabaseSection";
 import { DataExtractionSection } from "@/components/dashboard/DataExtractionSection";
 import { ComplianceReporting } from "@/components/compliance/ComplianceReporting";
 
