@@ -2,9 +2,9 @@ import { PostgrestFilterBuilder } from '@supabase/postgrest-js';
 import { Database } from '@/integrations/supabase/types';
 import { Transaction } from '@/integrations/supabase/types/transactions';
 
-type TransactionFilterBuilder = PostgrestFilterBuilder<
+type TransactionResponse = PostgrestFilterBuilder<
   Database['public'],
-  Database['public']['Tables']['transactions'],
+  Database['public']['Tables']['transactions']['Row'],
   Transaction[]
 >;
 
@@ -36,71 +36,62 @@ const mockTransactionData: Transaction[] = [
   }
 ];
 
-export const createMockFilterBuilder = (): TransactionFilterBuilder => {
-  const response = {
-    data: mockTransactionData,
-    error: null,
-    count: null,
-    status: 200,
-    statusText: 'OK',
-    then: () => Promise.resolve(response),
-    catch: () => Promise.resolve(response),
-    finally: () => Promise.resolve(response),
-    throwOnError: () => response,
-    limit: () => response,
-    order: () => response,
-    range: () => response,
-    single: () => response,
-    maybeSingle: () => response,
-    select: () => response,
-    textSearch: () => response,
-    match: () => response,
-    eq: () => response,
-    neq: () => response,
-    gt: () => response,
-    gte: () => response,
-    lt: () => response,
-    lte: () => response,
-    like: () => response,
-    ilike: () => response,
-    likeAllOf: () => response,
-    likeAnyOf: () => response,
-    ilikeAllOf: () => response,
-    ilikeAnyOf: () => response,
-    is: () => response,
-    in: () => response,
-    contains: () => response,
-    containedBy: () => response,
-    rangeGt: () => response,
-    rangeGte: () => response,
-    rangeLt: () => response,
-    rangeLte: () => response,
-    rangeAdjacent: () => response,
-    overlaps: () => response,
-    not: () => response,
-    filter: () => response,
-    or: () => response,
-  } as unknown as TransactionFilterBuilder;
+const createBaseResponse = () => ({
+  data: null,
+  error: null,
+  count: null,
+  status: 200,
+  statusText: 'OK',
+  then: () => Promise.resolve(mockTransactionData),
+  catch: () => Promise.resolve(mockTransactionData),
+  finally: () => Promise.resolve(mockTransactionData),
+  throwOnError: () => createBaseResponse(),
+  limit: () => createBaseResponse(),
+  order: () => createBaseResponse(),
+  range: () => createBaseResponse(),
+  single: () => createBaseResponse(),
+  maybeSingle: () => createBaseResponse(),
+  select: () => createBaseResponse(),
+  textSearch: () => createBaseResponse(),
+  match: () => createBaseResponse(),
+  eq: () => createBaseResponse(),
+  neq: () => createBaseResponse(),
+  gt: () => createBaseResponse(),
+  gte: () => createBaseResponse(),
+  lt: () => createBaseResponse(),
+  lte: () => createBaseResponse(),
+  like: () => createBaseResponse(),
+  ilike: () => createBaseResponse(),
+  likeAllOf: () => createBaseResponse(),
+  likeAnyOf: () => createBaseResponse(),
+  ilikeAllOf: () => createBaseResponse(),
+  ilikeAnyOf: () => createBaseResponse(),
+  is: () => createBaseResponse(),
+  in: () => createBaseResponse(),
+  contains: () => createBaseResponse(),
+  containedBy: () => createBaseResponse(),
+  rangeGt: () => createBaseResponse(),
+  rangeGte: () => createBaseResponse(),
+  rangeLt: () => createBaseResponse(),
+  rangeLte: () => createBaseResponse(),
+  rangeAdjacent: () => createBaseResponse(),
+  overlaps: () => createBaseResponse(),
+  not: () => createBaseResponse(),
+  filter: () => createBaseResponse(),
+  or: () => createBaseResponse(),
+  execute: () => Promise.resolve(createBaseResponse())
+});
 
-  return response;
-};
-
-export const createEmptyMockFilterBuilder = (): TransactionFilterBuilder => {
+export const createMockResponse = (): TransactionResponse => {
   return {
-    ...createMockFilterBuilder(),
-    data: [],
-  } as unknown as TransactionFilterBuilder;
+    ...createBaseResponse(),
+    data: mockTransactionData,
+  } as unknown as TransactionResponse;
 };
 
-export const mockSupabaseClient = {
-  auth: {
-    getUser: () => Promise.resolve({ data: { user: { id: 'test-user' } } })
-  },
-  from: () => ({
-    select: () => ({
-      order: () => ({
-        limit: () => createMockFilterBuilder()
-      })
-    })
-  })
+export const createEmptyMockResponse = (): TransactionResponse => {
+  return {
+    ...createBaseResponse(),
+    data: [],
+  } as unknown as TransactionResponse;
 };
