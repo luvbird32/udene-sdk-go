@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { DollarSign, ShieldCheck } from "lucide-react";
-import { Card } from "@/components/ui/card"; // Added import for Card component
+import { Card } from "@/components/ui/card";
 import { MetricCard } from "./components/MetricCard";
 import { DetectionAccuracy } from "./components/DetectionAccuracy";
 import { CustomerImpact } from "./components/CustomerImpact";
@@ -18,28 +18,24 @@ export const BusinessIntelligence = () => {
 
       if (!transactions) return null;
 
-      // Calculate ROI and savings
       const blockedTransactions = transactions.filter(t => t.risk_score >= 70);
       const totalBlocked = blockedTransactions.reduce((sum, t) => sum + (t.amount || 0), 0);
       
-      // Calculate accuracy metrics
       const verifiedTransactions = transactions.filter(t => t.is_fraudulent !== null);
       const truePositives = verifiedTransactions.filter(t => t.risk_score >= 70 && t.is_fraudulent).length;
       const falsePositives = verifiedTransactions.filter(t => t.risk_score >= 70 && !t.is_fraudulent).length;
       const trueNegatives = verifiedTransactions.filter(t => t.risk_score < 70 && !t.is_fraudulent).length;
       const falseNegatives = verifiedTransactions.filter(t => t.risk_score < 70 && t.is_fraudulent).length;
 
-      // Calculate rates
       const totalVerified = verifiedTransactions.length;
       const falsePositiveRate = totalVerified ? (falsePositives / totalVerified) * 100 : 0;
       const falseNegativeRate = totalVerified ? (falseNegatives / totalVerified) * 100 : 0;
       
-      // Estimate customer impact
       const affectedCustomers = new Set(blockedTransactions.map(t => t.amount)).size;
       const customerImpactRate = (affectedCustomers / transactions.length) * 100;
 
       return {
-        roi: totalBlocked * 0.15, // Assuming 15% of blocked amount is saved
+        roi: totalBlocked * 0.15,
         savings: totalBlocked,
         falsePositiveRate,
         falseNegativeRate,
@@ -53,17 +49,15 @@ export const BusinessIntelligence = () => {
 
   if (isLoading || !metrics) {
     return (
-      <div className="space-y-4">
-        <Card className="p-4">
-          <div className="animate-pulse space-y-4">
-            <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-            <div className="space-y-2">
-              <div className="h-4 bg-gray-200 rounded"></div>
-              <div className="h-4 bg-gray-200 rounded"></div>
-            </div>
+      <Card className="p-4">
+        <div className="animate-pulse space-y-4">
+          <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+          <div className="space-y-2">
+            <div className="h-4 bg-gray-200 rounded"></div>
+            <div className="h-4 bg-gray-200 rounded"></div>
           </div>
-        </Card>
-      </div>
+        </div>
+      </Card>
     );
   }
 
