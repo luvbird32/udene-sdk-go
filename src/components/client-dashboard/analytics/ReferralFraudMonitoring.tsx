@@ -1,3 +1,26 @@
+/**
+ * ReferralFraudMonitoring Component
+ * 
+ * Analyzes and visualizes referral patterns to detect potential fraud.
+ * This component monitors:
+ * - Referral chain patterns
+ * - Risk levels of referral activities
+ * - Suspicious referral behaviors
+ * 
+ * Key Features:
+ * - Real-time monitoring of referral activities
+ * - Risk level distribution visualization
+ * - Pattern analysis for fraud detection
+ * - Automatic risk scoring of referral chains
+ * 
+ * Data is refreshed every 30 seconds to maintain current insights
+ * into referral fraud patterns.
+ * 
+ * @example
+ * ```tsx
+ * <ReferralFraudMonitoring />
+ * ```
+ */
 import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";

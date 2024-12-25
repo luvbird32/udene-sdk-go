@@ -1,3 +1,22 @@
+/**
+ * RomanceScamMonitoring Component
+ * 
+ * Visualizes and analyzes potential romance scam activities through a pie chart.
+ * This component helps identify and track:
+ * - Distribution of risk levels across user interactions
+ * - Patterns in suspicious romantic relationships
+ * - Potential financial exploitation attempts
+ * 
+ * The data is presented as a pie chart showing the proportion of:
+ * - High-risk interactions
+ * - Medium-risk interactions
+ * - Low-risk interactions
+ * 
+ * @example
+ * ```tsx
+ * <RomanceScamMonitoring />
+ * ```
+ */
 import { Card } from "@/components/ui/card";
 import { useRomanceScamData } from "@/hooks/useRomanceScamData";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
