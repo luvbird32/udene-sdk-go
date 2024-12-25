@@ -1,3 +1,27 @@
+/**
+ * ApiKeyList Component
+ * 
+ * Displays a list of API keys with options to copy and delete them.
+ * Each key is displayed with its creation date and status.
+ * 
+ * Features:
+ * - Copy API key to clipboard
+ * - Delete API key
+ * - Visual confirmation for copied keys
+ * - Loading state handling
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * const apiKeys = [{ id: '1', key_value: 'abc123', name: 'Production Key' }];
+ * 
+ * <ApiKeyList 
+ *   apiKeys={apiKeys}
+ *   isLoading={false}
+ *   onDelete={(id) => handleDelete(id)}
+ * />
+ * ```
+ */
 import { Button } from "@/components/ui/button";
 import { Copy, Check, Trash, Loader2 } from "lucide-react";
 import { useState } from "react";

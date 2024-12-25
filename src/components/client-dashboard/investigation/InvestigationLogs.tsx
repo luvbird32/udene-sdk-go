@@ -1,3 +1,22 @@
+/**
+ * InvestigationLogs Component
+ * 
+ * Displays a list of security investigation logs with filtering and sorting capabilities.
+ * Shows investigation details, findings, and actions taken.
+ * 
+ * Features:
+ * - Investigation type filtering
+ * - Chronological sorting
+ * - Status indicators
+ * - Detailed findings view
+ * - Action tracking
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <InvestigationLogs />
+ * ```
+ */
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";

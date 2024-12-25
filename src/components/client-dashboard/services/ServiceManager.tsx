@@ -1,3 +1,22 @@
+/**
+ * ServiceManager Component
+ * 
+ * Manages the activation and configuration of fraud prevention services.
+ * Provides a centralized interface for managing all available services.
+ * 
+ * Features:
+ * - Service activation/deactivation
+ * - Service configuration
+ * - Status monitoring
+ * - Usage statistics
+ * - Integration guides
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <ServiceManager />
+ * ```
+ */
 import React from 'react';
 import { ServiceHeader } from './ServiceHeader';
 import { ServiceList } from './ServiceList';

@@ -1,3 +1,23 @@
+/**
+ * ApiKeyForm Component
+ * 
+ * A form component for generating new API keys with a name and optional description.
+ * Includes validation and loading state handling.
+ * 
+ * Features:
+ * - Input validation
+ * - Loading state during key generation
+ * - Error handling
+ * - Success feedback
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <ApiKeyForm onSubmit={async (name, description) => {
+ *   await generateApiKey(name, description);
+ * }} />
+ * ```
+ */
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

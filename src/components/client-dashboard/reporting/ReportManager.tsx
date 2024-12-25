@@ -1,3 +1,22 @@
+/**
+ * ReportManager Component
+ * 
+ * Manages the creation, scheduling, and viewing of compliance and security reports.
+ * Provides options for customizing report parameters and delivery schedules.
+ * 
+ * Features:
+ * - Report type selection
+ * - Date range picking
+ * - Schedule configuration
+ * - Template management
+ * - Export options
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <ReportManager />
+ * ```
+ */
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { ReportHeader } from "./components/ReportHeader";
