@@ -9,7 +9,7 @@ interface DatabaseMetrics {
   timestamp: string;
 }
 
-const DatabaseSection = () => {
+export default function DatabaseSection() {
   const { data: dbMetrics, isLoading, error } = useQuery({
     queryKey: ["database-metrics"],
     queryFn: async () => {
@@ -58,6 +58,4 @@ const DatabaseSection = () => {
       </div>
     </Card>
   );
-};
-
-export default DatabaseSection;
+}
