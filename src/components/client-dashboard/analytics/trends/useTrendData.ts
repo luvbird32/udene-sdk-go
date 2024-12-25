@@ -3,10 +3,16 @@ import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import { useToast } from "@/components/ui/use-toast";
 
+interface TrendData {
+  date: string;
+  total: number;
+  count: number;
+}
+
 export const useTrendData = () => {
   const { toast } = useToast();
 
-  return useQuery({
+  return useQuery<TrendData[]>({
     queryKey: ["transaction-trends"],
     queryFn: async () => {
       try {
@@ -34,7 +40,7 @@ export const useTrendData = () => {
         }
 
         // Group by date and calculate daily totals
-        const dailyTotals = (data || []).reduce((acc: any, metric) => {
+        const dailyTotals = (data || []).reduce((acc: Record<string, TrendData>, metric) => {
           const date = format(new Date(metric.timestamp), 'MMM d');
           if (!acc[date]) {
             acc[date] = {

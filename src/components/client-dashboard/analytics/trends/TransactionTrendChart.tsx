@@ -1,11 +1,13 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
+export interface TrendData {
+  date: string;
+  total: number;
+  count: number;
+}
+
 interface TransactionTrendChartProps {
-  data: Array<{
-    date: string;
-    total: number;
-    count: number;
-  }>;
+  data: TrendData[];
 }
 
 export const TransactionTrendChart = ({ data }: TransactionTrendChartProps) => (

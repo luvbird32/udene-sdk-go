@@ -52,7 +52,7 @@ export const TrendAnalysis = () => {
     <Card className="p-4">
       <TransactionTrendHeader title="Transaction Trends" />
       <div className="h-[300px]">
-        <TransactionTrendChart data={trends} />
+        <TransactionTrendChart data={trends || []} />
       </div>
     </Card>
   );
