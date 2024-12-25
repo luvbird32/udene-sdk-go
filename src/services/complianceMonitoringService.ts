@@ -100,30 +100,17 @@ export const complianceMonitoringService = {
     return data;
   },
 
-  // Get security assessments
-  async getSecurityAssessments() {
-    console.log('Fetching security assessments');
-    
-    const { data, error } = await supabase
-      .from('security_assessments')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching security assessments:', error);
-      throw error;
-    }
-
-    return data;
-  },
-
   // Create security assessment
   async createSecurityAssessment(assessmentData: Pick<SecurityAssessment, 'assessment_type' | 'program_id' | 'status'>) {
     console.log('Creating security assessment:', assessmentData);
     
     const { data, error } = await supabase
       .from('security_assessments')
-      .insert(assessmentData)
+      .insert({
+        assessment_type: assessmentData.assessment_type,
+        program_id: assessmentData.program_id,
+        status: assessmentData.status
+      })
       .select()
       .single();
 

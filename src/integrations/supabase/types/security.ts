@@ -12,20 +12,8 @@ export interface OpenSourceScan extends Tables<'open_source_scans'> {
   remediation_steps: string[];
 }
 
-export interface SecurityAssessment {
-  id: string;
-  assessment_type: string;
-  status: string;
-  findings: any[];
-  risk_level?: string;
-  due_date?: string;
-}
-
-export interface SecurityProgram extends Tables<'product_security_programs'> {
-  compliance_requirements: string[];
-  security_assessments?: SecurityAssessment[];
-}
-
+export type { SecurityAssessment } from './security/assessments';
+export type { SecurityProgram } from './security/programs';
 export type SecurityProgramInsert = TablesInsert<'product_security_programs'>;
 export type SecurityProgramUpdate = TablesUpdate<'product_security_programs'>;
 export type ComplianceReport = Tables<'compliance_reports'>;
