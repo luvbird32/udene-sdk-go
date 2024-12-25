@@ -2,16 +2,16 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
-import { VulnerabilityScan, VulnerabilityDetail } from "../../types";
+import { VulnerabilityScan } from "../../types";
 import { ScanHeader } from "./ScanHeader";
 import { ScanStats } from "./ScanStats";
 import { FindingDetails } from "../vulnerability/FindingDetails";
 
-interface VulnerabilityScanItemProps {
+interface ScanItemProps {
   scan: VulnerabilityScan;
 }
 
-export const ScanItem = ({ scan }: VulnerabilityScanItemProps) => {
+export const ScanItem = ({ scan }: ScanItemProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
