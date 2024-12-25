@@ -18,14 +18,18 @@ export const useClientSettings = () => {
         .single();
 
       if (error) throw error;
-      return (data?.settings || {
+      
+      // Ensure we return a properly typed object that matches ClientSettings
+      const defaultSettings: ClientSettings = {
         notification_preferences: {
           email: true,
           sms: false,
         },
         risk_threshold: 75,
         contact_email: '',
-      }) as ClientSettings;
+      };
+
+      return (data?.settings || defaultSettings) as ClientSettings;
     },
   });
 
@@ -36,7 +40,7 @@ export const useClientSettings = () => {
     const { error: updateError } = await supabase
       .from('profiles')
       .update({
-        settings: newSettings,
+        settings: newSettings as any, // Use type assertion since we know the structure is correct
         updated_at: new Date().toISOString(),
       })
       .eq('id', user.id);
