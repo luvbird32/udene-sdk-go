@@ -3,6 +3,7 @@ import { TransactionHistory } from './TransactionHistory';
 import { describe, it, expect, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { PostgrestFilterBuilder } from '@supabase/postgrest-js';
 
 // Mock the Supabase client
 vi.mock('@/integrations/supabase/client', () => ({
@@ -13,7 +14,7 @@ vi.mock('@/integrations/supabase/client', () => ({
     from: () => ({
       select: () => ({
         order: () => ({
-          limit: () => Promise.resolve({
+          limit: () => ({
             data: [
               {
                 id: '1',
@@ -27,10 +28,11 @@ vi.mock('@/integrations/supabase/client', () => ({
                 created_at: '2024-01-02T00:00:00Z',
                 is_fraudulent: true
               }
-            ]
+            ],
+            error: null
           })
         })
-      })
+      }) as unknown as PostgrestFilterBuilder<any>
     })
   }
 }));
@@ -79,9 +81,12 @@ describe('TransactionHistory', () => {
     vi.mocked(supabase.from).mockImplementationOnce(() => ({
       select: () => ({
         order: () => ({
-          limit: () => Promise.resolve({ data: [] })
+          limit: () => ({
+            data: [],
+            error: null
+          })
         })
-      })
+      }) as unknown as PostgrestFilterBuilder<any>
     }));
 
     render(
