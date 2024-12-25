@@ -1,16 +1,9 @@
 import { Card } from "@/components/ui/card";
 import { Shield, Activity, AlertTriangle } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
-/**
- * Props for the MetricCard component
- * @interface MetricCardProps
- * @property {string} title - The title of the metric card
- * @property {number | string} value - The value to display
- * @property {React.ElementType} icon - The icon component to display
- * @property {string} description - A description of the metric
- * @property {boolean} [isLoading] - Whether the card is in a loading state
- */
 interface MetricCardProps {
   title: string;
   value: number | string;
@@ -19,11 +12,6 @@ interface MetricCardProps {
   isLoading?: boolean;
 }
 
-/**
- * MetricCard component displays a single metric with an icon and loading state
- * @param {MetricCardProps} props - The props for the component
- * @returns {JSX.Element} A card displaying a metric with optional loading state
- */
 const MetricCard = ({ title, value, icon: Icon, description, isLoading }: MetricCardProps) => (
   <Card className="p-6">
     <div className="flex items-start justify-between">
@@ -41,32 +29,35 @@ const MetricCard = ({ title, value, icon: Icon, description, isLoading }: Metric
   </Card>
 );
 
-/**
- * Props for the ClientMetrics component
- * @interface ClientMetricsProps
- * @property {Object} [metrics] - The metrics data to display
- * @property {number} metrics.riskScore - The current risk assessment score
- * @property {number} metrics.totalTransactions - Total number of processed transactions
- * @property {number} metrics.flaggedTransactions - Number of transactions requiring attention
- * @property {boolean} isLoading - Whether the metrics are loading
- * @property {Error | null} error - Any error that occurred while loading metrics
- */
-interface ClientMetricsProps {
-  metrics?: {
-    riskScore: number;
-    totalTransactions: number;
-    flaggedTransactions: number;
-  };
-  isLoading: boolean;
-  error: Error | null;
-}
+export const ClientMetrics = () => {
+  const { data: metrics, isLoading, error } = useQuery({
+    queryKey: ["client-metrics"],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
 
-/**
- * ClientMetrics component displays key metrics for the client dashboard
- * @param {ClientMetricsProps} props - The props for the component
- * @returns {JSX.Element} A grid of metric cards showing key client metrics
- */
-export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps) => {
+      // Get recent transactions
+      const { data: transactions } = await supabase
+        .from('transactions')
+        .select('risk_score, is_fraudulent')
+        .order('created_at', { ascending: false });
+
+      if (!transactions) return null;
+
+      // Calculate metrics from real transaction data
+      const totalTransactions = transactions.length;
+      const flaggedTransactions = transactions.filter(t => t.is_fraudulent).length;
+      const averageRiskScore = transactions.reduce((acc, t) => acc + (t.risk_score || 0), 0) / totalTransactions;
+
+      return {
+        riskScore: Math.round(averageRiskScore),
+        totalTransactions,
+        flaggedTransactions
+      };
+    },
+    refetchInterval: 30000,
+  });
+
   if (error) {
     return (
       <Card className="p-6 border-destructive">

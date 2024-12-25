@@ -5,22 +5,6 @@ import { RiskScoreChart } from "./analytics/shared/RiskScoreChart";
 import { LoadingState } from "./analytics/shared/LoadingState";
 import { Transaction } from "@/types/supabase";
 
-/**
- * RiskOverview Component
- * 
- * Displays a real-time visualization of transaction risk scores over time.
- * The component fetches the most recent transactions and plots their risk scores
- * to help identify patterns and trends in potentially fraudulent activity.
- * 
- * Risk Score Interpretation:
- * - 0-30: Low risk - Normal transaction behavior
- * - 31-60: Medium risk - Some unusual patterns detected
- * - 61-80: High risk - Multiple risk factors present
- * - 81-100: Critical risk - Immediate attention required
- * 
- * The data is automatically refreshed every 30 seconds to ensure
- * near real-time monitoring of transaction risks.
- */
 export const RiskOverview = () => {
   const { data: riskData, isLoading } = useQuery({
     queryKey: ["risk-overview"],
