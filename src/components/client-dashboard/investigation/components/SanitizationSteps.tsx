@@ -9,6 +9,10 @@ interface SanitizationStepsProps {
 export const SanitizationSteps = ({ steps }: SanitizationStepsProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  if (!Array.isArray(steps) || steps.length === 0) {
+    return null;
+  }
+
   const formatStep = (step: Json): string => {
     if (typeof step === 'string') {
       return step;
