@@ -1,6 +1,6 @@
-import { Transaction } from '@/integrations/supabase/types/transactions';
 import { PostgrestFilterBuilder } from '@supabase/postgrest-js';
 import { Database } from '@/integrations/supabase/types';
+import { Transaction } from '@/integrations/supabase/types/transactions';
 
 export const mockTransactions: Transaction[] = [
   {
@@ -89,7 +89,6 @@ export const createMockResponse = (data: Transaction[] = mockTransactions): Tran
     not: () => response,
     filter: () => response,
     or: () => response,
-    // Add missing methods from PostgrestFilterBuilder
     execute: () => Promise.resolve(response),
     abortSignal: () => response,
     returns: () => response,
