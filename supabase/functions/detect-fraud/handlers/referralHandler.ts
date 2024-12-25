@@ -1,5 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
-import { analyzeFraudRisk } from '../services/riskAnalysis';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { analyzeFraudRisk } from '../services/riskAnalysis.ts';
 
 export async function handleReferral(supabase: ReturnType<typeof createClient>, data: any) {
   // Get historical referral data
