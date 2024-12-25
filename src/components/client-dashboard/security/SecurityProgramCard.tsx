@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Shield, Clock, ChevronDown, ChevronUp } from "lucide-react";
+import { Shield, Clock, ChevronDown, ChevronUp, Info } from "lucide-react";
 import { format } from "date-fns";
 import { getStatusColor } from "./utils/statusUtils";
 import { ComplianceRequirements } from "./components/program-card/ComplianceRequirements";
@@ -8,6 +8,7 @@ import { RecentAssessments } from "./components/program-card/RecentAssessments";
 import { useState } from "react";
 import { SecurityProgram } from "@/integrations/supabase/types/security";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface SecurityProgramCardProps {
   program: SecurityProgram;
@@ -16,7 +17,6 @@ interface SecurityProgramCardProps {
 export const SecurityProgramCard = ({ program }: SecurityProgramCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   
-  // Safely handle risk assessment data
   const riskScore = program.risk_assessment && typeof program.risk_assessment === 'object' 
     ? (program.risk_assessment as { score?: number })?.score ?? 0
     : 0;
@@ -30,18 +30,33 @@ export const SecurityProgramCard = ({ program }: SecurityProgramCardProps) => {
               <Shield className="h-5 w-5 text-primary" />
             </div>
             <h3 className="text-lg font-semibold">{program.name}</h3>
+            <Tooltip>
+              <TooltipTrigger>
+                <Info className="h-4 w-4 text-muted-foreground" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="max-w-xs">Security program to manage and monitor compliance requirements and security assessments.</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
           <p className="text-sm text-muted-foreground max-w-2xl">{program.description}</p>
         </div>
         <div className="flex flex-col gap-2 items-end">
           <Badge className={getStatusColor(program.status)}>{program.status}</Badge>
           {riskScore > 0 && (
-            <Badge 
-              variant={riskScore > 70 ? "destructive" : riskScore > 30 ? "warning" : "default"}
-              className="animate-pulse"
-            >
-              Risk Score: {riskScore}%
-            </Badge>
+            <Tooltip>
+              <TooltipTrigger>
+                <Badge 
+                  variant={riskScore > 70 ? "destructive" : riskScore > 30 ? "warning" : "default"}
+                  className="transition-opacity hover:opacity-80"
+                >
+                  Risk Score: {riskScore}%
+                </Badge>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Current risk assessment score based on security controls and compliance status</p>
+              </TooltipContent>
+            </Tooltip>
           )}
         </div>
       </div>
@@ -75,15 +90,20 @@ export const SecurityProgramCard = ({ program }: SecurityProgramCardProps) => {
 
       <Button
         variant="outline"
-        className="w-full mt-2"
+        className="w-full mt-2 flex items-center justify-center gap-2 hover:bg-muted/50"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         {isExpanded ? (
-          <ChevronUp className="h-4 w-4 mr-2" />
+          <>
+            <ChevronUp className="h-4 w-4" />
+            Show Less
+          </>
         ) : (
-          <ChevronDown className="h-4 w-4 mr-2" />
+          <>
+            <ChevronDown className="h-4 w-4" />
+            Show More Details
+          </>
         )}
-        {isExpanded ? "Show Less" : "Show More Details"}
       </Button>
     </Card>
   );
