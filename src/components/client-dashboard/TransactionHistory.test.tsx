@@ -3,6 +3,7 @@ import { TransactionHistory } from './TransactionHistory';
 import { describe, it, expect, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { Transaction } from '@/types/transactions';
 
 // Mock the Supabase client
 vi.mock('@/integrations/supabase/client', () => ({
@@ -13,22 +14,24 @@ vi.mock('@/integrations/supabase/client', () => ({
     from: () => ({
       select: () => ({
         order: () => ({
-          limit: () => Promise.resolve({
-            data: [
-              {
-                id: '1',
-                amount: 100,
-                created_at: '2024-01-01T00:00:00Z',
-                is_fraudulent: false
-              },
-              {
-                id: '2',
-                amount: 200,
-                created_at: '2024-01-02T00:00:00Z',
-                is_fraudulent: true
-              }
-            ],
-            error: null
+          limit: () => ({
+            eq: () => Promise.resolve({
+              data: [
+                {
+                  id: '1',
+                  amount: 100,
+                  created_at: '2024-01-01T00:00:00Z',
+                  is_fraudulent: false
+                },
+                {
+                  id: '2',
+                  amount: 200,
+                  created_at: '2024-01-02T00:00:00Z',
+                  is_fraudulent: true
+                }
+              ] as Transaction[],
+              error: null
+            })
           })
         })
       })
@@ -75,12 +78,15 @@ describe('TransactionHistory', () => {
   });
 
   it('displays empty state when no transactions', async () => {
+    // Override the mock for this specific test
     vi.mocked(supabase.from).mockImplementationOnce(() => ({
       select: () => ({
         order: () => ({
-          limit: () => Promise.resolve({
-            data: [],
-            error: null
+          limit: () => ({
+            eq: () => Promise.resolve({
+              data: [],
+              error: null
+            })
           })
         })
       })
