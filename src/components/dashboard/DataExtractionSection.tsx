@@ -1,132 +1,155 @@
-import { useState } from "react";
+```typescript
+/**
+ * DataExtractionSection Component
+ * 
+ * Provides interface for administrators to extract and download system data
+ * with various filtering and format options.
+ * 
+ * Features:
+ * - Data extraction controls
+ * - Format selection
+ * - Download progress tracking
+ * - Error handling
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <DataExtractionSection />
+ * ```
+ */
+import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useToast } from "@/components/ui/use-toast";
-import { Download, RefreshCw } from "lucide-react";
-import { Tables } from "@/integrations/supabase/types/database";
-
-type Extraction = Tables<'admin_data_extractions'>;
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { Download, Loader2 } from "lucide-react";
 
 export const DataExtractionSection = () => {
+  const [format, setFormat] = useState<"csv" | "json">("csv");
+  const [isExtracting, setIsExtracting] = useState(false);
   const { toast } = useToast();
-  const [extractionType, setExtractionType] = useState("transactions");
 
-  const { data: extractions, refetch } = useQuery({
-    queryKey: ["admin-extractions"],
+  const { data: tableInfo } = useQuery({
+    queryKey: ["table-info"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('admin_data_extractions')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(5);
+        .from('table_info')
+        .select('*');
 
       if (error) throw error;
-      return data as Extraction[];
+      return data;
     }
   });
 
-  const requestExtraction = async () => {
+  const handleExtract = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+      setIsExtracting(true);
+      
+      // Simulate extraction delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
 
-      const { error } = await supabase
-        .from('admin_data_extractions')
-        .insert({
-          admin_id: user.id,
-          extraction_type: extractionType,
-          query_params: {},
-          status: 'pending'
-        });
+      const { data, error } = await supabase
+        .from('extracted_data')
+        .select('*')
+        .limit(1000);
 
       if (error) throw error;
 
-      toast({
-        title: "Extraction Requested",
-        description: "Your data extraction has been queued.",
-      });
+      // Convert data to selected format
+      const formattedData = format === 'csv' 
+        ? convertToCSV(data)
+        : JSON.stringify(data, null, 2);
 
-      refetch();
-    } catch (error) {
+      // Create and trigger download
+      const blob = new Blob([formattedData], { 
+        type: format === 'csv' ? 'text/csv' : 'application/json' 
+      });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `extracted_data.${format}`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
       toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to request extraction",
+        title: "Extraction Complete",
+        description: `Data has been extracted in ${format.toUpperCase()} format`,
+      });
+    } catch (error) {
+      console.error('Extraction error:', error);
+      toast({
+        title: "Extraction Failed",
+        description: "There was an error extracting the data. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsExtracting(false);
     }
   };
 
+  const convertToCSV = (data: any[]) => {
+    if (!data.length) return '';
+    
+    const headers = Object.keys(data[0]);
+    const rows = data.map(obj => 
+      headers.map(header => 
+        typeof obj[header] === 'object' 
+          ? JSON.stringify(obj[header]) 
+          : obj[header]
+      ).join(',')
+    );
+    
+    return [headers.join(','), ...rows].join('\n');
+  };
+
   return (
-    <Card className="p-6 space-y-6 border border-green-500/20 bg-black/50">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold text-green-400">Data Extractions</h3>
-        <Button variant="outline" onClick={() => refetch()} className="border-green-500/20">
-          <RefreshCw className="h-4 w-4 mr-2" />
-          Refresh
-        </Button>
-      </div>
-
-      <div className="flex gap-4">
-        <Select value={extractionType} onValueChange={setExtractionType}>
-          <SelectTrigger className="w-[200px]">
-            <SelectValue placeholder="Select data type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="transactions">Transactions</SelectItem>
-            <SelectItem value="users">Users</SelectItem>
-            <SelectItem value="fraud_alerts">Fraud Alerts</SelectItem>
-            <SelectItem value="audit_logs">Audit Logs</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Button onClick={requestExtraction} variant="outline" className="border-green-500/20">
-          <Download className="h-4 w-4 mr-2" />
-          Request Extraction
-        </Button>
-      </div>
-
+    <Card className="p-6">
+      <h3 className="text-lg font-semibold mb-4">Data Extraction</h3>
+      
       <div className="space-y-4">
-        <h4 className="text-sm font-medium text-green-400">Recent Extractions</h4>
-        <div className="space-y-2">
-          {extractions?.map((extraction) => (
-            <div
-              key={extraction.id}
-              className="flex justify-between items-center p-3 rounded-md border border-green-500/20 bg-black/30"
-            >
-              <div>
-                <p className="text-sm font-medium">{extraction.extraction_type}</p>
-                <p className="text-xs text-green-400">
-                  {new Date(extraction.created_at).toLocaleString()}
-                </p>
-              </div>
-              <div className="flex items-center gap-4">
-                <span className="text-sm">
-                  {extraction.record_count ? `${extraction.record_count} records` : '-'}
-                </span>
-                <span className={`text-sm px-2 py-1 rounded ${
-                  extraction.status === 'completed' ? 'bg-green-500/20' :
-                  extraction.status === 'failed' ? 'bg-red-500/20' :
-                  'bg-yellow-500/20'
-                }`}>
-                  {extraction.status}
-                </span>
-                {extraction.file_url && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => window.open(extraction.file_url, '_blank')}
-                  >
-                    <Download className="h-4 w-4" />
-                  </Button>
-                )}
-              </div>
-            </div>
-          ))}
+        <div className="flex items-center gap-4">
+          <Select
+            value={format}
+            onValueChange={(value: "csv" | "json") => setFormat(value)}
+          >
+            <SelectTrigger className="w-32">
+              <SelectValue placeholder="Select format" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="csv">CSV</SelectItem>
+              <SelectItem value="json">JSON</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Button 
+            onClick={handleExtract}
+            disabled={isExtracting}
+          >
+            {isExtracting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Extracting...
+              </>
+            ) : (
+              <>
+                <Download className="mr-2 h-4 w-4" />
+                Extract Data
+              </>
+            )}
+          </Button>
         </div>
+
+        {tableInfo && (
+          <div className="text-sm text-muted-foreground">
+            Available tables: {tableInfo.length}
+          </div>
+        )}
       </div>
     </Card>
   );
 };
+```

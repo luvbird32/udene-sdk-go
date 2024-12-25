@@ -1,3 +1,25 @@
+/**
+ * MetricsSection Component
+ * 
+ * Displays key system metrics and health indicators in the admin dashboard.
+ * Includes various monitoring components and real-time status updates.
+ * 
+ * Features:
+ * - Key performance metrics
+ * - System health status
+ * - Detection metrics visualization
+ * - Error state handling
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <MetricsSection
+ *   metrics={metricsData}
+ *   metricsLoading={false}
+ *   metricsError={null}
+ * />
+ * ```
+ */
 import { KeyMetrics } from "./KeyMetrics";
 import { HealthStatus } from "@/components/monitoring/HealthStatus";
 import { DetectionMetrics } from "@/components/monitoring/DetectionMetrics";
@@ -5,8 +27,11 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
 interface MetricsSectionProps {
+  /** Current system metrics data */
   metrics: any;
+  /** Loading state for metrics data */
   metricsLoading: boolean;
+  /** Error state for metrics data fetch */
   metricsError: Error | null;
 }
 

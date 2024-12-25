@@ -1,4 +1,24 @@
+/**
+ * SecuritySection Component
+ * 
+ * Displays security-related metrics, alerts, and monitoring information
+ * for system administrators.
+ * 
+ * Features:
+ * - Security alerts display
+ * - Threat detection metrics
+ * - Real-time monitoring
+ * - Security status indicators
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <SecuritySection />
+ * ```
+ */
 import { Card } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 export const SecuritySection = () => {
   return (

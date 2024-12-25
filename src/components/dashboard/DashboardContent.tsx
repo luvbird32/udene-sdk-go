@@ -1,49 +1,42 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { VPNDetection } from "@/components/monitoring/VPNDetection";
+/**
+ * DashboardContent Component
+ * 
+ * Main content area for the admin dashboard displaying various metrics,
+ * monitoring sections, and real-time data.
+ * 
+ * Features:
+ * - Real-time metrics display
+ * - System health monitoring
+ * - Fraud detection metrics
+ * - User activity tracking
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <DashboardContent 
+ *   metrics={metricsData}
+ *   metricsLoading={false}
+ *   metricsError={null}
+ * />
+ * ```
+ */
 import { MetricsSection } from "./MetricsSection";
-import { MonitoringSection } from "./MonitoringSection";
-import { AnalyticsSection } from "./AnalyticsSection";
+import { UserActivities } from "./UserActivities";
 
 interface DashboardContentProps {
+  /** Current system metrics data */
   metrics: any;
+  /** Loading state for metrics data */
   metricsLoading: boolean;
+  /** Error state for metrics data fetch */
   metricsError: Error | null;
 }
 
 export const DashboardContent = ({ metrics, metricsLoading, metricsError }: DashboardContentProps) => {
-  const { data: profile } = useQuery({
-    queryKey: ["user-profile"],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("No user found");
-
-      const { data: profile, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-
-      if (error) throw error;
-      return profile;
-    }
-  });
-
-  if (!profile) return null;
-
   return (
-    <div className="space-y-8">
-      <VPNDetection profileId={profile.id} />
-      
-      <MetricsSection 
-        metrics={metrics}
-        metricsLoading={metricsLoading}
-        metricsError={metricsError}
-      />
-
-      <MonitoringSection />
-
-      <AnalyticsSection />
+    <div className="space-y-6">
+      <MetricsSection metrics={metrics} metricsLoading={metricsLoading} metricsError={metricsError} />
+      <UserActivities />
     </div>
   );
 };
