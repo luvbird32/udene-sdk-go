@@ -1,28 +1,31 @@
+/**
+ * TrendAnalysis Component
+ * 
+ * A comprehensive visualization component that displays transaction trends over time.
+ * Uses dual Y-axes to simultaneously show transaction counts and total amounts.
+ * 
+ * Features:
+ * - Real-time data updates every 30 seconds
+ * - Interactive tooltips showing detailed metrics
+ * - Responsive design that adapts to container size
+ * - Error boundary protection
+ * 
+ * Data Display:
+ * - Left Y-axis: Total transaction amounts ($)
+ * - Right Y-axis: Number of transactions
+ * - X-axis: Time periods (days)
+ * 
+ * @example
+ * ```tsx
+ * <TrendAnalysis />
+ * ```
+ */
+
 import { Card } from "@/components/ui/card";
 import { TransactionTrendHeader } from "./trends/TransactionTrendHeader";
 import { TransactionTrendChart } from "./trends/TransactionTrendChart";
 import { useTrendData } from "./trends/useTrendData";
 
-/**
- * TrendAnalysis Component
- * 
- * Visualizes and analyzes transaction trends over time to identify:
- * 1. Unusual spikes or drops in transaction volumes
- * 2. Patterns in transaction amounts
- * 3. Time-based anomalies
- * 
- * Key Metrics Tracked:
- * - Daily transaction totals
- * - Transaction count per day
- * - Trend patterns and deviations
- * 
- * The component uses dual Y-axes to simultaneously display:
- * - Left axis: Total transaction amounts
- * - Right axis: Number of transactions
- * 
- * Data is refreshed every 30 seconds to maintain near real-time
- * monitoring of transaction patterns.
- */
 export const TrendAnalysis = () => {
   const { data: trends, isLoading, error } = useTrendData();
 

@@ -1,9 +1,33 @@
+/**
+ * Custom hook for fetching and processing transaction trend data
+ * 
+ * Fetches transaction metrics from Supabase and transforms them into
+ * a format suitable for visualization, with daily aggregates of
+ * transaction counts and totals.
+ * 
+ * Features:
+ * - Automatic retries on failure (up to 3 attempts)
+ * - Error handling with toast notifications
+ * - Session validation
+ * - Data aggregation by date
+ * 
+ * @returns {Object} Query result containing:
+ *   - data: Array of daily transaction trends
+ *   - isLoading: Loading state boolean
+ *   - error: Error object if request fails
+ * 
+ * @example
+ * ```tsx
+ * const { data: trends, isLoading, error } = useTrendData();
+ * ```
+ */
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import { useToast } from "@/components/ui/use-toast";
 
-interface TrendData {
+export interface TrendData {
   date: string;
   total: number;
   count: number;
