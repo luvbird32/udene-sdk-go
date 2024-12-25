@@ -1,3 +1,21 @@
+/**
+ * TransactionHistory Component
+ * 
+ * Displays a real-time list of recent transactions with automatic updates.
+ * This component fetches and displays the most recent transactions,
+ * providing users with immediate visibility into transaction activity.
+ * 
+ * Features:
+ * - Real-time transaction updates every 30 seconds
+ * - Error boundary protection
+ * - Responsive layout
+ * - Loading state handling
+ * 
+ * @example
+ * ```tsx
+ * <TransactionHistory />
+ * ```
+ */
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";

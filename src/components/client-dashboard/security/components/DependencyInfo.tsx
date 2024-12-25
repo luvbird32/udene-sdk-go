@@ -10,7 +10,9 @@
  * - Visual security indicator
  * - Clean and minimal design
  * 
- * @component
+ * @param {Object} props
+ * @param {number} props.dependenciesScanned - The total number of dependencies scanned
+ * 
  * @example
  * ```tsx
  * <DependencyInfo dependenciesScanned={156} />
@@ -19,7 +21,6 @@
 import { Shield } from "lucide-react";
 
 interface DependencyInfoProps {
-  /** The total number of dependencies that have been scanned */
   dependenciesScanned: number;
 }
 
