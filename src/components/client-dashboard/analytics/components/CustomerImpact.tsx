@@ -1,8 +1,31 @@
+/**
+ * CustomerImpact Component
+ * 
+ * Displays metrics related to customer impact from fraud detection activities,
+ * including the number of affected customers and overall impact rate.
+ * 
+ * Features:
+ * - Visual representation of customer impact metrics
+ * - Progress bar showing impact rate
+ * - Responsive grid layout for metric display
+ * - Clear presentation of numerical data
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <CustomerImpact 
+ *   affectedCustomers={150}
+ *   customerImpactRate={12.5}
+ * />
+ * ```
+ */
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
 interface CustomerImpactProps {
+  /** Number of customers affected by fraud detection measures */
   affectedCustomers: number;
+  /** Percentage of total customers impacted (0-100) */
   customerImpactRate: number;
 }
 
