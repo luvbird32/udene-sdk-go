@@ -1,3 +1,23 @@
+/**
+ * OpenSourceSecurity Component
+ * 
+ * Displays the results of open source security scans, including vulnerability
+ * findings and severity breakdowns. Provides real-time updates of scan results
+ * and remediation recommendations.
+ * 
+ * Features:
+ * - Real-time scan results display
+ * - Vulnerability severity breakdown
+ * - Remediation steps
+ * - Loading state handling
+ * - Error state handling
+ * - Automatic refresh every 30 seconds
+ * 
+ * @example
+ * ```tsx
+ * <OpenSourceSecurity />
+ * ```
+ */
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";

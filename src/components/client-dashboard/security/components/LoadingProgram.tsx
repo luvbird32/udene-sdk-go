@@ -1,3 +1,22 @@
+/**
+ * LoadingProgram Component
+ * 
+ * A loading state component displayed while security program data is being fetched.
+ * Shows a spinning loader animation within a card container.
+ * 
+ * Features:
+ * - Centered spinning loader animation
+ * - Consistent card styling with main content
+ * - Accessible loading indicator
+ * 
+ * @example
+ * ```tsx
+ * // Show loading state while fetching security programs
+ * if (isLoading) {
+ *   return <LoadingProgram />;
+ * }
+ * ```
+ */
 import { Card } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 
