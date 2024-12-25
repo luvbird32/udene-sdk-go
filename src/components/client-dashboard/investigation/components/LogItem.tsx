@@ -3,6 +3,7 @@ import { Clock } from "lucide-react";
 import { format } from "date-fns";
 import { Database } from "@/integrations/supabase/types";
 import { LogActions } from "./LogActions";
+import { formatFindings } from "@/components/client-dashboard/investigation/utils/logFormatters"; // Add this import
 
 type InvestigationLog = Database['public']['Tables']['service_investigation_logs']['Row'];
 
