@@ -1,3 +1,21 @@
+/**
+ * ServiceHeader Component
+ * 
+ * Header component for the fraud detection services section, displaying
+ * the main title, description, and a status badge.
+ * 
+ * Features:
+ * - Section title with icon
+ * - Descriptive subtitle
+ * - Status badge
+ * - Tooltip with additional information
+ * - Responsive layout
+ * 
+ * @example
+ * ```tsx
+ * <ServiceHeader />
+ * ```
+ */
 import React from 'react';
 import { Shield } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";

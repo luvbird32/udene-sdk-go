@@ -1,3 +1,27 @@
+/**
+ * ServiceList Component
+ * 
+ * Displays a grid of available fraud detection services that can be activated
+ * or deactivated by the user. Shows an alert when no services are active.
+ * 
+ * Features:
+ * - Responsive grid layout of service cards
+ * - Empty state handling with alert message
+ * - Service activation/deactivation functionality
+ * - Real-time service status updates
+ * 
+ * @param {Object} props
+ * @param {ClientService[] | undefined} props.activeServices - Array of currently active services
+ * @param {(serviceType: string, isActive: boolean) => Promise<void>} props.handleToggle - Function to toggle service status
+ * 
+ * @example
+ * ```tsx
+ * <ServiceList 
+ *   activeServices={activeServices} 
+ *   handleToggle={handleToggle}
+ * />
+ * ```
+ */
 import React from 'react';
 import { ServiceCard } from './ServiceCard';
 import { FRAUD_DETECTION_SERVICES } from './config';
