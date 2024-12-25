@@ -3,6 +3,8 @@ import { Shield, Activity, AlertTriangle } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface MetricCardProps {
   title: string;
@@ -40,13 +42,13 @@ const MetricCard = ({ title, value, icon: Icon, description, isLoading }: Metric
 );
 
 export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps) => {
+  const { toast } = useToast();
   const { data: metricsData, isLoading: metricsLoading, error: metricsError } = useQuery({
     queryKey: ["client-metrics"],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("No user found");
 
-      // Get recent transactions
       const { data: transactions } = await supabase
         .from('transactions')
         .select('risk_score, is_fraudulent')
@@ -54,16 +56,13 @@ export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps)
 
       if (!transactions) return null;
 
-      // Calculate metrics from real transaction data
       const totalTransactions = transactions.length;
       const flaggedTransactions = transactions.filter(t => t.is_fraudulent).length;
       
-      // Filter out null, undefined, and NaN risk scores
       const validRiskScores = transactions.filter(t => 
         typeof t.risk_score === 'number' && !isNaN(t.risk_score)
       );
 
-      // Calculate average risk score
       const averageRiskScore = validRiskScores.length > 0
         ? Math.round(validRiskScores.reduce((acc, t) => acc + t.risk_score!, 0) / validRiskScores.length)
         : 0;
@@ -75,18 +74,39 @@ export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps)
       };
     },
     refetchInterval: 30000,
+    meta: {
+      errorHandler: (error: Error) => {
+        toast({
+          title: "Error",
+          description: "Failed to load metrics data",
+          variant: "destructive",
+        });
+      },
+    },
   });
 
   if (error || metricsError) {
     return (
-      <Card className="p-6 border-destructive">
-        <p className="text-destructive">Error loading metrics: {(error || metricsError)?.message}</p>
-      </Card>
+      <Alert variant="destructive">
+        <AlertDescription>
+          Error loading metrics: {(error || metricsError)?.message}
+        </AlertDescription>
+      </Alert>
     );
   }
 
   const displayMetrics = metrics || metricsData;
   const isLoadingState = isLoading || metricsLoading;
+
+  if (!displayMetrics && !isLoadingState) {
+    return (
+      <Alert>
+        <AlertDescription>
+          No metrics data available. Start processing transactions to see your metrics.
+        </AlertDescription>
+      </Alert>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
