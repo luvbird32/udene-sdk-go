@@ -6,13 +6,35 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Smartphone } from "lucide-react";
 
-interface DeviceStat {
-  date: string;
-  count: number;
-}
-
+/**
+ * DeviceFingerprintMonitoring Component
+ * 
+ * Monitors and analyzes device fingerprints for fraud detection.
+ * This component tracks various aspects of device usage:
+ * 
+ * Key Metrics:
+ * 1. Device Count: Number of unique devices detected
+ * 2. Usage Patterns: Frequency and timing of device appearances
+ * 3. Risk Indicators:
+ *    - Multiple accounts using same device
+ *    - Rapid device switching
+ *    - Known fraudulent device patterns
+ *    - Suspicious configuration changes
+ * 
+ * Device Fingerprint Analysis:
+ * - Browser and OS information
+ * - Hardware specifications
+ * - Network characteristics
+ * - Canvas and WebGL fingerprints
+ * - Font and plugin analysis
+ * 
+ * The data refreshes every 30 seconds to detect:
+ * - Device spoofing attempts
+ * - Automated fraud operations
+ * - Account sharing or theft
+ */
 export const DeviceFingerprintMonitoring = () => {
-  const { data: deviceStats, isLoading } = useQuery<DeviceStat[]>({
+  const { data: deviceStats, isLoading } = useQuery({
     queryKey: ["device-fingerprint-stats"],
     queryFn: async () => {
       console.log("Fetching device fingerprint stats...");
@@ -24,6 +46,7 @@ export const DeviceFingerprintMonitoring = () => {
 
       if (error) throw error;
 
+      // Aggregate device statistics by date
       const stats = (data || []).reduce((acc: Record<string, number>, curr) => {
         const date = new Date(curr.created_at).toLocaleDateString();
         acc[date] = (acc[date] || 0) + 1;

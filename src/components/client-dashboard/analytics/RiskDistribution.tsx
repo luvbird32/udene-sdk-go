@@ -2,14 +2,33 @@ import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
+/**
+ * RiskDistribution Component
+ * 
+ * Analyzes and visualizes the distribution of risk scores across transactions
+ * to identify patterns in fraudulent behavior. This helps in:
+ * - Understanding the overall risk landscape
+ * - Identifying clusters of high-risk transactions
+ * - Detecting anomalies in risk score distributions
+ * 
+ * The risk scores are grouped into ranges (0-10, 11-20, etc.) to show
+ * the frequency distribution of risk levels. This can help identify:
+ * - Normal risk score patterns
+ * - Unusual spikes in specific risk ranges
+ * - Potential systemic fraud patterns
+ * 
+ * Data is refreshed every 30 seconds to maintain current risk insights.
+ */
 export const RiskDistribution = () => {
-  const { data: riskDistribution, isLoading } = useQuery({
+  const { data: riskDistribution, error, isLoading } = useQuery({
     queryKey: ["risk-distribution"],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("No user found");
 
+      // Fetch recent transactions for risk analysis
       const { data, error } = await supabase
         .from('transactions')
         .select('risk_score')

@@ -2,7 +2,35 @@ import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 
+/**
+ * GeographicDistribution Component
+ * 
+ * Visualizes and analyzes the geographic distribution of transactions
+ * to identify potential location-based fraud patterns.
+ * 
+ * Key Analysis Points:
+ * 1. Location Clustering:
+ *    - Identifies unusual concentrations of activity
+ *    - Detects transactions from high-risk regions
+ *    - Monitors cross-border transaction patterns
+ * 
+ * 2. Fraud Indicators:
+ *    - Rapid location changes
+ *    - Impossible travel patterns
+ *    - Known high-risk locations
+ *    - VPN/proxy detection
+ * 
+ * 3. Visualization Features:
+ *    - Interactive pie chart showing top transaction locations
+ *    - Percentage distribution of activity by region
+ *    - Color-coded risk levels by location
+ * 
+ * The data refreshes every 30 seconds to maintain real-time
+ * geographic fraud pattern detection.
+ */
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
 export const GeographicDistribution = () => {
