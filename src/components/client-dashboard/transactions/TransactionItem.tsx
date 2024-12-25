@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 
@@ -10,7 +11,7 @@ interface TransactionItemProps {
   };
 }
 
-export const TransactionItem = ({ transaction }: TransactionItemProps) => {
+export const TransactionItem = memo(function TransactionItem({ transaction }: TransactionItemProps) {
   return (
     <div
       key={transaction.id}
@@ -29,4 +30,11 @@ export const TransactionItem = ({ transaction }: TransactionItemProps) => {
       </Badge>
     </div>
   );
-};
+}, (prevProps, nextProps) => {
+  // Custom comparison function for memo
+  return (
+    prevProps.transaction.id === nextProps.transaction.id &&
+    prevProps.transaction.amount === nextProps.transaction.amount &&
+    prevProps.transaction.is_fraudulent === nextProps.transaction.is_fraudulent
+  );
+});

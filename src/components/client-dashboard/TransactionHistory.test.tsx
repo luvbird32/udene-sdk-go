@@ -3,15 +3,6 @@ import { TransactionHistory } from './TransactionHistory';
 import { describe, it, expect, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { PostgrestFilterBuilder } from '@supabase/postgrest-js';
-
-// Define a simplified mock type for our test
-type MockTransaction = {
-  id: string;
-  amount: number;
-  created_at: string;
-  is_fraudulent: boolean;
-};
 
 // Mock the Supabase client
 vi.mock('@/integrations/supabase/client', () => ({
@@ -61,7 +52,10 @@ describe('TransactionHistory', () => {
       </QueryClientProvider>
     );
     
-    expect(screen.getByText(/Loading transactions/)).toBeInTheDocument();
+    expect(screen.getByText(/Recent Transactions/)).toBeInTheDocument();
+    // Should find 3 skeleton loaders
+    const skeletons = document.querySelectorAll('.h-[68px]');
+    expect(skeletons).toHaveLength(3);
   });
 
   it('displays transactions after loading', async () => {
@@ -72,20 +66,15 @@ describe('TransactionHistory', () => {
     );
 
     await waitFor(() => {
-      expect(screen.queryByText(/Loading transactions/)).not.toBeInTheDocument();
+      expect(screen.getByText('$100')).toBeInTheDocument();
+      expect(screen.getByText('$200')).toBeInTheDocument();
     });
-
-    // Check if transactions are displayed
-    expect(screen.getByText('$100')).toBeInTheDocument();
-    expect(screen.getByText('$200')).toBeInTheDocument();
     
-    // Check if badges are displayed correctly
     expect(screen.getByText('Clear')).toBeInTheDocument();
     expect(screen.getByText('Flagged')).toBeInTheDocument();
   });
 
   it('displays empty state when no transactions', async () => {
-    // Override mock for this test
     vi.mocked(supabase.from).mockImplementationOnce(() => ({
       select: () => ({
         order: () => ({
