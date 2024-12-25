@@ -3,11 +3,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { OpenSourceScan } from "@/integrations/supabase/types/security";
-import { SeverityBreakdownDisplay } from "./components/SeverityBreakdownDisplay";
-import { RemediationSteps } from "./components/RemediationSteps";
 import { ScanHeader } from "./components/ScanHeader";
-import { DependencyInfo } from "./components/DependencyInfo";
-import { Package } from "lucide-react"; // Add this import
+import { ScanResults } from "./components/scan-results/ScanResults";
+import { LoadingScanState } from "./components/scan-results/LoadingScanState";
 
 export const OpenSourceSecurity = () => {
   const { toast } = useToast();
@@ -63,17 +61,7 @@ export const OpenSourceSecurity = () => {
   });
 
   if (isLoading) {
-    return (
-      <Card className="p-6">
-        <div className="flex items-center gap-2 mb-4">
-          <Package className="h-5 w-5 text-muted-foreground" />
-          <h3 className="font-semibold">Open Source Security</h3>
-        </div>
-        <div className="h-[200px] flex items-center justify-center">
-          <p className="text-muted-foreground">Loading scan results...</p>
-        </div>
-      </Card>
-    );
+    return <LoadingScanState />;
   }
 
   const totalVulnerabilities = latestScan ? 
@@ -84,18 +72,10 @@ export const OpenSourceSecurity = () => {
       <ScanHeader totalVulnerabilities={totalVulnerabilities} />
 
       {latestScan && (
-        <>
-          <div className="space-y-4">
-            <DependencyInfo dependenciesScanned={latestScan.dependencies_scanned} />
-
-            <SeverityBreakdownDisplay 
-              severityBreakdown={latestScan.severity_breakdown}
-              totalVulnerabilities={totalVulnerabilities}
-            />
-          </div>
-
-          <RemediationSteps steps={latestScan.remediation_steps} />
-        </>
+        <ScanResults 
+          scan={latestScan}
+          totalVulnerabilities={totalVulnerabilities}
+        />
       )}
     </Card>
   );
