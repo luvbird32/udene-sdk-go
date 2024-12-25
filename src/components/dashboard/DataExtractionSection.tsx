@@ -1,4 +1,3 @@
-```typescript
 /**
  * DataExtractionSection Component
  * 
@@ -12,10 +11,6 @@
  * - Error handling
  * 
  * @component
- * @example
- * ```tsx
- * <DataExtractionSection />
- * ```
  */
 import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
@@ -152,4 +147,3 @@ export const DataExtractionSection = () => {
     </Card>
   );
 };
-```
