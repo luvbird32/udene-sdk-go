@@ -9,6 +9,7 @@
  * - Consistent card styling with main content
  * - Accessible loading indicator
  * 
+ * @component
  * @example
  * ```tsx
  * // Show loading state while fetching security programs

@@ -1,15 +1,16 @@
 /**
- * @component ScanResults
- * @description Displays the results of a security scan, including vulnerabilities found,
+ * ScanResults Component
+ * 
+ * Displays the results of a security scan, including vulnerabilities found,
  * severity distribution, and recommended remediation steps.
  * 
- * @param {Object} props - Component props
- * @param {Object} props.scan - The scan result object
- * @param {number} props.scan.totalVulnerabilities - Total number of vulnerabilities found
- * @param {Object} props.scan.severityBreakdown - Distribution of vulnerabilities by severity
- * @param {Array<Object>} props.scan.findings - Detailed findings from the scan
- * @param {Object} props.scan.remediationSteps - Recommended steps to address findings
+ * Features:
+ * - Vulnerability severity breakdown
+ * - Total dependencies scanned
+ * - Remediation recommendations
+ * - Clean and organized layout
  * 
+ * @component
  * @example
  * ```tsx
  * const scanResults = {
@@ -28,7 +29,9 @@ import { RemediationSteps } from "../RemediationSteps";
 import { DependencyInfo } from "../DependencyInfo";
 
 interface ScanResultsProps {
+  /** The scan result object containing all scan data */
   scan: OpenSourceScan;
+  /** Total number of vulnerabilities found in the scan */
   totalVulnerabilities: number;
 }
 
