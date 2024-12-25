@@ -1,44 +1,18 @@
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-
-interface ClientSettings {
-  notification_preferences: {
-    email: boolean;
-    sms: boolean;
-  };
-  risk_threshold: number;
-  contact_email: string;
-}
+import { ClientSettings } from "@/types/settings";
+import { useClientSettings } from "./hooks/useClientSettings";
+import { NotificationSection } from "./form/NotificationSection";
+import { RiskSection } from "./form/RiskSection";
 
 export const ClientSettingsForm = () => {
   const { toast } = useToast();
-  const queryClient = useQueryClient();
-  const [isLoading, setIsLoading] = useState(false);
+  const { settings, isLoading, updateSettings } = useClientSettings();
   const [error, setError] = useState<string | null>(null);
-
-  const { data: settings, isLoading: isLoadingSettings } = useQuery({
-    queryKey: ["client-settings"],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("No user found");
-
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('settings')
-        .eq('id', user.id)
-        .single();
-
-      if (error) throw error;
-      return (data?.settings || {}) as ClientSettings;
-    },
-  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState<ClientSettings>({
     notification_preferences: {
@@ -58,29 +32,14 @@ export const ClientSettingsForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setIsLoading(true);
+    setIsSubmitting(true);
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("No user found");
-
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update({
-          settings: formData,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', user.id);
-
-      if (updateError) throw updateError;
-
-      await queryClient.invalidateQueries({ queryKey: ["client-settings"] });
-
+      await updateSettings(formData);
       toast({
         title: "Settings Updated",
         description: "Your settings have been successfully updated.",
       });
-
     } catch (err: any) {
       console.error('Settings update error:', err);
       setError(err.message);
@@ -90,11 +49,11 @@ export const ClientSettingsForm = () => {
         variant: "destructive"
       });
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
-  if (isLoadingSettings) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center p-8">
         <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary" />
@@ -110,38 +69,15 @@ export const ClientSettingsForm = () => {
         </Alert>
       )}
 
-      <div className="space-y-2">
-        <Label htmlFor="contact_email">Contact Email</Label>
-        <Input
-          id="contact_email"
-          type="email"
-          value={formData.contact_email}
-          onChange={(e) => setFormData({ ...formData, contact_email: e.target.value })}
-          placeholder="Enter contact email for notifications"
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="risk_threshold">Risk Threshold</Label>
-        <Input
-          id="risk_threshold"
-          type="number"
-          min="0"
-          max="100"
-          value={formData.risk_threshold}
-          onChange={(e) => setFormData({ ...formData, risk_threshold: Number(e.target.value) })}
-        />
-        <p className="text-sm text-muted-foreground">
-          Transactions above this risk score will trigger alerts
-        </p>
-      </div>
+      <NotificationSection formData={formData} onChange={setFormData} />
+      <RiskSection formData={formData} onChange={setFormData} />
 
       <Button 
         type="submit" 
-        disabled={isLoading}
+        disabled={isSubmitting}
         className="w-full"
       >
-        {isLoading ? (
+        {isSubmitting ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             Updating...
