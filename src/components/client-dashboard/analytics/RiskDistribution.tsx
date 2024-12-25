@@ -4,23 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-/**
- * RiskDistribution Component
- * 
- * Analyzes and visualizes the distribution of risk scores across transactions
- * to identify patterns in fraudulent behavior. This helps in:
- * - Understanding the overall risk landscape
- * - Identifying clusters of high-risk transactions
- * - Detecting anomalies in risk score distributions
- * 
- * The risk scores are grouped into ranges (0-10, 11-20, etc.) to show
- * the frequency distribution of risk levels. This can help identify:
- * - Normal risk score patterns
- * - Unusual spikes in specific risk ranges
- * - Potential systemic fraud patterns
- * 
- * Data is refreshed every 30 seconds to maintain current risk insights.
- */
 export const RiskDistribution = () => {
   const { data: riskDistribution, error, isLoading } = useQuery({
     queryKey: ["risk-distribution"],
@@ -62,6 +45,18 @@ export const RiskDistribution = () => {
         <div className="h-[300px] flex items-center justify-center">
           <p className="text-muted-foreground">Loading risk distribution...</p>
         </div>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="p-4">
+        <Alert>
+          <AlertDescription>
+            Error loading risk distribution: {error.message}
+          </AlertDescription>
+        </Alert>
       </Card>
     );
   }

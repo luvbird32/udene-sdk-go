@@ -10,12 +10,16 @@ export const BusinessIntelligence = () => {
   const { data: metrics, isLoading } = useQuery({
     queryKey: ["business-intelligence"],
     queryFn: async () => {
-      const { data: transactions } = await supabase
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
+
+      const { data: transactions, error } = await supabase
         .from('transactions')
         .select('amount, risk_score, is_fraudulent')
         .order('created_at', { ascending: false })
         .limit(1000);
 
+      if (error) throw error;
       if (!transactions) return null;
 
       const blockedTransactions = transactions.filter(t => t.risk_score >= 70);
@@ -32,10 +36,10 @@ export const BusinessIntelligence = () => {
       const falseNegativeRate = totalVerified ? (falseNegatives / totalVerified) * 100 : 0;
       
       const affectedCustomers = new Set(blockedTransactions.map(t => t.amount)).size;
-      const customerImpactRate = (affectedCustomers / transactions.length) * 100;
+      const customerImpactRate = transactions.length ? (affectedCustomers / transactions.length) * 100 : 0;
 
       return {
-        roi: totalBlocked * 0.15,
+        roi: totalBlocked * 0.15, // Assuming 15% ROI on prevented fraud
         savings: totalBlocked,
         falsePositiveRate,
         falseNegativeRate,
