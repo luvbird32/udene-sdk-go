@@ -41,12 +41,12 @@ export const SecurityProgramCard = ({ program }: SecurityProgramCardProps) => {
       </div>
 
       <ComplianceRequirements 
-        requirements={program.compliance_requirements as string[] || []} 
+        requirements={program.compliance_requirements || []} 
         isExpanded={isExpanded}
         onToggle={() => setIsExpanded(!isExpanded)}
       />
       
-      {program.security_assessments && (
+      {program.security_assessments && program.security_assessments.length > 0 && (
         <RecentAssessments assessments={program.security_assessments} />
       )}
 

@@ -1,4 +1,5 @@
 import { Json } from "../database";
+import { SecurityAssessment } from "./assessments";
 
 export interface SecurityProgram {
   id: string;
@@ -14,4 +15,5 @@ export interface SecurityProgram {
   risk_assessment: Json | null;
   created_at: string | null;
   updated_at: string | null;
+  security_assessments?: SecurityAssessment[];
 }
