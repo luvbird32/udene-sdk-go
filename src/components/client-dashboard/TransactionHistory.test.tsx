@@ -7,6 +7,12 @@ import { Transaction } from '@/integrations/supabase/types/transactions';
 import { PostgrestFilterBuilder } from '@supabase/postgrest-js';
 import { Database } from '@/integrations/supabase/types';
 
+type TransactionResponse = PostgrestFilterBuilder<
+  Database['public'],
+  Database['public']['Tables']['transactions'],
+  Transaction[]
+>;
+
 // Mock the Supabase client
 vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
@@ -16,41 +22,90 @@ vi.mock('@/integrations/supabase/client', () => ({
     from: () => ({
       select: () => ({
         order: () => ({
-          limit: () => ({
-            data: [
-              {
-                id: '1',
-                amount: 100,
-                created_at: '2024-01-01T00:00:00Z',
-                is_fraudulent: false,
-                merchant_id: 'merchant-1',
-                customer_id: 'customer-1',
-                timestamp: '2024-01-01T00:00:00Z',
-                location: 'Test Location',
-                device_id: 'device-1',
-                ip_address: '127.0.0.1',
-                transaction_type: 'purchase',
-                card_present: true,
-                recurring: false
-              },
-              {
-                id: '2',
-                amount: 200,
-                created_at: '2024-01-02T00:00:00Z',
-                is_fraudulent: true,
-                merchant_id: 'merchant-2',
-                customer_id: 'customer-2',
-                timestamp: '2024-01-02T00:00:00Z',
-                location: 'Test Location 2',
-                device_id: 'device-2',
-                ip_address: '127.0.0.2',
-                transaction_type: 'purchase',
-                card_present: true,
-                recurring: false
-              }
-            ] as Transaction[],
-            error: null
-          }) as unknown as PostgrestFilterBuilder<Database['public'], Database['public']['Tables']['transactions'], Transaction[]>
+          limit: () => {
+            const response = {
+              data: [
+                {
+                  id: '1',
+                  amount: 100,
+                  created_at: '2024-01-01T00:00:00Z',
+                  is_fraudulent: false,
+                  merchant_id: 'merchant-1',
+                  customer_id: 'customer-1',
+                  timestamp: '2024-01-01T00:00:00Z',
+                  location: 'Test Location',
+                  device_id: 'device-1',
+                  ip_address: '127.0.0.1',
+                  transaction_type: 'purchase',
+                  card_present: true,
+                  recurring: false,
+                  risk_score: null,
+                  risk_factors: null,
+                  feature_importance: null,
+                  feedback_status: null,
+                  feedback_notes: null,
+                  appeal_timestamp: null,
+                  message_velocity: null,
+                  profile_changes: null,
+                  interaction_patterns: null,
+                  updated_at: null
+                },
+                {
+                  id: '2',
+                  amount: 200,
+                  created_at: '2024-01-02T00:00:00Z',
+                  is_fraudulent: true,
+                  merchant_id: 'merchant-2',
+                  customer_id: 'customer-2',
+                  timestamp: '2024-01-02T00:00:00Z',
+                  location: 'Test Location 2',
+                  device_id: 'device-2',
+                  ip_address: '127.0.0.2',
+                  transaction_type: 'purchase',
+                  card_present: true,
+                  recurring: false,
+                  risk_score: null,
+                  risk_factors: null,
+                  feature_importance: null,
+                  feedback_status: null,
+                  feedback_notes: null,
+                  appeal_timestamp: null,
+                  message_velocity: null,
+                  profile_changes: null,
+                  interaction_patterns: null,
+                  updated_at: null
+                }
+              ],
+              error: null,
+              count: null,
+              status: 200,
+              statusText: 'OK',
+              // Add required PostgrestFilterBuilder methods
+              eq: () => response,
+              neq: () => response,
+              gt: () => response,
+              gte: () => response,
+              lt: () => response,
+              lte: () => response,
+              like: () => response,
+              ilike: () => response,
+              is: () => response,
+              in: () => response,
+              contains: () => response,
+              containedBy: () => response,
+              rangeGt: () => response,
+              rangeGte: () => response,
+              rangeLt: () => response,
+              rangeLte: () => response,
+              rangeAdjacent: () => response,
+              overlaps: () => response,
+              match: () => response,
+              not: () => response,
+              filter: () => response,
+              or: () => response,
+            } as TransactionResponse;
+            return response;
+          }
         })
       })
     })
@@ -100,10 +155,39 @@ describe('TransactionHistory', () => {
     vi.mocked(supabase.from).mockImplementationOnce(() => ({
       select: () => ({
         order: () => ({
-          limit: () => ({
-            data: [],
-            error: null
-          }) as unknown as PostgrestFilterBuilder<Database['public'], Database['public']['Tables']['transactions'], Transaction[]>
+          limit: () => {
+            const response = {
+              data: [],
+              error: null,
+              count: null,
+              status: 200,
+              statusText: 'OK',
+              // Add required PostgrestFilterBuilder methods
+              eq: () => response,
+              neq: () => response,
+              gt: () => response,
+              gte: () => response,
+              lt: () => response,
+              lte: () => response,
+              like: () => response,
+              ilike: () => response,
+              is: () => response,
+              in: () => response,
+              contains: () => response,
+              containedBy: () => response,
+              rangeGt: () => response,
+              rangeGte: () => response,
+              rangeLt: () => response,
+              rangeLte: () => response,
+              rangeAdjacent: () => response,
+              overlaps: () => response,
+              match: () => response,
+              not: () => response,
+              filter: () => response,
+              or: () => response,
+            } as TransactionResponse;
+            return response;
+          }
         })
       })
     }));
