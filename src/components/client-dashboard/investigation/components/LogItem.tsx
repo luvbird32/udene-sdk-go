@@ -8,7 +8,7 @@ import { AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { InvestigationLog } from "@/integrations/supabase/types/investigation";
-import { Json } from "@/integrations/supabase/types/core"; // Add this import
+import { Json } from "@/integrations/supabase/types/core";
 
 interface LogItemProps {
   log: InvestigationLog;
@@ -30,7 +30,6 @@ export const LogItem = ({ log }: LogItemProps) => {
     }
   };
 
-  // Check if sanitization_steps is an array and has items
   const hasSanitizationSteps = Array.isArray(log.sanitization_steps) && log.sanitization_steps.length > 0;
 
   return (
