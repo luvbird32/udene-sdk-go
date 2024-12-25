@@ -1,17 +1,3 @@
-/**
- * DataExtractionSection Component
- * 
- * Provides interface for administrators to extract and download system data
- * with various filtering and format options.
- * 
- * Features:
- * - Data extraction controls
- * - Format selection
- * - Download progress tracking
- * - Error handling
- * 
- * @component
- */
 import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -42,20 +28,18 @@ export const DataExtractionSection = () => {
     try {
       setIsExtracting(true);
       
-      // Simulate extraction delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
       const { data, error } = await supabase
         .from('extracted_data')
-        .select('*')
-        .limit(1000);
+        .select('data')
+        .limit(1000)
+        .single();
 
       if (error) throw error;
 
       // Convert data to selected format
       const formattedData = format === 'csv' 
-        ? convertToCSV(data)
-        : JSON.stringify(data, null, 2);
+        ? convertToCSV(data.data)
+        : JSON.stringify(data.data, null, 2);
 
       // Create and trigger download
       const blob = new Blob([formattedData], { 
@@ -87,7 +71,7 @@ export const DataExtractionSection = () => {
   };
 
   const convertToCSV = (data: any[]) => {
-    if (!data.length) return '';
+    if (!data?.length) return '';
     
     const headers = Object.keys(data[0]);
     const rows = data.map(obj => 

@@ -2,7 +2,14 @@ import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
-const DatabaseSection = () => {
+interface DatabaseMetrics {
+  current_connections: number;
+  active_queries: number;
+  cache_hit_ratio: number;
+  timestamp: string;
+}
+
+export const DatabaseSection = () => {
   const { data: dbMetrics, isLoading, error } = useQuery({
     queryKey: ["database-metrics"],
     queryFn: async () => {
@@ -10,11 +17,11 @@ const DatabaseSection = () => {
         .from('database_metrics')
         .select('*')
         .order('timestamp', { ascending: false })
-        .limit(1);
+        .limit(1)
+        .single();
 
       if (error) throw error;
-
-      return data;
+      return data as DatabaseMetrics;
     },
     refetchInterval: 30000,
   });
@@ -45,9 +52,9 @@ const DatabaseSection = () => {
     <Card className="p-4">
       <h3 className="font-semibold mb-4">Database Metrics</h3>
       <div>
-        <p>Current Connections: {dbMetrics?.[0]?.current_connections}</p>
-        <p>Active Queries: {dbMetrics?.[0]?.active_queries}</p>
-        <p>Cache Hit Ratio: {dbMetrics?.[0]?.cache_hit_ratio}</p>
+        <p>Current Connections: {dbMetrics?.current_connections}</p>
+        <p>Active Queries: {dbMetrics?.active_queries}</p>
+        <p>Cache Hit Ratio: {dbMetrics?.cache_hit_ratio}</p>
       </div>
     </Card>
   );
