@@ -1,13 +1,20 @@
 import type { Json } from '../core';
+import type { Tables } from '../tables';
 
 export interface Database {
   public: {
     Tables: {
-      [K: string]: {
-        Row: any;
-        Insert: any;
-        Update: any;
-        Relationships: any[];
+      [K in keyof Tables]: {
+        Row: Tables[K];
+        Insert: Omit<Tables[K], 'id' | 'created_at' | 'updated_at'>;
+        Update: Partial<Tables[K]>;
+        Relationships: {
+          foreignKeyName: string;
+          columns: string[];
+          isOneToOne: boolean;
+          referencedRelation: string;
+          referencedColumns: string[];
+        }[];
       };
     };
     Views: {
