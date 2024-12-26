@@ -1,6 +1,6 @@
 import { ApiCreditsDisplay } from "@/components/client-dashboard/ApiCreditsDisplay";
 import { ClientMetrics } from "@/components/client-dashboard/ClientMetrics";
-import { TransactionHistory } from "@/components/client-dashboard/TransactionHistory";
+import { TransactionHistory } from "@/components/client-dashboard/transactions/TransactionHistory";
 import { RiskOverview } from "@/components/client-dashboard/RiskOverview";
 import { TrendAnalysis } from "@/components/client-dashboard/analytics/TrendAnalysis";
 import { GeographicDistribution } from "@/components/client-dashboard/analytics/GeographicDistribution";
