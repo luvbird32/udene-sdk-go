@@ -22,9 +22,11 @@ export const useTrialStats = () => {
       if (error) throw error;
 
       // Group data by status and calculate risk levels
-      const stats = (data || []).reduce((acc: Record<string, number>, curr) => {
-        const riskLevel = (curr.risk_score as number) >= 70 ? 'High Risk' : 
-                         (curr.risk_score as number) >= 40 ? 'Medium Risk' : 
+      const stats = (data as TrialUsageData[] || []).reduce((acc: Record<string, number>, curr) => {
+        // Default to 0 if risk_score is null
+        const score = curr.risk_score ?? 0;
+        const riskLevel = score >= 70 ? 'High Risk' : 
+                         score >= 40 ? 'Medium Risk' : 
                          'Low Risk';
         acc[riskLevel] = (acc[riskLevel] || 0) + 1;
         return acc;
