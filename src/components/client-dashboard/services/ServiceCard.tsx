@@ -1,51 +1,18 @@
-/**
- * ServiceCard Component
- * 
- * Displays a card for a fraud detection service with toggle functionality,
- * description, features list, and status indicators.
- * 
- * Features:
- * - Service activation toggle
- * - Real-time status updates
- * - Feature list display
- * - Service details dialog
- * - Toast notifications for status changes
- * 
- * @component
- * @example
- * ```tsx
- * <ServiceCard
- *   title="Bot Detection"
- *   description="Detect and prevent automated attacks"
- *   features={['IP tracking', 'Behavior analysis']}
- *   isActive={true}
- *   serviceType="bot_detection"
- *   onToggle={(type, status) => handleToggle(type, status)}
- * />
- * ```
- */
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { ServiceDetailsDialog } from "./ServiceDetailsDialog";
-import { ServiceHeader } from "./components/ServiceHeader";
+import { ServiceDescription } from "./components/ServiceDescription";
+import { ServiceFeatureList } from "./components/ServiceFeatureList";
+import { ServiceControls } from "./components/ServiceControls";
 import { ServiceToggle } from "./components/ServiceToggle";
-import { ServiceFeatures } from "./components/ServiceFeatures";
-import { ServiceStatus } from "./components/ServiceStatus";
-import { ServiceActions } from "./components/ServiceActions";
 
 interface ServiceCardProps {
-  /** Title of the service */
   title: string;
-  /** Description of what the service does */
   description: string;
-  /** List of features provided by the service */
   features: string[];
-  /** Whether the service is currently active */
   isActive: boolean;
-  /** Type identifier for the service */
   serviceType: string;
-  /** Callback function when service is toggled */
   onToggle: (serviceType: string, isActive: boolean) => Promise<void>;
 }
 
@@ -86,7 +53,7 @@ export const ServiceCard = ({
     <>
       <Card className="p-6 space-y-4">
         <div className="flex items-start justify-between">
-          <ServiceHeader 
+          <ServiceDescription
             title={title}
             description={description}
             serviceType={serviceType}
@@ -100,12 +67,12 @@ export const ServiceCard = ({
           />
         </div>
         
-        <ServiceFeatures features={features} />
-
-        <div className="flex items-center justify-between">
-          <ServiceStatus isActive={isActive} serviceType={serviceType} />
-          <ServiceActions onShowDetails={() => setShowDetails(true)} />
-        </div>
+        <ServiceFeatureList features={features} />
+        <ServiceControls
+          isActive={isActive}
+          serviceType={serviceType}
+          onShowDetails={() => setShowDetails(true)}
+        />
       </Card>
 
       <ServiceDetailsDialog
