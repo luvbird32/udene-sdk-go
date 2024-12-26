@@ -12,7 +12,6 @@ export const RiskFactorAnalysis = () => {
   const { data: latestTransaction, isLoading } = useQuery({
     queryKey: ["latest-flagged-transaction"],
     queryFn: async () => {
-      console.log("Fetching latest flagged transaction...");
       const { data, error } = await supabase
         .from('transactions')
         .select('*')
@@ -50,7 +49,6 @@ export const RiskFactorAnalysis = () => {
 
   const riskFactors = latestTransaction.risk_factors || {};
   const featureImportance = latestTransaction.feature_importance || {};
-  
   const datingRiskIndicators = analyzeDatingRiskIndicators(latestTransaction);
   
   const additionalFactors = Object.entries(riskFactors)
@@ -71,7 +69,10 @@ export const RiskFactorAnalysis = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div>
           <h4 className="text-sm font-medium mb-2">Feature Importance</h4>
-          <RiskChart featureImportance={featureImportance} />
+          <RiskChart 
+            title="Feature Importance"
+            featureImportance={featureImportance} 
+          />
         </div>
 
         <div>

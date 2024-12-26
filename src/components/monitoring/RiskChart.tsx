@@ -1,12 +1,13 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card } from '@/components/ui/card';
 
-interface RiskChartProps {
-  data: Array<{
+export interface RiskChartProps {
+  data?: Array<{
     timestamp: string;
     value: number | string;
   }>;
   title?: string;
+  featureImportance?: Record<string, number>;
 }
 
 const formatValue = (value: number | string): string => {
@@ -16,11 +17,14 @@ const formatValue = (value: number | string): string => {
   return String(value);
 };
 
-export const RiskChart = ({ data, title = 'Risk Analysis' }: RiskChartProps) => {
-  const processedData = data.map(item => ({
-    ...item,
-    value: typeof item.value === 'string' ? parseFloat(item.value) || 0 : item.value
-  }));
+export const RiskChart = ({ data = [], title = 'Risk Analysis', featureImportance }: RiskChartProps) => {
+  // Transform feature importance data if provided
+  const chartData = featureImportance 
+    ? Object.entries(featureImportance).map(([key, value]) => ({
+        timestamp: key,
+        value: value
+      }))
+    : data;
 
   return (
     <Card className="p-6 rounded-lg shadow-md">
@@ -28,7 +32,7 @@ export const RiskChart = ({ data, title = 'Risk Analysis' }: RiskChartProps) => 
       <div className="h-[300px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
-            data={processedData}
+            data={chartData}
             margin={{
               top: 5,
               right: 30,
