@@ -1,21 +1,3 @@
-/**
- * ReferralFraudMonitoring Component
- * 
- * Analyzes and visualizes referral patterns to detect potential fraud.
- * This component monitors:
- * - Referral chain patterns
- * - Risk levels of referral activities
- * - Suspicious referral behaviors
- * 
- * Key Features:
- * - Real-time monitoring of referral activities
- * - Risk level distribution visualization
- * - Pattern analysis for fraud detection
- * - Automatic risk scoring of referral chains
- * 
- * Data is refreshed every 30 seconds to maintain current insights
- * into referral fraud patterns.
- */
 import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -32,39 +14,68 @@ interface ReferralStat {
 
 export const ReferralFraudMonitoring = () => {
   const { toast } = useToast();
-  const { data: referralStats, isLoading, error } = useQuery({
+  const { data: referralStats, isLoading, error } = useQuery<ReferralStat[]>({
     queryKey: ["referral-fraud-stats"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('referral_tracking')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(100);
+      try {
+        console.log("Fetching referral fraud statistics...");
+        const { data, error } = await supabase
+          .from('referral_tracking')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(100);
 
-      if (error) throw error;
+        if (error) {
+          console.error("Error fetching referral tracking data:", error);
+          throw error;
+        }
 
-      const stats = (data || []).reduce<Record<string, number>>((acc, curr) => {
-        const riskLevel = curr.risk_score >= 70 ? 'High' : curr.risk_score >= 40 ? 'Medium' : 'Low';
-        acc[riskLevel] = (acc[riskLevel] || 0) + 1;
-        return acc;
-      }, {});
+        console.log(`Processing ${data?.length || 0} referral records`);
 
-      return Object.entries(stats).map(([name, value]): ReferralStat => ({ 
-        name, 
-        value 
-      }));
+        const stats = (data || []).reduce<Record<string, number>>((acc, curr) => {
+          const riskLevel = curr.risk_score >= 70 ? 'High' : curr.risk_score >= 40 ? 'Medium' : 'Low';
+          acc[riskLevel] = (acc[riskLevel] || 0) + 1;
+          return acc;
+        }, {});
+
+        console.log("Referral fraud statistics calculated successfully");
+
+        return Object.entries(stats).map(([name, value]): ReferralStat => ({ 
+          name, 
+          value 
+        }));
+      } catch (error) {
+        console.error("Error in referral fraud statistics calculation:", error);
+        throw error;
+      }
     },
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
     meta: {
       errorHandler: (error: Error) => {
+        console.error("Failed to fetch referral fraud statistics:", error);
         toast({
           title: "Error",
-          description: "Failed to load referral fraud data",
+          description: "Failed to load referral fraud data. Please try again later.",
           variant: "destructive",
         });
       },
     },
-    refetchInterval: 30000,
   });
+
+  if (error) {
+    return (
+      <Card className="p-4">
+        <ReferralHeader />
+        <Alert variant="destructive" className="mt-4">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            Failed to load referral fraud data. Please try again later.
+          </AlertDescription>
+        </Alert>
+      </Card>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -76,19 +87,6 @@ export const ReferralFraudMonitoring = () => {
             <p className="text-sm text-muted-foreground">Loading referral data...</p>
           </div>
         </div>
-      </Card>
-    );
-  }
-
-  if (error) {
-    return (
-      <Card className="p-4">
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription>
-            Failed to load referral fraud data. Please try again later.
-          </AlertDescription>
-        </Alert>
       </Card>
     );
   }
@@ -110,7 +108,7 @@ export const ReferralFraudMonitoring = () => {
   return (
     <Card className="p-4">
       <ReferralHeader />
-      <ReferralChart data={referralStats || []} />
+      <ReferralChart data={referralStats} />
     </Card>
   );
 };

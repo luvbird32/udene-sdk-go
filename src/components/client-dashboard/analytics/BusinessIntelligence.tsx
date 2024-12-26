@@ -5,51 +5,108 @@ import { Card } from "@/components/ui/card";
 import { MetricCard } from "./components/MetricCard";
 import { DetectionAccuracy } from "./components/DetectionAccuracy";
 import { CustomerImpact } from "./components/CustomerImpact";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+
+interface BusinessMetrics {
+  roi: number;
+  savings: number;
+  falsePositiveRate: number;
+  falseNegativeRate: number;
+  customerImpactRate: number;
+  totalTransactions: number;
+  affectedCustomers: number;
+}
 
 export const BusinessIntelligence = () => {
-  const { data: metrics, isLoading } = useQuery({
+  const { toast } = useToast();
+  const { data: metrics, isLoading, error } = useQuery<BusinessMetrics>({
     queryKey: ["business-intelligence"],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("No user found");
+      console.log("Fetching business intelligence metrics...");
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          console.error("No user found");
+          throw new Error("No user found");
+        }
 
-      const { data: transactions, error } = await supabase
-        .from('transactions')
-        .select('amount, risk_score, is_fraudulent')
-        .order('created_at', { ascending: false })
-        .limit(1000);
+        const { data: transactions, error } = await supabase
+          .from('transactions')
+          .select('amount, risk_score, is_fraudulent')
+          .order('created_at', { ascending: false })
+          .limit(1000);
 
-      if (error) throw error;
-      if (!transactions) return null;
+        if (error) {
+          console.error("Error fetching transactions:", error);
+          throw error;
+        }
 
-      const blockedTransactions = transactions.filter(t => t.risk_score >= 70);
-      const totalBlocked = blockedTransactions.reduce((sum, t) => sum + (t.amount || 0), 0);
-      
-      const verifiedTransactions = transactions.filter(t => t.is_fraudulent !== null);
-      const truePositives = verifiedTransactions.filter(t => t.risk_score >= 70 && t.is_fraudulent).length;
-      const falsePositives = verifiedTransactions.filter(t => t.risk_score >= 70 && !t.is_fraudulent).length;
-      const trueNegatives = verifiedTransactions.filter(t => t.risk_score < 70 && !t.is_fraudulent).length;
-      const falseNegatives = verifiedTransactions.filter(t => t.risk_score < 70 && t.is_fraudulent).length;
+        if (!transactions) {
+          console.log("No transactions found");
+          return null;
+        }
 
-      const totalVerified = verifiedTransactions.length;
-      const falsePositiveRate = totalVerified ? (falsePositives / totalVerified) * 100 : 0;
-      const falseNegativeRate = totalVerified ? (falseNegatives / totalVerified) * 100 : 0;
-      
-      const affectedCustomers = new Set(blockedTransactions.map(t => t.amount)).size;
-      const customerImpactRate = transactions.length ? (affectedCustomers / transactions.length) * 100 : 0;
+        console.log(`Processing ${transactions.length} transactions for metrics`);
 
-      return {
-        roi: totalBlocked * 0.15, // Assuming 15% ROI on prevented fraud
-        savings: totalBlocked,
-        falsePositiveRate,
-        falseNegativeRate,
-        customerImpactRate,
-        totalTransactions: transactions.length,
-        affectedCustomers
-      };
+        const blockedTransactions = transactions.filter(t => t.risk_score >= 70);
+        const totalBlocked = blockedTransactions.reduce((sum, t) => sum + (t.amount || 0), 0);
+        
+        const verifiedTransactions = transactions.filter(t => t.is_fraudulent !== null);
+        const truePositives = verifiedTransactions.filter(t => t.risk_score >= 70 && t.is_fraudulent).length;
+        const falsePositives = verifiedTransactions.filter(t => t.risk_score >= 70 && !t.is_fraudulent).length;
+        const trueNegatives = verifiedTransactions.filter(t => t.risk_score < 70 && !t.is_fraudulent).length;
+        const falseNegatives = verifiedTransactions.filter(t => t.risk_score < 70 && t.is_fraudulent).length;
+
+        const totalVerified = verifiedTransactions.length;
+        const falsePositiveRate = totalVerified ? (falsePositives / totalVerified) * 100 : 0;
+        const falseNegativeRate = totalVerified ? (falseNegatives / totalVerified) * 100 : 0;
+        
+        const affectedCustomers = new Set(blockedTransactions.map(t => t.amount)).size;
+        const customerImpactRate = transactions.length ? (affectedCustomers / transactions.length) * 100 : 0;
+
+        console.log("Business intelligence metrics calculated successfully");
+
+        return {
+          roi: totalBlocked * 0.15,
+          savings: totalBlocked,
+          falsePositiveRate,
+          falseNegativeRate,
+          customerImpactRate,
+          totalTransactions: transactions.length,
+          affectedCustomers
+        };
+      } catch (error) {
+        console.error("Error in business intelligence metrics calculation:", error);
+        throw error;
+      }
     },
     refetchInterval: 30000,
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    meta: {
+      errorHandler: (error: Error) => {
+        console.error("Failed to fetch business intelligence metrics:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load business metrics. Please try again later.",
+          variant: "destructive",
+        });
+      },
+    },
   });
+
+  if (error) {
+    return (
+      <Alert variant="destructive">
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>
+          Failed to load business intelligence metrics. Please try again later.
+        </AlertDescription>
+      </Alert>
+    );
+  }
 
   if (isLoading || !metrics) {
     return (
