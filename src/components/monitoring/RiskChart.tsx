@@ -28,7 +28,11 @@ export const RiskChart = ({ featureImportance }: RiskChartProps) => {
               content={({ active, payload }) => {
                 if (active && payload && payload.length) {
                   const value = payload[0].value;
-                  const formattedValue = typeof value === 'number' ? value.toFixed(1) : value;
+                  const formattedValue = typeof value === 'number' 
+                    ? value.toFixed(1) 
+                    : typeof value === 'string' 
+                      ? value 
+                      : '0';
                   
                   return (
                     <UITooltip>
@@ -41,7 +45,7 @@ export const RiskChart = ({ featureImportance }: RiskChartProps) => {
                         </div>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Risk factor importance score</p>
+                        <p>Click for more details</p>
                       </TooltipContent>
                     </UITooltip>
                   );
@@ -49,7 +53,10 @@ export const RiskChart = ({ featureImportance }: RiskChartProps) => {
                 return null;
               }}
             />
-            <Bar dataKey="importance" fill="#8884d8" />
+            <Bar 
+              dataKey="importance" 
+              fill="#8884d8" 
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
