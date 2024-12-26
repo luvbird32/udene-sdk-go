@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/card';
 import { useMemo } from 'react';
 
 export interface RiskChartProps {
-  data: Array<{
+  data?: Array<{
     timestamp: string;
     value: number | string;
   }>;

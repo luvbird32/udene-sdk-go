@@ -7,7 +7,7 @@ import { RiskChart } from "./RiskChart";
 import { RiskIndicators } from "./RiskIndicators";
 import { analyzeDatingRiskIndicators } from "@/utils/riskAnalysis";
 import type { DatabaseTransaction, TransactionWithPatterns } from "@/types/risk";
-import { useCallback } from "react";
+import { useMemo } from "react";
 
 export const RiskFactorAnalysis = () => {
   const { data: latestTransaction, isLoading } = useQuery({
@@ -25,10 +25,20 @@ export const RiskFactorAnalysis = () => {
     refetchInterval: 5000,
   });
 
-  // Memoize the risk indicators calculation to prevent unnecessary recalculations
-  const getRiskIndicators = useCallback((transaction: TransactionWithPatterns) => {
-    return analyzeDatingRiskIndicators(transaction);
-  }, []);
+  // Memoize the risk indicators and additional factors calculations
+  const { datingRiskIndicators, additionalFactors } = useMemo(() => {
+    if (!latestTransaction) {
+      return { datingRiskIndicators: [], additionalFactors: [] };
+    }
+
+    const riskFactors = latestTransaction.risk_factors || {};
+    const indicators = analyzeDatingRiskIndicators(latestTransaction);
+    const factors = Object.entries(riskFactors)
+      .filter(([key]) => !['multiple_platforms', 'fraud_history'].includes(key))
+      .map(([key, value]) => [key, String(value)]) as [string, string][];
+
+    return { datingRiskIndicators: indicators, additionalFactors: factors };
+  }, [latestTransaction]);
 
   if (isLoading) {
     return (
@@ -53,14 +63,6 @@ export const RiskFactorAnalysis = () => {
     );
   }
 
-  const riskFactors = latestTransaction.risk_factors || {};
-  const featureImportance = latestTransaction.feature_importance || {};
-  const datingRiskIndicators = getRiskIndicators(latestTransaction);
-  
-  const additionalFactors = Object.entries(riskFactors)
-    .filter(([key]) => !['multiple_platforms', 'fraud_history'].includes(key))
-    .map(([key, value]) => [key, String(value)]) as [string, string][];
-
   return (
     <Card className="p-4">
       <div className="flex items-center justify-between mb-4">
@@ -77,8 +79,7 @@ export const RiskFactorAnalysis = () => {
           <h4 className="text-sm font-medium mb-2">Feature Importance</h4>
           <RiskChart 
             title="Feature Importance"
-            data={[]}
-            featureImportance={featureImportance} 
+            featureImportance={latestTransaction.feature_importance || {}}
           />
         </div>
 
