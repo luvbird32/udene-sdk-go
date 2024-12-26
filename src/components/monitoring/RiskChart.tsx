@@ -27,13 +27,16 @@ export const RiskChart = ({ featureImportance }: RiskChartProps) => {
             <Tooltip 
               content={({ active, payload }) => {
                 if (active && payload && payload.length) {
+                  const value = payload[0].value;
+                  const formattedValue = typeof value === 'number' ? value.toFixed(1) : value;
+                  
                   return (
                     <UITooltip>
                       <TooltipTrigger asChild>
                         <div className="bg-background border rounded-lg p-2">
                           <p className="font-medium">{payload[0].payload.factor}</p>
                           <p className="text-sm text-muted-foreground">
-                            Importance: {payload[0].value.toFixed(1)}%
+                            Importance: {formattedValue}%
                           </p>
                         </div>
                       </TooltipTrigger>
