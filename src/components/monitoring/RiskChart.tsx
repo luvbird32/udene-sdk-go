@@ -1,5 +1,6 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card } from '@/components/ui/card';
+import { useMemo } from 'react';
 
 export interface RiskChartProps {
   data?: Array<{
@@ -18,13 +19,16 @@ const formatValue = (value: number | string): string => {
 };
 
 export const RiskChart = ({ data = [], title = 'Risk Analysis', featureImportance }: RiskChartProps) => {
-  // Transform feature importance data if provided
-  const chartData = featureImportance 
-    ? Object.entries(featureImportance).map(([key, value]) => ({
+  // Transform feature importance data if provided, using useMemo to prevent unnecessary recalculations
+  const chartData = useMemo(() => {
+    if (featureImportance) {
+      return Object.entries(featureImportance).map(([key, value]) => ({
         timestamp: key,
         value: value
-      }))
-    : data;
+      }));
+    }
+    return data;
+  }, [featureImportance, data]);
 
   return (
     <Card className="p-6 rounded-lg shadow-md">
