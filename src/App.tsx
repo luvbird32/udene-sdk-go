@@ -26,7 +26,8 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const { toast } = useToast();
 
   const handleAuthError = useCallback((error: Error) => {
@@ -41,30 +42,32 @@ function App() {
   const checkSession = useCallback(async () => {
     try {
       const { data: { session }, error } = await supabase.auth.getSession();
-      if (error) {
-        handleAuthError(error);
-        return;
-      }
+      if (error) throw error;
       setIsAuthenticated(!!session);
     } catch (error) {
       handleAuthError(error as Error);
+      setIsAuthenticated(false);
+    } finally {
+      setIsLoading(false);
     }
   }, [handleAuthError]);
 
   useEffect(() => {
-    // Check initial auth state
     checkSession();
 
-    // Subscribe to auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setIsAuthenticated(!!session);
+      setIsLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [checkSession]);
 
-  // Show loading state while checking auth
-  if (isAuthenticated === null) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -77,9 +80,10 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/login" element={
-            isAuthenticated ? <Navigate to="/dashboard" replace /> : <AuthFormWrapper />
-          } />
+          <Route 
+            path="/login" 
+            element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <AuthFormWrapper />} 
+          />
           <Route
             path="/dashboard"
             element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />}
