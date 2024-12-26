@@ -25,10 +25,14 @@ export const RiskFactorAnalysis = () => {
     refetchInterval: 5000,
   });
 
-  // Memoize the risk indicators and additional factors calculations
-  const { datingRiskIndicators, additionalFactors } = useMemo(() => {
+  // Memoize calculations to prevent unnecessary re-renders
+  const { datingRiskIndicators, additionalFactors, chartData } = useMemo(() => {
     if (!latestTransaction) {
-      return { datingRiskIndicators: [], additionalFactors: [] };
+      return { 
+        datingRiskIndicators: [], 
+        additionalFactors: [],
+        chartData: []
+      };
     }
 
     const riskFactors = latestTransaction.risk_factors || {};
@@ -37,7 +41,18 @@ export const RiskFactorAnalysis = () => {
       .filter(([key]) => !['multiple_platforms', 'fraud_history'].includes(key))
       .map(([key, value]) => [key, String(value)]) as [string, string][];
 
-    return { datingRiskIndicators: indicators, additionalFactors: factors };
+    const featureImportanceData = latestTransaction.feature_importance 
+      ? Object.entries(latestTransaction.feature_importance).map(([key, value]) => ({
+          timestamp: key,
+          value: value
+        }))
+      : [];
+
+    return { 
+      datingRiskIndicators: indicators, 
+      additionalFactors: factors,
+      chartData: featureImportanceData
+    };
   }, [latestTransaction]);
 
   if (isLoading) {
@@ -79,7 +94,7 @@ export const RiskFactorAnalysis = () => {
           <h4 className="text-sm font-medium mb-2">Feature Importance</h4>
           <RiskChart 
             title="Feature Importance"
-            featureImportance={latestTransaction.feature_importance || {}}
+            data={chartData}
           />
         </div>
 

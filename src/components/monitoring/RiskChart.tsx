@@ -8,7 +8,6 @@ export interface RiskChartProps {
     timestamp: string;
     value: number | string;
   }>;
-  featureImportance?: Record<string, number>;
 }
 
 const formatValue = (value: number | string): string => {
@@ -18,17 +17,9 @@ const formatValue = (value: number | string): string => {
   return String(value);
 };
 
-export const RiskChart = ({ data = [], title = 'Risk Analysis', featureImportance }: RiskChartProps) => {
-  // Transform feature importance data if provided, using useMemo to prevent unnecessary recalculations
-  const chartData = useMemo(() => {
-    if (featureImportance) {
-      return Object.entries(featureImportance).map(([key, value]) => ({
-        timestamp: key,
-        value: value
-      }));
-    }
-    return data;
-  }, [featureImportance, data]);
+export const RiskChart = ({ data = [], title = 'Risk Analysis' }: RiskChartProps) => {
+  // Memoize the chart data to prevent unnecessary recalculations
+  const chartData = useMemo(() => data, [data]);
 
   return (
     <Card className="p-6 rounded-lg shadow-md">
