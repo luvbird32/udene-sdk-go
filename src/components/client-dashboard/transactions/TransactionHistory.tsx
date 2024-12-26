@@ -5,9 +5,10 @@ import { TransactionList } from "./TransactionList";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, Loader2 } from "lucide-react";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { LoadingState } from "./components/LoadingState";
+import { ErrorState } from "./components/ErrorState";
+import { EmptyState } from "./components/EmptyState";
 
 export const TransactionHistory = () => {
   const { toast } = useToast();
@@ -52,29 +53,11 @@ export const TransactionHistory = () => {
   });
 
   if (userLoading) {
-    return (
-      <Card className="p-6">
-        <div className="flex items-center justify-center py-8">
-          <div className="flex flex-col items-center gap-2">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            <p className="text-sm text-muted-foreground">Loading user data...</p>
-          </div>
-        </div>
-      </Card>
-    );
+    return <LoadingState message="Loading user data..." />;
   }
 
   if (!user) {
-    return (
-      <Card className="p-6">
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription>
-            Please log in to view transaction history.
-          </AlertDescription>
-        </Alert>
-      </Card>
-    );
+    return <ErrorState message="Please log in to view transaction history." />;
   }
 
   return (
@@ -82,31 +65,9 @@ export const TransactionHistory = () => {
       <Card className="p-6">
         <h3 className="font-semibold mb-4">Recent Transactions</h3>
         
-        {isLoading && (
-          <div className="flex items-center justify-center py-8">
-            <div className="flex flex-col items-center gap-2">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              <p className="text-sm text-muted-foreground">Loading transactions...</p>
-            </div>
-          </div>
-        )}
-
-        {error && (
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              Failed to load transactions. Please try again later.
-            </AlertDescription>
-          </Alert>
-        )}
-
-        {!isLoading && !error && (!transactions || transactions.length === 0) && (
-          <div className="text-center py-8">
-            <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
-            <p className="text-muted-foreground">No transactions found</p>
-          </div>
-        )}
-
+        {isLoading && <LoadingState message="Loading transactions..." />}
+        {error && <ErrorState message="Failed to load transactions. Please try again later." />}
+        {!isLoading && !error && (!transactions || transactions.length === 0) && <EmptyState />}
         {!isLoading && !error && transactions && transactions.length > 0 && (
           <TransactionList 
             transactions={transactions} 
