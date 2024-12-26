@@ -14,32 +14,45 @@ export const useAffiliateData = () => {
   return useQuery({
     queryKey: ["affiliate-fraud-stats"],
     queryFn: async () => {
-      console.log("Fetching affiliate activity data...");
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        console.error("No user found");
-        throw new Error("No user found");
-      }
+      try {
+        console.log("Fetching affiliate activity data...");
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        
+        if (userError) {
+          console.error("Error getting user:", userError);
+          throw userError;
+        }
 
-      const { data, error } = await supabase
-        .from('affiliate_activities')
-        .select('*')
-        .order('created_at', { ascending: true })
-        .limit(100);
+        if (!user) {
+          console.error("No user found");
+          throw new Error("No user found");
+        }
 
-      if (error) {
-        console.error("Error fetching affiliate activities:", error);
+        const { data, error } = await supabase
+          .from('affiliate_activities')
+          .select('*')
+          .order('created_at', { ascending: true })
+          .limit(100);
+
+        if (error) {
+          console.error("Error fetching affiliate activities:", error);
+          throw error;
+        }
+
+        console.log("Affiliate activities fetched:", data?.length || 0, "records");
+        return data?.map(activity => ({
+          date: new Date(activity.created_at).toLocaleDateString(),
+          riskScore: activity.risk_score || 0,
+          amount: activity.transaction_amount || 0
+        })) || [];
+      } catch (error) {
+        console.error("Error in affiliate data query:", error);
         throw error;
       }
-
-      console.log("Affiliate activities fetched:", data?.length || 0, "records");
-      return data?.map(activity => ({
-        date: new Date(activity.created_at).toLocaleDateString(),
-        riskScore: activity.risk_score || 0,
-        amount: activity.transaction_amount || 0
-      }));
     },
     refetchInterval: 30000,
+    retry: 2,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
     meta: {
       errorHandler: (error: Error) => {
         console.error("Affiliate data fetch error:", error);
