@@ -49,7 +49,7 @@ export const DeviceFingerprintMonitoring = () => {
   });
 
   if (isLoading) {
-    return <LoadingState title="Device Fingerprint Analysis" />;
+    return <LoadingState title="Loading device fingerprint data..." />;
   }
 
   if (error) {
