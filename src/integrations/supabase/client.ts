@@ -9,8 +9,6 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables');
 }
 
-console.log('Initializing Supabase client with URL:', supabaseUrl);
-
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
@@ -36,25 +34,23 @@ export const handleSupabaseError = async (error: any) => {
   
   // Check if it's a connection error
   if (error.message?.includes('connection') || error.message === 'Failed to fetch') {
-    console.error('Database connection error - please check if Supabase is running');
+    console.error('Database connection error - attempting to refresh session');
     
-    // Try to refresh the session
-    const { error: refreshError } = await supabase.auth.refreshSession();
-    if (refreshError) {
-      console.error('Failed to refresh session:', refreshError);
-      // Redirect to login if session refresh fails
-      window.location.href = '/login';
+    try {
+      // Try to refresh the session
+      const { data: { session }, error: refreshError } = await supabase.auth.refreshSession();
+      if (refreshError) {
+        console.error('Failed to refresh session:', refreshError);
+        throw refreshError;
+      }
+      return session;
+    } catch (refreshError) {
+      console.error('Session refresh failed:', refreshError);
+      throw refreshError;
     }
   }
   
-  if (error.message === 'Load failed') {
-    // Attempt to refresh the session
-    const { error: refreshError } = await supabase.auth.refreshSession();
-    if (refreshError) {
-      console.error('Failed to refresh session:', refreshError);
-    }
-  }
-  return null;
+  throw error;
 };
 
 // Add a health check function

@@ -1,64 +1,61 @@
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { TooltipProvider, Tooltip as UITooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Card } from '@/components/ui/card';
 
 interface RiskChartProps {
-  featureImportance: Record<string, number>;
+  data: Array<{
+    timestamp: string;
+    value: number | string;
+  }>;
+  title?: string;
 }
 
-export const RiskChart = ({ featureImportance }: RiskChartProps) => {
-  // Transform data for the chart
-  const chartData = Object.entries(featureImportance)
-    .map(([factor, importance]) => ({
-      factor,
-      importance: Number(importance) * 100,
-    }))
-    .sort((a, b) => b.importance - a.importance);
+const formatValue = (value: number | string): string => {
+  if (typeof value === 'number') {
+    return value.toFixed(2);
+  }
+  return String(value);
+};
+
+export const RiskChart = ({ data, title = 'Risk Analysis' }: RiskChartProps) => {
+  const processedData = data.map(item => ({
+    ...item,
+    value: typeof item.value === 'string' ? parseFloat(item.value) || 0 : item.value
+  }));
 
   return (
-    <TooltipProvider>
-      <div className="h-[200px]">
+    <Card className="p-6 rounded-lg shadow-md">
+      <h3 className="text-lg font-semibold mb-4">{title}</h3>
+      <div className="h-[300px] w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} layout="vertical">
-            <XAxis type="number" domain={[0, 100]} />
-            <YAxis type="category" dataKey="factor" width={100} />
-            <Tooltip 
-              content={({ active, payload }) => {
-                if (active && payload && payload.length) {
-                  const value = payload[0].value;
-                  const formattedValue = typeof value === 'number' 
-                    ? value.toFixed(1) 
-                    : typeof value === 'string' 
-                      ? value 
-                      : '0';
-                  
-                  return (
-                    <UITooltip>
-                      <TooltipTrigger asChild>
-                        <div className="bg-background border rounded-lg p-2">
-                          <p className="font-medium">{payload[0].payload.factor}</p>
-                          <p className="text-sm text-muted-foreground">
-                            Importance: {formattedValue}%
-                          </p>
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Click for more details</p>
-                      </TooltipContent>
-                    </UITooltip>
-                  );
-                }
-                return null;
-              }}
+          <LineChart
+            data={processedData}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="timestamp" />
+            <YAxis />
+            <Tooltip
+              formatter={(value: number | string) => [
+                formatValue(value),
+                'Risk Score'
+              ]}
             />
-            <Bar 
-              dataKey="importance" 
-              fill="#8884d8" 
-              name="Risk Factor Importance"
-              radius={[4, 4, 0, 0]} // Rounded corners on top
+            <Line
+              type="monotone"
+              dataKey="value"
+              stroke="#8884d8"
+              strokeWidth={2}
+              dot={{ r: 4 }}
+              activeDot={{ r: 8 }}
             />
-          </BarChart>
+          </LineChart>
         </ResponsiveContainer>
       </div>
-    </TooltipProvider>
+    </Card>
   );
 };
