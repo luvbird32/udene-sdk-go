@@ -5,9 +5,6 @@ interface RiskChartProps {
   featureImportance: Record<string, number>;
 }
 
-/**
- * Displays a bar chart of risk factors and their importance
- */
 export const RiskChart = ({ featureImportance }: RiskChartProps) => {
   // Transform data for the chart
   const chartData = Object.entries(featureImportance)
@@ -56,6 +53,8 @@ export const RiskChart = ({ featureImportance }: RiskChartProps) => {
             <Bar 
               dataKey="importance" 
               fill="#8884d8" 
+              name="Risk Factor Importance"
+              radius={[4, 4, 0, 0]} // Rounded corners on top
             />
           </BarChart>
         </ResponsiveContainer>

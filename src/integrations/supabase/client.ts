@@ -16,12 +16,17 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
-    flowType: 'pkce'
+    flowType: 'pkce',
+    storage: window.localStorage,
+    storageKey: 'supabase.auth.token',
   },
   global: {
     headers: {
       'X-Client-Info': 'udene-web',
     },
+  },
+  db: {
+    schema: 'public',
   },
 });
 
@@ -32,6 +37,14 @@ export const handleSupabaseError = async (error: any) => {
   // Check if it's a connection error
   if (error.message?.includes('connection') || error.message === 'Failed to fetch') {
     console.error('Database connection error - please check if Supabase is running');
+    
+    // Try to refresh the session
+    const { error: refreshError } = await supabase.auth.refreshSession();
+    if (refreshError) {
+      console.error('Failed to refresh session:', refreshError);
+      // Redirect to login if session refresh fails
+      window.location.href = '/login';
+    }
   }
   
   if (error.message === 'Load failed') {
