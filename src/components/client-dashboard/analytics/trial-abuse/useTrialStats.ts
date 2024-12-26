@@ -1,15 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { TrialStatData } from "./types";
+import { useToast } from "@/hooks/use-toast";
 
 interface TrialUsageData {
   risk_score: number | null;
 }
 
 export const useTrialStats = () => {
+  const { toast } = useToast();
+
   return useQuery({
     queryKey: ["trial-abuse-stats"],
     queryFn: async () => {
+      console.log("Fetching trial usage data...");
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("No user found");
 
@@ -19,7 +23,12 @@ export const useTrialStats = () => {
         .order('created_at', { ascending: false })
         .limit(100);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching trial usage data:", error);
+        throw error;
+      }
+
+      console.log("Trial usage data fetched:", data?.length || 0, "records");
 
       // Group data by status and calculate risk levels
       const stats = (data as TrialUsageData[] || []).reduce((acc: Record<string, number>, curr) => {
@@ -38,5 +47,15 @@ export const useTrialStats = () => {
       }));
     },
     refetchInterval: 30000,
+    meta: {
+      errorHandler: (error: Error) => {
+        console.error("Trial stats fetch error:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load trial abuse data. Please try again later.",
+          variant: "destructive",
+        });
+      },
+    },
   });
 };
