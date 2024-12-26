@@ -7,14 +7,18 @@ import { useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, Loader2 } from "lucide-react";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 export const TransactionHistory = () => {
   const { toast } = useToast();
+  const { data: user, isLoading: userLoading } = useCurrentUser();
+  
   const fetchTransactions = useCallback(async () => {
-    console.log("Fetching recent transactions...");
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) throw new Error("No user found");
+    if (!user) {
+      throw new Error("Authentication required");
+    }
 
+    console.log("Fetching recent transactions...");
     const { data, error } = await supabase
       .from('transactions')
       .select('*')
@@ -26,15 +30,18 @@ export const TransactionHistory = () => {
       throw error;
     }
 
+    console.log("Transactions fetched:", data);
     return data;
-  }, []);
+  }, [user]);
 
   const { data: transactions, isLoading, error } = useQuery({
-    queryKey: ["recent-transactions"],
+    queryKey: ["recent-transactions", user?.id],
     queryFn: fetchTransactions,
+    enabled: !!user,
     refetchInterval: 30000,
     meta: {
       errorHandler: (error: Error) => {
+        console.error("Transaction fetch error:", error);
         toast({
           title: "Error",
           description: "Failed to load transaction history. Please try again later.",
@@ -43,6 +50,32 @@ export const TransactionHistory = () => {
       },
     },
   });
+
+  if (userLoading) {
+    return (
+      <Card className="p-6">
+        <div className="flex items-center justify-center py-8">
+          <div className="flex flex-col items-center gap-2">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <p className="text-sm text-muted-foreground">Loading user data...</p>
+          </div>
+        </div>
+      </Card>
+    );
+  }
+
+  if (!user) {
+    return (
+      <Card className="p-6">
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            Please log in to view transaction history.
+          </AlertDescription>
+        </Alert>
+      </Card>
+    );
+  }
 
   return (
     <ErrorBoundary>
