@@ -1,27 +1,5 @@
 export const SECURITY_SERVICES = [
   {
-    type: 'user_behavior_analysis',
-    title: 'User Behavior Analysis',
-    description: 'Analyzing user behavior to detect potential fraud',
-    features: [
-      'Behavioral Patterns',
-      'Session Replay',
-      'User Risk Scoring',
-      'Real-time Alerts'
-    ]
-  },
-  {
-    type: 'compliance_monitoring',
-    title: 'Compliance Monitoring',
-    description: 'Ensuring compliance with regulations and standards',
-    features: [
-      'Audit Trails',
-      'Regulatory Reporting',
-      'Data Privacy Checks',
-      'Automated Compliance Alerts'
-    ]
-  },
-  {
     type: 'api_security',
     title: 'API Security',
     description: 'Protecting APIs from unauthorized access and abuse',
@@ -30,6 +8,28 @@ export const SECURITY_SERVICES = [
       'IP Whitelisting',
       'API Key Management',
       'Threat Detection'
+    ]
+  },
+  {
+    type: 'email_security',
+    title: 'Email Security',
+    description: 'Advanced email fraud and phishing protection',
+    features: [
+      'Email Authentication',
+      'Phishing Detection',
+      'Domain Monitoring',
+      'DMARC Enforcement'
+    ]
+  },
+  {
+    type: 'device_fingerprinting',
+    title: 'Device Fingerprinting',
+    description: 'Identify and track suspicious devices',
+    features: [
+      'Device Recognition',
+      'Browser Fingerprinting',
+      'Hardware Analysis',
+      'Location Tracking'
     ]
   }
 ];

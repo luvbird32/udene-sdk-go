@@ -33,5 +33,17 @@ export const FRAUD_PROTECTION_SERVICES = [
       'Suspicious Activity Alerts',
       'Multi-account Detection'
     ]
+  },
+  {
+    type: 'affiliate_fraud_protection',
+    title: 'Affiliate Fraud Protection',
+    description: 'Detect and prevent affiliate marketing fraud',
+    features: [
+      'Click Fraud Detection',
+      'Cookie Stuffing Prevention',
+      'Traffic Quality Analysis',
+      'Commission Pattern Analysis',
+      'IP/Device Tracking'
+    ]
   }
 ];
