@@ -1,66 +1,64 @@
-/**
- * ApiKeyForm Component
- * 
- * A form component for generating new API keys with a name and optional description.
- * Includes validation and loading state handling.
- * 
- * Features:
- * - Input validation
- * - Loading state during key generation
- * - Error handling
- * - Success feedback
- * 
- * @component
- * @example
- * ```tsx
- * <ApiKeyForm onSubmit={async (name, description) => {
- *   await generateApiKey(name, description);
- * }} />
- * ```
- */
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface ApiKeyFormProps {
   onSubmit: (name: string, description: string) => Promise<void>;
+  isGenerating: boolean;
 }
 
-export const ApiKeyForm = ({ onSubmit }: ApiKeyFormProps) => {
+export const ApiKeyForm = ({ onSubmit, isGenerating }: ApiKeyFormProps) => {
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
-  const [isGenerating, setIsGenerating] = useState(false);
+  const { toast } = useToast();
 
-  const handleGenerateKey = async () => {
-    setIsGenerating(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!projectName.trim()) {
+      toast({
+        title: "Error",
+        description: "Project name is required",
+        variant: "destructive"
+      });
+      return;
+    }
+
     try {
       await onSubmit(projectName, projectDescription);
       setProjectName("");
       setProjectDescription("");
-    } finally {
-      setIsGenerating(false);
+    } catch (error) {
+      console.error('Error generating API key:', error);
     }
   };
 
   return (
-    <div className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <Input
           placeholder="Project Name"
           value={projectName}
           onChange={(e) => setProjectName(e.target.value)}
           className="mb-2"
+          disabled={isGenerating}
+          required
+          aria-label="Project Name"
         />
         <Input
           placeholder="Project Description (optional)"
           value={projectDescription}
           onChange={(e) => setProjectDescription(e.target.value)}
+          disabled={isGenerating}
+          aria-label="Project Description"
         />
       </div>
       <Button 
-        onClick={handleGenerateKey} 
+        type="submit"
         disabled={!projectName.trim() || isGenerating}
+        className="w-full"
       >
         {isGenerating ? (
           <>
@@ -71,6 +69,6 @@ export const ApiKeyForm = ({ onSubmit }: ApiKeyFormProps) => {
           'Generate API Key'
         )}
       </Button>
-    </div>
+    </form>
   );
 };

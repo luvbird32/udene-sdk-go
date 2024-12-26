@@ -1,30 +1,17 @@
-/**
- * ApiKeyList Component
- * 
- * Displays a list of API keys with options to copy and delete them.
- * Each key is displayed with its creation date and status.
- * 
- * Features:
- * - Copy API key to clipboard
- * - Delete API key
- * - Visual confirmation for copied keys
- * - Loading state handling
- * 
- * @component
- * @example
- * ```tsx
- * const apiKeys = [{ id: '1', key_value: 'abc123', name: 'Production Key' }];
- * 
- * <ApiKeyList 
- *   apiKeys={apiKeys}
- *   isLoading={false}
- *   onDelete={(id) => handleDelete(id)}
- * />
- * ```
- */
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Copy, Check, Trash, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface ApiKey {
   id: string;
@@ -42,25 +29,60 @@ interface ApiKeyListProps {
 
 export const ApiKeyList = ({ apiKeys, isLoading, onDelete }: ApiKeyListProps) => {
   const [copiedKeyId, setCopiedKeyId] = useState<string | null>(null);
+  const [keyToDelete, setKeyToDelete] = useState<string | null>(null);
+  const { toast } = useToast();
 
-  const handleCopyKey = (key: string, id: string) => {
-    navigator.clipboard.writeText(key);
-    setCopiedKeyId(id);
-    setTimeout(() => setCopiedKeyId(null), 2000);
+  const handleCopyKey = async (key: string, id: string) => {
+    try {
+      await navigator.clipboard.writeText(key);
+      setCopiedKeyId(id);
+      toast({
+        title: "Copied!",
+        description: "API key copied to clipboard",
+      });
+      setTimeout(() => setCopiedKeyId(null), 2000);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to copy API key",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDelete = (id: string) => {
+    setKeyToDelete(id);
+  };
+
+  const confirmDelete = () => {
+    if (keyToDelete) {
+      onDelete(keyToDelete);
+      setKeyToDelete(null);
+    }
   };
 
   if (isLoading) {
     return (
-      <div className="flex justify-center">
-        <Loader2 className="h-6 w-6 animate-spin" />
+      <div className="flex justify-center p-8">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!apiKeys?.length) {
+    return (
+      <div className="text-center p-8 bg-muted/50 rounded-lg">
+        <p className="text-muted-foreground">
+          No API keys generated yet. Create your first key above.
+        </p>
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      {apiKeys?.map((key) => (
-        <div key={key.id} className="flex items-center justify-between p-4 border rounded-lg">
+      {apiKeys.map((key) => (
+        <div key={key.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/5">
           <div className="space-y-1">
             <p className="font-medium">{key.name}</p>
             {key.description && (
@@ -75,6 +97,7 @@ export const ApiKeyList = ({ apiKeys, isLoading, onDelete }: ApiKeyListProps) =>
               variant="outline"
               size="icon"
               onClick={() => handleCopyKey(key.key_value, key.id)}
+              title="Copy API key"
             >
               {copiedKeyId === key.id ? (
                 <Check className="h-4 w-4" />
@@ -85,18 +108,31 @@ export const ApiKeyList = ({ apiKeys, isLoading, onDelete }: ApiKeyListProps) =>
             <Button
               variant="outline"
               size="icon"
-              onClick={() => onDelete(key.id)}
+              onClick={() => handleDelete(key.id)}
+              title="Delete API key"
             >
               <Trash className="h-4 w-4" />
             </Button>
           </div>
         </div>
       ))}
-      {(!apiKeys || apiKeys.length === 0) && (
-        <p className="text-center text-muted-foreground">
-          No API keys generated yet.
-        </p>
-      )}
+
+      <AlertDialog open={!!keyToDelete} onOpenChange={() => setKeyToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete API Key</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this API key? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
