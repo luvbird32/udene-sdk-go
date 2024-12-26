@@ -7,15 +7,16 @@ import ClientSettings from "./pages/ClientSettings";
 import Users from "./pages/Users";
 import { Toaster } from "./components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect, useState, useCallback } from "react";
-import { supabase } from "./integrations/supabase/client";
+import { useEffect, useState } from "react";
+import { supabase, refreshSession } from "./integrations/supabase/client";
 import { AuthFormWrapper } from "./components/auth/AuthFormWrapper";
 import { useToast } from "@/hooks/use-toast";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 1,
+      retry: 2,
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
       meta: {
         onError: (error: Error) => {
           console.error('Query error:', error);
@@ -26,46 +27,41 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
-  const handleAuthError = useCallback((error: Error) => {
-    console.error('Auth error:', error);
-    toast({
-      title: "Authentication Error",
-      description: "There was a problem connecting to the authentication service. Please try again later.",
-      variant: "destructive"
-    });
-  }, [toast]);
-
-  const checkSession = useCallback(async () => {
-    try {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      if (error) throw error;
-      setIsAuthenticated(!!session);
-    } catch (error) {
-      handleAuthError(error as Error);
-      setIsAuthenticated(false);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [handleAuthError]);
-
   useEffect(() => {
-    checkSession();
+    const initializeAuth = async () => {
+      try {
+        setIsLoading(true);
+        const session = await refreshSession();
+        setIsAuthenticated(!!session);
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+        toast({
+          title: "Authentication Error",
+          description: "There was a problem connecting to the authentication service. Please try again later.",
+          variant: "destructive"
+        });
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializeAuth();
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setIsAuthenticated(!!session);
-      setIsLoading(false);
     });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [checkSession]);
+  }, [toast]);
 
   if (isLoading) {
     return (
