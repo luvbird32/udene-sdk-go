@@ -3,11 +3,11 @@ import { Card } from '@/components/ui/card';
 import { useMemo } from 'react';
 
 export interface RiskChartProps {
+  title?: string;
   data?: Array<{
     timestamp: string;
     value: number | string;
   }>;
-  title?: string;
   featureImportance?: Record<string, number>;
 }
 

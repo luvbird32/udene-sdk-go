@@ -6,7 +6,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { RiskChart } from "./RiskChart";
 import { RiskIndicators } from "./RiskIndicators";
 import { analyzeDatingRiskIndicators } from "@/utils/riskAnalysis";
-import type { DatabaseTransaction, TransactionWithPatterns } from "@/types/risk";
+import type { TransactionWithPatterns } from "@/types/risk";
 import { useMemo } from "react";
 
 export const RiskFactorAnalysis = () => {
