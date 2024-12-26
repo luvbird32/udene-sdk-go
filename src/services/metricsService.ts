@@ -1,5 +1,5 @@
 import { getItem, setItem } from "@/utils/indexedDB";
-import { supabase, handleSupabaseError } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface UdeneMetrics {
   riskScore: number;
@@ -72,7 +72,7 @@ export const getFraudMetrics = async (): Promise<UdeneMetrics> => {
         return metrics;
       } catch (error) {
         if (retries > 0) {
-          await handleSupabaseError(error);
+          console.error('Error fetching metrics:', error);
           await new Promise(resolve => setTimeout(resolve, 1000));
           return fetchWithRetry(retries - 1);
         }

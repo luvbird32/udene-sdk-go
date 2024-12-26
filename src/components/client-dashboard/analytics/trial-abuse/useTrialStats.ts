@@ -2,6 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { TrialStatData } from "./types";
 
+interface TrialUsageData {
+  risk_score: number | null;
+}
+
 export const useTrialStats = () => {
   return useQuery({
     queryKey: ["trial-abuse-stats"],
@@ -19,8 +23,8 @@ export const useTrialStats = () => {
 
       // Group data by status and calculate risk levels
       const stats = (data || []).reduce((acc: Record<string, number>, curr) => {
-        const riskLevel = curr.risk_score >= 70 ? 'High Risk' : 
-                         curr.risk_score >= 40 ? 'Medium Risk' : 
+        const riskLevel = (curr.risk_score as number) >= 70 ? 'High Risk' : 
+                         (curr.risk_score as number) >= 40 ? 'Medium Risk' : 
                          'Low Risk';
         acc[riskLevel] = (acc[riskLevel] || 0) + 1;
         return acc;
