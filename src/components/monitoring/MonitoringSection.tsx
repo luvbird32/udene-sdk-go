@@ -1,18 +1,8 @@
 import { Card } from "@/components/ui/card";
-import { RiskIndicators } from "./RiskIndicators";
-import { EmailChangeMonitoring } from "./EmailChangeMonitoring";
 import { CustomerBehavior } from "./CustomerBehavior";
-import { DetectionMetrics } from "./DetectionMetrics";
-import { ErrorLog } from "./ErrorLog";
-import { FeedbackManagement } from "./FeedbackManagement";
-import { FlaggedDevices } from "./FlaggedDevices";
-import { HealthStatus } from "./HealthStatus";
-import { IPAddressMonitoring } from "./IPAddressMonitoring";
-import { PerformanceMetrics } from "./PerformanceMetrics";
-import { RateLimitStatus } from "./RateLimitStatus";
-import { RequestPatterns } from "./RequestPatterns";
-import { RiskChart } from "./RiskChart";
 import { RiskFactorAnalysis } from "./RiskFactorAnalysis";
+import { FeedbackManagement } from "./FeedbackManagement";
+import { EmailChangeMonitoring } from "./email-change/EmailChangeMonitoring";
 import { VPNDetection } from "./VPNDetection";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 
@@ -20,29 +10,18 @@ export const MonitoringSection = () => {
   const { data: currentUser } = useCurrentUser();
 
   if (!currentUser) {
-    return null; // Or a loading state
+    return null;
   }
 
   return (
-    <div className="grid gap-6 md:grid-cols-2">
-      <EmailChangeMonitoring />
-      <RiskIndicators 
-        indicators={[]} 
-        additionalFactors={[]}
-      />
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <EmailChangeMonitoring />
+        <VPNDetection profileId={currentUser.id} />
+      </div>
       <CustomerBehavior />
-      <DetectionMetrics />
-      <ErrorLog />
-      <FeedbackManagement />
-      <FlaggedDevices />
-      <HealthStatus />
-      <IPAddressMonitoring />
-      <PerformanceMetrics />
-      <RateLimitStatus />
-      <RequestPatterns />
-      <RiskChart />
       <RiskFactorAnalysis />
-      <VPNDetection profileId={currentUser.id} />
+      <FeedbackManagement />
     </div>
   );
 };
