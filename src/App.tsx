@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useSessionTimeout } from "@/hooks/useSessionTimeout";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import ClientDashboard from "@/pages/ClientDashboard";
 import ClientSettings from "@/pages/ClientSettings";
 import Settings from "@/pages/Settings";
@@ -29,15 +29,13 @@ function App() {
         <meta httpEquiv="Permissions-Policy" content="geolocation=(), camera=(), microphone=()" />
         <meta httpEquiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains" />
       </Helmet>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/client-dashboard" element={<ClientDashboard />} />
-          <Route path="/client-settings" element={<ClientSettings />} />
-          <Route path="/settings" element={<Settings />} />
-        </Routes>
-      </Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/client-dashboard" element={<ClientDashboard />} />
+        <Route path="/client-settings" element={<ClientSettings />} />
+        <Route path="/settings" element={<Settings />} />
+      </Routes>
     </>
   );
 }

@@ -1,6 +1,13 @@
 import { useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 
+interface PayloadChange {
+  id?: string;
+  old?: Record<string, any> | null;
+  new?: Record<string, any> | null;
+  eventType?: string;
+}
+
 export const AuditLogger = () => {
   useEffect(() => {
     const channel = supabase
@@ -8,11 +15,11 @@ export const AuditLogger = () => {
       .on(
         'postgres_changes',
         {
-          event: '*', // Listen to all events
+          event: '*',
           schema: 'public',
           table: 'fraud_alerts'
         },
-        async (payload) => {
+        async (payload: PayloadChange) => {
           // Create detailed audit log entry
           await supabase.from('audit_logs').insert({
             event_type: `fraud_alert_${payload.eventType}`,
