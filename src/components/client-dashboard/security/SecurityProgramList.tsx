@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SecurityProgramCard } from "./SecurityProgramCard";
 import { OpenSourceSecurity } from "./OpenSourceSecurity";
 import { VulnerabilityScanning } from "./VulnerabilityScanning";
+import { DependencyMonitor } from "./components/dependency/DependencyMonitor";
 import { SecurityProgram } from "@/integrations/supabase/types/security";
 import { useToast } from "@/hooks/use-toast";
 import { LoadingProgram } from "./components/LoadingProgram";
@@ -52,6 +53,8 @@ export const SecurityProgramList = () => {
         <OpenSourceSecurity />
         <VulnerabilityScanning />
       </div>
+      
+      <DependencyMonitor />
       
       <div className="space-y-6">
         <h2 className="text-2xl font-semibold">Security Programs</h2>

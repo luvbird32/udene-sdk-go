@@ -372,6 +372,75 @@ export type Database = {
         }
         Relationships: []
       }
+      dependency_scans: {
+        Row: {
+          created_at: string | null
+          id: string
+          scan_date: string | null
+          scan_log: Json | null
+          scan_status: string
+          total_dependencies: number
+          updated_at: string | null
+          vulnerabilities_found: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          scan_date?: string | null
+          scan_log?: Json | null
+          scan_status: string
+          total_dependencies: number
+          updated_at?: string | null
+          vulnerabilities_found: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          scan_date?: string | null
+          scan_log?: Json | null
+          scan_status?: string
+          total_dependencies?: number
+          updated_at?: string | null
+          vulnerabilities_found?: number
+        }
+        Relationships: []
+      }
+      dependency_vulnerabilities: {
+        Row: {
+          created_at: string | null
+          current_version: string
+          cve_id: string | null
+          description: string | null
+          id: string
+          package_name: string
+          recommended_version: string
+          severity: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          current_version: string
+          cve_id?: string | null
+          description?: string | null
+          id?: string
+          package_name: string
+          recommended_version: string
+          severity: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          current_version?: string
+          cve_id?: string | null
+          description?: string | null
+          id?: string
+          package_name?: string
+          recommended_version?: string
+          severity?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       device_fingerprint_history: {
         Row: {
           change_type: string
@@ -1220,6 +1289,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      security_webhooks: {
+        Row: {
+          created_at: string | null
+          enabled: boolean | null
+          id: string
+          notification_types: string[] | null
+          secret_key: string
+          updated_at: string | null
+          url: string
+        }
+        Insert: {
+          created_at?: string | null
+          enabled?: boolean | null
+          id?: string
+          notification_types?: string[] | null
+          secret_key: string
+          updated_at?: string | null
+          url: string
+        }
+        Update: {
+          created_at?: string | null
+          enabled?: boolean | null
+          id?: string
+          notification_types?: string[] | null
+          secret_key?: string
+          updated_at?: string | null
+          url?: string
+        }
+        Relationships: []
       }
       service_investigation_logs: {
         Row: {
