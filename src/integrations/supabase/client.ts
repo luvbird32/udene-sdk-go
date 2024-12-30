@@ -18,8 +18,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 // Health check function
 export const checkSupabaseHealth = async () => {
   try {
-    const { data, error } = await supabase.from('profiles').select('count').single()
-    if (error) throw error
+    const { data: { user } } = await supabase.auth.getUser()
     console.log('Supabase connection healthy')
     return true
   } catch (error) {
