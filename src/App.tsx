@@ -10,35 +10,20 @@ import Dashboard from '@/pages/Dashboard'
 import Settings from '@/pages/Settings'
 import Users from '@/pages/Users'
 import ClientSettings from '@/pages/ClientSettings'
-import { supabase, checkSupabaseHealth } from "@/integrations/supabase/client"
+import { supabase } from "@/integrations/supabase/client"
 
 function App() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check Supabase health on mount
-    checkSupabaseHealth().then(isHealthy => {
-      if (!isHealthy) {
-        toast({
-          title: "Connection Error",
-          description: "Unable to connect to the server. Please try again later.",
-          variant: "destructive"
-        });
-      }
-    });
-
-    // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('Auth event:', event);
-      
       if (event === 'SIGNED_IN') {
         console.log('User signed in:', session?.user?.id);
         toast({
           title: "Welcome back!",
           description: "You have successfully signed in.",
         });
-        navigate('/dashboard');
       } else if (event === 'SIGNED_OUT') {
         console.log('User signed out');
         navigate('/login');
@@ -51,7 +36,6 @@ function App() {
       }
     });
 
-    // Cleanup subscription
     return () => {
       subscription.unsubscribe();
     };
