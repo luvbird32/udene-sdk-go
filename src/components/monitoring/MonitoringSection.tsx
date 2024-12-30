@@ -14,8 +14,15 @@ import { RequestPatterns } from "./RequestPatterns";
 import { RiskChart } from "./RiskChart";
 import { RiskFactorAnalysis } from "./RiskFactorAnalysis";
 import { VPNDetection } from "./VPNDetection";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 export const MonitoringSection = () => {
+  const { data: currentUser } = useCurrentUser();
+
+  if (!currentUser) {
+    return null; // Or a loading state
+  }
+
   return (
     <div className="grid gap-6 md:grid-cols-2">
       <EmailChangeMonitoring />
@@ -35,7 +42,7 @@ export const MonitoringSection = () => {
       <RequestPatterns />
       <RiskChart />
       <RiskFactorAnalysis />
-      <VPNDetection />
+      <VPNDetection profileId={currentUser.id} />
     </div>
   );
 };
