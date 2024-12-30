@@ -210,9 +210,12 @@ export type Database = {
           created_at: string | null
           entity_id: string
           entity_type: string
+          error_details: Json | null
           event_type: string
           id: string
           ip_address: string | null
+          performance_metrics: Json | null
+          request_payload: Json | null
           user_agent: string | null
           user_id: string | null
         }
@@ -221,9 +224,12 @@ export type Database = {
           created_at?: string | null
           entity_id: string
           entity_type: string
+          error_details?: Json | null
           event_type: string
           id?: string
           ip_address?: string | null
+          performance_metrics?: Json | null
+          request_payload?: Json | null
           user_agent?: string | null
           user_id?: string | null
         }
@@ -232,9 +238,12 @@ export type Database = {
           created_at?: string | null
           entity_id?: string
           entity_type?: string
+          error_details?: Json | null
           event_type?: string
           id?: string
           ip_address?: string | null
+          performance_metrics?: Json | null
+          request_payload?: Json | null
           user_agent?: string | null
           user_id?: string | null
         }
@@ -995,6 +1004,33 @@ export type Database = {
           updated_at?: string | null
           usage_limit?: number
           validation_rules?: Json | null
+        }
+        Relationships: []
+      }
+      rate_limits: {
+        Row: {
+          endpoint: string
+          first_request_time: string | null
+          id: string
+          ip_address: string
+          last_request_time: string | null
+          request_count: number | null
+        }
+        Insert: {
+          endpoint: string
+          first_request_time?: string | null
+          id?: string
+          ip_address: string
+          last_request_time?: string | null
+          request_count?: number | null
+        }
+        Update: {
+          endpoint?: string
+          first_request_time?: string | null
+          id?: string
+          ip_address?: string
+          last_request_time?: string | null
+          request_count?: number | null
         }
         Relationships: []
       }
@@ -1784,7 +1820,24 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      check_rate_limit: {
+        Args: {
+          p_ip_address: string
+          p_endpoint: string
+          p_max_requests?: number
+          p_window_minutes?: number
+        }
+        Returns: boolean
+      }
+      log_detailed_error: {
+        Args: {
+          p_event_type: string
+          p_user_id: string
+          p_error: Json
+          p_request?: Json
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
