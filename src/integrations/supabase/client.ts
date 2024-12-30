@@ -12,16 +12,12 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
-    detectSessionInUrl: true
+    detectSessionInUrl: true,
+    flowType: 'pkce'
   },
   global: {
     headers: {
       'x-application-name': 'fraud-detection-dashboard'
-    }
-  },
-  realtime: {
-    params: {
-      eventsPerSecond: 10
     }
   }
 });
@@ -29,9 +25,9 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 // Add health check function
 export const checkSupabaseHealth = async () => {
   try {
-    const { data, error } = await supabase.from('health_check').select('count').single();
+    const { data: { user }, error } = await supabase.auth.getUser();
     if (error) throw error;
-    return true;
+    return !!user;
   } catch (error) {
     console.error('Supabase health check failed:', error);
     return false;
@@ -44,7 +40,8 @@ export const refreshSession = async () => {
     const { data: { session }, error } = await supabase.auth.getSession();
     if (error) throw error;
     if (!session) {
-      await supabase.auth.refreshSession();
+      const { error: refreshError } = await supabase.auth.refreshSession();
+      if (refreshError) throw refreshError;
     }
     return session;
   } catch (error) {
