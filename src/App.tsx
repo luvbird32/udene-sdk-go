@@ -1,109 +1,44 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Landing from "./pages/Landing";
-import Dashboard from "./pages/Dashboard";
-import ClientDashboard from "./pages/ClientDashboard";
-import Settings from "./pages/Settings";
-import ClientSettings from "./pages/ClientSettings";
-import Users from "./pages/Users";
-import { Toaster } from "./components/ui/toaster";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { supabase, refreshSession } from "./integrations/supabase/client";
-import { AuthFormWrapper } from "./components/auth/AuthFormWrapper";
-import { useToast } from "@/hooks/use-toast";
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 2,
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-      meta: {
-        onError: (error: Error) => {
-          console.error('Query error:', error);
-        }
-      }
-    }
-  }
-});
+import { useEffect } from "react";
+import { Helmet } from "react-helmet";
+import { useSessionTimeout } from "@/hooks/useSessionTimeout";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import ClientDashboard from "@/pages/ClientDashboard";
+import ClientSettings from "@/pages/ClientSettings";
+import Settings from "@/pages/Settings";
+import Login from "@/pages/Login";
+import Signup from "@/pages/Signup";
+import { supabase } from "@/integrations/supabase/client";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const { toast } = useToast();
+  useSessionTimeout();
 
   useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        setIsLoading(true);
-        const session = await refreshSession();
-        setIsAuthenticated(!!session);
-      } catch (error) {
-        console.error('Auth initialization error:', error);
-        toast({
-          title: "Authentication Error",
-          description: "There was a problem connecting to the authentication service. Please try again later.",
-          variant: "destructive"
-        });
-        setIsAuthenticated(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    initializeAuth();
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setIsAuthenticated(!!session);
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [toast]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
+    // Add security headers
+    const meta = document.createElement('meta');
+    meta.httpEquiv = 'Content-Security-Policy';
+    meta.content = "default-src 'self' https://*.supabase.co; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.supabase.co";
+    document.head.appendChild(meta);
+  }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
+      <Helmet>
+        <meta httpEquiv="X-Frame-Options" content="DENY" />
+        <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
+        <meta httpEquiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+        <meta httpEquiv="Permissions-Policy" content="geolocation=(), camera=(), microphone=()" />
+        <meta httpEquiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains" />
+      </Helmet>
       <Router>
         <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route 
-            path="/login" 
-            element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <AuthFormWrapper />} 
-          />
-          <Route
-            path="/dashboard"
-            element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />}
-          />
-          <Route 
-            path="/client-dashboard" 
-            element={isAuthenticated ? <ClientDashboard /> : <Navigate to="/login" replace />}
-          />
-          <Route
-            path="/settings"
-            element={isAuthenticated ? <Settings /> : <Navigate to="/login" replace />}
-          />
-          <Route 
-            path="/client-settings" 
-            element={isAuthenticated ? <ClientSettings /> : <Navigate to="/login" replace />}
-          />
-          <Route
-            path="/users"
-            element={isAuthenticated ? <Users /> : <Navigate to="/login" replace />}
-          />
+          <Route path="/" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/client-dashboard" element={<ClientDashboard />} />
+          <Route path="/client-settings" element={<ClientSettings />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
-        <Toaster />
       </Router>
-    </QueryClientProvider>
+    </>
   );
 }
 

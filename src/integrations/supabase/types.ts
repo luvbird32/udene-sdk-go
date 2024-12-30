@@ -742,6 +742,33 @@ export type Database = {
         }
         Relationships: []
       }
+      ip_allowlist: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          ip_address: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          ip_address: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          ip_address?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       metrics: {
         Row: {
           id: string
@@ -917,10 +944,13 @@ export type Database = {
         Row: {
           account_type: string
           avatar_url: string | null
+          backup_codes: Json | null
           created_at: string | null
           email_verified: boolean | null
           id: string
           last_login: string | null
+          mfa_enabled: boolean | null
+          mfa_secret: string | null
           organization_id: string | null
           organization_name: string | null
           organization_role: string | null
@@ -928,6 +958,7 @@ export type Database = {
           preferences: Json | null
           role: string
           security_settings: Json | null
+          session_timeout_minutes: number | null
           settings: Json | null
           status: string
           timezone: string | null
@@ -937,10 +968,13 @@ export type Database = {
         Insert: {
           account_type?: string
           avatar_url?: string | null
+          backup_codes?: Json | null
           created_at?: string | null
           email_verified?: boolean | null
           id: string
           last_login?: string | null
+          mfa_enabled?: boolean | null
+          mfa_secret?: string | null
           organization_id?: string | null
           organization_name?: string | null
           organization_role?: string | null
@@ -948,6 +982,7 @@ export type Database = {
           preferences?: Json | null
           role?: string
           security_settings?: Json | null
+          session_timeout_minutes?: number | null
           settings?: Json | null
           status?: string
           timezone?: string | null
@@ -957,10 +992,13 @@ export type Database = {
         Update: {
           account_type?: string
           avatar_url?: string | null
+          backup_codes?: Json | null
           created_at?: string | null
           email_verified?: boolean | null
           id?: string
           last_login?: string | null
+          mfa_enabled?: boolean | null
+          mfa_secret?: string | null
           organization_id?: string | null
           organization_name?: string | null
           organization_role?: string | null
@@ -968,6 +1006,7 @@ export type Database = {
           preferences?: Json | null
           role?: string
           security_settings?: Json | null
+          session_timeout_minutes?: number | null
           settings?: Json | null
           status?: string
           timezone?: string | null
