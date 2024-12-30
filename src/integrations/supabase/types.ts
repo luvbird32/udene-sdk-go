@@ -1455,6 +1455,50 @@ export type Database = {
           },
         ]
       }
+      user_email_history: {
+        Row: {
+          changed_at: string | null
+          device_fingerprint: string | null
+          id: string
+          ip_address: string | null
+          new_email: string
+          previous_email: string
+          requires_review: boolean | null
+          risk_score: number | null
+          user_id: string | null
+        }
+        Insert: {
+          changed_at?: string | null
+          device_fingerprint?: string | null
+          id?: string
+          ip_address?: string | null
+          new_email: string
+          previous_email: string
+          requires_review?: boolean | null
+          risk_score?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          changed_at?: string | null
+          device_fingerprint?: string | null
+          id?: string
+          ip_address?: string | null
+          new_email?: string
+          previous_email?: string
+          requires_review?: boolean | null
+          risk_score?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_email_history_device_fingerprint_fkey"
+            columns: ["device_fingerprint"]
+            isOneToOne: false
+            referencedRelation: "device_fingerprints"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_notifications: {
         Row: {
           created_at: string | null
