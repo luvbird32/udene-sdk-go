@@ -15,6 +15,7 @@ import { DeviceFingerprintMonitoring } from "@/components/client-dashboard/analy
 import { IdentityVerificationMonitoring } from "@/components/client-dashboard/analytics/IdentityVerificationMonitoring";
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
 import { ReferralFraudMonitoring } from "@/components/client-dashboard/analytics/ReferralFraudMonitoring";
+import { IPAddressMonitoring } from "@/components/monitoring/IPAddressMonitoring";
 
 interface DashboardContentProps {
   metrics?: {
@@ -50,6 +51,11 @@ export const DashboardContent = ({ metrics, metricsLoading, metricsError }: Dash
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <TrialAbuseMonitoring />
         <ReferralFraudMonitoring />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <IPAddressMonitoring />
+        <FlaggedDevices />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
