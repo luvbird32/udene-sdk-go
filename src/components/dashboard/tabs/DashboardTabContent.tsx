@@ -1,5 +1,5 @@
 import { TabsContent } from "@/components/ui/tabs";
-import { DashboardContent } from "@/components/dashboard/DashboardContent";
+import { DashboardContent } from "../DashboardContent";
 import { UserManagement } from "@/components/dashboard/UserManagement";
 import { ClientAnalytics } from "@/components/dashboard/analytics/ClientAnalytics";
 import { UsageAnalytics } from "@/components/dashboard/analytics/UsageAnalytics";
