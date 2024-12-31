@@ -1,26 +1,15 @@
-import { TabsContent } from "@/components/ui/tabs";
-import { ServiceManager } from "@/components/client-dashboard/services/ServiceManager";
-import { ReportManager } from "@/components/client-dashboard/reporting/ReportManager";
-import { ApiDocs } from "@/components/documentation/ApiDocs";
-import { ClientApiKeyManager } from "@/components/client-dashboard/ClientApiKeyManager";
-import { ClientProfile } from "@/components/client-dashboard/ClientProfile";
-import { WebhookManager } from "@/components/client-dashboard/webhooks/WebhookManager";
-import { TriggerManager } from "@/components/client-dashboard/triggers/TriggerManager";
-import { InvestigationLogs } from "@/components/client-dashboard/investigation/InvestigationLogs";
-import { DashboardOverview } from "./DashboardOverview";
-import { SecurityProgramList } from "@/components/client-dashboard/security/SecurityProgramList";
+import { Tabs } from "@/components/ui/tabs";
+import { DashboardHeader } from "./DashboardHeader";
+import { DashboardTabs } from "./DashboardTabs";
+import { DashboardContent } from "./DashboardContent";
+import { useClientMetrics } from "@/hooks/useClientMetrics";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
-interface DashboardTabContentProps {
-  metrics: any;
-  metricsLoading: boolean;
-  metricsError: Error | null;
-}
-
-export const DashboardTabContent = ({ metrics, metricsLoading, metricsError }: DashboardTabContentProps) => {
+export const DashboardTabContent = ({ metrics, metricsLoading, metricsError }) => {
   return (
     <>
       <TabsContent value="dashboard" className="space-y-6">
-        <DashboardOverview 
+        <DashboardContent 
           metrics={metrics}
           metricsLoading={metricsLoading}
           metricsError={metricsError}
