@@ -11,9 +11,13 @@ import { InvestigationLogs } from "@/components/client-dashboard/investigation/I
 import { DashboardContent } from "../DashboardContent";
 
 interface DashboardTabContentProps {
-  metrics: any;
-  metricsLoading: boolean;
-  metricsError: Error | null;
+  metrics?: {
+    riskScore: number;
+    totalTransactions: number;
+    flaggedTransactions: number;
+  } | null;
+  metricsLoading?: boolean;
+  metricsError?: Error | null;
 }
 
 export const DashboardTabContent = ({ metrics, metricsLoading, metricsError }: DashboardTabContentProps) => {
