@@ -1,8 +1,4 @@
 import { 
-  Play,
-  Pause,
-  StopCircle,
-  RefreshCw,
   FileJson,
   AlertTriangle,
   Clock,
@@ -12,37 +8,6 @@ import {
   FileText,
   Calendar
 } from "lucide-react";
-
-export const scanActions = [
-  {
-    id: "start",
-    label: "Start New Scan",
-    icon: Play,
-    action: "Start New Scan",
-    disabledWhen: "isScanning"
-  },
-  {
-    id: "pause",
-    label: "Pause Scan",
-    icon: Pause,
-    action: "Pause Scan",
-    enabledWhen: "isScanning"
-  },
-  {
-    id: "stop",
-    label: "Stop Scan",
-    icon: StopCircle,
-    action: "Stop Scan",
-    enabledWhen: "isScanning"
-  },
-  {
-    id: "resume",
-    label: "Resume Scan",
-    icon: RefreshCw,
-    action: "Resume Scan",
-    enabledWhen: "isScanning"
-  }
-];
 
 export const reportActions = [
   {
