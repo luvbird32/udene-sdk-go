@@ -8,7 +8,7 @@ import { WebhookManager } from "@/components/client-dashboard/webhooks/WebhookMa
 import { TriggerManager } from "@/components/client-dashboard/triggers/TriggerManager";
 import { ClientProfile } from "@/components/client-dashboard/ClientProfile";
 import { InvestigationLogs } from "@/components/client-dashboard/investigation/InvestigationLogs";
-import { DashboardContent } from "@/components/client-dashboard/DashboardContent";
+import { DashboardContent } from "../DashboardContent";
 
 interface DashboardTabContentProps {
   metrics: any;
