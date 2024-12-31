@@ -4,12 +4,12 @@
   }
   
   body {
-    @apply bg-background text-foreground font-['Inter'] antialiased dark;
+    @apply bg-background text-foreground font-['Inter'] antialiased;
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
   }
   
   [data-landing-page="true"] {
-    @apply dark bg-gradient-to-br from-black via-gray-900 to-black;
+    @apply bg-gradient-to-br from-black via-gray-900 to-black;
   }
 }
 
