@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { VulnerabilityScan } from "../../types";
-import { ScanHeader } from "./ScanHeader";
+import { ScanHeader } from "../shared/ScanHeader";
 import { ScanStats } from "./ScanStats";
 import { FindingDetails } from "../vulnerability/FindingDetails";
 
