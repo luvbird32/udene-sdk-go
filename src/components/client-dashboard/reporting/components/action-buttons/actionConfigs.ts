@@ -26,7 +26,7 @@ export const reportActions = [
   },
   {
     id: "schedule",
-    label: "Schedule",
+    label: "Schedule Report",
     icon: Clock,
     action: "Schedule",
     variant: "outline" as const
@@ -40,7 +40,7 @@ export const reportActions = [
   },
   {
     id: "share",
-    label: "Share Results",
+    label: "Share Report",
     icon: Share2,
     action: "Share",
     variant: "outline" as const

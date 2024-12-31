@@ -3,15 +3,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ActionButton } from "./action-buttons/ActionButton";
 import { reportActions } from "./action-buttons/actionConfigs";
 
-interface ReportQuickActionsProps {
-  onStartScan?: () => void;
-  isScanning?: boolean;
-}
-
-export const ReportQuickActions = ({ 
-  onStartScan, 
-  isScanning = false 
-}: ReportQuickActionsProps) => {
+export const ReportQuickActions = () => {
   const { toast } = useToast();
 
   const handleAction = (action: string) => {
