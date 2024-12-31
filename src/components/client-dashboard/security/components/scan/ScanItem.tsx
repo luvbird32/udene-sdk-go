@@ -6,6 +6,7 @@ import { VulnerabilityScan } from "../../types";
 import { ScanHeader } from "../shared/ScanHeader";
 import { ScanStats } from "../shared/ScanStats";
 import { FindingDetails } from "../vulnerability/FindingDetails";
+import { ExportResults } from "../ExportResults";
 
 interface ScanItemProps {
   scan: VulnerabilityScan;
@@ -16,13 +17,16 @@ export const ScanItem = ({ scan }: ScanItemProps) => {
 
   return (
     <Card className="p-4 space-y-4">
-      <ScanHeader 
-        scanType={scan.scan_type}
-        startTime={scan.start_time}
-        endTime={scan.end_time}
-        totalVulnerabilities={scan.total_vulnerabilities}
-        status={scan.status}
-      />
+      <div className="flex items-center justify-between">
+        <ScanHeader 
+          scanType={scan.scan_type}
+          startTime={scan.start_time}
+          endTime={scan.end_time}
+          totalVulnerabilities={scan.total_vulnerabilities}
+          status={scan.status}
+        />
+        <ExportResults scanId={scan.id} scanType={scan.scan_type} />
+      </div>
 
       <ScanStats 
         status={scan.status}
