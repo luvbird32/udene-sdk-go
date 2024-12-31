@@ -12,13 +12,3 @@
     @apply bg-gradient-to-br from-black via-gray-900 to-black;
   }
 }
-
-.glass-card {
-  @apply backdrop-blur-xl border shadow-xl transition-all duration-300;
-  @apply bg-black/30 border-white/10 hover:bg-black/40;
-}
-
-.glass-nav {
-  @apply fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-b transition-all duration-300;
-  @apply bg-black/20 border-white/10;
-}
