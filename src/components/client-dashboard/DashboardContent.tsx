@@ -14,6 +14,7 @@ import { RewardProgramMonitoring } from "@/components/client-dashboard/analytics
 import { DeviceFingerprintMonitoring } from "@/components/client-dashboard/analytics/DeviceFingerprintMonitoring";
 import { IdentityVerificationMonitoring } from "@/components/client-dashboard/analytics/IdentityVerificationMonitoring";
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
+import { FraudPatterns } from "@/components/dashboard/FraudPatterns";
 
 interface DashboardContentProps {
   metrics?: {
@@ -53,6 +54,11 @@ export const DashboardContent = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <FraudPatterns />
+        <RiskDistribution />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <AffiliateMonitoring />
         <RewardProgramMonitoring />
       </div>
@@ -73,8 +79,8 @@ export const DashboardContent = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <RiskDistribution />
         <BusinessIntelligence />
+        <RiskOverview />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
