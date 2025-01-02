@@ -10,6 +10,9 @@ export const TrialStatsChart = ({ data }: TrialStatsChartProps) => {
             dataKey="name" 
             fontSize={12}
             tickLine={false}
+            angle={-45}
+            textAnchor="end"
+            height={60}
           />
           <YAxis 
             fontSize={12}

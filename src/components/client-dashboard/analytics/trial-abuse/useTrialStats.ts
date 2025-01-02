@@ -7,6 +7,9 @@ interface TrialUsageData {
   risk_score: number | null;
   created_at: string;
   status: string;
+  device_fingerprints: any[];
+  ip_addresses: any[];
+  usage_patterns: Record<string, any>;
 }
 
 export const useTrialStats = () => {
@@ -31,9 +34,9 @@ export const useTrialStats = () => {
 
         const { data, error } = await supabase
           .from('trial_usage')
-          .select('risk_score, created_at, status')
-          .order('created_at', { ascending: false })
-          .limit(100);
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
 
         if (error) {
           console.error("Error fetching trial usage data:", error);
@@ -42,13 +45,24 @@ export const useTrialStats = () => {
 
         console.log("Trial usage data fetched:", data?.length || 0, "records");
 
-        // Group data by status and calculate risk levels
+        // Group data by risk levels and analyze patterns
         const stats = (data as TrialUsageData[] || []).reduce((acc: Record<string, number>, curr) => {
           const score = curr.risk_score ?? 0;
           const riskLevel = score >= 70 ? 'High Risk' : 
                           score >= 40 ? 'Medium Risk' : 
                           'Low Risk';
+          
+          // Count occurrences of each risk level
           acc[riskLevel] = (acc[riskLevel] || 0) + 1;
+
+          // Analyze patterns
+          if (curr.device_fingerprints?.length > 2) {
+            acc['Multiple Devices'] = (acc['Multiple Devices'] || 0) + 1;
+          }
+          if (curr.ip_addresses?.length > 2) {
+            acc['Multiple IPs'] = (acc['Multiple IPs'] || 0) + 1;
+          }
+          
           return acc;
         }, {});
 
