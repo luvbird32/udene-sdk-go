@@ -31,9 +31,13 @@ export const useMetricsData = () => {
           throw error;
         }
 
-        if (!transactions) {
+        if (!transactions || transactions.length === 0) {
           console.log("No transactions found");
-          return null;
+          return {
+            riskScore: 0,
+            totalTransactions: 0,
+            flaggedTransactions: 0
+          };
         }
 
         const totalTransactions = transactions.length;
