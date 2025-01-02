@@ -56,7 +56,7 @@ export const useAuth = (): AuthResponse => {
           description: "Login successful! Redirecting...",
         });
 
-        // Redirect based on current path
+        // Simple path-based routing - no role checks needed
         const currentPath = window.location.pathname;
         if (currentPath.includes('client-auth')) {
           navigate('/client-dashboard');
