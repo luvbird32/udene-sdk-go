@@ -25,8 +25,12 @@ const Dashboard = () => {
         .order('timestamp', { ascending: false })
         .limit(1);
 
-      if (metricsError) throw metricsError;
+      if (metricsError) {
+        console.error("Error fetching metrics:", metricsError);
+        throw metricsError;
+      }
 
+      // Ensure we always return an object with default values
       return {
         activeUsers: metricsData?.[0]?.metric_value ?? 0,
         avgProcessingTime: 35,
@@ -35,6 +39,45 @@ const Dashboard = () => {
     },
     refetchInterval: 3000,
     retry: 1,
+    meta: {
+      errorHandler: (error: Error) => {
+        console.error("Metrics fetch error:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load metrics data",
+          variant: "destructive",
+        });
+      },
+    },
+  });
+
+  // Add rate limits query with proper error handling and default values
+  const { data: rateLimits } = useQuery({
+    queryKey: ["rate-limits"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('rate_limits')
+        .select('*')
+        .order('last_request_time', { ascending: false })
+        .limit(1);
+
+      if (error) {
+        console.error("Error fetching rate limits:", error);
+        throw error;
+      }
+
+      // Always return an object with default values
+      return {
+        currentRate: data?.[0]?.request_count ?? 0,
+        limit: 100,
+        remaining: 100 - (data?.[0]?.request_count ?? 0)
+      };
+    },
+    meta: {
+      errorHandler: (error: Error) => {
+        console.error("Rate limits fetch error:", error);
+      },
+    },
   });
 
   return (
