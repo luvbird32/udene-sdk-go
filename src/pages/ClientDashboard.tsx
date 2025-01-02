@@ -1,4 +1,3 @@
-import { useRoleAuth } from "@/hooks/useRoleAuth";
 import { Tabs } from "@/components/ui/tabs";
 import { DashboardHeader } from "@/components/client-dashboard/tabs/DashboardHeader";
 import { DashboardTabs } from "@/components/client-dashboard/tabs/DashboardTabs";
@@ -7,17 +6,13 @@ import { useClientMetrics } from "@/hooks/useClientMetrics";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 const ClientDashboard = () => {
-  const { isLoading: authLoading } = useRoleAuth(['client', 'user']);
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useClientMetrics();
-
-  if (authLoading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className="min-h-screen bg-background p-6">
       <TooltipProvider>
         <DashboardHeader />
+
         <Tabs defaultValue="dashboard" className="space-y-6">
           <DashboardTabs />
           <DashboardTabContent 

@@ -17,28 +17,13 @@ function App() {
   const { toast } = useToast();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN') {
         console.log('User signed in:', session?.user?.id);
-        
-        // Get user's role from profile
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', session?.user?.id)
-          .single();
-
         toast({
           title: "Welcome back!",
           description: "You have successfully signed in.",
         });
-
-        // Redirect based on role
-        if (profile?.role === 'admin') {
-          navigate('/dashboard');
-        } else {
-          navigate('/client-dashboard');
-        }
       } else if (event === 'SIGNED_OUT') {
         console.log('User signed out');
         navigate('/login');
