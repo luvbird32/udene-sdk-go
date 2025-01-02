@@ -6,19 +6,21 @@ export const useProfileManagement = () => {
 
   const createUserProfile = async (userId: string): Promise<boolean> => {
     try {
-      const { error: profileError } = await supabase
+      const { error } = await supabase
         .from('profiles')
-        .upsert({
-          id: userId,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        });
+        .insert([
+          { 
+            id: userId,
+            status: 'active',
+            account_type: 'client'
+          }
+        ]);
 
-      if (profileError) {
-        console.error("Error creating profile:", profileError);
+      if (error) {
+        console.error("Error creating profile:", error);
         toast({
-          title: "Profile Error",
-          description: "Account created but profile setup failed. Please contact support.",
+          title: "Profile Creation Error",
+          description: "Failed to create user profile. Please try again.",
           variant: "destructive"
         });
         return false;

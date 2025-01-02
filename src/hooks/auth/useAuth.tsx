@@ -47,7 +47,7 @@ export const useAuth = (): AuthResponse => {
         return;
       }
 
-      if (data.user) {
+      if (data?.user) {
         console.log("Login successful, user:", data.user.id);
         setUser(data.user);
 
@@ -86,7 +86,7 @@ export const useAuth = (): AuthResponse => {
     console.log("Attempting signup with email:", cleanEmail);
 
     try {
-      const { data: existingUser, error: signUpError } = await supabase.auth.signUp({
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email: cleanEmail,
         password,
         options: {
@@ -115,11 +115,11 @@ export const useAuth = (): AuthResponse => {
         return;
       }
 
-      if (existingUser?.user) {
-        console.log("User created successfully:", existingUser.user.id);
-        setUser(existingUser.user);
+      if (signUpData?.user) {
+        console.log("User created successfully:", signUpData.user.id);
+        setUser(signUpData.user);
         
-        const profileCreated = await createUserProfile(existingUser.user.id);
+        const profileCreated = await createUserProfile(signUpData.user.id);
         if (!profileCreated) return;
 
         toast({
