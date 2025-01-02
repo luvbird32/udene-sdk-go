@@ -45,5 +45,18 @@ export const FRAUD_PROTECTION_SERVICES = [
       'Commission Pattern Analysis',
       'IP/Device Tracking'
     ]
+  },
+  {
+    type: 'trial_abuse_prevention',
+    title: 'Free Trial Abuse Prevention',
+    description: 'Prevent exploitation and abuse of free trial offerings',
+    features: [
+      'Multiple Account Detection',
+      'Device Fingerprinting',
+      'IP Address Tracking',
+      'Usage Pattern Analysis',
+      'Risk Scoring',
+      'Automated Prevention'
+    ]
   }
 ];
