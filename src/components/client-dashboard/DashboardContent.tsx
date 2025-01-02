@@ -15,6 +15,7 @@ import { DeviceFingerprintMonitoring } from "@/components/client-dashboard/analy
 import { IdentityVerificationMonitoring } from "@/components/client-dashboard/analytics/IdentityVerificationMonitoring";
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
 import { FraudPatterns } from "@/components/dashboard/FraudPatterns";
+import { IPAddressMonitoring } from "@/components/monitoring/IPAddressMonitoring";
 
 interface DashboardContentProps {
   metrics?: {
@@ -31,7 +32,6 @@ export const DashboardContent = ({
   metricsLoading = false, 
   metricsError = null 
 }: DashboardContentProps) => {
-  // Ensure we have default values for all metrics
   const safeMetrics = metrics ?? {
     riskScore: 0,
     totalTransactions: 0,
@@ -59,28 +59,28 @@ export const DashboardContent = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <IPAddressMonitoring />
+        <FlaggedDevices />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <AffiliateMonitoring />
         <RewardProgramMonitoring />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <TrialAbuseMonitoring />
-        <FlaggedDevices />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <DeviceFingerprintMonitoring />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <IdentityVerificationMonitoring />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <UserActivityMonitoring />
-        <PeakTransactionTimes />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <PeakTransactionTimes />
         <BusinessIntelligence />
-        <RiskOverview />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
