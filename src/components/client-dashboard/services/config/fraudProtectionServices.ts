@@ -1,62 +1,87 @@
 export const FRAUD_PROTECTION_SERVICES = [
   {
-    type: 'transaction_monitoring',
-    title: 'Transaction Monitoring',
-    description: 'Real-time monitoring of transactions for fraud detection',
+    type: 'payment_fraud',
+    title: 'Payment Fraud Detection',
+    description: 'Detect and prevent fraudulent payment transactions using advanced machine learning algorithms.',
     features: [
-      'Risk Scoring',
-      'Anomaly Detection',
-      'Transaction History Analysis',
-      'Alerts and Notifications'
+      'Transaction risk scoring',
+      'Pattern recognition',
+      'Behavioral analysis',
+      'Real-time monitoring',
+      'Automated prevention'
     ]
   },
   {
-    type: 'romance_scam_protection',
-    title: 'Romance Scam Protection',
-    description: 'Advanced detection of romance scams and dating fraud patterns',
+    type: 'account_takeover',
+    title: 'Account Takeover Protection',
+    description: 'Protect user accounts from unauthorized access and suspicious activities.',
     features: [
-      'Behavioral Pattern Analysis',
-      'Message Content Analysis',
-      'Profile Change Monitoring',
-      'Relationship Progression Tracking',
-      'Cross-platform Activity Analysis'
+      'Device fingerprinting',
+      'Location tracking',
+      'Behavior analysis',
+      'Multi-factor authentication',
+      'Real-time alerts'
     ]
   },
   {
-    type: 'rewards_program_protection',
-    title: 'Rewards Program Protection',
-    description: 'Protect loyalty programs from abuse and fraud',
+    type: 'romance_scam',
+    title: 'Romance Scam Detection',
+    description: 'Identify and prevent romance scams using behavioral analysis and pattern detection.',
     features: [
-      'Points Transaction Monitoring',
-      'Redemption Pattern Analysis',
-      'Account Linking Detection',
-      'Suspicious Activity Alerts',
-      'Multi-account Detection'
+      'Message pattern analysis',
+      'Profile authenticity verification',
+      'Behavioral red flags detection',
+      'Financial pattern monitoring',
+      'Real-time risk assessment'
     ]
   },
   {
-    type: 'affiliate_fraud_protection',
-    title: 'Affiliate Fraud Protection',
-    description: 'Detect and prevent affiliate marketing fraud',
-    features: [
-      'Click Fraud Detection',
-      'Cookie Stuffing Prevention',
-      'Traffic Quality Analysis',
-      'Commission Pattern Analysis',
-      'IP/Device Tracking'
-    ]
-  },
-  {
-    type: 'trial_abuse_prevention',
+    type: 'trial_abuse',
     title: 'Free Trial Abuse Prevention',
-    description: 'Prevent exploitation and abuse of free trial offerings',
+    description: 'Prevent abuse of free trials through advanced user verification and monitoring.',
     features: [
-      'Multiple Account Detection',
-      'Device Fingerprinting',
-      'IP Address Tracking',
-      'Usage Pattern Analysis',
-      'Risk Scoring',
-      'Automated Prevention'
+      'Multiple account detection',
+      'Device fingerprinting',
+      'IP address tracking',
+      'Usage pattern analysis',
+      'Risk scoring',
+      'Automated prevention'
+    ]
+  },
+  {
+    type: 'affiliate_fraud',
+    title: 'Affiliate Fraud Detection',
+    description: 'Monitor and analyze affiliate activities to prevent fraudulent actions.',
+    features: [
+      'Activity velocity analysis',
+      'IP address tracking',
+      'Commission amount monitoring',
+      'User agent analysis',
+      'Real-time alerts'
+    ]
+  },
+  {
+    type: 'identity_verification',
+    title: 'Identity Verification',
+    description: 'Ensure user identities are verified to prevent fraud.',
+    features: [
+      'Document verification',
+      'Facial recognition',
+      'Biometric checks',
+      'Real-time verification',
+      'Fraud detection alerts'
+    ]
+  },
+  {
+    type: 'device_fingerprinting',
+    title: 'Device Fingerprinting',
+    description: 'Identify and track devices to prevent fraudulent access.',
+    features: [
+      'Unique device identification',
+      'Behavioral tracking',
+      'Risk scoring',
+      'Real-time alerts',
+      'Automated prevention'
     ]
   }
 ];
