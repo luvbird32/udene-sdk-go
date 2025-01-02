@@ -7,7 +7,8 @@ export const SECURITY_SERVICES = [
       'Rate Limiting',
       'IP Whitelisting',
       'API Key Management',
-      'Threat Detection'
+      'Threat Detection',
+      'Access Control'
     ]
   },
   {
@@ -18,18 +19,20 @@ export const SECURITY_SERVICES = [
       'Email Authentication',
       'Phishing Detection',
       'Domain Monitoring',
-      'DMARC Enforcement'
+      'DMARC Enforcement',
+      'Spoofing Prevention'
     ]
   },
   {
     type: 'device_fingerprinting',
     title: 'Device Fingerprinting',
-    description: 'Identify and track suspicious devices',
+    description: 'Identify and track devices to prevent fraudulent access',
     features: [
       'Device Recognition',
       'Browser Fingerprinting',
       'Hardware Analysis',
-      'Location Tracking'
+      'Location Tracking',
+      'Risk Assessment'
     ]
   }
 ];

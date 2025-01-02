@@ -5,7 +5,7 @@ export const FRAUD_PROTECTION_SERVICES = [
     description: 'Detect and prevent fraudulent payment transactions using advanced machine learning algorithms.',
     features: [
       'Transaction risk scoring',
-      'Pattern recognition',
+      'Pattern recognition', 
       'Behavioral analysis',
       'Real-time monitoring',
       'Automated prevention'
@@ -14,13 +14,13 @@ export const FRAUD_PROTECTION_SERVICES = [
   {
     type: 'account_takeover',
     title: 'Account Takeover Protection',
-    description: 'Protect user accounts from unauthorized access and suspicious activities.',
+    description: 'Prevent unauthorized account access and hijacking attempts.',
     features: [
-      'Device fingerprinting',
-      'Location tracking',
-      'Behavior analysis',
-      'Multi-factor authentication',
-      'Real-time alerts'
+      'Login Monitoring',
+      'Suspicious Activity Detection',
+      'Password Security',
+      'Session Management',
+      'Multi-factor Authentication'
     ]
   },
   {
@@ -58,30 +58,6 @@ export const FRAUD_PROTECTION_SERVICES = [
       'Commission amount monitoring',
       'User agent analysis',
       'Real-time alerts'
-    ]
-  },
-  {
-    type: 'identity_verification',
-    title: 'Identity Verification',
-    description: 'Ensure user identities are verified to prevent fraud.',
-    features: [
-      'Document verification',
-      'Facial recognition',
-      'Biometric checks',
-      'Real-time verification',
-      'Fraud detection alerts'
-    ]
-  },
-  {
-    type: 'device_fingerprinting',
-    title: 'Device Fingerprinting',
-    description: 'Identify and track devices to prevent fraudulent access.',
-    features: [
-      'Unique device identification',
-      'Behavioral tracking',
-      'Risk scoring',
-      'Real-time alerts',
-      'Automated prevention'
     ]
   }
 ];
