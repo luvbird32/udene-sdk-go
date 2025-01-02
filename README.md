@@ -1,60 +1,86 @@
 # Fraud Detection API Documentation
 
-## Quick Start
+## Overview
 
-```bash
-# Set your API key as an environment variable
-export FRAUD_API_KEY=your_api_key_here
+A comprehensive fraud detection and security platform with real-time monitoring, AI-powered threat detection, and advanced analytics.
 
-# Make your first API request
-curl -X GET "https://udene.net/v1/metrics" \
-  -H "Authorization: Bearer $FRAUD_API_KEY"
-```
+## Core Features
 
-## Technology Stack
+### 1. Security Monitoring
+- **Vulnerability Scanning**: Automated security assessments and dependency checks
+- **Device Fingerprinting**: Track and analyze device patterns
+- **IP Address Monitoring**: Detect suspicious IP patterns
+- **Email Change Monitoring**: Track and verify email modifications
+
+### 2. Fraud Prevention
+- **Account Takeover Protection**: Real-time monitoring of login attempts and session activity
+- **Transaction Monitoring**: AI-powered analysis of transaction patterns
+- **Romance Scam Detection**: Pattern recognition for dating fraud
+- **Affiliate Fraud Protection**: Monitor and prevent affiliate marketing abuse
+- **Trial Abuse Prevention**: Detect and prevent trial system exploitation
+- **Promo Code Protection**: Prevent abuse of promotional offers
+
+### 3. Identity & Access Management
+- **Identity Verification**: Multi-factor authentication and document verification
+- **API Key Management**: Secure API access control
+- **IP Allowlisting**: Manage trusted IP addresses
+- **User Activity Monitoring**: Track and analyze user behavior
+
+### 4. Analytics & Reporting
+- **Risk Analytics**: Advanced risk scoring and pattern analysis
+- **Geographic Distribution**: Location-based threat analysis
+- **Business Intelligence**: Fraud impact on business metrics
+- **Compliance Reporting**: Automated compliance documentation
+- **Custom Report Generation**: Flexible reporting tools
+
+### 5. Automated Response
+- **Event Triggers**: Configure automated responses to security events
+- **Webhook Integration**: Real-time notifications and integrations
+- **Alert Management**: Prioritized security alerts
+- **Investigation Tools**: Case management and investigation workflows
+
+## Technical Stack
 
 ### Backend Infrastructure
-- **Database**: Supabase (PostgreSQL) - Scalable and secure data storage
-- **Machine Learning**: Edge Functions - Real-time fraud detection models
-- **Caching**: Supabase - Optimized query performance
-- **Message Queue**: Supabase Realtime - Real-time fraud alerts
-- **Monitoring**: Supabase Dashboard - System health and metrics
+- **Database**: Supabase (PostgreSQL)
+- **Authentication**: Supabase Auth
+- **Storage**: Supabase Storage
+- **Functions**: Edge Functions
+- **Real-time**: Supabase Realtime
+- **Monitoring**: Supabase Dashboard
 
-## Authentication
+### Frontend Framework
+- **Framework**: React + Vite
+- **UI Components**: Shadcn/UI
+- **Styling**: Tailwind CSS
+- **State Management**: TanStack Query
+- **Charts**: Recharts
+- **Icons**: Lucide React
 
-All API requests require Bearer token authentication. Your API key should be included in the Authorization header:
+## Getting Started
+
+1. **Environment Setup**
 ```bash
-Authorization: Bearer your_api_key_here
+# Set your API key
+export FRAUD_API_KEY=your_api_key_here
+
+# Install dependencies
+npm install
 ```
 
-## API Reference
-
-### Core Endpoints
-
-```http
-GET /api/v1/metrics    # Retrieve fraud detection metrics and statistics
-GET /api/v1/activity   # Get recent fraud events and suspicious activities
-POST /api/v1/track     # Track and analyze user interactions in real-time
-```
-
-Full OpenAPI specification: [openapi.yaml](openapi.yaml)
-
-## SDKs
-
-### JavaScript/TypeScript
+2. **Authentication**
 ```typescript
-// Install the SDK
-npm install @fraud/js-sdk
-
 // Initialize the client
 import { FraudClient } from '@fraud/js-sdk';
 const client = new FraudClient('your_api_key');
+```
 
-// Example: Get fraud metrics
+3. **Basic Usage**
+```typescript
+// Get fraud metrics
 const metrics = await client.getMetrics();
-console.log('Current risk score:', metrics.riskScore);
 
-// Example: Track user interaction
+// Track user interaction
 await client.trackInteraction({
   userId: 'user_123',
   action: 'login',
@@ -63,106 +89,64 @@ await client.trackInteraction({
     deviceId: 'device_456'
   }
 });
+```
 
-// Example: Handle errors
+## API Reference
+
+### Core Endpoints
+
+```http
+GET /api/v1/metrics    # Retrieve fraud detection metrics
+GET /api/v1/activity   # Get recent fraud events
+POST /api/v1/track     # Track user interactions
+```
+
+### Security Endpoints
+
+```http
+POST /api/v1/scan/vulnerability   # Run security scan
+GET /api/v1/devices              # List tracked devices
+POST /api/v1/verify/identity     # Verify user identity
+```
+
+## Rate Limits
+- **Standard Plan**: 100 requests/minute
+- **Enterprise Plan**: 1000 requests/minute
+- **Burst Limit**: 200 requests/10 seconds
+
+## Error Handling
+```typescript
 try {
   const activity = await client.getActivity();
 } catch (error) {
   if (error.response?.status === 429) {
     // Handle rate limiting
-    console.log('Rate limit exceeded, retry after:', error.response.headers['retry-after']);
+    console.log('Rate limit exceeded');
   }
 }
 ```
 
-### Python
-```python
-# Install the SDK
-pip install fraud-sdk
+## Webhooks
+Configure webhooks to receive real-time notifications for:
+- Security incidents
+- Fraud alerts
+- Identity verification results
+- System health updates
 
-# Initialize the client
-from fraud_sdk import FraudClient
-client = FraudClient('your_api_key')
+## Security Best Practices
+1. Store API keys securely
+2. Implement proper error handling
+3. Use webhook signatures for verification
+4. Monitor API usage and alerts
+5. Regularly update dependencies
 
-# Example: Get fraud metrics
-metrics = client.get_metrics()
-print(f"Current risk score: {metrics['risk_score']}")
+## Support & Resources
+- [API Status](https://status.fraud-api.com)
+- [Documentation](https://docs.fraud-api.com)
+- [Support Portal](https://support.fraud-api.com)
 
-# Example: Track user interaction with custom metadata
-client.track_interaction(
-    user_id='user_123',
-    action='login',
-    metadata={
-        'ip_address': '192.168.1.1',
-        'device_id': 'device_456'
-    }
-)
+## Contributing
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-# Example: Error handling with context manager
-from fraud_sdk.exceptions import RateLimitError
-try:
-    activity = client.get_activity()
-except RateLimitError as e:
-    print(f"Rate limit exceeded. Retry after: {e.retry_after} seconds")
-```
-
-### Java
-```java
-// Add dependency to pom.xml
-// <dependency>
-//   <groupId>com.fraud</groupId>
-//   <artifactId>fraud-sdk</artifactId>
-//   <version>1.0.0</version>
-// </dependency>
-
-// Initialize the client
-import com.fraud.sdk.FraudClient;
-import com.fraud.sdk.models.*;
-import com.fraud.sdk.exceptions.*;
-
-FraudClient client = new FraudClient("your_api_key");
-
-// Example: Get fraud metrics
-try {
-    Metrics metrics = client.getMetrics();
-    System.out.println("Current risk score: " + metrics.getRiskScore());
-    
-    // Example: Track user interaction
-    InteractionData data = new InteractionData.Builder()
-        .userId("user_123")
-        .action("login")
-        .addMetadata("ipAddress", "192.168.1.1")
-        .addMetadata("deviceId", "device_456")
-        .build();
-    
-    client.trackInteraction(data);
-    
-} catch (RateLimitException e) {
-    System.out.println("Rate limit exceeded. Retry after: " + e.getRetryAfter() + " seconds");
-} catch (FraudApiException e) {
-    System.out.println("API error: " + e.getMessage());
-}
-```
-
-## Rate Limits
-- **Standard Plan**: 100 requests per minute
-- **Enterprise Plan**: 1000 requests per minute
-- **Burst Limit**: 200 requests per 10 seconds
-
-Rate limit headers are included in all responses:
-```http
-X-RateLimit-Limit: 100
-X-RateLimit-Remaining: 95
-X-RateLimit-Reset: 1614556800
-```
-
-## Resources
-- [Integration Guides](docs/) - Detailed implementation guides
-- [API Status](https://status.fraud-api.com) - Real-time API status
-- [Support](https://support.fraud-api.com) - Technical support and documentation
-
-## Deployment
-
-Visit [Lovable](https://lovable.dev/projects/93cd0ad5-a304-45e0-bed8-a08742db3f9f) and use Share -> Publish.
-
-For custom domains, use Netlify. See [docs](https://docs.lovable.dev/tips-tricks/custom-domain/).
+## License
+MIT License - see LICENSE file for details.
