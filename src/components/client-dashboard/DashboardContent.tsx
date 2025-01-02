@@ -16,6 +16,7 @@ import { IdentityVerificationMonitoring } from "@/components/client-dashboard/an
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
 import { ReferralFraudMonitoring } from "@/components/client-dashboard/analytics/ReferralFraudMonitoring";
 import { IPAddressMonitoring } from "@/components/monitoring/IPAddressMonitoring";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 interface DashboardContentProps {
   metrics?: {
@@ -30,52 +31,88 @@ interface DashboardContentProps {
 export const DashboardContent = ({ metrics, metricsLoading, metricsError }: DashboardContentProps) => {
   return (
     <div className="space-y-8">
-      <ApiCreditsDisplay />
+      <ErrorBoundary>
+        <ApiCreditsDisplay />
+      </ErrorBoundary>
       
-      <ClientMetrics 
-        metrics={metrics}
-        isLoading={metricsLoading}
-        error={metricsError}
-      />
+      <ErrorBoundary>
+        <ClientMetrics 
+          metrics={metrics}
+          isLoading={metricsLoading}
+          error={metricsError}
+        />
+      </ErrorBoundary>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <TrendAnalysis />
-        <GeographicDistribution />
+        <ErrorBoundary>
+          <TrendAnalysis />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <GeographicDistribution />
+        </ErrorBoundary>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <AffiliateMonitoring />
-        <RewardProgramMonitoring />
+        <ErrorBoundary>
+          <AffiliateMonitoring />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <RewardProgramMonitoring />
+        </ErrorBoundary>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <TrialAbuseMonitoring />
-        <ReferralFraudMonitoring />
+        <ErrorBoundary>
+          <TrialAbuseMonitoring />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <ReferralFraudMonitoring />
+        </ErrorBoundary>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <IPAddressMonitoring />
-        <FlaggedDevices />
+        <ErrorBoundary>
+          <IPAddressMonitoring />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <FlaggedDevices />
+        </ErrorBoundary>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <DeviceFingerprintMonitoring />
-        <IdentityVerificationMonitoring />
+        <ErrorBoundary>
+          <DeviceFingerprintMonitoring />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <IdentityVerificationMonitoring />
+        </ErrorBoundary>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <UserActivityMonitoring />
-        <PeakTransactionTimes />
+        <ErrorBoundary>
+          <UserActivityMonitoring />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <PeakTransactionTimes />
+        </ErrorBoundary>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <RiskDistribution />
-        <BusinessIntelligence />
+        <ErrorBoundary>
+          <RiskDistribution />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <BusinessIntelligence />
+        </ErrorBoundary>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <TransactionHistory />
-        <RiskOverview />
+        <ErrorBoundary>
+          <TransactionHistory />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <RiskOverview />
+        </ErrorBoundary>
       </div>
     </div>
   );
