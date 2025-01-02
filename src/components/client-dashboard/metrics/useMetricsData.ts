@@ -20,59 +20,38 @@ export const useMetricsData = () => {
           throw new Error("No active session");
         }
 
-        const { data: transactions, error } = await supabase
+        const { data: transactions, error: transactionsError } = await supabase
           .from('transactions')
           .select('risk_score, is_fraudulent')
-          .order('created_at', { ascending: false });
+          .order('created_at', { ascending: false })
+          .limit(100);
 
-        if (error) {
-          console.error("Error fetching transactions:", error);
-          throw error;
+        if (transactionsError) {
+          console.error("Transaction fetch error:", transactionsError);
+          throw transactionsError;
         }
 
-        if (!transactions) {
-          console.log("No transactions found");
-          return null;
-        }
-
-        const totalTransactions = transactions.length;
-        const flaggedTransactions = transactions.filter(t => t.is_fraudulent).length;
-        
-        const validRiskScores = transactions.filter(t => 
-          typeof t.risk_score === 'number' && !isNaN(t.risk_score)
-        );
-
-        const averageRiskScore = validRiskScores.length > 0
-          ? Math.round(validRiskScores.reduce((acc, t) => acc + (t.risk_score || 0), 0) / validRiskScores.length)
+        const validTransactions = transactions?.filter(t => t?.risk_score != null) ?? [];
+        const avgRiskScore = validTransactions.length > 0
+          ? validTransactions.reduce((acc, t) => acc + (t.risk_score ?? 0), 0) / validTransactions.length
           : 0;
 
-        console.log("Metrics calculated:", {
-          riskScore: averageRiskScore,
-          totalTransactions,
-          flaggedTransactions
-        });
-
         return {
-          riskScore: averageRiskScore,
-          totalTransactions,
-          flaggedTransactions
+          riskScore: Math.round(avgRiskScore),
+          totalTransactions: validTransactions.length,
+          flaggedTransactions: validTransactions.filter(t => t.is_fraudulent).length
         };
       } catch (error) {
-        console.error("Error in metrics query:", error);
+        console.error('Error fetching metrics:', error);
+        toast({
+          variant: "destructive",
+          title: "Error loading metrics",
+          description: "Failed to load dashboard metrics. Please try again later."
+        });
         throw error;
       }
     },
-    refetchInterval: 30000,
-    retry: 2,
+    retry: 3,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-    meta: {
-      errorHandler: (error: Error) => {
-        toast({
-          title: "Error",
-          description: "Failed to load metrics data",
-          variant: "destructive",
-        });
-      },
-    },
   });
 };
