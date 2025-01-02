@@ -31,9 +31,6 @@ export const UserManagement = () => {
             <span>{user.username || user.id}</span>
             <UserActions 
               user={user} 
-              onRoleChange={async (userId, newRole) => {
-                await supabase.from('profiles').update({ role: newRole }).eq('id', userId);
-              }} 
               onStatusToggle={async (userId, newStatus) => {
                 await supabase.from('profiles').update({ status: newStatus }).eq('id', userId);
               }} 
