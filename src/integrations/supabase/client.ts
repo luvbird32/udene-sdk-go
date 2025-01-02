@@ -19,25 +19,15 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     headers: {
       'x-application-name': 'fraud-detection-dashboard'
     }
-  },
-  db: {
-    schema: 'public'
   }
 });
 
 // Add health check function
 export const checkSupabaseHealth = async () => {
   try {
-    const { data, error } = await supabase
-      .from('metrics')
-      .select('*')
-      .limit(1);
-    
-    if (error) {
-      console.error('Supabase health check failed:', error);
-      return false;
-    }
-    return true;
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error) throw error;
+    return !!user;
   } catch (error) {
     console.error('Supabase health check failed:', error);
     return false;

@@ -9,55 +9,65 @@ export const useMetricsData = () => {
     queryKey: ["client-metrics"],
     queryFn: async () => {
       try {
-        // First check if we have a valid session
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
         
-        if (!session) {
-          console.error("No active session");
-          throw new Error("Authentication required");
+        if (userError) {
+          console.error("Error getting user:", userError);
+          throw userError;
         }
 
-        console.log("Fetching metrics data...");
-        const { data: metrics, error: metricsError } = await supabase
-          .from('metrics')
-          .select('*')
-          .order('timestamp', { ascending: false })
-          .limit(1);
-
-        if (metricsError) {
-          console.error("Error fetching metrics:", metricsError);
-          throw metricsError;
+        if (!user) {
+          console.error("No user found");
+          throw new Error("No user found");
         }
 
-        if (!metrics || metrics.length === 0) {
-          console.log("No metrics data found");
-          return {
-            riskScore: 0,
-            totalTransactions: 0,
-            flaggedTransactions: 0
-          };
+        const { data: transactions, error } = await supabase
+          .from('transactions')
+          .select('risk_score, is_fraudulent')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error("Error fetching transactions:", error);
+          throw error;
         }
+
+        if (!transactions) {
+          console.log("No transactions found");
+          return null;
+        }
+
+        const totalTransactions = transactions.length;
+        const flaggedTransactions = transactions.filter(t => t.is_fraudulent).length;
+        
+        const validRiskScores = transactions.filter(t => 
+          typeof t.risk_score === 'number' && !isNaN(t.risk_score)
+        );
+
+        const averageRiskScore = validRiskScores.length > 0
+          ? Math.round(validRiskScores.reduce((acc, t) => acc + (t.risk_score || 0), 0) / validRiskScores.length)
+          : 0;
+
+        console.log("Metrics calculated:", {
+          riskScore: averageRiskScore,
+          totalTransactions,
+          flaggedTransactions
+        });
 
         return {
-          riskScore: metrics[0].metric_value || 0,
-          totalTransactions: metrics[0].metric_value || 0,
-          flaggedTransactions: 0
+          riskScore: averageRiskScore,
+          totalTransactions,
+          flaggedTransactions
         };
       } catch (error) {
-        console.error('Error in metrics query:', error);
-        toast({
-          title: "Error",
-          description: "Failed to load metrics data. Please try again later.",
-          variant: "destructive",
-        });
+        console.error("Error in metrics query:", error);
         throw error;
       }
     },
-    retry: 3,
+    refetchInterval: 30000,
+    retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
     meta: {
       errorHandler: (error: Error) => {
-        console.error("Failed to fetch metrics:", error);
         toast({
           title: "Error",
           description: "Failed to load metrics data",
