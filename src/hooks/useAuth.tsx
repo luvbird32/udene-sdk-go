@@ -102,44 +102,11 @@ export const useAuth = (): AuthResponse => {
       if (data.user) {
         console.log("Login successful, user:", data.user.id);
         setUser(data.user);
-
-        // Get user's role from profiles table
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', data.user.id)
-          .single();
-
         toast({
           title: "Success",
           description: "Login successful! Redirecting...",
         });
-
-        // Redirect based on role and current path
-        const currentPath = window.location.pathname;
-        if (currentPath.includes('client-auth')) {
-          if (profile?.role === 'client') {
-            navigate('/client-dashboard');
-          } else {
-            toast({
-              title: "Access Denied",
-              description: "You need client access to view this dashboard",
-              variant: "destructive"
-            });
-            navigate('/login');
-          }
-        } else {
-          if (profile?.role === 'admin') {
-            navigate('/dashboard');
-          } else {
-            toast({
-              title: "Access Denied",
-              description: "You need admin access to view this dashboard",
-              variant: "destructive"
-            });
-            navigate('/login');
-          }
-        }
+        navigate('/dashboard');
       }
     } catch (err) {
       console.error("Unexpected login error:", err);
@@ -200,29 +167,6 @@ export const useAuth = (): AuthResponse => {
           description: "Account created successfully! You can now log in.",
         });
         
-        // Set the appropriate role based on the signup path
-        const role = window.location.pathname.includes('client-auth') ? 'client' : 'user';
-        
-        // Create profile with appropriate role
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .upsert({
-            id: existingUser.user.id,
-            role: role,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          });
-
-        if (profileError) {
-          console.error("Error creating profile:", profileError);
-          toast({
-            title: "Profile Error",
-            description: "Account created but profile setup failed. Please contact support.",
-            variant: "destructive"
-          });
-          return;
-        }
-
         // Since email verification is disabled, we can automatically log them in
         await handleLogin(cleanEmail, password);
       }

@@ -9,49 +9,71 @@ export const useMetricsData = () => {
     queryKey: ["client-metrics"],
     queryFn: async () => {
       try {
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
         
-        if (sessionError) {
-          console.error("Session error:", sessionError);
-          throw new Error("Authentication error");
+        if (userError) {
+          console.error("Error getting user:", userError);
+          throw userError;
         }
 
-        if (!session) {
-          throw new Error("No active session");
+        if (!user) {
+          console.error("No user found");
+          throw new Error("No user found");
         }
 
-        const { data: transactions, error: transactionsError } = await supabase
+        const { data: transactions, error } = await supabase
           .from('transactions')
           .select('risk_score, is_fraudulent')
-          .order('created_at', { ascending: false })
-          .limit(100);
+          .order('created_at', { ascending: false });
 
-        if (transactionsError) {
-          console.error("Transaction fetch error:", transactionsError);
-          throw transactionsError;
+        if (error) {
+          console.error("Error fetching transactions:", error);
+          throw error;
         }
 
-        const validTransactions = transactions?.filter(t => t?.risk_score != null) ?? [];
-        const avgRiskScore = validTransactions.length > 0
-          ? validTransactions.reduce((acc, t) => acc + (t.risk_score ?? 0), 0) / validTransactions.length
+        if (!transactions) {
+          console.log("No transactions found");
+          return null;
+        }
+
+        const totalTransactions = transactions.length;
+        const flaggedTransactions = transactions.filter(t => t.is_fraudulent).length;
+        
+        const validRiskScores = transactions.filter(t => 
+          typeof t.risk_score === 'number' && !isNaN(t.risk_score)
+        );
+
+        const averageRiskScore = validRiskScores.length > 0
+          ? Math.round(validRiskScores.reduce((acc, t) => acc + (t.risk_score || 0), 0) / validRiskScores.length)
           : 0;
 
+        console.log("Metrics calculated:", {
+          riskScore: averageRiskScore,
+          totalTransactions,
+          flaggedTransactions
+        });
+
         return {
-          riskScore: Math.round(avgRiskScore),
-          totalTransactions: validTransactions.length,
-          flaggedTransactions: validTransactions.filter(t => t.is_fraudulent).length
+          riskScore: averageRiskScore,
+          totalTransactions,
+          flaggedTransactions
         };
       } catch (error) {
-        console.error('Error fetching metrics:', error);
-        toast({
-          variant: "destructive",
-          title: "Error loading metrics",
-          description: "Failed to load dashboard metrics. Please try again later."
-        });
+        console.error("Error in metrics query:", error);
         throw error;
       }
     },
-    retry: 3,
+    refetchInterval: 30000,
+    retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    meta: {
+      errorHandler: (error: Error) => {
+        toast({
+          title: "Error",
+          description: "Failed to load metrics data",
+          variant: "destructive",
+        });
+      },
+    },
   });
 };

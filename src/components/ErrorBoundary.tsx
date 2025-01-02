@@ -10,40 +10,24 @@ interface Props {
 
 interface State {
   hasError: boolean;
-  error?: Error | null;
-  errorInfo?: ErrorInfo | null;
+  error?: Error;
 }
 
 class ErrorBoundary extends Component<Props, State> {
   public state: State = {
-    hasError: false,
-    error: null,
-    errorInfo: null
+    hasError: false
   };
 
   public static getDerivedStateFromError(error: Error): State {
-    return { 
-      hasError: true, 
-      error 
-    };
+    return { hasError: true, error };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Uncaught error:', error);
-    console.error('Error info:', errorInfo);
-    
-    this.setState({
-      error,
-      errorInfo
-    });
+    console.error('Uncaught error:', error, errorInfo);
   }
 
   private handleReset = () => {
-    this.setState({ 
-      hasError: false, 
-      error: null,
-      errorInfo: null 
-    });
+    this.setState({ hasError: false, error: undefined });
   };
 
   public render() {
@@ -58,16 +42,10 @@ class ErrorBoundary extends Component<Props, State> {
           <AlertTitle>Something went wrong</AlertTitle>
           <AlertDescription className="mt-2 space-y-2">
             <p>{this.state.error?.message || 'An unexpected error occurred'}</p>
-            {this.state.errorInfo && (
-              <pre className="mt-2 text-xs overflow-auto max-h-[200px] p-2 bg-destructive/10 rounded">
-                {this.state.errorInfo.componentStack}
-              </pre>
-            )}
             <Button 
               variant="outline" 
               size="sm"
               onClick={this.handleReset}
-              className="mt-4"
             >
               Try Again
             </Button>

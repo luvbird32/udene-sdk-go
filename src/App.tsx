@@ -10,7 +10,6 @@ import Dashboard from '@/pages/Dashboard'
 import Settings from '@/pages/Settings'
 import Users from '@/pages/Users'
 import ClientSettings from '@/pages/ClientSettings'
-import ClientDashboardAuth from '@/components/client-dashboard/auth/ClientDashboardAuth'
 import { supabase } from "@/integrations/supabase/client"
 
 function App() {
@@ -49,7 +48,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/client-auth" element={<ClientDashboardAuth />} />
         <Route path="/client-dashboard" element={<ClientDashboard />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/users" element={<Users />} />

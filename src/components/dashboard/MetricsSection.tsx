@@ -1,17 +1,37 @@
+/**
+ * MetricsSection Component
+ * 
+ * Displays key system metrics and health indicators in the admin dashboard.
+ * Includes various monitoring components and real-time status updates.
+ * 
+ * Features:
+ * - Key performance metrics
+ * - System health status
+ * - Detection metrics visualization
+ * - Error state handling
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <MetricsSection
+ *   metrics={metricsData}
+ *   metricsLoading={false}
+ *   metricsError={null}
+ * />
+ * ```
+ */
 import { KeyMetrics } from "./KeyMetrics";
 import { HealthStatus } from "@/components/monitoring/HealthStatus";
 import { DetectionMetrics } from "@/components/monitoring/DetectionMetrics";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import ErrorBoundary from "@/components/ErrorBoundary";
 
 interface MetricsSectionProps {
-  metrics: {
-    activeUsers?: number;
-    avgProcessingTime?: number;
-    concurrentCalls?: number;
-  };
+  /** Current system metrics data */
+  metrics: any;
+  /** Loading state for metrics data */
   metricsLoading: boolean;
+  /** Error state for metrics data fetch */
   metricsError: Error | null;
 }
 
@@ -30,20 +50,11 @@ export const MetricsSection = ({ metrics, metricsLoading, metricsError }: Metric
     <div className="space-y-6">
       {metricsError && renderError(metricsError)}
       
-      <ErrorBoundary>
-        <KeyMetrics 
-          metrics={metrics || {}} 
-          isLoading={metricsLoading} 
-        />
-      </ErrorBoundary>
+      <KeyMetrics metrics={metrics} isLoading={metricsLoading} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <HealthStatus />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <DetectionMetrics />
-        </ErrorBoundary>
+        <HealthStatus />
+        <DetectionMetrics />
       </div>
     </div>
   );

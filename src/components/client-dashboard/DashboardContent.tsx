@@ -16,9 +16,6 @@ import { IdentityVerificationMonitoring } from "@/components/client-dashboard/an
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
 import { ReferralFraudMonitoring } from "@/components/client-dashboard/analytics/ReferralFraudMonitoring";
 import { IPAddressMonitoring } from "@/components/monitoring/IPAddressMonitoring";
-import ErrorBoundary from "@/components/ErrorBoundary";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface DashboardContentProps {
   metrics?: {
@@ -31,106 +28,54 @@ interface DashboardContentProps {
 }
 
 export const DashboardContent = ({ metrics, metricsLoading, metricsError }: DashboardContentProps) => {
-  const { data: user, isLoading: userLoading } = useCurrentUser();
-
-  if (userLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!user) {
-    return (
-      <Alert variant="destructive">
-        <AlertDescription>
-          Please log in to view the dashboard
-        </AlertDescription>
-      </Alert>
-    );
-  }
-
   return (
     <div className="space-y-8">
-      <ErrorBoundary>
-        <ApiCreditsDisplay />
-      </ErrorBoundary>
+      <ApiCreditsDisplay />
       
-      <ErrorBoundary>
-        <ClientMetrics 
-          metrics={metrics}
-          isLoading={metricsLoading}
-          error={metricsError}
-        />
-      </ErrorBoundary>
+      <ClientMetrics 
+        metrics={metrics}
+        isLoading={metricsLoading}
+        error={metricsError}
+      />
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <TrendAnalysis />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <GeographicDistribution />
-        </ErrorBoundary>
+        <TrendAnalysis />
+        <GeographicDistribution />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <AffiliateMonitoring />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <RewardProgramMonitoring />
-        </ErrorBoundary>
+        <AffiliateMonitoring />
+        <RewardProgramMonitoring />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <TrialAbuseMonitoring />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <ReferralFraudMonitoring />
-        </ErrorBoundary>
+        <TrialAbuseMonitoring />
+        <ReferralFraudMonitoring />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <IPAddressMonitoring />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <FlaggedDevices />
-        </ErrorBoundary>
+        <IPAddressMonitoring />
+        <FlaggedDevices />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <DeviceFingerprintMonitoring />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <IdentityVerificationMonitoring />
-        </ErrorBoundary>
+        <DeviceFingerprintMonitoring />
+        <IdentityVerificationMonitoring />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <UserActivityMonitoring />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <PeakTransactionTimes />
-        </ErrorBoundary>
+        <UserActivityMonitoring />
+        <PeakTransactionTimes />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <RiskDistribution />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <BusinessIntelligence />
-        </ErrorBoundary>
+        <RiskDistribution />
+        <BusinessIntelligence />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <TransactionHistory />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <RiskOverview />
-        </ErrorBoundary>
+        <TransactionHistory />
+        <RiskOverview />
       </div>
     </div>
   );
