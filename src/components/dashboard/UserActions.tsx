@@ -22,7 +22,15 @@ export const UserActions = ({ user, onStatusToggle }: UserActionsProps) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => onStatusToggle(user.id, user.status === "active" ? "suspended" : "active")}>
+        <DropdownMenuItem 
+          onClick={async () => {
+            try {
+              await onStatusToggle(user.id, user.status === "active" ? "suspended" : "active");
+            } catch (error) {
+              console.error("Error toggling user status:", error);
+            }
+          }}
+        >
           {user.status === "active" ? "Suspend User" : "Activate User"}
         </DropdownMenuItem>
       </DropdownMenuContent>
