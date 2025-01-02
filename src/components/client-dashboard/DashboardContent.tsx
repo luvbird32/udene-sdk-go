@@ -17,6 +17,8 @@ import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/
 import { ReferralFraudMonitoring } from "@/components/client-dashboard/analytics/ReferralFraudMonitoring";
 import { IPAddressMonitoring } from "@/components/monitoring/IPAddressMonitoring";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface DashboardContentProps {
   metrics?: {
@@ -29,6 +31,22 @@ interface DashboardContentProps {
 }
 
 export const DashboardContent = ({ metrics, metricsLoading, metricsError }: DashboardContentProps) => {
+  const { data: user, isLoading: userLoading } = useCurrentUser();
+
+  if (userLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return (
+      <Alert variant="destructive">
+        <AlertDescription>
+          Please log in to view the dashboard
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
   return (
     <div className="space-y-8">
       <ErrorBoundary>

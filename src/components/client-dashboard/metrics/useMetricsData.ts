@@ -9,16 +9,15 @@ export const useMetricsData = () => {
     queryKey: ["client-metrics"],
     queryFn: async () => {
       try {
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         
-        if (userError) {
-          console.error("Error getting user:", userError);
-          throw userError;
+        if (sessionError) {
+          console.error("Session error:", sessionError);
+          throw new Error("Authentication error");
         }
 
-        if (!user) {
-          console.error("No user found");
-          throw new Error("No user found");
+        if (!session) {
+          throw new Error("No active session");
         }
 
         const { data: transactions, error } = await supabase
