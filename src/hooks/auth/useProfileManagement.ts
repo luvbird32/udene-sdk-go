@@ -5,13 +5,12 @@ import type { UserProfile } from "./types";
 export const useProfileManagement = () => {
   const { toast } = useToast();
 
-  const createUserProfile = async (userId: string, role: string): Promise<boolean> => {
+  const createUserProfile = async (userId: string): Promise<boolean> => {
     try {
       const { error: profileError } = await supabase
         .from('profiles')
         .upsert({
           id: userId,
-          role: role,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         });

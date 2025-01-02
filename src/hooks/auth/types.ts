@@ -9,7 +9,6 @@ export interface AuthResponse {
 
 export interface UserProfile {
   id: string;
-  role: string;
   created_at?: string;
   updated_at?: string;
 }

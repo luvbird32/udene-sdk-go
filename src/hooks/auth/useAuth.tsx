@@ -11,7 +11,7 @@ export const useAuth = (): AuthResponse => {
   const { toast } = useToast();
   const { isLoading, setIsLoading, user, setUser } = useAuthState();
   const { validateCredentials } = useAuthValidation();
-  const { createUserProfile, getUserProfile } = useProfileManagement();
+  const { createUserProfile } = useProfileManagement();
 
   const handleLogin = async (email: string, password: string) => {
     if (!validateCredentials(email, password)) {
@@ -51,37 +51,17 @@ export const useAuth = (): AuthResponse => {
         console.log("Login successful, user:", data.user.id);
         setUser(data.user);
 
-        const profile = await getUserProfile(data.user.id);
-
         toast({
           title: "Success",
           description: "Login successful! Redirecting...",
         });
 
-        // Redirect based on role and current path
+        // Redirect based on current path
         const currentPath = window.location.pathname;
         if (currentPath.includes('client-auth')) {
-          if (profile?.role === 'client') {
-            navigate('/client-dashboard');
-          } else {
-            toast({
-              title: "Access Denied",
-              description: "You need client access to view this dashboard",
-              variant: "destructive"
-            });
-            navigate('/login');
-          }
+          navigate('/client-dashboard');
         } else {
-          if (profile?.role === 'admin') {
-            navigate('/dashboard');
-          } else {
-            toast({
-              title: "Access Denied",
-              description: "You need admin access to view this dashboard",
-              variant: "destructive"
-            });
-            navigate('/login');
-          }
+          navigate('/dashboard');
         }
       }
     } catch (err) {
@@ -138,16 +118,14 @@ export const useAuth = (): AuthResponse => {
       if (existingUser?.user) {
         console.log("User created successfully:", existingUser.user.id);
         setUser(existingUser.user);
+        
+        const profileCreated = await createUserProfile(existingUser.user.id);
+        if (!profileCreated) return;
+
         toast({
           title: "Success",
           description: "Account created successfully! You can now log in.",
         });
-        
-        // Set the appropriate role based on the signup path
-        const role = window.location.pathname.includes('client-auth') ? 'client' : 'user';
-        
-        const profileCreated = await createUserProfile(existingUser.user.id, role);
-        if (!profileCreated) return;
 
         // Since email verification is disabled, we can automatically log them in
         await handleLogin(cleanEmail, password);
