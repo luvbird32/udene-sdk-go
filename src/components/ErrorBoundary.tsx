@@ -23,6 +23,7 @@ class ErrorBoundary extends Component<Props, State> {
 
   public static getDerivedStateFromError(error: Error): State {
     // Update state so the next render will show the fallback UI
+    console.error('Error caught by ErrorBoundary:', error);
     return { 
       hasError: true, 
       error 
@@ -32,6 +33,9 @@ class ErrorBoundary extends Component<Props, State> {
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('Uncaught error:', error);
     console.error('Error info:', errorInfo);
+    
+    // Log additional debugging information
+    console.error('Component stack:', errorInfo.componentStack);
     
     this.setState({
       error,
@@ -55,24 +59,27 @@ class ErrorBoundary extends Component<Props, State> {
         return this.props.fallback;
       }
 
-      // Default error UI
+      // Default error UI with more detailed information
       return (
         <Alert variant="destructive" className="my-4">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Something went wrong</AlertTitle>
           <AlertDescription className="mt-2 space-y-2">
-            <p>
+            <div className="text-sm">
               {this.state.error?.message || 'An unexpected error occurred'}
               {process.env.NODE_ENV === 'development' && this.state.errorInfo && (
-                <pre className="mt-2 text-xs overflow-auto">
+                <pre className="mt-2 text-xs overflow-auto bg-secondary/10 p-2 rounded">
+                  {this.state.error?.stack}
+                  {'\n\nComponent Stack:\n'}
                   {this.state.errorInfo.componentStack}
                 </pre>
               )}
-            </p>
+            </div>
             <Button 
               variant="outline" 
               size="sm"
               onClick={this.handleReset}
+              className="mt-2"
             >
               Try Again
             </Button>

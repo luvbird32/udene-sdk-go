@@ -33,6 +33,7 @@ export const DashboardContent = ({
   metricsLoading = false, 
   metricsError = null 
 }: DashboardContentProps) => {
+  // Ensure we have default values for metrics
   const safeMetrics = metrics ?? {
     riskScore: 0,
     totalTransactions: 0,
