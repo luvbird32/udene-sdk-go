@@ -8,25 +8,53 @@ export const UserManagement = () => {
   const { data: users, isLoading, error } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const { data, error } = await supabase.from('profiles').select('*');
-      if (error) throw error;
-      return data as Profile[];
+      console.log("Fetching users from Supabase...");
+      const { data: profiles, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching users:", error);
+        throw error;
+      }
+
+      return profiles?.map((profile): Profile => ({
+        id: profile.id,
+        username: profile.username || "Unnamed User",
+        status: profile.status || "active",
+        // Ensure we have default values for required fields
+        role: profile.role || "user",
+        account_type: profile.account_type || "personal",
+        created_at: profile.created_at,
+        updated_at: profile.updated_at
+      })) || [];
     },
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <Card className="p-4">
+        <h3 className="font-semibold mb-4">User Management</h3>
+        <div>Loading users...</div>
+      </Card>
+    );
   }
 
   if (error) {
-    return <div>Error loading users: {error.message}</div>;
+    return (
+      <Card className="p-4">
+        <h3 className="font-semibold mb-4">User Management</h3>
+        <div className="text-red-500">Error loading users: {error.message}</div>
+      </Card>
+    );
   }
 
   return (
     <Card className="p-4">
       <h3 className="font-semibold mb-4">User Management</h3>
       <div className="space-y-4">
-        {users.map((user) => (
+        {users?.map((user) => (
           <div key={user.id} className="flex justify-between items-center">
             <span>{user.username || user.id}</span>
             <UserActions 
