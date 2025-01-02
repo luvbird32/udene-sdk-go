@@ -16,6 +16,7 @@ import { IdentityVerificationMonitoring } from "@/components/client-dashboard/an
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
 import { FraudPatterns } from "@/components/dashboard/FraudPatterns";
 import { IPAddressMonitoring } from "@/components/monitoring/IPAddressMonitoring";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 interface DashboardContentProps {
   metrics?: {
@@ -40,52 +41,88 @@ export const DashboardContent = ({
 
   return (
     <div className="space-y-8">
-      <ApiCreditsDisplay />
+      <ErrorBoundary>
+        <ApiCreditsDisplay />
+      </ErrorBoundary>
       
-      <ClientMetrics 
-        metrics={safeMetrics}
-        isLoading={metricsLoading}
-        error={metricsError}
-      />
+      <ErrorBoundary>
+        <ClientMetrics 
+          metrics={safeMetrics}
+          isLoading={metricsLoading}
+          error={metricsError}
+        />
+      </ErrorBoundary>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <TrendAnalysis />
-        <GeographicDistribution />
+        <ErrorBoundary>
+          <TrendAnalysis />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <GeographicDistribution />
+        </ErrorBoundary>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <FraudPatterns />
-        <RiskDistribution />
+        <ErrorBoundary>
+          <FraudPatterns />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <RiskDistribution />
+        </ErrorBoundary>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <IPAddressMonitoring />
-        <FlaggedDevices />
+        <ErrorBoundary>
+          <IPAddressMonitoring />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <FlaggedDevices />
+        </ErrorBoundary>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <AffiliateMonitoring />
-        <RewardProgramMonitoring />
+        <ErrorBoundary>
+          <AffiliateMonitoring />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <RewardProgramMonitoring />
+        </ErrorBoundary>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <TrialAbuseMonitoring />
-        <DeviceFingerprintMonitoring />
+        <ErrorBoundary>
+          <TrialAbuseMonitoring />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <DeviceFingerprintMonitoring />
+        </ErrorBoundary>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <IdentityVerificationMonitoring />
-        <UserActivityMonitoring />
+        <ErrorBoundary>
+          <IdentityVerificationMonitoring />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <UserActivityMonitoring />
+        </ErrorBoundary>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <PeakTransactionTimes />
-        <BusinessIntelligence />
+        <ErrorBoundary>
+          <PeakTransactionTimes />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <BusinessIntelligence />
+        </ErrorBoundary>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <TransactionHistory />
-        <RiskOverview />
+        <ErrorBoundary>
+          <TransactionHistory />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <RiskOverview />
+        </ErrorBoundary>
       </div>
     </div>
   );
