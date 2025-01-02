@@ -14,8 +14,6 @@ import { RewardProgramMonitoring } from "@/components/client-dashboard/analytics
 import { DeviceFingerprintMonitoring } from "@/components/client-dashboard/analytics/DeviceFingerprintMonitoring";
 import { IdentityVerificationMonitoring } from "@/components/client-dashboard/analytics/IdentityVerificationMonitoring";
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
-import { ReferralFraudMonitoring } from "@/components/client-dashboard/analytics/ReferralFraudMonitoring";
-import { IPAddressMonitoring } from "@/components/monitoring/IPAddressMonitoring";
 
 interface DashboardContentProps {
   metrics?: {
@@ -27,13 +25,24 @@ interface DashboardContentProps {
   metricsError?: Error | null;
 }
 
-export const DashboardContent = ({ metrics, metricsLoading, metricsError }: DashboardContentProps) => {
+export const DashboardContent = ({ 
+  metrics = null, 
+  metricsLoading = false, 
+  metricsError = null 
+}: DashboardContentProps) => {
+  // Ensure we have default values for all metrics
+  const safeMetrics = metrics ?? {
+    riskScore: 0,
+    totalTransactions: 0,
+    flaggedTransactions: 0
+  };
+
   return (
     <div className="space-y-8">
       <ApiCreditsDisplay />
       
       <ClientMetrics 
-        metrics={metrics}
+        metrics={safeMetrics}
         isLoading={metricsLoading}
         error={metricsError}
       />
@@ -50,11 +59,6 @@ export const DashboardContent = ({ metrics, metricsLoading, metricsError }: Dash
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <TrialAbuseMonitoring />
-        <ReferralFraudMonitoring />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <IPAddressMonitoring />
         <FlaggedDevices />
       </div>
 

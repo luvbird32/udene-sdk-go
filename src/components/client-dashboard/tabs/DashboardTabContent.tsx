@@ -20,7 +20,11 @@ interface DashboardTabContentProps {
   metricsError?: Error | null;
 }
 
-export const DashboardTabContent = ({ metrics, metricsLoading, metricsError }: DashboardTabContentProps) => {
+export const DashboardTabContent = ({ 
+  metrics = null, 
+  metricsLoading = false, 
+  metricsError = null 
+}: DashboardTabContentProps) => {
   return (
     <>
       <TabsContent value="dashboard" className="space-y-6">
