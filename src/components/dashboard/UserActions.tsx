@@ -10,11 +10,10 @@ import { MoreHorizontal } from "lucide-react";
 
 interface UserActionsProps {
   user: Profile;
-  onRoleChange: (userId: string, newRole: string) => Promise<void>;
   onStatusToggle: (userId: string, newStatus: string) => Promise<void>;
 }
 
-export const UserActions = ({ user, onRoleChange, onStatusToggle }: UserActionsProps) => {
+export const UserActions = ({ user, onStatusToggle }: UserActionsProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -23,12 +22,6 @@ export const UserActions = ({ user, onRoleChange, onStatusToggle }: UserActionsP
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => onRoleChange(user.id, "admin")}>
-          Make Admin
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onRoleChange(user.id, "user")}>
-          Make User
-        </DropdownMenuItem>
         <DropdownMenuItem onClick={() => onStatusToggle(user.id, user.status === "active" ? "suspended" : "active")}>
           {user.status === "active" ? "Suspend User" : "Activate User"}
         </DropdownMenuItem>
