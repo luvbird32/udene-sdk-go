@@ -33,10 +33,10 @@ export const useServices = () => {
       }
 
       try {
+        // Removed the .eq('user_id', userId) filter to get all services
         const { data: services, error } = await supabase
           .from('client_services')
-          .select('*')
-          .eq('user_id', userId);
+          .select('*');
 
         if (error) {
           console.error('Supabase error:', error);
