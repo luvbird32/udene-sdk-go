@@ -28,8 +28,8 @@ export const ClientApiKeyManager = () => {
   });
 
   const createKeyMutation = useMutation({
-    mutationFn: async ({ name, description }: { name: string; description: string }) => {
-      return createApiKey(name, description, user?.id);
+    mutationFn: async ({ name, description, keyType }: { name: string; description: string; keyType: 'testing' | 'production' }) => {
+      return createApiKey(name, description, user?.id, keyType);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['client-api-keys'] });
@@ -78,8 +78,8 @@ export const ClientApiKeyManager = () => {
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4">Generate New API Key</h3>
         <ApiKeyForm 
-          onSubmit={async (name, description) => {
-            await createKeyMutation.mutateAsync({ name, description });
+          onSubmit={async (name, description, keyType) => {
+            await createKeyMutation.mutateAsync({ name, description, keyType });
           }}
           isGenerating={createKeyMutation.isPending}
         />

@@ -176,6 +176,7 @@ export type Database = {
           created_at: string | null
           description: string | null
           id: string
+          key_type: string
           key_value: string
           name: string
           project_id: string | null
@@ -186,6 +187,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           id?: string
+          key_type?: string
           key_value: string
           name: string
           project_id?: string | null
@@ -196,6 +198,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           id?: string
+          key_type?: string
           key_value?: string
           name?: string
           project_id?: string | null
@@ -254,6 +257,7 @@ export type Database = {
           created_at: string | null
           description: string | null
           id: string
+          key_type: string
           key_value: string
           name: string
           status: string
@@ -264,6 +268,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           id?: string
+          key_type?: string
           key_value: string
           name: string
           status?: string
@@ -274,6 +279,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           id?: string
+          key_type?: string
           key_value?: string
           name?: string
           status?: string

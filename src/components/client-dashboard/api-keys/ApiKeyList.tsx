@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { ApiKeyItem } from "./components/ApiKeyItem";
 import { DeleteKeyDialog } from "./components/DeleteKeyDialog";
 
@@ -9,6 +10,7 @@ interface ApiKey {
   name: string;
   description?: string;
   created_at: string;
+  key_type: 'testing' | 'production';
 }
 
 interface ApiKeyListProps {
@@ -59,6 +61,7 @@ export const ApiKeyList = ({ apiKeys, isLoading, onDelete }: ApiKeyListProps) =>
           name={key.name}
           description={key.description}
           createdAt={key.created_at}
+          keyType={key.key_type}
           onDelete={handleDelete}
         />
       ))}

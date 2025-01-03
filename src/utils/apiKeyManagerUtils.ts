@@ -7,7 +7,12 @@ type TableName = 'api_keys' | 'client_api_keys';
 export const useApiKeyMutations = (queryClient: any, tableName: TableName) => {
   const { toast } = useToast();
 
-  const createApiKey = async (projectName: string, projectDescription: string, userId?: string) => {
+  const createApiKey = async (
+    projectName: string, 
+    projectDescription: string, 
+    userId?: string, 
+    keyType: 'testing' | 'production' = 'testing'
+  ) => {
     if (!projectName.trim()) {
       throw new Error("Project name is required");
     }
@@ -18,6 +23,7 @@ export const useApiKeyMutations = (queryClient: any, tableName: TableName) => {
       name: projectName.trim(),
       description: projectDescription.trim() || null,
       status: 'active',
+      key_type: keyType,
       ...(userId && { user_id: userId }),
     };
 
