@@ -1,19 +1,14 @@
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
-
 interface ErrorStateProps {
-  error: Error;
-  title?: string;
+  error: Error | null;
 }
 
-export const ErrorState = ({ error, title = "Error" }: ErrorStateProps) => {
+export const ErrorState = ({ error }: ErrorStateProps) => {
   return (
-    <Alert variant="destructive" className="my-4">
-      <AlertCircle className="h-4 w-4" />
-      <AlertTitle>{title}</AlertTitle>
-      <AlertDescription>
-        {error.message || "An unexpected error occurred. Please try again later."}
-      </AlertDescription>
-    </Alert>
+    <div className="flex items-center justify-center p-8">
+      <div className="text-center">
+        <h4 className="text-lg font-semibold text-destructive mb-2">Error</h4>
+        <p className="text-muted-foreground">{error?.message || "An unexpected error occurred"}</p>
+      </div>
+    </div>
   );
 };

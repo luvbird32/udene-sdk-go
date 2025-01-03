@@ -16,7 +16,7 @@ export const RiskOverview = () => {
         
         {isLoading && <LoadingState message="Loading risk data..." />}
         {error && <ErrorState error={error} />}
-        {!isLoading && !error && (!riskData || riskData.length === 0) && <EmptyState />}
+        {!isLoading && !error && (!riskData || riskData.length === 0) && <EmptyState message="No risk data available" />}
         
         {!isLoading && !error && riskData && riskData.length > 0 && (
           <div className="h-[400px]">
