@@ -6,33 +6,28 @@ export const useMetricsData = () => {
   const { toast } = useToast();
 
   return useQuery({
-    queryKey: ["client-metrics"],
+    queryKey: ["dashboard-metrics"],
     queryFn: async () => {
       try {
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
-        
-        if (userError) {
-          console.error("Error getting user:", userError);
-          throw userError;
-        }
-
+        const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
-          console.error("No user found");
           throw new Error("No user found");
         }
 
-        const { data: transactions, error } = await supabase
-          .from('transactions')
-          .select('risk_score, is_fraudulent')
-          .order('created_at', { ascending: false });
+        // Fetch metrics from Supabase
+        const { data: metricsData, error } = await supabase
+          .from('metrics')
+          .select('*')
+          .order('timestamp', { ascending: false })
+          .limit(1);
 
         if (error) {
-          console.error("Error fetching transactions:", error);
+          console.error("Error fetching metrics:", error);
           throw error;
         }
 
-        if (!transactions || transactions.length === 0) {
-          console.log("No transactions found");
+        // If no metrics exist yet, return default values
+        if (!metricsData || metricsData.length === 0) {
           return {
             riskScore: 0,
             totalTransactions: 0,
@@ -40,44 +35,21 @@ export const useMetricsData = () => {
           };
         }
 
-        const totalTransactions = transactions.length;
-        const flaggedTransactions = transactions.filter(t => t.is_fraudulent).length;
-        
-        const validRiskScores = transactions.filter(t => 
-          typeof t.risk_score === 'number' && !isNaN(t.risk_score)
-        );
-
-        const averageRiskScore = validRiskScores.length > 0
-          ? Math.round(validRiskScores.reduce((acc, t) => acc + (t.risk_score || 0), 0) / validRiskScores.length)
-          : 0;
-
-        console.log("Metrics calculated:", {
-          riskScore: averageRiskScore,
-          totalTransactions,
-          flaggedTransactions
-        });
-
         return {
-          riskScore: averageRiskScore,
-          totalTransactions,
-          flaggedTransactions
+          riskScore: metricsData[0].risk_score || 0,
+          totalTransactions: metricsData[0].total_transactions || 0,
+          flaggedTransactions: metricsData[0].flagged_transactions || 0
         };
       } catch (error) {
-        console.error("Error in metrics query:", error);
+        console.error("Metrics fetch error:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load metrics data. Please try again later.",
+          variant: "destructive",
+        });
         throw error;
       }
     },
-    refetchInterval: 30000,
-    retry: 2,
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-    meta: {
-      errorHandler: (error: Error) => {
-        toast({
-          title: "Error",
-          description: "Failed to load metrics data",
-          variant: "destructive",
-        });
-      },
-    },
+    refetchInterval: 30000, // Refetch every 30 seconds
   });
 };

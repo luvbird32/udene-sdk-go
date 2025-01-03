@@ -956,7 +956,6 @@ export type Database = {
           organization_role: string | null
           phone_number: string | null
           preferences: Json | null
-          role: string
           security_settings: Json | null
           session_timeout_minutes: number | null
           settings: Json | null
@@ -980,7 +979,6 @@ export type Database = {
           organization_role?: string | null
           phone_number?: string | null
           preferences?: Json | null
-          role?: string
           security_settings?: Json | null
           session_timeout_minutes?: number | null
           settings?: Json | null
@@ -1004,7 +1002,6 @@ export type Database = {
           organization_role?: string | null
           phone_number?: string | null
           preferences?: Json | null
-          role?: string
           security_settings?: Json | null
           session_timeout_minutes?: number | null
           settings?: Json | null
