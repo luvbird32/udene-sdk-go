@@ -31,22 +31,38 @@ function App() {
       
       if (!session) {
         console.log('No active session');
-        if (window.location.pathname !== '/login' && window.location.pathname !== '/signup' && window.location.pathname !== '/') {
+        if (window.location.pathname !== '/login' && 
+            window.location.pathname !== '/signup' && 
+            window.location.pathname !== '/') {
           navigate('/login');
         }
       }
     });
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('Auth state changed:', event, session?.user?.id);
       
       if (event === 'SIGNED_IN') {
+        // Check user profile type to determine dashboard redirect
+        if (session?.user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('account_type')
+            .eq('id', session.user.id)
+            .single();
+
+          if (profile?.account_type === 'client') {
+            navigate('/client-dashboard');
+          } else {
+            navigate('/dashboard');
+          }
+        }
+        
         toast({
           title: "Welcome back!",
           description: "You have successfully signed in.",
         });
-        navigate('/dashboard');
       } else if (event === 'SIGNED_OUT') {
         console.log('User signed out');
         navigate('/login');
@@ -54,10 +70,6 @@ function App() {
           title: "Signed out",
           description: "You have been signed out successfully.",
         });
-      } else if (event === 'TOKEN_REFRESHED') {
-        console.log('Token refreshed');
-      } else if (event === 'USER_UPDATED') {
-        console.log('User updated');
       }
     });
 
