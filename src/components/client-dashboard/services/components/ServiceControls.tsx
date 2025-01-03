@@ -14,10 +14,9 @@ export const ServiceControls = ({ isActive, serviceType, onShowDetails }: Servic
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-2">
         <Tooltip>
-          <TooltipTrigger asChild>
+          <TooltipTrigger>
             <Badge 
               variant={isActive ? "default" : "secondary"}
-              className="cursor-help"
             >
               {isActive ? "Active" : "Inactive"}
             </Badge>
