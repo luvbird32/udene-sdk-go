@@ -1,9 +1,9 @@
 import { Shield, Layers, FileText, Code, Webhook, Settings, UserRound, Search } from "lucide-react";
-import { TabsTrigger } from "@/components/ui/tabs";
+import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const DashboardTabs = () => {
   return (
-    <>
+    <TabsList>
       <TabsTrigger value="dashboard">
         <Shield className="h-4 w-4 mr-2" />
         Dashboard
@@ -40,6 +40,6 @@ export const DashboardTabs = () => {
         <Search className="h-4 w-4 mr-2" />
         Investigations
       </TabsTrigger>
-    </>
+    </TabsList>
   );
 };
