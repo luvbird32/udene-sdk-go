@@ -40,10 +40,7 @@ export const UserManagement = () => {
           theme: "light",
           notifications: { email: true, sms: false }
         },
-        security_settings: profile.security_settings || {
-          login_history: [],
-          two_factor_enabled: false
-        },
+        security_settings: profile.security_settings || {},
         mfa_enabled: profile.mfa_enabled || false,
         mfa_secret: profile.mfa_secret || null,
         backup_codes: profile.backup_codes || [],
