@@ -18,8 +18,6 @@ import { FraudPatterns } from "@/components/dashboard/FraudPatterns";
 import { IPAddressMonitoring } from "@/components/monitoring/IPAddressMonitoring";
 import { SystemHealth } from "@/components/client-dashboard/monitoring/SystemHealth";
 import ErrorBoundary from "@/components/ErrorBoundary";
-import { Loader2 } from "lucide-react";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 interface DashboardContentProps {
   metrics?: {
@@ -36,20 +34,6 @@ export const DashboardContent = ({
   metricsLoading = false, 
   metricsError = null 
 }: DashboardContentProps) => {
-  const { data: user, isLoading: userLoading } = useCurrentUser();
-
-  // Show loading state while checking user authentication
-  if (userLoading || !user) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="flex flex-col items-center gap-2">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-sm text-muted-foreground">Loading dashboard...</p>
-        </div>
-      </div>
-    );
-  }
-
   const safeMetrics = metrics ?? {
     riskScore: 0,
     totalTransactions: 0,

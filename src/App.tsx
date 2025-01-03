@@ -17,48 +17,9 @@ function App() {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check initial session
-    supabase.auth.getSession().then(({ data: { session }, error }) => {
-      if (error) {
-        console.error('Error checking session:', error);
-        toast({
-          title: "Authentication Error",
-          description: "There was a problem checking your login status.",
-          variant: "destructive",
-        });
-        return;
-      }
-      
-      if (!session) {
-        console.log('No active session');
-        if (window.location.pathname !== '/login' && 
-            window.location.pathname !== '/signup' && 
-            window.location.pathname !== '/') {
-          navigate('/login');
-        }
-      }
-    });
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('Auth state changed:', event, session?.user?.id);
-      
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN') {
-        // Check user profile type to determine dashboard redirect
-        if (session?.user) {
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('account_type')
-            .eq('id', session.user.id)
-            .single();
-
-          if (profile?.account_type === 'client') {
-            navigate('/client-dashboard');
-          } else {
-            navigate('/dashboard');
-          }
-        }
-        
+        console.log('User signed in:', session?.user?.id);
         toast({
           title: "Welcome back!",
           description: "You have successfully signed in.",
@@ -70,6 +31,8 @@ function App() {
           title: "Signed out",
           description: "You have been signed out successfully.",
         });
+      } else if (event === 'TOKEN_REFRESHED') {
+        console.log('Token refreshed');
       }
     });
 
