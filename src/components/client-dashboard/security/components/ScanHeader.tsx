@@ -40,9 +40,9 @@ export const ScanHeader: React.FC<ScanHeaderProps> = ({
   onStopScan 
 }) => {
   return (
-    <div className="flex items-center justify-between p-4 bg-gray-100 rounded-lg">
+    <div className="flex items-center justify-between p-4 dashboard-card">
       <div>
-        <h2 className="text-lg font-semibold">{scanType} Scan</h2>
+        <h2 className="text-lg font-semibold text-primary-light">{scanType} Scan</h2>
         <p className="text-sm text-muted-foreground">
           Total vulnerabilities found: {totalVulnerabilities}
         </p>
@@ -52,14 +52,14 @@ export const ScanHeader: React.FC<ScanHeaderProps> = ({
           {isScanning ? (
             <button 
               onClick={onStopScan} 
-              className="px-4 py-2 text-white bg-red-500 rounded"
+              className="px-4 py-2 text-white bg-destructive rounded hover:bg-destructive/90 transition-colors"
             >
               Stop Scan
             </button>
           ) : (
             <button 
               onClick={onStartScan} 
-              className="px-4 py-2 text-white bg-blue-500 rounded"
+              className="dashboard-button px-4 py-2 rounded"
             >
               Start Scan
             </button>
