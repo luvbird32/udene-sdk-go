@@ -14,7 +14,7 @@ export const RiskOverview = () => {
       <Card className="p-6">
         <h3 className="font-semibold mb-4">Risk Score Trend</h3>
         
-        {isLoading && <LoadingState title="Loading risk data..." />}
+        {isLoading && <LoadingState message="Loading risk data..." />}
         {error && <ErrorState error={error} />}
         {!isLoading && !error && (!riskData || riskData.length === 0) && <EmptyState />}
         
