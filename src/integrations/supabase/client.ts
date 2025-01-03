@@ -13,13 +13,15 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
-    flowType: 'pkce'
+    flowType: 'pkce',
+    storage: window.localStorage,
+    storageKey: 'supabase.auth.token',
   },
   global: {
     headers: {
-      'x-application-name': 'fraud-detection-dashboard'
-    }
-  }
+      'X-Client-Info': 'supabase-js-client',
+    },
+  },
 });
 
 // Add health check function

@@ -17,13 +17,36 @@ function App() {
   const { toast } = useToast();
 
   useEffect(() => {
+    // Check initial session
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error) {
+        console.error('Error checking session:', error);
+        toast({
+          title: "Authentication Error",
+          description: "There was a problem checking your login status.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      if (!session) {
+        console.log('No active session');
+        if (window.location.pathname !== '/login' && window.location.pathname !== '/signup' && window.location.pathname !== '/') {
+          navigate('/login');
+        }
+      }
+    });
+
+    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('Auth state changed:', event, session?.user?.id);
+      
       if (event === 'SIGNED_IN') {
-        console.log('User signed in:', session?.user?.id);
         toast({
           title: "Welcome back!",
           description: "You have successfully signed in.",
         });
+        navigate('/dashboard');
       } else if (event === 'SIGNED_OUT') {
         console.log('User signed out');
         navigate('/login');
@@ -33,6 +56,8 @@ function App() {
         });
       } else if (event === 'TOKEN_REFRESHED') {
         console.log('Token refreshed');
+      } else if (event === 'USER_UPDATED') {
+        console.log('User updated');
       }
     });
 
