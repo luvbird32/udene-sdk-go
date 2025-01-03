@@ -25,16 +25,16 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#9b87f5",
+          DEFAULT: "#00ff00",
           foreground: "#ffffff",
-          dark: "#7E69AB",
-          light: "#D6BCFA",
+          dark: "#00cc00",
+          light: "#33ff33",
         },
         secondary: {
-          DEFAULT: "#0EA5E9",
+          DEFAULT: "#1a1a1a",
           foreground: "#ffffff",
-          dark: "#1A1F2C",
-          light: "#33C3F0",
+          dark: "#000000",
+          light: "#333333",
         },
         warning: {
           DEFAULT: "#F97316",
@@ -53,7 +53,7 @@ export default {
           foreground: "#C8C8C9",
         },
         accent: {
-          DEFAULT: "#8B5CF6",
+          DEFAULT: "#00ff00",
           foreground: "#ffffff",
         },
         popover: {
@@ -83,11 +83,16 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.5" },
         },
+        "matrix-fade": {
+          "0%": { opacity: "0", transform: "translateY(-10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "pulse-slow": "pulse-slow 2s ease-in-out infinite",
+        "matrix-fade": "matrix-fade 0.5s ease-out",
       },
     },
   },
