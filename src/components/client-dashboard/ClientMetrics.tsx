@@ -1,7 +1,7 @@
 import { Shield, Activity, AlertTriangle } from "lucide-react";
-import { MetricCard } from "./metrics/MetricCard";
-import { MetricsError } from "./metrics/MetricsError";
-import { EmptyMetrics } from "./metrics/EmptyMetrics";
+import { MetricCard } from "@/components/ui/metrics/MetricCard";
+import { ErrorState } from "@/components/ui/states/ErrorState";
+import { EmptyState } from "@/components/ui/states/EmptyState";
 import { useMetricsData } from "./metrics/useMetricsData";
 
 interface ClientMetricsProps {
@@ -20,7 +20,7 @@ export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps)
   // Early return for error states
   if (error || metricsError) {
     console.error("Metrics error:", error || metricsError);
-    return <MetricsError error={error || metricsError} />;
+    return <ErrorState error={error || metricsError} />;
   }
 
   // Use provided metrics or fallback to fetched metrics
@@ -59,7 +59,7 @@ export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps)
   // Early return for empty state
   if (!displayMetrics) {
     console.log("No metrics data available");
-    return <EmptyMetrics />;
+    return <EmptyState title="No Metrics Available" message="No metrics data is currently available." />;
   }
 
   return (

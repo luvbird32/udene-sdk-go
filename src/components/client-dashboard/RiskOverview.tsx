@@ -1,8 +1,8 @@
 import { Card } from "@/components/ui/card";
 import { RiskScoreChart } from "./analytics/shared/RiskScoreChart";
-import { LoadingState } from "./analytics/shared/LoadingState";
-import { ErrorState } from "./analytics/shared/ErrorState";
-import { EmptyState } from "./analytics/shared/EmptyState";
+import { LoadingState } from "@/components/ui/states/LoadingState";
+import { ErrorState } from "@/components/ui/states/ErrorState";
+import { EmptyState } from "@/components/ui/states/EmptyState";
 import { useRiskData } from "./analytics/risk/useRiskData";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
