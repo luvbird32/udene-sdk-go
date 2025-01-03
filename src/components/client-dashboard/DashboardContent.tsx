@@ -16,6 +16,7 @@ import { IdentityVerificationMonitoring } from "@/components/client-dashboard/an
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
 import { FraudPatterns } from "@/components/dashboard/FraudPatterns";
 import { IPAddressMonitoring } from "@/components/monitoring/IPAddressMonitoring";
+import { SystemHealth } from "@/components/client-dashboard/monitoring/SystemHealth";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 interface DashboardContentProps {
@@ -33,7 +34,6 @@ export const DashboardContent = ({
   metricsLoading = false, 
   metricsError = null 
 }: DashboardContentProps) => {
-  // Ensure we have default values for metrics
   const safeMetrics = metrics ?? {
     riskScore: 0,
     totalTransactions: 0,
@@ -44,6 +44,10 @@ export const DashboardContent = ({
     <div className="space-y-8">
       <ErrorBoundary>
         <ApiCreditsDisplay />
+      </ErrorBoundary>
+      
+      <ErrorBoundary>
+        <SystemHealth />
       </ErrorBoundary>
       
       <ErrorBoundary>
