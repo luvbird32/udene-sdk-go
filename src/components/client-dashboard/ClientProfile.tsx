@@ -11,7 +11,7 @@ import { useProfileData } from "./profile/useProfileData";
 const ProfileContent = () => {
   const { toast } = useToast();
   const { isEditing, formData, setFormData, setIsEditing } = useProfile();
-  const { data: profile, refetch } = useProfileData();
+  const { data: profile, refetch, isLoading, error } = useProfileData();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,6 +19,8 @@ const ProfileContent = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("No user found");
+
+      console.log("Updating profile for user:", user.id, "with data:", formData);
 
       const { error } = await supabase
         .from("profiles")
@@ -52,6 +54,26 @@ const ProfileContent = () => {
       });
     }
   };
+
+  if (isLoading) {
+    return (
+      <Card className="p-6">
+        <div className="flex items-center justify-center h-40">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="p-6">
+        <div className="text-center text-destructive">
+          Failed to load profile. Please try again later.
+        </div>
+      </Card>
+    );
+  }
 
   if (!profile) return null;
 

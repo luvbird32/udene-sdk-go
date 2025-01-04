@@ -13,13 +13,20 @@ export const useProfileData = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("No user found");
 
+      console.log("Fetching profile for user:", user.id);
+
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
         .eq("id", user.id)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching profile:", error);
+        throw error;
+      }
+
+      console.log("Profile data fetched:", data);
       
       const rawPreferences = data.preferences as unknown;
       const preferences: ProfilePreferences = (rawPreferences as ProfilePreferences) || {
