@@ -12,16 +12,7 @@ import { Header } from "@/components/landing/Header";
 const Landing = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Header>
-        <div className="flex items-center gap-4">
-          <Link to="/login">
-            <Button variant="ghost">Login</Button>
-          </Link>
-          <Link to="/signup">
-            <Button>Sign Up</Button>
-          </Link>
-        </div>
-      </Header>
+      <Header />
       
       <main>
         <HeroSection />
