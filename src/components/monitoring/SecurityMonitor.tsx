@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 export const SecurityMonitor = () => {
   const { toast } = useToast();
 
-  // Real-time monitoring for fraud alerts
+  // Real-time monitoring for client-specific fraud alerts
   useEffect(() => {
     const channel = supabase
       .channel('security_alerts')
@@ -17,10 +17,11 @@ export const SecurityMonitor = () => {
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'fraud_alerts'
+          table: 'fraud_alerts',
+          filter: `transaction_id=eq.${supabase.auth.getUser()}`
         },
         async (payload) => {
-          console.log("New security alert detected:", payload);
+          console.log("New client security alert detected:", payload);
           
           // Show real-time notification
           toast({
@@ -29,7 +30,7 @@ export const SecurityMonitor = () => {
             variant: "destructive",
           });
 
-          // Log detailed audit entry
+          // Log client audit entry
           await supabase.from('audit_logs').insert({
             event_type: 'security_alert',
             entity_type: 'fraud_alert',
@@ -50,13 +51,17 @@ export const SecurityMonitor = () => {
     };
   }, [toast]);
 
-  // Query recent security events
+  // Query recent client security events
   const { data: recentAlerts } = useQuery({
-    queryKey: ['security-alerts'],
+    queryKey: ['client-security-alerts'],
     queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("User not authenticated");
+
       const { data, error } = await supabase
         .from('fraud_alerts')
         .select('*')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(5);
 
@@ -93,6 +98,11 @@ export const SecurityMonitor = () => {
             </div>
           </div>
         ))}
+        {(!recentAlerts || recentAlerts.length === 0) && (
+          <p className="text-sm text-muted-foreground text-center py-4">
+            No recent security alerts
+          </p>
+        )}
       </div>
     </Card>
   );
