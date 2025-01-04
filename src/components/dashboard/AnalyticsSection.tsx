@@ -1,6 +1,6 @@
 import { TransactionTrends } from "./TransactionTrends";
 import { GeographicalDistribution } from "./GeographicalDistribution";
-import { FraudPatterns } from "./FraudPatterns";
+import { FraudPatterns } from "@/components/client-dashboard/fraud/FraudPatterns";
 import { ErrorLog } from "@/components/monitoring/ErrorLog";
 import { PerformanceMetrics } from "@/components/monitoring/PerformanceMetrics";
 
