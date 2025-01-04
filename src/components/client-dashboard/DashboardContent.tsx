@@ -14,7 +14,7 @@ import { RewardProgramMonitoring } from "@/components/client-dashboard/analytics
 import { DeviceFingerprintMonitoring } from "@/components/client-dashboard/analytics/DeviceFingerprintMonitoring";
 import { IdentityVerificationMonitoring } from "@/components/client-dashboard/analytics/IdentityVerificationMonitoring";
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
-import { FraudPatterns } from "@/components/dashboard/FraudPatterns";
+import { FraudPatterns } from "@/components/client-dashboard/fraud/FraudPatterns";
 import { IPAddressMonitoring } from "@/components/monitoring/IPAddressMonitoring";
 import { SystemHealth } from "@/components/client-dashboard/monitoring/SystemHealth";
 import ErrorBoundary from "@/components/ErrorBoundary";
