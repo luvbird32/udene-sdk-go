@@ -11,15 +11,31 @@ import Settings from '@/pages/Settings'
 import Users from '@/pages/Users'
 import ClientSettings from '@/pages/ClientSettings'
 import { supabase } from "@/integrations/supabase/client"
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 
 function App() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN') {
         console.log('User signed in:', session?.user?.id);
+        
+        // Check user role from profiles table
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('account_type')
+          .eq('id', session?.user?.id)
+          .single();
+
+        // Redirect based on account type
+        if (profile?.account_type === 'admin') {
+          navigate('/dashboard');
+        } else {
+          navigate('/client-dashboard');
+        }
+
         toast({
           title: "Welcome back!",
           description: "You have successfully signed in.",
@@ -31,8 +47,6 @@ function App() {
           title: "Signed out",
           description: "You have been signed out successfully.",
         });
-      } else if (event === 'TOKEN_REFRESHED') {
-        console.log('Token refreshed');
       }
     });
 
@@ -47,11 +61,19 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/client-dashboard" element={<ClientDashboard />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/client-settings" element={<ClientSettings />} />
+        
+        {/* Admin Routes */}
+        <Route element={<ProtectedRoute allowedRole="admin" />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/users" element={<Users />} />
+        </Route>
+
+        {/* Client Routes */}
+        <Route element={<ProtectedRoute allowedRole="client" />}>
+          <Route path="/client-dashboard" element={<ClientDashboard />} />
+          <Route path="/client-settings" element={<ClientSettings />} />
+        </Route>
       </Routes>
       <Toaster />
     </>
