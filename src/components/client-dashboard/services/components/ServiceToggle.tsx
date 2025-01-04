@@ -12,17 +12,19 @@ export const ServiceToggle = ({ isActive, isToggling, onToggle, serviceName }: S
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <div className={isToggling ? 'opacity-50 pointer-events-none' : ''}>
+        <div className={isToggling ? 'opacity-50' : ''}>
           <Switch 
-            checked={isActive} 
+            checked={isActive}
             onCheckedChange={onToggle}
+            aria-label={`${isActive ? 'Disable' : 'Enable'} ${serviceName}`}
             disabled={isToggling}
-            className={isToggling ? 'cursor-not-allowed' : 'cursor-pointer'}
+            aria-disabled={isToggling}
+            className={`${isToggling ? 'cursor-not-allowed' : 'cursor-pointer'}`}
           />
         </div>
       </TooltipTrigger>
       <TooltipContent>
-        <p>{isToggling ? 'Processing...' : isActive ? 'Disable' : 'Enable'} {serviceName}</p>
+        <p>{isToggling ? 'Processing...' : `${isActive ? 'Disable' : 'Enable'} ${serviceName}`}</p>
       </TooltipContent>
     </Tooltip>
   );
