@@ -6,7 +6,7 @@ import { ServiceDescription } from "./components/ServiceDescription";
 import { ServiceFeatureList } from "./components/ServiceFeatureList";
 import { ServiceControls } from "./components/ServiceControls";
 import { ServiceToggle } from "./components/ServiceToggle";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 interface ServiceCardProps {
@@ -27,6 +27,7 @@ export const ServiceCard = ({
   onToggle,
 }: ServiceCardProps) => {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [isToggling, setIsToggling] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
@@ -34,19 +35,42 @@ export const ServiceCard = ({
   const { data: serviceData } = useQuery({
     queryKey: ["service-status", serviceType],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return null;
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return null;
 
-      const { data, error } = await supabase
-        .from('client_services')
-        .select('is_active')
-        .eq('user_id', user.id)
-        .eq('service_type', serviceType)
-        .single();
+        const { data, error } = await supabase
+          .from('client_services')
+          .select('is_active')
+          .eq('user_id', user.id)
+          .eq('service_type', serviceType)
+          .maybeSingle();
 
-      if (error) throw error;
-      return data;
-    }
+        if (error) throw error;
+
+        // If no record exists, create one with default state
+        if (!data) {
+          const { data: newService, error: insertError } = await supabase
+            .from('client_services')
+            .insert({
+              user_id: user.id,
+              service_type: serviceType,
+              is_active: initialIsActive,
+            })
+            .select('is_active')
+            .single();
+
+          if (insertError) throw insertError;
+          return newService;
+        }
+
+        return data;
+      } catch (error) {
+        console.error("Service status query error:", error);
+        return null;
+      }
+    },
+    retry: 1,
   });
 
   // Use the queried status if available, otherwise fall back to the prop
@@ -58,6 +82,8 @@ export const ServiceCard = ({
     setIsToggling(true);
     try {
       await onToggle(serviceType, checked);
+      // Invalidate the query to refetch the latest status
+      queryClient.invalidateQueries({ queryKey: ["service-status", serviceType] });
       toast({
         title: checked ? "Service activated" : "Service deactivated",
         description: `${title} has been ${checked ? "activated" : "deactivated"} successfully.`,
