@@ -3,59 +3,31 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 
-interface ProtectedRouteProps {
-  allowedRole: 'admin' | 'client';
-}
-
-export const ProtectedRoute = ({ allowedRole }: ProtectedRouteProps) => {
+export const ProtectedRoute = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [hasAccess, setHasAccess] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
-        
-        if (!session) {
-          setHasAccess(false);
-          setIsLoading(false);
-          return;
-        }
-
-        // Check user's account type from profiles
-        const { data: profile, error } = await supabase
-          .from('profiles')
-          .select('account_type')
-          .eq('id', session.user.id)
-          .single();
-
-        if (error) {
-          console.error('Error fetching profile:', error);
-          toast({
-            title: "Error",
-            description: "Failed to verify access. Please try again.",
-            variant: "destructive",
-          });
-          setHasAccess(false);
-        } else {
-          // Check if user's account type matches the allowed role
-          const hasPermission = 
-            (allowedRole === 'admin' && profile.account_type === 'admin') ||
-            (allowedRole === 'client' && profile.account_type === 'personal');
-          
-          setHasAccess(hasPermission);
-        }
+        setIsAuthenticated(!!session);
       } catch (error) {
         console.error('Auth check error:', error);
-        setHasAccess(false);
+        toast({
+          title: "Error",
+          description: "Failed to verify authentication. Please try again.",
+          variant: "destructive",
+        });
+        setIsAuthenticated(false);
       } finally {
         setIsLoading(false);
       }
     };
 
     checkAuth();
-  }, [allowedRole, toast]);
+  }, [toast]);
 
   if (isLoading) {
     return (
@@ -65,5 +37,5 @@ export const ProtectedRoute = ({ allowedRole }: ProtectedRouteProps) => {
     );
   }
 
-  return hasAccess ? <Outlet /> : <Navigate to="/login" replace />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
