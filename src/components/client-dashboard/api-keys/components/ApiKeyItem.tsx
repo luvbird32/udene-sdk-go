@@ -14,34 +14,26 @@ interface ApiKeyItemProps {
   onDelete: (id: string) => void;
 }
 
-export const ApiKeyItem = ({ 
-  id, 
-  keyValue, 
-  name, 
-  description, 
-  createdAt, 
+export const ApiKeyItem = ({
+  id,
+  keyValue,
+  name,
+  description,
+  createdAt,
   keyType,
-  onDelete 
+  onDelete,
 }: ApiKeyItemProps) => {
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
 
-  const handleCopyKey = async () => {
-    try {
-      await navigator.clipboard.writeText(keyValue);
-      setCopied(true);
-      toast({
-        title: "Copied!",
-        description: "API key copied to clipboard",
-      });
-      setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to copy API key",
-        variant: "destructive",
-      });
-    }
+  const handleCopy = () => {
+    navigator.clipboard.writeText(keyValue);
+    setCopied(true);
+    toast({
+      title: "Copied!",
+      description: "API key copied to clipboard",
+    });
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -65,7 +57,7 @@ export const ApiKeyItem = ({
           <Button
             variant="outline"
             size="icon"
-            onClick={handleCopyKey}
+            onClick={handleCopy}
             title="Copy API key"
           >
             {copied ? (
