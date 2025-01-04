@@ -1,17 +1,41 @@
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, refreshSession } from "@/integrations/supabase/client";
 import { ProfileProvider } from "./profile/ProfileContext";
 import { ProfileHeader } from "./profile/ProfileHeader";
 import { ProfileForm } from "./profile/ProfileForm";
 import { ProfileDisplay } from "./profile/ProfileDisplay";
 import { useProfile } from "./profile/ProfileContext";
 import { useProfileData } from "./profile/useProfileData";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ProfileContent = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const { isEditing, formData, setFormData, setIsEditing } = useProfile();
   const { data: profile, refetch, isLoading, error } = useProfileData();
+
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const session = await refreshSession();
+        if (!session) {
+          toast({
+            title: "Session Expired",
+            description: "Please log in again.",
+            variant: "destructive",
+          });
+          navigate('/login');
+        }
+      } catch (error) {
+        console.error('Session check failed:', error);
+        navigate('/login');
+      }
+    };
+
+    checkSession();
+  }, [navigate, toast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
