@@ -8,7 +8,12 @@ interface ServiceToggleProps {
   serviceName: string;
 }
 
-export const ServiceToggle = ({ isActive, isToggling, onToggle, serviceName }: ServiceToggleProps) => {
+export const ServiceToggle = ({ 
+  isActive, 
+  isToggling, 
+  onToggle, 
+  serviceName 
+}: ServiceToggleProps) => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
