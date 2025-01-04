@@ -18,6 +18,7 @@ function App() {
   const { toast } = useToast();
 
   useEffect(() => {
+    // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN') {
         console.log('User signed in:', session?.user?.id);
@@ -28,7 +29,7 @@ function App() {
         });
       } else if (event === 'SIGNED_OUT') {
         console.log('User signed out');
-        navigate('/login');
+        navigate('/');
         toast({
           title: "Signed out",
           description: "You have been signed out successfully.",
@@ -36,6 +37,7 @@ function App() {
       }
     });
 
+    // Cleanup subscription
     return () => {
       subscription.unsubscribe();
     };
@@ -44,6 +46,7 @@ function App() {
   return (
     <>
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
@@ -53,7 +56,7 @@ function App() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/users" element={<Users />} />
 
-        {/* Client Routes (With Auth) */}
+        {/* Protected Client Routes */}
         <Route element={<ProtectedRoute />}>
           <Route path="/client-dashboard" element={<ClientDashboard />} />
           <Route path="/client-settings" element={<ClientSettings />} />

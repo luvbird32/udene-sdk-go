@@ -1,52 +1,38 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { Features } from "@/components/landing/Features";
 import { Industries } from "@/components/landing/Industries";
 import { UseCases } from "@/components/landing/UseCases";
 import { PricingPlans } from "@/components/landing/PricingPlans";
-import { Footer } from "@/components/landing/Footer";
-import { MatrixBackground } from "@/components/landing/MatrixBackground";
-import { Header } from "@/components/landing/Header";
 import { Compliance } from "@/components/landing/Compliance";
-import { Terms } from "@/components/landing/Terms";
-import { useEffect } from "react";
+import { Footer } from "@/components/landing/Footer";
+import { Header } from "@/components/landing/Header";
 
 const Landing = () => {
-  useEffect(() => {
-    document.body.setAttribute('data-landing-page', 'true');
-    return () => {
-      document.body.setAttribute('data-landing-page', 'false');
-    };
-  }, []);
-
   return (
     <div className="min-h-screen bg-background">
-      <MatrixBackground>
-        <Header />
-        <HeroSection />
-      </MatrixBackground>
+      <Header>
+        <div className="flex items-center gap-4">
+          <Link to="/login">
+            <Button variant="ghost">Login</Button>
+          </Link>
+          <Link to="/signup">
+            <Button>Sign Up</Button>
+          </Link>
+        </div>
+      </Header>
       
-      <div id="features">
+      <main>
+        <HeroSection />
         <Features />
-      </div>
-      <div id="industries">
         <Industries />
-      </div>
-      <div id="use-cases">
         <UseCases />
-      </div>
-      <div id="compliance">
-        <Compliance />
-      </div>
-      <div id="terms">
-        <Terms />
-      </div>
-      <div id="pricing">
         <PricingPlans />
-      </div>
-      <div id="about">
-        <Footer />
-      </div>
+        <Compliance />
+      </main>
+      
+      <Footer />
     </div>
   );
 };
