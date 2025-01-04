@@ -15,75 +15,71 @@ interface ClientMetricsProps {
 }
 
 export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps) => {
-  const { data: metricsData, isLoading: metricsLoading, error: metricsError } = useMetricsData();
+  const { 
+    data: metricsData, 
+    isLoading: metricsLoading, 
+    error: metricsError 
+  } = useMetricsData();
 
-  // Early return for error states
+  // Handle error states
   if (error || metricsError) {
-    console.error("Client metrics error:", error || metricsError);
-    return <ErrorState error={error || metricsError} />;
+    const displayError = error || metricsError;
+    console.error("Metrics error:", displayError);
+    return <ErrorState error={displayError} />;
   }
 
   // Use provided metrics or fallback to fetched metrics
   const displayMetrics = metrics || metricsData;
   const isLoadingState = isLoading || metricsLoading;
 
-  // Early return for loading state
+  // Handle loading state
   if (isLoadingState) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <MetricCard
-          title="Risk Score"
-          value="Loading..."
-          icon={Shield}
-          description="Current risk assessment score"
-          isLoading={true}
-        />
-        <MetricCard
-          title="Total Transactions"
-          value="Loading..."
-          icon={Activity}
-          description="Number of processed transactions"
-          isLoading={true}
-        />
-        <MetricCard
-          title="Flagged Transactions"
-          value="Loading..."
-          icon={AlertTriangle}
-          description="Transactions requiring attention"
-          isLoading={true}
-        />
+        {[1, 2, 3].map((index) => (
+          <MetricCard
+            key={index}
+            title="Loading..."
+            value="..."
+            icon={Shield}
+            description="Loading metric data"
+            isLoading={true}
+          />
+        ))}
       </div>
     );
   }
 
-  // Early return for empty state
+  // Handle empty state
   if (!displayMetrics) {
-    console.log("No client metrics data available");
-    return <EmptyState title="No Metrics Available" message="No metrics data is currently available." />;
+    return <EmptyState 
+      title="No Metrics Available" 
+      message="No metrics data is currently available." 
+    />;
   }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <MetricCard
         title="Risk Score"
-        value={`${displayMetrics.riskScore ?? 0}%`}
+        value={`${displayMetrics.riskScore}%`}
         icon={Shield}
         description="Current risk assessment score"
-        isLoading={isLoadingState}
+        isLoading={false}
       />
       <MetricCard
         title="Total Transactions"
-        value={displayMetrics.totalTransactions ?? 0}
+        value={displayMetrics.totalTransactions}
         icon={Activity}
         description="Number of processed transactions"
-        isLoading={isLoadingState}
+        isLoading={false}
       />
       <MetricCard
         title="Flagged Transactions"
-        value={displayMetrics.flaggedTransactions ?? 0}
+        value={displayMetrics.flaggedTransactions}
         icon={AlertTriangle}
         description="Transactions requiring attention"
-        isLoading={isLoadingState}
+        isLoading={false}
       />
     </div>
   );
