@@ -32,13 +32,21 @@ export const ServiceCard = ({
   const [showDetails, setShowDetails] = useState(false);
 
   // Query to get the current service status
-  const { data: serviceData } = useQuery({
+  const { data: serviceData, error: serviceError } = useQuery({
     queryKey: ["service-status", serviceType],
     queryFn: async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return null;
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        if (authError) {
+          console.error("Auth error:", authError);
+          throw new Error("Authentication failed");
+        }
+        
+        if (!user) {
+          throw new Error("No authenticated user");
+        }
 
+        // First try to get existing service
         const { data, error } = await supabase
           .from('client_services')
           .select('is_active')
@@ -46,10 +54,14 @@ export const ServiceCard = ({
           .eq('service_type', serviceType)
           .maybeSingle();
 
-        if (error) throw error;
+        if (error) {
+          console.error("Service fetch error:", error);
+          throw error;
+        }
 
         // If no record exists, create one with default state
         if (!data) {
+          console.log("Creating new service record for:", serviceType);
           const { data: newService, error: insertError } = await supabase
             .from('client_services')
             .insert({
@@ -60,18 +72,33 @@ export const ServiceCard = ({
             .select('is_active')
             .single();
 
-          if (insertError) throw insertError;
+          if (insertError) {
+            console.error("Service creation error:", insertError);
+            throw insertError;
+          }
+
           return newService;
         }
 
         return data;
       } catch (error) {
         console.error("Service status query error:", error);
-        return null;
+        toast({
+          title: "Error loading service status",
+          description: "Failed to load service status. Please try again.",
+          variant: "destructive",
+        });
+        throw error;
       }
     },
     retry: 1,
+    staleTime: 1000 * 60, // Consider data fresh for 1 minute
   });
+
+  // Show error toast if service query fails
+  if (serviceError) {
+    console.error("Service query error:", serviceError);
+  }
 
   // Use the queried status if available, otherwise fall back to the prop
   const isActive = serviceData?.is_active ?? initialIsActive;
