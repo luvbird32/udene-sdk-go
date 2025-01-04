@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Copy, Check, Trash } from "lucide-react";
+import { Copy, Check, Trash, Shield, ShieldCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface ApiKeyItemProps {
@@ -42,7 +42,15 @@ export const ApiKeyItem = ({
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <p className="font-medium text-foreground">{name}</p>
-            <Badge variant={keyType === 'production' ? 'default' : 'secondary'}>
+            <Badge 
+              variant={keyType === 'production' ? 'default' : 'secondary'}
+              className="flex items-center gap-1"
+            >
+              {keyType === 'production' ? (
+                <ShieldCheck className="h-3 w-3" />
+              ) : (
+                <Shield className="h-3 w-3" />
+              )}
               {keyType}
             </Badge>
           </div>

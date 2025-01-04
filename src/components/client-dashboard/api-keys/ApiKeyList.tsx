@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Loader2, Copy, Check, Trash } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Loader2 } from "lucide-react";
 import { ApiKeyItem } from "./components/ApiKeyItem";
 import { DeleteKeyDialog } from "./components/DeleteKeyDialog";
 
