@@ -7,11 +7,19 @@ import { AffiliateChart } from "./affiliate/AffiliateChart";
 import { useAffiliateData } from "./affiliate/useAffiliateData";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export const AffiliateMonitoring = () => {
+  const { toast } = useToast();
   const { data: affiliateStats, isLoading, error } = useAffiliateData();
 
   if (error) {
+    toast({
+      variant: "destructive",
+      title: "Error",
+      description: "Failed to load affiliate activity data. Please try again later.",
+    });
+    
     return (
       <Card className="p-4">
         <div className="flex justify-between items-center mb-4">

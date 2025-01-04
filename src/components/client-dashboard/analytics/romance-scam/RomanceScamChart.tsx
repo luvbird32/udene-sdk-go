@@ -23,16 +23,7 @@ export const RomanceScamChart = ({ data }: RomanceScamChartProps) => {
               cx="50%"
               cy="50%"
               labelLine={false}
-              label={({ name, percent }) => (
-                <UITooltip>
-                  <TooltipTrigger asChild>
-                    <text>{`${name} (${(percent * 100).toFixed(0)}%)`}</text>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Click for more details</p>
-                  </TooltipContent>
-                </UITooltip>
-              )}
+              label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
               outerRadius={80}
               fill="#8884d8"
               dataKey="value"
