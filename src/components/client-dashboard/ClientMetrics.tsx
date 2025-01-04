@@ -19,7 +19,7 @@ export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps)
 
   // Early return for error states
   if (error || metricsError) {
-    console.error("Metrics error:", error || metricsError);
+    console.error("Client metrics error:", error || metricsError);
     return <ErrorState error={error || metricsError} />;
   }
 
@@ -58,7 +58,7 @@ export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps)
 
   // Early return for empty state
   if (!displayMetrics) {
-    console.log("No metrics data available");
+    console.log("No client metrics data available");
     return <EmptyState title="No Metrics Available" message="No metrics data is currently available." />;
   }
 

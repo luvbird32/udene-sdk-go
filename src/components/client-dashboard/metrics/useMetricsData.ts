@@ -14,15 +14,16 @@ export const useMetricsData = () => {
           throw new Error("No user found");
         }
 
-        // Fetch metrics from Supabase
+        // Fetch metrics from client_metrics table instead of metrics
         const { data: metricsData, error } = await supabase
-          .from('metrics')
+          .from('client_metrics')
           .select('*')
+          .eq('user_id', user.id)
           .order('timestamp', { ascending: false })
           .limit(1);
 
         if (error) {
-          console.error("Error fetching metrics:", error);
+          console.error("Error fetching client metrics:", error);
           throw error;
         }
 
@@ -35,13 +36,14 @@ export const useMetricsData = () => {
           };
         }
 
+        // Map the client metrics to the expected format
         return {
-          riskScore: metricsData[0].risk_score || 0,
-          totalTransactions: metricsData[0].total_transactions || 0,
-          flaggedTransactions: metricsData[0].flagged_transactions || 0
+          riskScore: metricsData[0].metric_value || 0,
+          totalTransactions: metricsData.find(m => m.metric_name === 'total_transactions')?.metric_value || 0,
+          flaggedTransactions: metricsData.find(m => m.metric_name === 'flagged_transactions')?.metric_value || 0
         };
       } catch (error) {
-        console.error("Metrics fetch error:", error);
+        console.error("Client metrics fetch error:", error);
         toast({
           title: "Error",
           description: "Failed to load metrics data. Please try again later.",
