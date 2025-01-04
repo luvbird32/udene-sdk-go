@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Loader2, Copy, Check, Trash } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Loader2, Copy, Check, Trash, Shield, ShieldCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface ApiKey {
@@ -9,6 +10,7 @@ interface ApiKey {
   name: string;
   description?: string;
   created_at: string;
+  key_type: 'testing' | 'production';
 }
 
 interface ApiKeyListProps {
@@ -45,7 +47,20 @@ export const ApiKeyList = ({ apiKeys, isLoading, onDelete }: ApiKeyListProps) =>
         <div key={key.id} className="flex flex-col space-y-3 p-4 border rounded-lg bg-background/50 backdrop-blur supports-[backdrop-filter]:bg-background/50">
           <div className="flex items-center justify-between">
             <div className="space-y-1">
-              <p className="font-medium text-foreground">{key.name}</p>
+              <div className="flex items-center gap-2">
+                <p className="font-medium text-foreground">{key.name}</p>
+                <Badge 
+                  variant={key.key_type === 'production' ? 'default' : 'secondary'}
+                  className="flex items-center gap-1"
+                >
+                  {key.key_type === 'production' ? (
+                    <ShieldCheck className="h-3 w-3" />
+                  ) : (
+                    <Shield className="h-3 w-3" />
+                  )}
+                  {key.key_type}
+                </Badge>
+              </div>
               {key.description && (
                 <p className="text-sm text-muted-foreground">{key.description}</p>
               )}
