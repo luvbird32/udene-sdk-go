@@ -14,10 +14,9 @@ import { RewardProgramMonitoring } from "@/components/client-dashboard/analytics
 import { DeviceFingerprintMonitoring } from "@/components/client-dashboard/analytics/DeviceFingerprintMonitoring";
 import { IdentityVerificationMonitoring } from "@/components/client-dashboard/analytics/IdentityVerificationMonitoring";
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
-import { FraudPatterns } from "@/components/client-dashboard/fraud/FraudPatterns";
+import { FraudPatterns } from "@/components/dashboard/FraudPatterns";
 import { IPAddressMonitoring } from "@/components/monitoring/IPAddressMonitoring";
 import { SystemHealth } from "@/components/client-dashboard/monitoring/SystemHealth";
-import { ClientDataExtraction } from "@/components/client-dashboard/data/ClientDataExtraction";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 interface DashboardContentProps {
@@ -57,10 +56,6 @@ export const DashboardContent = ({
           isLoading={metricsLoading}
           error={metricsError}
         />
-      </ErrorBoundary>
-
-      <ErrorBoundary>
-        <ClientDataExtraction />
       </ErrorBoundary>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

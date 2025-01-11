@@ -288,66 +288,6 @@ export type Database = {
         }
         Relationships: []
       }
-      client_data_extractions: {
-        Row: {
-          created_at: string | null
-          extraction_type: string
-          file_url: string | null
-          id: string
-          query_params: Json | null
-          record_count: number | null
-          status: string
-          updated_at: string | null
-          user_id: string
-        }
-        Insert: {
-          created_at?: string | null
-          extraction_type: string
-          file_url?: string | null
-          id?: string
-          query_params?: Json | null
-          record_count?: number | null
-          status?: string
-          updated_at?: string | null
-          user_id: string
-        }
-        Update: {
-          created_at?: string | null
-          extraction_type?: string
-          file_url?: string | null
-          id?: string
-          query_params?: Json | null
-          record_count?: number | null
-          status?: string
-          updated_at?: string | null
-          user_id?: string
-        }
-        Relationships: []
-      }
-      client_metrics: {
-        Row: {
-          id: string
-          metric_name: string
-          metric_value: number
-          timestamp: string | null
-          user_id: string
-        }
-        Insert: {
-          id?: string
-          metric_name: string
-          metric_value: number
-          timestamp?: string | null
-          user_id: string
-        }
-        Update: {
-          id?: string
-          metric_name?: string
-          metric_value?: number
-          timestamp?: string | null
-          user_id?: string
-        }
-        Relationships: []
-      }
       client_services: {
         Row: {
           created_at: string | null

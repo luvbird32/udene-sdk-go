@@ -19,34 +19,33 @@ export const TransactionHistory = () => {
       throw new Error("Authentication required");
     }
 
-    console.log("Fetching client transactions...");
+    console.log("Fetching recent transactions...");
     const { data, error } = await supabase
       .from('transactions')
       .select('*')
-      .eq('customer_id', user.id)  // Filter by the current user's ID
       .order('created_at', { ascending: false })
       .limit(10);
 
     if (error) {
-      console.error("Error fetching client transactions:", error);
+      console.error("Error fetching transactions:", error);
       throw error;
     }
 
-    console.log("Client transactions fetched:", data);
+    console.log("Transactions fetched:", data);
     return data;
   }, [user]);
 
   const { data: transactions, isLoading, error } = useQuery({
-    queryKey: ["client-transactions", user?.id],
+    queryKey: ["recent-transactions", user?.id],
     queryFn: fetchTransactions,
     enabled: !!user,
     refetchInterval: 30000,
     meta: {
       errorHandler: (error: Error) => {
-        console.error("Client transaction fetch error:", error);
+        console.error("Transaction fetch error:", error);
         toast({
           title: "Error",
-          description: "Failed to load your transaction history. Please try again later.",
+          description: "Failed to load transaction history. Please try again later.",
           variant: "destructive",
         });
       },
@@ -54,20 +53,20 @@ export const TransactionHistory = () => {
   });
 
   if (userLoading) {
-    return <LoadingState message="Loading your data..." />;
+    return <LoadingState message="Loading user data..." />;
   }
 
   if (!user) {
-    return <ErrorState message="Please log in to view your transaction history." />;
+    return <ErrorState message="Please log in to view transaction history." />;
   }
 
   return (
     <ErrorBoundary>
       <Card className="p-6">
-        <h3 className="font-semibold mb-4">Your Recent Transactions</h3>
+        <h3 className="font-semibold mb-4">Recent Transactions</h3>
         
-        {isLoading && <LoadingState message="Loading your transactions..." />}
-        {error && <ErrorState message="Failed to load your transactions. Please try again later." />}
+        {isLoading && <LoadingState message="Loading transactions..." />}
+        {error && <ErrorState message="Failed to load transactions. Please try again later." />}
         {!isLoading && !error && (!transactions || transactions.length === 0) && <EmptyState />}
         {!isLoading && !error && transactions && transactions.length > 0 && (
           <TransactionList 

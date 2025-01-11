@@ -2,38 +2,32 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-interface ClientMetric {
-  metric_name: string;
-  metric_value: number;
-}
-
 export const useMetricsData = () => {
   const { toast } = useToast();
 
   return useQuery({
-    queryKey: ["client-dashboard-metrics"],
+    queryKey: ["dashboard-metrics"],
     queryFn: async () => {
       try {
-        console.log("Fetching client metrics data...");
         const { data: { user } } = await supabase.auth.getUser();
-        
         if (!user) {
-          throw new Error("No authenticated user found");
+          throw new Error("No user found");
         }
 
-        const { data, error } = await supabase
-          .from('client_metrics')
-          .select('metric_name, metric_value')
-          .eq('user_id', user.id)
-          .order('timestamp', { ascending: false });
+        // Fetch metrics from Supabase
+        const { data: metricsData, error } = await supabase
+          .from('metrics')
+          .select('*')
+          .order('timestamp', { ascending: false })
+          .limit(1);
 
         if (error) {
-          console.error("Error fetching client metrics:", error);
+          console.error("Error fetching metrics:", error);
           throw error;
         }
 
-        if (!data || data.length === 0) {
-          console.log("No metrics found for user");
+        // If no metrics exist yet, return default values
+        if (!metricsData || metricsData.length === 0) {
           return {
             riskScore: 0,
             totalTransactions: 0,
@@ -41,19 +35,13 @@ export const useMetricsData = () => {
           };
         }
 
-        // Map the metrics to our expected format
-        const metrics = data.reduce((acc: Record<string, number>, curr: ClientMetric) => {
-          acc[curr.metric_name] = curr.metric_value;
-          return acc;
-        }, {});
-
         return {
-          riskScore: metrics.risk_score || 0,
-          totalTransactions: metrics.total_transactions || 0,
-          flaggedTransactions: metrics.flagged_transactions || 0
+          riskScore: metricsData[0].risk_score || 0,
+          totalTransactions: metricsData[0].total_transactions || 0,
+          flaggedTransactions: metricsData[0].flagged_transactions || 0
         };
       } catch (error) {
-        console.error("Failed to fetch client metrics:", error);
+        console.error("Metrics fetch error:", error);
         toast({
           title: "Error",
           description: "Failed to load metrics data. Please try again later.",
@@ -62,6 +50,6 @@ export const useMetricsData = () => {
         throw error;
       }
     },
-    refetchInterval: 30000,
+    refetchInterval: 30000, // Refetch every 30 seconds
   });
 };
