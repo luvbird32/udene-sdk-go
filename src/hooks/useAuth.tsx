@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,15 +17,18 @@ export const useAuth = (): AuthResponse => {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
-  // Initialize user state and subscribe to auth changes
-  useState(() => {
-    supabase.auth.getUser().then(({ data: { user }, error }) => {
-      if (error) {
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      try {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error) throw error;
+        setUser(user);
+      } catch (error) {
         console.error('Error fetching user:', error);
-        return;
       }
-      setUser(user);
-    });
+    };
+
+    getCurrentUser();
 
     const {
       data: { subscription },
@@ -35,7 +38,7 @@ export const useAuth = (): AuthResponse => {
     });
 
     return () => subscription.unsubscribe();
-  });
+  }, []);
 
   const validateCredentials = (email: string, password: string): boolean => {
     if (!email || !password) {
@@ -106,7 +109,6 @@ export const useAuth = (): AuthResponse => {
       if (data.user) {
         console.log("Login successful, user:", data.user.id);
         setUser(data.user);
-        navigate('/dashboard');
       }
     } catch (err) {
       console.error("Unexpected login error:", err);
@@ -165,7 +167,6 @@ export const useAuth = (): AuthResponse => {
           title: "Success",
           description: "Account created successfully! You can now log in.",
         });
-        navigate('/dashboard');
       }
     } catch (err) {
       console.error("Unexpected signup error:", err);

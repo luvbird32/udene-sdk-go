@@ -16,6 +16,8 @@ function App() {
   const { toast } = useToast();
 
   useEffect(() => {
+    let mounted = true;
+
     // Initial session check
     const initAuth = async () => {
       try {
@@ -25,16 +27,18 @@ function App() {
           throw error;
         }
         
-        if (session) {
+        if (session && mounted) {
           console.log('Initial session found:', session.user.id);
           await refreshSession();
-          // Don't redirect if we're already on a protected route
-          if (window.location.pathname === '/login' || window.location.pathname === '/signup') {
+          
+          const publicRoutes = ['/', '/login', '/signup'];
+          const currentPath = window.location.pathname;
+          
+          if (publicRoutes.includes(currentPath)) {
             navigate('/dashboard');
           }
-        } else {
+        } else if (mounted) {
           console.log('No initial session found');
-          // Only redirect to login if we're not already on a public route
           const publicRoutes = ['/', '/login', '/signup'];
           if (!publicRoutes.includes(window.location.pathname)) {
             navigate('/login');
@@ -42,12 +46,14 @@ function App() {
         }
       } catch (error) {
         console.error('Error checking initial session:', error);
-        toast({
-          title: "Authentication Error",
-          description: "Failed to verify authentication status. Please try refreshing the page.",
-          variant: "destructive",
-        });
-        navigate('/login');
+        if (mounted) {
+          toast({
+            title: "Authentication Error",
+            description: "Failed to verify authentication status. Please try refreshing the page.",
+            variant: "destructive",
+          });
+          navigate('/login');
+        }
       }
     };
 
@@ -55,20 +61,24 @@ function App() {
 
     // Subscribe to auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (!mounted) return;
+      
       console.log('Auth state change:', event, session?.user?.id);
       
       try {
         switch (event) {
           case 'SIGNED_IN':
-            await refreshSession();
-            // Only navigate if we're on a public route
-            if (['/login', '/signup', '/'].includes(window.location.pathname)) {
-              navigate('/dashboard');
+            if (session) {
+              await refreshSession();
+              const publicRoutes = ['/', '/login', '/signup'];
+              if (publicRoutes.includes(window.location.pathname)) {
+                navigate('/dashboard');
+              }
+              toast({
+                title: "Welcome back!",
+                description: "You have successfully signed in.",
+              });
             }
-            toast({
-              title: "Welcome back!",
-              description: "You have successfully signed in.",
-            });
             break;
             
           case 'SIGNED_OUT':
@@ -101,16 +111,19 @@ function App() {
         }
       } catch (error) {
         console.error('Auth state change error:', error);
-        toast({
-          title: "Authentication Error",
-          description: "There was a problem with your authentication status. Please try signing in again.",
-          variant: "destructive",
-        });
-        navigate('/login');
+        if (mounted) {
+          toast({
+            title: "Authentication Error",
+            description: "There was a problem with your authentication status. Please try signing in again.",
+            variant: "destructive",
+          });
+          navigate('/login');
+        }
       }
     });
 
     return () => {
+      mounted = false;
       subscription.unsubscribe();
     };
   }, [navigate, toast]);
