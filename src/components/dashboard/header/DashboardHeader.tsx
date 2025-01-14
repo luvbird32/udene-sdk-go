@@ -8,10 +8,10 @@ export const DashboardHeader = () => {
     <header className="mb-8 flex justify-between items-center relative z-10">
       <div className="glass-card p-6 rounded-lg w-full max-w-2xl">
         <h2 className="text-4xl font-bold text-green-400 animate-pulse-slow" tabIndex={0}>
-          Admin Control Center
+          System Dashboard
         </h2>
         <p className="text-green-300/80" tabIndex={0}>
-          Advanced system monitoring and management interface
+          Monitor and manage your system performance
         </p>
       </div>
       <div className="flex items-center gap-4">
