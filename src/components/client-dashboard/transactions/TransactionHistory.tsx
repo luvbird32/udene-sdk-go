@@ -23,7 +23,7 @@ export const TransactionHistory = () => {
     const { data, error } = await supabase
       .from('transactions')
       .select('*')
-      .eq('customer_id', user.id.toString()) // Cast user.id to string to match the customer_id format
+      .eq('customer_id', user.id.toString())
       .order('created_at', { ascending: false })
       .limit(10);
 
@@ -33,10 +33,10 @@ export const TransactionHistory = () => {
     }
 
     console.log("Transactions fetched:", data);
-    return data;
+    return data || []; // Ensure we always return an array
   }, [user]);
 
-  const { data: transactions, isLoading, error } = useQuery({
+  const { data: transactions = [], isLoading, error } = useQuery({
     queryKey: ["recent-transactions", user?.id],
     queryFn: fetchTransactions,
     enabled: !!user,
