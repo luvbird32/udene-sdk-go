@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 interface ProjectFormData {
   name: string;
@@ -20,9 +21,19 @@ export function ProjectForm({ onSuccess }: ProjectFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { data: user } = useCurrentUser();
   const { register, handleSubmit, formState: { errors } } = useForm<ProjectFormData>();
 
   const onSubmit = async (data: ProjectFormData) => {
+    if (!user) {
+      toast({
+        title: "Error",
+        description: "You must be logged in to create a project",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const { error } = await supabase
@@ -30,6 +41,7 @@ export function ProjectForm({ onSuccess }: ProjectFormProps) {
         .insert([{
           name: data.name,
           description: data.description,
+          user_id: user.id
         }]);
 
       if (error) throw error;

@@ -20,19 +20,24 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { ProjectForm } from "./ProjectForm";
 import { useCurrentProject } from "@/hooks/useCurrentProject";
 import { toast } from "sonner";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 export function ProjectSwitcher() {
   const [open, setOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
   const { currentProject, currentProjectId, setCurrentProjectId } = useCurrentProject();
+  const { data: user } = useCurrentUser();
 
   const { data: projects, isLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: async () => {
+      if (!user) return [];
+      
       console.log("Fetching projects from Supabase...");
       const { data, error } = await supabase
         .from('projects')
         .select('*')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false });
       
       if (error) {
@@ -44,6 +49,7 @@ export function ProjectSwitcher() {
       console.log("Projects fetched:", data);
       return data;
     },
+    enabled: !!user
   });
 
   if (isLoading) {
