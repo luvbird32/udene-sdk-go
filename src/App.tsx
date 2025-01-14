@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
 import { Toaster } from "@/components/ui/toaster"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/hooks/use-toast"
 import Login from '@/pages/Login'
 import Signup from '@/pages/Signup'
 import Landing from '@/pages/Landing'
@@ -11,6 +11,31 @@ import Users from '@/pages/Users'
 import ClientSettings from '@/pages/ClientSettings'
 import { supabase, refreshSession } from "@/integrations/supabase/client"
 
+// Protected Route wrapper component
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      
+      if (error || !session) {
+        toast({
+          title: "Authentication Required",
+          description: "Please sign in to access this page",
+          variant: "destructive",
+        });
+        navigate('/login', { replace: true });
+      }
+    };
+    
+    checkAuth();
+  }, [navigate, toast]);
+
+  return <>{children}</>;
+};
+
 function App() {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -18,7 +43,6 @@ function App() {
   useEffect(() => {
     let mounted = true;
 
-    // Initial session check
     const initAuth = async () => {
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
@@ -32,13 +56,13 @@ function App() {
           const currentPath = window.location.pathname;
           
           if (publicRoutes.includes(currentPath)) {
-            navigate('/dashboard');
+            navigate('/dashboard', { replace: true });
           }
         } else if (mounted) {
           console.log('No initial session found');
           const publicRoutes = ['/', '/login', '/signup'];
           if (!publicRoutes.includes(window.location.pathname)) {
-            navigate('/login');
+            navigate('/login', { replace: true });
           }
         }
       } catch (error) {
@@ -49,14 +73,13 @@ function App() {
             description: "Failed to verify authentication status. Please try refreshing the page.",
             variant: "destructive",
           });
-          navigate('/login');
+          navigate('/login', { replace: true });
         }
       }
     };
 
     initAuth();
 
-    // Subscribe to auth changes with persistent session handling
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (!mounted) return;
       
@@ -66,13 +89,9 @@ function App() {
         switch (event) {
           case 'SIGNED_IN':
             if (session) {
-              // Store session in localStorage for persistence
               localStorage.setItem('supabase.auth.token', session.access_token);
               await refreshSession();
-              const publicRoutes = ['/', '/login', '/signup'];
-              if (publicRoutes.includes(window.location.pathname)) {
-                navigate('/dashboard');
-              }
+              navigate('/dashboard', { replace: true });
               toast({
                 title: "Welcome back!",
                 description: "You have successfully signed in.",
@@ -81,9 +100,8 @@ function App() {
             break;
             
           case 'SIGNED_OUT':
-            // Clear stored session data
             localStorage.removeItem('supabase.auth.token');
-            navigate('/login');
+            navigate('/login', { replace: true });
             toast({
               title: "Signed out",
               description: "You have been signed out successfully.",
@@ -104,6 +122,16 @@ function App() {
               description: "Your profile has been updated successfully.",
             });
             break;
+
+          case 'USER_DELETED':
+            localStorage.removeItem('supabase.auth.token');
+            navigate('/login', { replace: true });
+            toast({
+              title: "Account Deleted",
+              description: "Your account has been deleted.",
+              variant: "destructive",
+            });
+            break;
         }
       } catch (error) {
         console.error('Auth state change error:', error);
@@ -113,7 +141,7 @@ function App() {
             description: "There was a problem with your authentication status. Please try signing in again.",
             variant: "destructive",
           });
-          navigate('/login');
+          navigate('/login', { replace: true });
         }
       }
     });
@@ -127,13 +155,19 @@ function App() {
   return (
     <>
       <Routes>
+        {/* Public routes */}
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/client-settings" element={<ClientSettings />} />
+        
+        {/* Protected routes */}
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+        <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
+        <Route path="/client-settings" element={<ProtectedRoute><ClientSettings /></ProtectedRoute>} />
+        
+        {/* Catch-all redirect */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
       <Toaster />
     </>
