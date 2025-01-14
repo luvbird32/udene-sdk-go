@@ -77,6 +77,14 @@ function App() {
           case 'USER_UPDATED':
             console.log('User profile updated');
             break;
+            
+          case 'PASSWORD_RECOVERY':
+            navigate('/login');
+            toast({
+              title: "Password Recovery",
+              description: "Please check your email for password reset instructions.",
+            });
+            break;
         }
       } catch (error) {
         console.error('Auth state change error:', error);
