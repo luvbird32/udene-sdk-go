@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -9,12 +9,31 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { Code } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 export const Header = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleAuthenticatedNavigation = async (destination: string) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (session?.user) {
+      navigate(destination);
+    } else {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in or create an account to continue.",
+      });
+      navigate('/login');
     }
   };
 
@@ -80,20 +99,20 @@ export const Header = () => {
                 Sign In
               </Button>
             </Link>
-            <Link to="/login">
-              <Button className="bg-green-500 text-black hover:bg-green-400">
-                Get Started
-              </Button>
-            </Link>
-            <Link to="/client-dashboard">
-              <Button 
-                variant="outline" 
-                className="flex items-center gap-2 text-green-400 border-green-500/50 hover:bg-green-900/20"
-              >
-                <Code className="w-4 h-4" />
-                Developer
-              </Button>
-            </Link>
+            <Button 
+              className="bg-green-500 text-black hover:bg-green-400"
+              onClick={() => handleAuthenticatedNavigation('/dashboard')}
+            >
+              Get Started
+            </Button>
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2 text-green-400 border-green-500/50 hover:bg-green-900/20"
+              onClick={() => handleAuthenticatedNavigation('/client-dashboard')}
+            >
+              <Code className="w-4 h-4" />
+              Developer
+            </Button>
           </div>
         </div>
       </div>

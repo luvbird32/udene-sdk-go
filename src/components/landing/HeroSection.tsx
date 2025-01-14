@@ -1,8 +1,27 @@
 import { ArrowRight, Shield, Lock } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 export const HeroSection = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleStartTrial = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (session?.user) {
+      navigate('/client-dashboard');
+    } else {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in or create an account to start your free trial.",
+      });
+      navigate('/login');
+    }
+  };
+
   return (
     <section className="relative z-10 py-24">
       <div className="glass-card p-12 rounded-xl max-w-5xl mx-auto text-center backdrop-blur-lg border border-green-500/20">
@@ -19,11 +38,12 @@ export const HeroSection = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row justify-center gap-4 items-center">
-          <Link to="/client-dashboard">
-            <Button className="bg-green-600 hover:bg-green-700 text-white px-8 py-6 rounded-lg flex items-center gap-2 text-lg transition-all duration-300 hover:scale-105">
-              Start Free Trial <ArrowRight className="w-5 h-5" />
-            </Button>
-          </Link>
+          <Button 
+            className="bg-green-600 hover:bg-green-700 text-white px-8 py-6 rounded-lg flex items-center gap-2 text-lg transition-all duration-300 hover:scale-105"
+            onClick={handleStartTrial}
+          >
+            Start Free Trial <ArrowRight className="w-5 h-5" />
+          </Button>
         </div>
 
         <div className="mt-12 pt-12 border-t border-green-500/20 grid grid-cols-1 sm:grid-cols-3 gap-8">
