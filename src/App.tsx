@@ -12,7 +12,6 @@ import ClientSettings from '@/pages/ClientSettings'
 import { supabase, refreshSession } from "@/integrations/supabase/client"
 import { Loader2 } from 'lucide-react'
 
-// Protected Route wrapper component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -23,11 +22,16 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
     const checkAuth = async () => {
       try {
+        console.log('Checking authentication status...');
         const { data: { session }, error } = await supabase.auth.getSession();
         
-        if (error) throw error;
+        if (error) {
+          console.error('Auth check error:', error);
+          throw error;
+        }
         
         if (!session && mounted) {
+          console.log('No session found, redirecting to login');
           toast({
             title: "Authentication Required",
             description: "Please sign in to access this page",
@@ -37,8 +41,8 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
           return;
         }
         
-        // Check if session is expired
         if (session && new Date(session.expires_at * 1000) < new Date()) {
+          console.log('Session expired, signing out');
           await supabase.auth.signOut();
           toast({
             title: "Session Expired",
@@ -48,6 +52,8 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
           navigate('/login', { replace: true });
           return;
         }
+
+        console.log('Auth check completed successfully');
       } catch (error) {
         console.error('Auth check error:', error);
         if (mounted) {
@@ -59,7 +65,10 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
           navigate('/login', { replace: true });
         }
       } finally {
-        if (mounted) setIsLoading(false);
+        if (mounted) {
+          console.log('Setting loading state to false');
+          setIsLoading(false);
+        }
       }
     };
     
@@ -88,6 +97,7 @@ function App() {
 
     const initAuth = async () => {
       try {
+        console.log('Initializing authentication...');
         const { data: { session }, error } = await supabase.auth.getSession();
         if (error) throw error;
         
@@ -119,7 +129,10 @@ function App() {
           navigate('/login', { replace: true });
         }
       } finally {
-        if (mounted) setIsInitializing(false);
+        if (mounted) {
+          console.log('Setting initializing state to false');
+          setIsInitializing(false);
+        }
       }
     };
 
@@ -167,24 +180,13 @@ function App() {
               description: "Your profile has been updated successfully.",
             });
             break;
-
-          case 'PASSWORD_RECOVERY':
-            navigate('/reset-password', { replace: true });
-            toast({
-              title: "Password Recovery",
-              description: "Please check your email for password reset instructions.",
-            });
-            break;
-
-          default:
-            console.log('Unhandled auth event:', event);
         }
       } catch (error) {
         console.error('Auth state change error:', error);
         if (mounted) {
           toast({
             title: "Authentication Error",
-            description: "There was a problem with your authentication status. Please try signing in again.",
+            description: "There was a problem with your authentication status",
             variant: "destructive",
           });
           navigate('/login', { replace: true });
@@ -225,7 +227,7 @@ function App() {
       </Routes>
       <Toaster />
     </>
-  )
+  );
 }
 
 export default App
