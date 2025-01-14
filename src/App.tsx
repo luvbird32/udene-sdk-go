@@ -19,9 +19,20 @@ function App() {
     // Initial session check
     const initAuth = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        
         if (session) {
           console.log('Initial session found:', session.user.id);
+          // Ensure we have a fresh session
+          await refreshSession();
+        } else {
+          console.log('No initial session found');
+          // Only redirect to login if we're not already on a public route
+          const publicRoutes = ['/', '/login', '/signup'];
+          if (!publicRoutes.includes(window.location.pathname)) {
+            navigate('/login');
+          }
         }
       } catch (error) {
         console.error('Error checking initial session:', error);
@@ -30,6 +41,7 @@ function App() {
           description: "Failed to verify authentication status. Please try refreshing the page.",
           variant: "destructive",
         });
+        navigate('/login');
       }
     };
 
@@ -37,26 +49,42 @@ function App() {
 
     // Subscribe to auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('Auth state change:', event, session?.user?.id);
+      
       try {
-        if (event === 'SIGNED_IN') {
-          console.log('User signed in:', session?.user?.id);
-          await refreshSession(); // Ensure token is fresh
-          navigate('/dashboard');
-          toast({
-            title: "Welcome back!",
-            description: "You have successfully signed in.",
-          });
-        } else if (event === 'SIGNED_OUT') {
-          console.log('User signed out');
-          navigate('/login');
-          toast({
-            title: "Signed out",
-            description: "You have been signed out successfully.",
-          });
-        } else if (event === 'TOKEN_REFRESHED') {
-          console.log('Token refreshed');
-        } else if (event === 'USER_UPDATED') {
-          console.log('User updated:', session?.user?.id);
+        switch (event) {
+          case 'SIGNED_IN':
+            await refreshSession();
+            navigate('/dashboard');
+            toast({
+              title: "Welcome back!",
+              description: "You have successfully signed in.",
+            });
+            break;
+            
+          case 'SIGNED_OUT':
+            navigate('/login');
+            toast({
+              title: "Signed out",
+              description: "You have been signed out successfully.",
+            });
+            break;
+            
+          case 'TOKEN_REFRESHED':
+            console.log('Token refreshed successfully');
+            break;
+            
+          case 'USER_UPDATED':
+            console.log('User profile updated');
+            break;
+            
+          case 'USER_DELETED':
+            navigate('/login');
+            toast({
+              title: "Account Deleted",
+              description: "Your account has been deleted.",
+            });
+            break;
         }
       } catch (error) {
         console.error('Auth state change error:', error);

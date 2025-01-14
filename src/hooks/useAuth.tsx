@@ -17,17 +17,23 @@ export const useAuth = (): AuthResponse => {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
-  // Initialize user state
+  // Initialize user state and subscribe to auth changes
   useState(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
+    supabase.auth.getUser().then(({ data: { user }, error }) => {
+      if (error) {
+        console.error('Error fetching user:', error);
+        return;
+      }
       setUser(user);
     });
 
-    // Subscribe to auth state changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
+      
+      // Log auth state changes for debugging
+      console.log('Auth state changed:', event, session?.user?.id);
     });
 
     return () => subscription.unsubscribe();
@@ -36,7 +42,7 @@ export const useAuth = (): AuthResponse => {
   const validateCredentials = (email: string, password: string): boolean => {
     if (!email || !password) {
       toast({
-        title: "Error",
+        title: "Validation Error",
         description: "Please provide both email and password",
         variant: "destructive"
       });
@@ -46,7 +52,7 @@ export const useAuth = (): AuthResponse => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       toast({
-        title: "Error",
+        title: "Invalid Email",
         description: "Please provide a valid email address",
         variant: "destructive"
       });
@@ -55,7 +61,7 @@ export const useAuth = (): AuthResponse => {
 
     if (password.length < 6) {
       toast({
-        title: "Error",
+        title: "Invalid Password",
         description: "Password must be at least 6 characters long",
         variant: "destructive"
       });
@@ -130,7 +136,7 @@ export const useAuth = (): AuthResponse => {
     console.log("Attempting signup with email:", cleanEmail);
 
     try {
-      const { data: existingUser, error: signUpError } = await supabase.auth.signUp({
+      const { data, error: signUpError } = await supabase.auth.signUp({
         email: cleanEmail,
         password,
         options: {
@@ -141,8 +147,7 @@ export const useAuth = (): AuthResponse => {
       if (signUpError) {
         console.error("Signup error:", signUpError);
         
-        if (signUpError.message?.includes("User already registered") || 
-            signUpError.message?.includes("user_already_exists")) {
+        if (signUpError.message?.includes("User already registered")) {
           toast({
             title: "Account Exists",
             description: "An account with this email already exists. Please try logging in instead.",
@@ -159,9 +164,9 @@ export const useAuth = (): AuthResponse => {
         return;
       }
 
-      if (existingUser?.user) {
-        console.log("User created successfully:", existingUser.user.id);
-        setUser(existingUser.user);
+      if (data?.user) {
+        console.log("User created successfully:", data.user.id);
+        setUser(data.user);
         toast({
           title: "Success",
           description: "Account created successfully! You can now log in.",
