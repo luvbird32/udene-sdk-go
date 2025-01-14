@@ -1,33 +1,12 @@
-import { Settings, ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
-import { ThemeToggle } from "@/components/client-dashboard/ThemeToggle";
+import { ProjectSwitcher } from "../projects/ProjectSwitcher";
 
 export const DashboardHeader = () => {
   return (
-    <header className="mb-8 flex justify-between items-center">
-      <div>
-        <h1 className="text-3xl font-bold">Fraud Detection Dashboard</h1>
-        <p className="text-muted-foreground mt-2">
-          Monitor your transaction security and risk metrics
-        </p>
+    <div className="flex items-center justify-between pb-4 border-b border-green-500/20">
+      <div className="flex items-center gap-4">
+        <h1 className="text-2xl font-bold text-green-400">Dashboard</h1>
+        <ProjectSwitcher />
       </div>
-      <div className="flex gap-4 items-center">
-        <ThemeToggle />
-        <Link 
-          to="/dashboard" 
-          className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent transition-colors"
-        >
-          <ArrowLeft className="h-5 w-5" />
-          <span>Back to Admin</span>
-        </Link>
-        <Link 
-          to="/client-settings" 
-          className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent transition-colors"
-        >
-          <Settings className="h-5 w-5" />
-          <span>Settings</span>
-        </Link>
-      </div>
-    </header>
+    </div>
   );
 };
