@@ -6,10 +6,6 @@ import { TrendAnalysis } from "@/components/client-dashboard/analytics/TrendAnal
 import { GeographicDistribution } from "@/components/client-dashboard/analytics/GeographicDistribution";
 import { RiskDistribution } from "@/components/client-dashboard/analytics/RiskDistribution";
 import { BusinessIntelligence } from "@/components/client-dashboard/analytics/BusinessIntelligence";
-import { AffiliateMonitoring } from "@/components/client-dashboard/analytics/AffiliateMonitoring";
-import { TrialAbuseMonitoring } from "@/components/client-dashboard/analytics/TrialAbuseMonitoring";
-import { DeviceFingerprintMonitoring } from "@/components/client-dashboard/analytics/DeviceFingerprintMonitoring";
-import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 interface DashboardContentProps {
@@ -52,24 +48,6 @@ export const DashboardContent = ({
         </ErrorBoundary>
         <ErrorBoundary>
           <BusinessIntelligence />
-        </ErrorBoundary>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <DeviceFingerprintMonitoring />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <UserActivityMonitoring />
-        </ErrorBoundary>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <AffiliateMonitoring />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <TrialAbuseMonitoring />
         </ErrorBoundary>
       </div>
 
