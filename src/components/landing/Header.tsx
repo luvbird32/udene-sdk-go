@@ -4,6 +4,7 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
+  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
@@ -107,7 +108,7 @@ export const Header = () => {
             <Button 
               variant="outline" 
               className="flex items-center gap-2 text-green-400 border-green-500/50 hover:bg-green-900/20"
-              onClick={() => handleAuthenticatedNavigation('/dashboard')}
+              onClick={() => handleAuthenticatedNavigation('/client-dashboard')}
             >
               <Code className="w-4 h-4" />
               Developer

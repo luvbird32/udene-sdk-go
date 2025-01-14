@@ -81,8 +81,8 @@ function App() {
           case 'PASSWORD_RECOVERY':
             navigate('/login');
             toast({
-              title: "Password Recovery",
-              description: "Please check your email for password reset instructions.",
+              title: "Account Deleted",
+              description: "Your account has been deleted.",
             });
             break;
         }

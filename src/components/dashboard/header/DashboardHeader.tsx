@@ -1,5 +1,5 @@
-import { Settings } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Settings, Link, Users } from "lucide-react";
+import { Link as RouterLink } from "react-router-dom";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { AccountTypeIndicator } from "@/components/dashboard/AccountTypeIndicator";
 
@@ -16,13 +16,20 @@ export const DashboardHeader = () => {
       </div>
       <div className="flex items-center gap-4">
         <NotificationBell />
-        <Link 
+        <RouterLink 
+          to="/client-dashboard" 
+          className="flex items-center gap-2 px-6 py-3 rounded-md hover:bg-green-900/20 transition-all duration-300 glass-card"
+        >
+          <Users className="h-5 w-5" />
+          <span>My Dashboard</span>
+        </RouterLink>
+        <RouterLink 
           to="/settings" 
           className="flex items-center gap-2 px-6 py-3 rounded-md hover:bg-green-900/20 transition-all duration-300 glass-card"
         >
           <Settings className="h-5 w-5" />
           <span>Settings</span>
-        </Link>
+        </RouterLink>
       </div>
     </header>
   );
