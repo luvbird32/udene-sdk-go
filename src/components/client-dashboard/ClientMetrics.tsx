@@ -1,4 +1,4 @@
-import { Shield, Activity, AlertTriangle } from "lucide-react";
+import { Shield, Activity, AlertTriangle, Clock, Users } from "lucide-react";
 import { MetricCard } from "@/components/ui/metrics/MetricCard";
 import { ErrorState } from "@/components/ui/states/ErrorState";
 import { EmptyState } from "@/components/ui/states/EmptyState";
@@ -6,9 +6,12 @@ import { useMetricsData } from "./metrics/useMetricsData";
 
 interface ClientMetricsProps {
   metrics?: {
-    riskScore: number;
-    totalTransactions: number;
-    flaggedTransactions: number;
+    riskScore?: number;
+    totalTransactions?: number;
+    flaggedTransactions?: number;
+    avgProcessingTime?: number;
+    concurrentCalls?: number;
+    activeUsers?: number;
   } | null;
   isLoading?: boolean;
   error?: Error | null;
@@ -30,28 +33,17 @@ export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps)
   // Early return for loading state
   if (isLoadingState) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <MetricCard
-          title="Risk Score"
-          value="Loading..."
-          icon={Shield}
-          description="Current risk assessment score"
-          isLoading={true}
-        />
-        <MetricCard
-          title="Total Transactions"
-          value="Loading..."
-          icon={Activity}
-          description="Number of processed transactions"
-          isLoading={true}
-        />
-        <MetricCard
-          title="Flagged Transactions"
-          value="Loading..."
-          icon={AlertTriangle}
-          description="Transactions requiring attention"
-          isLoading={true}
-        />
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        {[...Array(5)].map((_, i) => (
+          <MetricCard
+            key={i}
+            title="Loading..."
+            value="Loading..."
+            icon={Shield}
+            description="Loading..."
+            isLoading={true}
+          />
+        ))}
       </div>
     );
   }
@@ -63,7 +55,7 @@ export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps)
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
       <MetricCard
         title="Risk Score"
         value={`${displayMetrics.riskScore ?? 0}%`}
@@ -83,6 +75,20 @@ export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps)
         value={displayMetrics.flaggedTransactions ?? 0}
         icon={AlertTriangle}
         description="Transactions requiring attention"
+        isLoading={isLoadingState}
+      />
+      <MetricCard
+        title="Avg Processing Time"
+        value={`${displayMetrics.avgProcessingTime ?? 0}ms`}
+        icon={Clock}
+        description="Average transaction processing time"
+        isLoading={isLoadingState}
+      />
+      <MetricCard
+        title="Concurrent Calls"
+        value={displayMetrics.concurrentCalls ?? 0}
+        icon={Users}
+        description="Current concurrent API calls"
         isLoading={isLoadingState}
       />
     </div>
