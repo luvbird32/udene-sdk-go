@@ -260,6 +260,7 @@ export type Database = {
           key_type: string
           key_value: string
           name: string
+          project_id: string | null
           status: string
           updated_at: string | null
           user_id: string
@@ -271,6 +272,7 @@ export type Database = {
           key_type?: string
           key_value: string
           name: string
+          project_id?: string | null
           status?: string
           updated_at?: string | null
           user_id: string
@@ -282,11 +284,20 @@ export type Database = {
           key_type?: string
           key_value?: string
           name?: string
+          project_id?: string | null
           status?: string
           updated_at?: string | null
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "client_api_keys_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       client_data_extractions: {
         Row: {
@@ -353,6 +364,7 @@ export type Database = {
           created_at: string | null
           id: string
           is_active: boolean | null
+          project_id: string | null
           service_type: string
           settings: Json | null
           updated_at: string | null
@@ -362,6 +374,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           is_active?: boolean | null
+          project_id?: string | null
           service_type: string
           settings?: Json | null
           updated_at?: string | null
@@ -371,12 +384,21 @@ export type Database = {
           created_at?: string | null
           id?: string
           is_active?: boolean | null
+          project_id?: string | null
           service_type?: string
           settings?: Json | null
           updated_at?: string | null
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "client_services_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       compliance_reports: {
         Row: {
@@ -1085,6 +1107,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      projects: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       promo_code_usage: {
         Row: {
