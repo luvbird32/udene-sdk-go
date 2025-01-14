@@ -4,7 +4,6 @@ import { TransactionHistory } from "@/components/client-dashboard/transactions/T
 import { RiskOverview } from "@/components/client-dashboard/RiskOverview";
 import { TrendAnalysis } from "@/components/client-dashboard/analytics/TrendAnalysis";
 import { GeographicDistribution } from "@/components/client-dashboard/analytics/GeographicDistribution";
-import { PeakTransactionTimes } from "@/components/client-dashboard/analytics/PeakTransactionTimes";
 import { RiskDistribution } from "@/components/client-dashboard/analytics/RiskDistribution";
 import { BusinessIntelligence } from "@/components/client-dashboard/analytics/BusinessIntelligence";
 import { AffiliateMonitoring } from "@/components/client-dashboard/analytics/AffiliateMonitoring";
