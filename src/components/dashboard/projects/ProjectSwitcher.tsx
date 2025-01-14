@@ -24,7 +24,7 @@ import { toast } from "sonner";
 export function ProjectSwitcher() {
   const [open, setOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
-  const { currentProject, setCurrentProject } = useCurrentProject();
+  const { currentProject, currentProjectId, setCurrentProjectId } = useCurrentProject();
 
   const { data: projects, isLoading } = useQuery({
     queryKey: ['projects'],
@@ -70,7 +70,7 @@ export function ProjectSwitcher() {
             className="w-[200px] justify-between"
           >
             {currentProject
-              ? projects?.find((project) => project.id === currentProject.id)?.name
+              ? projects?.find((project) => project.id === currentProjectId)?.name
               : "Select project..."}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
@@ -85,14 +85,14 @@ export function ProjectSwitcher() {
                   key={project.id}
                   value={project.id}
                   onSelect={() => {
-                    setCurrentProject(project);
+                    setCurrentProjectId(project.id);
                     setOpen(false);
                   }}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      currentProject?.id === project.id ? "opacity-100" : "opacity-0"
+                      currentProjectId === project.id ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {project.name}
