@@ -25,7 +25,15 @@ export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps)
     return <ErrorState error={error || metricsError} />;
   }
 
-  const displayMetrics = metrics || metricsData;
+  const displayMetrics = metrics || metricsData || {
+    riskScore: 0,
+    totalTransactions: 0,
+    flaggedTransactions: 0,
+    avgProcessingTime: 0,
+    concurrentCalls: 0,
+    activeUsers: 0
+  };
+  
   const isLoadingState = isLoading || metricsLoading;
 
   if (isLoadingState) {

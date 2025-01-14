@@ -22,8 +22,7 @@ export const ServiceManager = () => {
   const handleToggle = async (serviceType: string, isActive: boolean) => {
     await toggleService.mutateAsync({ 
       serviceType, 
-      isActive,
-      project_id: null // Make project_id optional in the service
+      isActive
     });
   };
 
