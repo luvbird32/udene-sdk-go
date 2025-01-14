@@ -30,10 +30,21 @@ const Dashboard = () => {
         throw metricsError;
       }
 
+      const defaultMetrics = {
+        riskScore: 0,
+        totalTransactions: 0,
+        flaggedTransactions: 0,
+        avgProcessingTime: 35,
+        concurrentCalls: 0
+      };
+
+      if (!metricsData || metricsData.length === 0) {
+        return defaultMetrics;
+      }
+
       return {
-        activeUsers: metricsData?.[0]?.metric_value ?? 0,
-        avgProcessingTime: 35, // Preserved as requested
-        concurrentCalls: metricsData?.[0]?.metric_value ?? 0
+        ...defaultMetrics,
+        ...metricsData[0]
       };
     },
     refetchInterval: 3000,

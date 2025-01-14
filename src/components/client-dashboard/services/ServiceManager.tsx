@@ -28,13 +28,19 @@ import { Card } from '@/components/ui/card';
 import { Info } from 'lucide-react';
 
 export const ServiceManager = () => {
-  const { data: activeServices, isLoading } = useServices();
+  const { data: servicesData, isLoading } = useServices();
   const toggleService = useServiceToggle();
   useAIActivityMonitoring();
 
   const handleToggle = async (serviceType: string, isActive: boolean) => {
     await toggleService.mutateAsync({ serviceType, isActive });
   };
+
+  // Transform the services data to include project_id
+  const activeServices = servicesData?.map(service => ({
+    ...service,
+    project_id: service.project_id || null // Provide a default value if project_id is missing
+  })) || [];
 
   if (isLoading) {
     return (
