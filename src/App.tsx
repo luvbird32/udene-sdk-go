@@ -77,6 +77,14 @@ function App() {
           case 'USER_UPDATED':
             console.log('User profile updated');
             break;
+            
+          case 'PASSWORD_RECOVERY':
+            navigate('/login');
+            toast({
+              title: "Account Deleted",
+              description: "Your account has been deleted.",
+            });
+            break;
         }
       } catch (error) {
         console.error('Auth state change error:', error);
