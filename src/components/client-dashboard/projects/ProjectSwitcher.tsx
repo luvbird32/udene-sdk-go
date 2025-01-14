@@ -28,7 +28,7 @@ export function ProjectSwitcher() {
   const { currentProject, currentProjectId, setCurrentProjectId } = useCurrentProject();
   const { data: user } = useCurrentUser();
 
-  const { data: projects, isLoading } = useQuery({
+  const { data: projects = [], isLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: async () => {
       if (!user) return [];
@@ -43,11 +43,11 @@ export function ProjectSwitcher() {
       if (error) {
         console.error("Error fetching projects:", error);
         toast.error("Failed to load projects");
-        throw error;
+        return [];
       }
 
       console.log("Projects fetched:", data);
-      return data;
+      return data || [];
     },
     enabled: !!user
   });
@@ -76,7 +76,7 @@ export function ProjectSwitcher() {
             className="w-[200px] justify-between"
           >
             {currentProject
-              ? projects?.find((project) => project.id === currentProjectId)?.name
+              ? projects?.find((project) => project.id === currentProjectId)?.name || "Select project..."
               : "Select project..."}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
@@ -86,7 +86,7 @@ export function ProjectSwitcher() {
             <CommandInput placeholder="Search projects..." />
             <CommandEmpty>No project found.</CommandEmpty>
             <CommandGroup>
-              {projects?.map((project) => (
+              {(projects || []).map((project) => (
                 <CommandItem
                   key={project.id}
                   value={project.id}
