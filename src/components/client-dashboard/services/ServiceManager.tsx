@@ -26,14 +26,23 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { useAIActivityMonitoring } from '@/hooks/useAIActivityMonitoring';
 import { Card } from '@/components/ui/card';
 import { Info } from 'lucide-react';
+import { useCurrentProject } from '@/hooks/useCurrentProject';
 
 export const ServiceManager = () => {
+  const { currentProject } = useCurrentProject();
   const { data: activeServices, isLoading } = useServices();
   const toggleService = useServiceToggle();
   useAIActivityMonitoring();
 
   const handleToggle = async (serviceType: string, isActive: boolean) => {
-    await toggleService.mutateAsync({ serviceType, isActive });
+    if (!currentProject?.id) {
+      return;
+    }
+    await toggleService.mutateAsync({ 
+      serviceType, 
+      isActive,
+      projectId: currentProject.id 
+    });
   };
 
   if (isLoading) {

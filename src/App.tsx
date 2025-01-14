@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom'
 import { Toaster } from "@/components/ui/toaster"
 import { useToast } from "@/components/ui/use-toast"
 import ClientDashboard from '@/pages/ClientDashboard'
@@ -12,7 +12,7 @@ import Users from '@/pages/Users'
 import ClientSettings from '@/pages/ClientSettings'
 import { supabase } from "@/integrations/supabase/client"
 
-function App() {
+function AppRoutes() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -55,7 +55,15 @@ function App() {
       </Routes>
       <Toaster />
     </>
-  )
+  );
 }
 
-export default App
+function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+  );
+}
+
+export default App;

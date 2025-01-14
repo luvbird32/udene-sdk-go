@@ -3,17 +3,23 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useToast } from "@/components/ui/use-toast";
 import { useBotDetection } from "@/hooks/useBotDetection";
-import { useCurrentProject } from "@/hooks/useCurrentProject";
 
 export const useServiceToggle = () => {
   const queryClient = useQueryClient();
   const { data: currentUser } = useCurrentUser();
-  const { currentProject } = useCurrentProject();
   const { toast } = useToast();
   const { isBotDetected } = useBotDetection();
 
   const toggleService = useMutation({
-    mutationFn: async ({ serviceType, isActive }: { serviceType: string; isActive: boolean }) => {
+    mutationFn: async ({ 
+      serviceType, 
+      isActive,
+      projectId 
+    }: { 
+      serviceType: string; 
+      isActive: boolean;
+      projectId: string;
+    }) => {
       if (!currentUser?.id) throw new Error("No user found");
       
       if (isBotDetected) {
@@ -25,7 +31,7 @@ export const useServiceToggle = () => {
         .select('*')
         .eq('service_type', serviceType)
         .eq('user_id', currentUser.id)
-        .eq('project_id', currentProject?.id)
+        .eq('project_id', projectId)
         .maybeSingle();
 
       if (queryError) throw queryError;
@@ -36,7 +42,7 @@ export const useServiceToggle = () => {
           .update({ is_active: isActive })
           .eq('service_type', serviceType)
           .eq('user_id', currentUser.id)
-          .eq('project_id', currentProject?.id);
+          .eq('project_id', projectId);
 
         if (error) throw error;
       } else {
@@ -46,7 +52,7 @@ export const useServiceToggle = () => {
             service_type: serviceType,
             is_active: isActive,
             user_id: currentUser.id,
-            project_id: currentProject?.id,
+            project_id: projectId,
             settings: {}
           });
 
@@ -58,7 +64,7 @@ export const useServiceToggle = () => {
         entity_type: 'service',
         entity_id: serviceType,
         user_id: currentUser.id,
-        changes: { service_type: serviceType, is_active: isActive, project_id: currentProject?.id }
+        changes: { service_type: serviceType, is_active: isActive, project_id: projectId }
       });
     },
     onSuccess: () => {
