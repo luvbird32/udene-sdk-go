@@ -14,8 +14,6 @@ import { RewardProgramMonitoring } from "@/components/client-dashboard/analytics
 import { DeviceFingerprintMonitoring } from "@/components/client-dashboard/analytics/DeviceFingerprintMonitoring";
 import { IdentityVerificationMonitoring } from "@/components/client-dashboard/analytics/IdentityVerificationMonitoring";
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
-import { FraudPatterns } from "@/components/dashboard/FraudPatterns";
-import { IPAddressMonitoring } from "@/components/monitoring/IPAddressMonitoring";
 import { SystemHealth } from "@/components/client-dashboard/monitoring/SystemHealth";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
@@ -69,19 +67,19 @@ export const DashboardContent = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ErrorBoundary>
-          <FraudPatterns />
+          <RiskDistribution />
         </ErrorBoundary>
         <ErrorBoundary>
-          <RiskDistribution />
+          <BusinessIntelligence />
         </ErrorBoundary>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ErrorBoundary>
-          <IPAddressMonitoring />
+          <FlaggedDevices />
         </ErrorBoundary>
         <ErrorBoundary>
-          <FlaggedDevices />
+          <DeviceFingerprintMonitoring />
         </ErrorBoundary>
       </div>
 
@@ -99,25 +97,16 @@ export const DashboardContent = ({
           <TrialAbuseMonitoring />
         </ErrorBoundary>
         <ErrorBoundary>
-          <DeviceFingerprintMonitoring />
+          <IdentityVerificationMonitoring />
         </ErrorBoundary>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <IdentityVerificationMonitoring />
-        </ErrorBoundary>
         <ErrorBoundary>
           <UserActivityMonitoring />
         </ErrorBoundary>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ErrorBoundary>
           <PeakTransactionTimes />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <BusinessIntelligence />
         </ErrorBoundary>
       </div>
 
