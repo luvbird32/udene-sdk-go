@@ -3,19 +3,6 @@
  * 
  * Manages the activation and configuration of fraud prevention services.
  * Provides a centralized interface for managing all available services.
- * 
- * Features:
- * - Service activation/deactivation
- * - Service configuration
- * - Status monitoring
- * - Usage statistics
- * - Integration guides
- * 
- * @component
- * @example
- * ```tsx
- * <ServiceManager />
- * ```
  */
 import React from 'react';
 import { ServiceHeader } from './ServiceHeader';
@@ -49,6 +36,11 @@ export const ServiceManager = () => {
     );
   }
 
+  const servicesWithProject = activeServices?.map(service => ({
+    ...service,
+    project_id: service.project_id || ''
+  })) || [];
+
   return (
     <TooltipProvider delayDuration={300}>
       <div className="space-y-6">
@@ -73,7 +65,7 @@ export const ServiceManager = () => {
         </Card>
 
         <ServiceList 
-          activeServices={activeServices} 
+          activeServices={servicesWithProject} 
           handleToggle={handleToggle}
         />
       </div>

@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import { Toaster } from "@/components/ui/toaster"
 import { useToast } from "@/components/ui/use-toast"
-import ClientDashboard from '@/pages/ClientDashboard'
 import Login from '@/pages/Login'
 import Signup from '@/pages/Signup'
 import Landing from '@/pages/Landing'
@@ -20,6 +19,7 @@ function App() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN') {
         console.log('User signed in:', session?.user?.id);
+        navigate('/dashboard');
         toast({
           title: "Welcome back!",
           description: "You have successfully signed in.",
@@ -48,7 +48,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/client-dashboard" element={<ClientDashboard />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/users" element={<Users />} />
         <Route path="/client-settings" element={<ClientSettings />} />
