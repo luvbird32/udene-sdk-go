@@ -13,6 +13,8 @@ import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { MetricsSection } from "./MetricsSection";
 import { SecuritySection } from "./SecuritySection";
+import { TransactionHistory } from "@/components/client-dashboard/transactions/TransactionHistory";
+import { RiskOverview } from "@/components/client-dashboard/RiskOverview";
 
 interface DashboardContentProps {
   metrics?: {
