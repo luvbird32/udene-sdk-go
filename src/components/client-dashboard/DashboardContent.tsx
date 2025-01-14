@@ -14,13 +14,17 @@ import { RewardProgramMonitoring } from "@/components/client-dashboard/analytics
 import { DeviceFingerprintMonitoring } from "@/components/client-dashboard/analytics/DeviceFingerprintMonitoring";
 import { IdentityVerificationMonitoring } from "@/components/client-dashboard/analytics/IdentityVerificationMonitoring";
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
+import { HealthStatus } from "@/components/monitoring/HealthStatus";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 interface DashboardContentProps {
   metrics?: {
-    riskScore: number;
-    totalTransactions: number;
-    flaggedTransactions: number;
+    activeUsers?: number;
+    avgProcessingTime?: number;
+    concurrentCalls?: number;
+    riskScore?: number;
+    totalTransactions?: number;
+    flaggedTransactions?: number;
   } | null;
   metricsLoading?: boolean;
   metricsError?: Error | null;
@@ -36,14 +40,18 @@ export const DashboardContent = ({
       <ApiCreditsDisplay />
       
       <ClientMetrics 
-        metrics={metrics}
+        metrics={{
+          riskScore: metrics?.riskScore ?? 0,
+          totalTransactions: metrics?.totalTransactions ?? 0,
+          flaggedTransactions: metrics?.flaggedTransactions ?? 0
+        }}
         isLoading={metricsLoading}
         error={metricsError}
       />
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ErrorBoundary>
-          <TrendAnalysis />
+          <HealthStatus />
         </ErrorBoundary>
         <ErrorBoundary>
           <GeographicDistribution />
