@@ -10,7 +10,6 @@ import { BusinessIntelligence } from "@/components/client-dashboard/analytics/Bu
 import { FlaggedDevices } from "@/components/monitoring/FlaggedDevices";
 import { AffiliateMonitoring } from "@/components/client-dashboard/analytics/AffiliateMonitoring";
 import { TrialAbuseMonitoring } from "@/components/client-dashboard/analytics/TrialAbuseMonitoring";
-import { RewardProgramMonitoring } from "@/components/client-dashboard/analytics/RewardProgramMonitoring";
 import { DeviceFingerprintMonitoring } from "@/components/client-dashboard/analytics/DeviceFingerprintMonitoring";
 import { IdentityVerificationMonitoring } from "@/components/client-dashboard/analytics/IdentityVerificationMonitoring";
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
@@ -28,33 +27,19 @@ interface DashboardContentProps {
 }
 
 export const DashboardContent = ({ 
-  metrics = null, 
-  metricsLoading = false, 
-  metricsError = null 
+  metrics, 
+  metricsLoading, 
+  metricsError 
 }: DashboardContentProps) => {
-  const safeMetrics = metrics ?? {
-    riskScore: 0,
-    totalTransactions: 0,
-    flaggedTransactions: 0
-  };
-
   return (
     <div className="space-y-8">
-      <ErrorBoundary>
-        <ApiCreditsDisplay />
-      </ErrorBoundary>
+      <ApiCreditsDisplay />
       
-      <ErrorBoundary>
-        <SystemHealth />
-      </ErrorBoundary>
-      
-      <ErrorBoundary>
-        <ClientMetrics 
-          metrics={safeMetrics}
-          isLoading={metricsLoading}
-          error={metricsError}
-        />
-      </ErrorBoundary>
+      <ClientMetrics 
+        metrics={metrics}
+        isLoading={metricsLoading}
+        error={metricsError}
+      />
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ErrorBoundary>
@@ -88,16 +73,7 @@ export const DashboardContent = ({
           <AffiliateMonitoring />
         </ErrorBoundary>
         <ErrorBoundary>
-          <RewardProgramMonitoring />
-        </ErrorBoundary>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
           <TrialAbuseMonitoring />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <IdentityVerificationMonitoring />
         </ErrorBoundary>
       </div>
 
