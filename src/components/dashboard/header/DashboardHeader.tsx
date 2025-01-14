@@ -21,7 +21,7 @@ export const DashboardHeader = () => {
           className="flex items-center gap-2 px-6 py-3 rounded-md hover:bg-green-900/20 transition-all duration-300 glass-card"
         >
           <Users className="h-5 w-5" />
-          <span>Client Dashboard</span>
+          <span>My Dashboard</span>
         </RouterLink>
         <RouterLink 
           to="/settings" 
