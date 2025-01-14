@@ -13,6 +13,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { useAIActivityMonitoring } from '@/hooks/useAIActivityMonitoring';
 import { Card } from '@/components/ui/card';
 import { Info } from 'lucide-react';
+import type { ClientService } from '@/types/services';
 
 export const ServiceManager = () => {
   const { data: activeServices, isLoading } = useServices();
@@ -36,10 +37,11 @@ export const ServiceManager = () => {
     );
   }
 
-  const servicesWithProject = activeServices?.map(service => ({
+  // Ensure project_id is always a string, even if null/undefined
+  const servicesWithProject = (activeServices || []).map((service: ClientService) => ({
     ...service,
     project_id: service.project_id || ''
-  })) || [];
+  }));
 
   return (
     <TooltipProvider delayDuration={300}>
