@@ -31,20 +31,14 @@ export const useMetricsData = () => {
           return {
             riskScore: 0,
             totalTransactions: 0,
-            flaggedTransactions: 0,
-            avgProcessingTime: 0,
-            concurrentCalls: 0,
-            activeUsers: 0
+            flaggedTransactions: 0
           };
         }
 
         return {
           riskScore: metricsData[0].risk_score || 0,
           totalTransactions: metricsData[0].total_transactions || 0,
-          flaggedTransactions: metricsData[0].flagged_transactions || 0,
-          avgProcessingTime: metricsData[0].avg_processing_time || 0,
-          concurrentCalls: metricsData[0].concurrent_calls || 0,
-          activeUsers: metricsData[0].active_users || 0
+          flaggedTransactions: metricsData[0].flagged_transactions || 0
         };
       } catch (error) {
         console.error("Metrics fetch error:", error);

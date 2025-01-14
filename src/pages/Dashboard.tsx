@@ -6,8 +6,9 @@ import { useSessionTimeout } from "@/hooks/useSessionTimeout";
 import { useRealtimeSubscriptions } from "@/hooks/useRealtimeSubscriptions";
 import { DashboardHeader } from "@/components/dashboard/header/DashboardHeader";
 import { MatrixBackground } from "@/components/dashboard/background/MatrixBackground";
-import { DashboardTabs } from "@/components/dashboard/tabs/DashboardTabs";
-import { DashboardTabContent } from "@/components/dashboard/tabs/DashboardTabContent";
+import { DashboardTabs } from "@/components/client-dashboard/tabs/DashboardTabs";
+import { DashboardTabContent } from "@/components/client-dashboard/tabs/DashboardTabContent";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -30,28 +31,13 @@ const Dashboard = () => {
         throw metricsError;
       }
 
-      // Combine metrics from different sources
-      const { data: transactionData, error: transactionError } = await supabase
-        .from('transactions')
-        .select('risk_score, is_fraudulent')
-        .limit(100);
-
-      if (transactionError) {
-        console.error("Error fetching transactions:", transactionError);
-        throw transactionError;
-      }
-
-      const avgRiskScore = transactionData?.length 
-        ? transactionData.reduce((acc, t) => acc + (t.risk_score || 0), 0) / transactionData.length 
-        : 0;
-
       return {
-        riskScore: Math.round(avgRiskScore),
-        totalTransactions: transactionData?.length ?? 0,
-        flaggedTransactions: transactionData?.filter(t => t.is_fraudulent).length ?? 0,
-        avgProcessingTime: 35, // Keep existing value
-        concurrentCalls: metricsData?.[0]?.metric_value ?? 0,
-        activeUsers: metricsData?.[0]?.metric_value ?? 0
+        riskScore: metricsData?.[0]?.metric_value ?? 0,
+        totalTransactions: metricsData?.[0]?.metric_value ?? 0,
+        flaggedTransactions: metricsData?.[0]?.metric_value ?? 0,
+        activeUsers: metricsData?.[0]?.metric_value ?? 0,
+        avgProcessingTime: 35,
+        concurrentCalls: metricsData?.[0]?.metric_value ?? 0
       };
     },
     refetchInterval: 3000,
@@ -71,17 +57,18 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-black text-green-400 p-6 relative overflow-hidden" role="main">
       <MatrixBackground />
-      <DashboardHeader />
-
       <div className="relative z-10">
-        <Tabs defaultValue="dashboard" className="space-y-4">
-          <DashboardTabs />
-          <DashboardTabContent 
-            metrics={metrics}
-            metricsLoading={metricsLoading}
-            metricsError={metricsError}
-          />
-        </Tabs>
+        <TooltipProvider>
+          <DashboardHeader />
+          <Tabs defaultValue="dashboard" className="space-y-6">
+            <DashboardTabs />
+            <DashboardTabContent 
+              metrics={metrics}
+              metricsLoading={metricsLoading}
+              metricsError={metricsError}
+            />
+          </Tabs>
+        </TooltipProvider>
       </div>
     </div>
   );

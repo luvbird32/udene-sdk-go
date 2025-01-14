@@ -13,6 +13,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { useAIActivityMonitoring } from '@/hooks/useAIActivityMonitoring';
 import { Card } from '@/components/ui/card';
 import { Info } from 'lucide-react';
+import type { ClientService } from '@/types/services';
 
 export const ServiceManager = () => {
   const { data: activeServices, isLoading } = useServices();
@@ -20,10 +21,7 @@ export const ServiceManager = () => {
   useAIActivityMonitoring();
 
   const handleToggle = async (serviceType: string, isActive: boolean) => {
-    await toggleService.mutateAsync({ 
-      serviceType, 
-      isActive
-    });
+    await toggleService.mutateAsync({ serviceType, isActive });
   };
 
   if (isLoading) {
@@ -39,10 +37,10 @@ export const ServiceManager = () => {
     );
   }
 
-  // Transform the services data to include project_id as null if it's missing
-  const transformedServices = activeServices?.map(service => ({
+  // Ensure project_id is always a string, even if null/undefined
+  const servicesWithProject = (activeServices || []).map((service: ClientService) => ({
     ...service,
-    project_id: service.project_id || null
+    project_id: service.project_id || ''
   }));
 
   return (
@@ -69,7 +67,7 @@ export const ServiceManager = () => {
         </Card>
 
         <ServiceList 
-          activeServices={transformedServices} 
+          activeServices={servicesWithProject} 
           handleToggle={handleToggle}
         />
       </div>
