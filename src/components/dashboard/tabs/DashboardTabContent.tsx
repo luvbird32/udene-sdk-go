@@ -2,8 +2,6 @@ import { TabsContent } from "@/components/ui/tabs";
 import { DashboardContent } from "../DashboardContent";
 import { ClientAnalytics } from "@/components/dashboard/analytics/ClientAnalytics";
 import { SecuritySection } from "@/components/dashboard/SecuritySection";
-import DatabaseSection from "@/components/dashboard/DatabaseSection";
-import { DataExtractionSection } from "@/components/dashboard/DataExtractionSection";
 
 interface DashboardTabContentProps {
   metrics: any;
@@ -28,13 +26,6 @@ export const DashboardTabContent = ({ metrics, metricsLoading, metricsError }: D
 
       <TabsContent value="security" className="glass-card p-6 rounded-lg">
         <SecuritySection />
-      </TabsContent>
-
-      <TabsContent value="database" className="glass-card p-6 rounded-lg">
-        <DatabaseSection />
-        <div className="mt-8">
-          <DataExtractionSection />
-        </div>
       </TabsContent>
     </>
   );
