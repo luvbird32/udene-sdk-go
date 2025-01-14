@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
 import { Toaster } from "@/components/ui/toaster"
 import { useToast } from "@/hooks/use-toast"
@@ -10,28 +10,73 @@ import Settings from '@/pages/Settings'
 import Users from '@/pages/Users'
 import ClientSettings from '@/pages/ClientSettings'
 import { supabase, refreshSession } from "@/integrations/supabase/client"
+import { Loader2 } from 'lucide-react'
 
 // Protected Route wrapper component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let mounted = true;
+
     const checkAuth = async () => {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      
-      if (error || !session) {
-        toast({
-          title: "Authentication Required",
-          description: "Please sign in to access this page",
-          variant: "destructive",
-        });
-        navigate('/login', { replace: true });
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) throw error;
+        
+        if (!session && mounted) {
+          toast({
+            title: "Authentication Required",
+            description: "Please sign in to access this page",
+            variant: "destructive",
+          });
+          navigate('/login', { replace: true });
+        }
+        
+        // Check if session is expired
+        if (session && new Date(session.expires_at * 1000) < new Date()) {
+          await supabase.auth.signOut();
+          toast({
+            title: "Session Expired",
+            description: "Your session has expired. Please sign in again.",
+            variant: "destructive",
+          });
+          navigate('/login', { replace: true });
+          return;
+        }
+      } catch (error) {
+        console.error('Auth check error:', error);
+        if (mounted) {
+          toast({
+            title: "Authentication Error",
+            description: "Failed to verify authentication status",
+            variant: "destructive",
+          });
+          navigate('/login', { replace: true });
+        }
+      } finally {
+        if (mounted) setIsLoading(false);
       }
     };
     
     checkAuth();
+    
+    // Cleanup subscription on unmount
+    return () => {
+      mounted = false;
+    };
   }, [navigate, toast]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-green-500" />
+      </div>
+    );
+  }
 
   return <>{children}</>;
 };
@@ -39,9 +84,13 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 function App() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [isInitializing, setIsInitializing] = useState(true);
+  const [authRetryCount, setAuthRetryCount] = useState(0);
+  const MAX_AUTH_RETRIES = 3;
 
   useEffect(() => {
     let mounted = true;
+    let retryTimeout: NodeJS.Timeout;
 
     const initAuth = async () => {
       try {
@@ -67,7 +116,10 @@ function App() {
         }
       } catch (error) {
         console.error('Error checking initial session:', error);
-        if (mounted) {
+        if (mounted && authRetryCount < MAX_AUTH_RETRIES) {
+          setAuthRetryCount(prev => prev + 1);
+          retryTimeout = setTimeout(initAuth, 2000); // Retry after 2 seconds
+        } else if (mounted) {
           toast({
             title: "Authentication Error",
             description: "Failed to verify authentication status. Please try refreshing the page.",
@@ -75,6 +127,8 @@ function App() {
           });
           navigate('/login', { replace: true });
         }
+      } finally {
+        if (mounted) setIsInitializing(false);
       }
     };
 
@@ -132,7 +186,6 @@ function App() {
             break;
 
           default:
-            // Handle any other auth events
             console.log('Unhandled auth event:', event);
         }
       } catch (error) {
@@ -148,11 +201,21 @@ function App() {
       }
     });
 
+    // Cleanup function
     return () => {
       mounted = false;
+      if (retryTimeout) clearTimeout(retryTimeout);
       subscription.unsubscribe();
     };
-  }, [navigate, toast]);
+  }, [navigate, toast, authRetryCount]);
+
+  if (isInitializing) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-green-500" />
+      </div>
+    );
+  }
 
   return (
     <>
