@@ -1,13 +1,9 @@
 import { TabsContent } from "@/components/ui/tabs";
 import { DashboardContent } from "../DashboardContent";
-import { UserManagement } from "@/components/dashboard/UserManagement";
 import { ClientAnalytics } from "@/components/dashboard/analytics/ClientAnalytics";
-import { UsageAnalytics } from "@/components/dashboard/analytics/UsageAnalytics";
 import { SecuritySection } from "@/components/dashboard/SecuritySection";
-import { InfrastructureSection } from "@/components/dashboard/InfrastructureSection";
 import DatabaseSection from "@/components/dashboard/DatabaseSection";
 import { DataExtractionSection } from "@/components/dashboard/DataExtractionSection";
-import { ComplianceReporting } from "@/components/compliance/ComplianceReporting";
 
 interface DashboardTabContentProps {
   metrics: any;
@@ -26,24 +22,12 @@ export const DashboardTabContent = ({ metrics, metricsLoading, metricsError }: D
         />
       </TabsContent>
 
-      <TabsContent value="users" className="glass-card p-6 rounded-lg">
-        <UserManagement />
-      </TabsContent>
-
       <TabsContent value="client-analytics" className="glass-card p-6 rounded-lg">
         <ClientAnalytics />
       </TabsContent>
 
-      <TabsContent value="usage-analytics" className="glass-card p-6 rounded-lg">
-        <UsageAnalytics />
-      </TabsContent>
-
       <TabsContent value="security" className="glass-card p-6 rounded-lg">
         <SecuritySection />
-      </TabsContent>
-
-      <TabsContent value="infrastructure" className="glass-card p-6 rounded-lg">
-        <InfrastructureSection />
       </TabsContent>
 
       <TabsContent value="database" className="glass-card p-6 rounded-lg">
@@ -51,10 +35,6 @@ export const DashboardTabContent = ({ metrics, metricsLoading, metricsError }: D
         <div className="mt-8">
           <DataExtractionSection />
         </div>
-      </TabsContent>
-
-      <TabsContent value="compliance" className="glass-card p-6 rounded-lg">
-        <ComplianceReporting />
       </TabsContent>
     </>
   );

@@ -1,13 +1,19 @@
-import React from 'react';
-import { MetricsSection } from "./MetricsSection";
-import { AnalyticsSection } from "./AnalyticsSection";
-import { SecuritySection } from "./SecuritySection";
-import { MonitoringSection } from "./MonitoringSection";
+import { ApiCreditsDisplay } from "@/components/client-dashboard/ApiCreditsDisplay";
+import { ClientMetrics } from "@/components/client-dashboard/ClientMetrics";
+import { TransactionHistory } from "@/components/client-dashboard/transactions/TransactionHistory";
+import { RiskOverview } from "@/components/client-dashboard/RiskOverview";
+import { TrendAnalysis } from "@/components/client-dashboard/analytics/TrendAnalysis";
+import { GeographicDistribution } from "@/components/client-dashboard/analytics/GeographicDistribution";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 interface DashboardContentProps {
-  metrics: any;
-  metricsLoading: boolean;
-  metricsError: Error | null;
+  metrics?: {
+    riskScore: number;
+    totalTransactions: number;
+    flaggedTransactions: number;
+  } | null;
+  metricsLoading?: boolean;
+  metricsError?: Error | null;
 }
 
 export const DashboardContent = ({ 
@@ -16,15 +22,32 @@ export const DashboardContent = ({
   metricsError 
 }: DashboardContentProps) => {
   return (
-    <div className="space-y-6">
-      <MetricsSection 
+    <div className="space-y-8">
+      <ApiCreditsDisplay />
+      
+      <ClientMetrics 
         metrics={metrics}
-        metricsLoading={metricsLoading}
-        metricsError={metricsError}
+        isLoading={metricsLoading}
+        error={metricsError}
       />
-      <AnalyticsSection />
-      <SecuritySection />
-      <MonitoringSection />
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <ErrorBoundary>
+          <TrendAnalysis />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <GeographicDistribution />
+        </ErrorBoundary>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <ErrorBoundary>
+          <TransactionHistory />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <RiskOverview />
+        </ErrorBoundary>
+      </div>
     </div>
   );
 };
