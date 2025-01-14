@@ -8,10 +8,6 @@ export const DashboardTabs = () => {
         <Activity className="h-4 w-4 mr-2" />
         System Overview
       </TabsTrigger>
-      <TabsTrigger value="client-analytics" className="data-[state=active]:bg-green-900/40">
-        <BarChart2 className="h-4 w-4 mr-2" />
-        Client Analytics
-      </TabsTrigger>
       <TabsTrigger value="security" className="data-[state=active]:bg-green-900/40">
         <Shield className="h-4 w-4 mr-2" />
         Security
