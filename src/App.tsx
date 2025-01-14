@@ -10,6 +10,7 @@ import Dashboard from '@/pages/Dashboard'
 import Settings from '@/pages/Settings'
 import Users from '@/pages/Users'
 import ClientSettings from '@/pages/ClientSettings'
+import Developers from '@/pages/Developers'
 import { supabase } from "@/integrations/supabase/client"
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/users" element={<Users />} />
         <Route path="/client-settings" element={<ClientSettings />} />
+        <Route path="/developers" element={<Developers />} />
       </Routes>
       <Toaster />
     </>
