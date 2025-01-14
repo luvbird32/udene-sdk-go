@@ -20,12 +20,18 @@ function App() {
     const initAuth = async () => {
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
-        if (error) throw error;
+        if (error) {
+          console.error('Session check error:', error);
+          throw error;
+        }
         
         if (session) {
           console.log('Initial session found:', session.user.id);
-          // Ensure we have a fresh session
           await refreshSession();
+          // Don't redirect if we're already on a protected route
+          if (window.location.pathname === '/login' || window.location.pathname === '/signup') {
+            navigate('/dashboard');
+          }
         } else {
           console.log('No initial session found');
           // Only redirect to login if we're not already on a public route
@@ -55,7 +61,10 @@ function App() {
         switch (event) {
           case 'SIGNED_IN':
             await refreshSession();
-            navigate('/dashboard');
+            // Only navigate if we're on a public route
+            if (['/login', '/signup', '/'].includes(window.location.pathname)) {
+              navigate('/dashboard');
+            }
             toast({
               title: "Welcome back!",
               description: "You have successfully signed in.",
@@ -76,6 +85,10 @@ function App() {
             
           case 'USER_UPDATED':
             console.log('User profile updated');
+            toast({
+              title: "Profile Updated",
+              description: "Your profile has been updated successfully.",
+            });
             break;
             
           case 'PASSWORD_RECOVERY':

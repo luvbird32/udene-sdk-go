@@ -31,8 +31,6 @@ export const useAuth = (): AuthResponse => {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
-      
-      // Log auth state changes for debugging
       console.log('Auth state changed:', event, session?.user?.id);
     });
 
@@ -108,10 +106,6 @@ export const useAuth = (): AuthResponse => {
       if (data.user) {
         console.log("Login successful, user:", data.user.id);
         setUser(data.user);
-        toast({
-          title: "Success",
-          description: "Login successful! Redirecting...",
-        });
         navigate('/dashboard');
       }
     } catch (err) {
@@ -171,9 +165,7 @@ export const useAuth = (): AuthResponse => {
           title: "Success",
           description: "Account created successfully! You can now log in.",
         });
-        
-        // Since email verification is disabled, we can automatically log them in
-        await handleLogin(cleanEmail, password);
+        navigate('/dashboard');
       }
     } catch (err) {
       console.error("Unexpected signup error:", err);
