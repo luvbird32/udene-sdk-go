@@ -8,7 +8,6 @@ import { DashboardHeader } from "@/components/dashboard/header/DashboardHeader";
 import { MatrixBackground } from "@/components/dashboard/background/MatrixBackground";
 import { DashboardTabs } from "@/components/dashboard/tabs/DashboardTabs";
 import { DashboardTabContent } from "@/components/dashboard/tabs/DashboardTabContent";
-import { API_CONFIG } from "@/config/api";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -31,10 +30,28 @@ const Dashboard = () => {
         throw metricsError;
       }
 
+      // Combine metrics from different sources
+      const { data: transactionData, error: transactionError } = await supabase
+        .from('transactions')
+        .select('risk_score, is_fraudulent')
+        .limit(100);
+
+      if (transactionError) {
+        console.error("Error fetching transactions:", transactionError);
+        throw transactionError;
+      }
+
+      const avgRiskScore = transactionData?.length 
+        ? transactionData.reduce((acc, t) => acc + (t.risk_score || 0), 0) / transactionData.length 
+        : 0;
+
       return {
-        activeUsers: metricsData?.[0]?.metric_value ?? 0,
-        avgProcessingTime: 35,
-        concurrentCalls: metricsData?.[0]?.metric_value ?? 0
+        riskScore: Math.round(avgRiskScore),
+        totalTransactions: transactionData?.length ?? 0,
+        flaggedTransactions: transactionData?.filter(t => t.is_fraudulent).length ?? 0,
+        avgProcessingTime: 35, // Keep existing value
+        concurrentCalls: metricsData?.[0]?.metric_value ?? 0,
+        activeUsers: metricsData?.[0]?.metric_value ?? 0
       };
     },
     refetchInterval: 3000,
@@ -45,41 +62,6 @@ const Dashboard = () => {
         toast({
           title: "Error",
           description: "Failed to load metrics data",
-          variant: "destructive",
-        });
-      },
-    },
-  });
-
-  // Add proper error handling for rate limits query
-  const { data: rateLimits } = useQuery({
-    queryKey: ["rate-limits"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('rate_limits')
-        .select('*')
-        .order('last_request_time', { ascending: false })
-        .limit(1);
-
-      if (error) {
-        console.error("Error fetching rate limits:", error);
-        throw error;
-      }
-
-      // Return default values if no data
-      return {
-        currentRate: data?.[0]?.request_count ?? 0,
-        limit: 100,
-        remaining: 100 - (data?.[0]?.request_count ?? 0)
-      };
-    },
-    retry: 2,
-    meta: {
-      errorHandler: (error: Error) => {
-        console.error("Rate limits fetch error:", error);
-        toast({
-          title: "Error",
-          description: "Failed to load rate limits",
           variant: "destructive",
         });
       },
