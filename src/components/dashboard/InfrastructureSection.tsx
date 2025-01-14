@@ -14,10 +14,15 @@ export const InfrastructureSection = () => {
         .from('metrics')
         .select('*')
         .order('timestamp', { ascending: false })
-        .limit(1);
+        .limit(1)
+        .maybeSingle();
 
-      if (error) throw error;
-      return data?.[0] ?? null;
+      if (error) {
+        console.error("Error fetching metrics:", error);
+        throw error;
+      }
+      
+      return data ?? null;
     },
     refetchInterval: 30000,
   });
