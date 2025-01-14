@@ -8,6 +8,7 @@ import { DashboardHeader } from "@/components/dashboard/header/DashboardHeader";
 import { MatrixBackground } from "@/components/dashboard/background/MatrixBackground";
 import { DashboardTabs } from "@/components/dashboard/tabs/DashboardTabs";
 import { DashboardTabContent } from "@/components/dashboard/tabs/DashboardTabContent";
+import { API_CONFIG } from "@/config/api";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -30,7 +31,6 @@ const Dashboard = () => {
         throw metricsError;
       }
 
-      // Ensure we always return an object with default values
       return {
         activeUsers: metricsData?.[0]?.metric_value ?? 0,
         avgProcessingTime: 35,
@@ -51,7 +51,7 @@ const Dashboard = () => {
     },
   });
 
-  // Add rate limits query with proper error handling and default values
+  // Add proper error handling for rate limits query
   const { data: rateLimits } = useQuery({
     queryKey: ["rate-limits"],
     queryFn: async () => {
@@ -66,16 +66,22 @@ const Dashboard = () => {
         throw error;
       }
 
-      // Always return an object with default values
+      // Return default values if no data
       return {
         currentRate: data?.[0]?.request_count ?? 0,
         limit: 100,
         remaining: 100 - (data?.[0]?.request_count ?? 0)
       };
     },
+    retry: 2,
     meta: {
       errorHandler: (error: Error) => {
         console.error("Rate limits fetch error:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load rate limits",
+          variant: "destructive",
+        });
       },
     },
   });
