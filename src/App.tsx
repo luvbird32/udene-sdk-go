@@ -24,7 +24,6 @@ function App() {
           title: "Welcome back!",
           description: "You have successfully signed in.",
         });
-        navigate('/client-dashboard'); // Navigate to client dashboard after sign in
       } else if (event === 'SIGNED_OUT') {
         console.log('User signed out');
         navigate('/login');
@@ -56,7 +55,7 @@ function App() {
       </Routes>
       <Toaster />
     </>
-  );
+  )
 }
 
-export default App;
+export default App

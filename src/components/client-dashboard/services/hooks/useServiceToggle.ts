@@ -11,15 +11,7 @@ export const useServiceToggle = () => {
   const { isBotDetected } = useBotDetection();
 
   const toggleService = useMutation({
-    mutationFn: async ({ 
-      serviceType, 
-      isActive,
-      projectId 
-    }: { 
-      serviceType: string; 
-      isActive: boolean;
-      projectId: string;
-    }) => {
+    mutationFn: async ({ serviceType, isActive }: { serviceType: string; isActive: boolean }) => {
       if (!currentUser?.id) throw new Error("No user found");
       
       if (isBotDetected) {
@@ -31,7 +23,6 @@ export const useServiceToggle = () => {
         .select('*')
         .eq('service_type', serviceType)
         .eq('user_id', currentUser.id)
-        .eq('project_id', projectId)
         .maybeSingle();
 
       if (queryError) throw queryError;
@@ -41,8 +32,7 @@ export const useServiceToggle = () => {
           .from('client_services')
           .update({ is_active: isActive })
           .eq('service_type', serviceType)
-          .eq('user_id', currentUser.id)
-          .eq('project_id', projectId);
+          .eq('user_id', currentUser.id);
 
         if (error) throw error;
       } else {
@@ -52,7 +42,6 @@ export const useServiceToggle = () => {
             service_type: serviceType,
             is_active: isActive,
             user_id: currentUser.id,
-            project_id: projectId,
             settings: {}
           });
 
@@ -64,7 +53,7 @@ export const useServiceToggle = () => {
         entity_type: 'service',
         entity_id: serviceType,
         user_id: currentUser.id,
-        changes: { service_type: serviceType, is_active: isActive, project_id: projectId }
+        changes: { service_type: serviceType, is_active: isActive }
       });
     },
     onSuccess: () => {

@@ -9,10 +9,8 @@ interface TransactionListProps {
   isLoading?: boolean;
 }
 
-export const TransactionList = ({ transactions = [], isLoading }: TransactionListProps) => {
+export const TransactionList = ({ transactions, isLoading }: TransactionListProps) => {
   const sortedTransactions = useMemo(() => {
-    if (!transactions) return [];
-    
     return [...transactions].sort((a, b) => 
       new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()
     );

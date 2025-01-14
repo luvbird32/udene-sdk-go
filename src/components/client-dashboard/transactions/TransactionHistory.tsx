@@ -19,11 +19,10 @@ export const TransactionHistory = () => {
       throw new Error("Authentication required");
     }
 
-    console.log("Fetching transactions for user:", user.id);
+    console.log("Fetching recent transactions...");
     const { data, error } = await supabase
       .from('transactions')
       .select('*')
-      .eq('customer_id', user.id.toString())
       .order('created_at', { ascending: false })
       .limit(10);
 
@@ -33,10 +32,10 @@ export const TransactionHistory = () => {
     }
 
     console.log("Transactions fetched:", data);
-    return data || []; // Ensure we always return an array
+    return data;
   }, [user]);
 
-  const { data: transactions = [], isLoading, error } = useQuery({
+  const { data: transactions, isLoading, error } = useQuery({
     queryKey: ["recent-transactions", user?.id],
     queryFn: fetchTransactions,
     enabled: !!user,
