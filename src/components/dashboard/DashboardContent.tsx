@@ -1,7 +1,3 @@
-import { ApiCreditsDisplay } from "@/components/client-dashboard/ApiCreditsDisplay";
-import { ClientMetrics } from "@/components/client-dashboard/ClientMetrics";
-import { TransactionHistory } from "@/components/client-dashboard/transactions/TransactionHistory";
-import { RiskOverview } from "@/components/client-dashboard/RiskOverview";
 import { TrendAnalysis } from "@/components/client-dashboard/analytics/TrendAnalysis";
 import { GeographicDistribution } from "@/components/client-dashboard/analytics/GeographicDistribution";
 import { PeakTransactionTimes } from "@/components/client-dashboard/analytics/PeakTransactionTimes";
@@ -16,6 +12,7 @@ import { IdentityVerificationMonitoring } from "@/components/client-dashboard/an
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { MetricsSection } from "./MetricsSection";
+import { SecuritySection } from "./SecuritySection";
 
 interface DashboardContentProps {
   metrics?: {
@@ -40,6 +37,8 @@ export const DashboardContent = ({
         metricsError={metricsError}
       />
       
+      <SecuritySection />
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ErrorBoundary>
           <TrendAnalysis />
