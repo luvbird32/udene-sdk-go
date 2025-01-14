@@ -39,6 +39,12 @@ export const ServiceManager = () => {
     );
   }
 
+  // Transform the services data to include project_id as null if it's missing
+  const transformedServices = activeServices?.map(service => ({
+    ...service,
+    project_id: service.project_id || null
+  }));
+
   return (
     <TooltipProvider delayDuration={300}>
       <div className="space-y-6">
@@ -63,7 +69,7 @@ export const ServiceManager = () => {
         </Card>
 
         <ServiceList 
-          activeServices={activeServices} 
+          activeServices={transformedServices} 
           handleToggle={handleToggle}
         />
       </div>

@@ -33,10 +33,10 @@ export const useServices = () => {
       }
 
       try {
-        // Removed the .eq('user_id', userId) filter to get all services
         const { data: services, error } = await supabase
           .from('client_services')
-          .select('*');
+          .select('*')
+          .eq('user_id', userId);
 
         if (error) {
           console.error('Supabase error:', error);
@@ -48,7 +48,13 @@ export const useServices = () => {
           throw error;
         }
 
-        return services as ClientService[];
+        // Transform the services to include project_id if missing
+        const transformedServices = services.map(service => ({
+          ...service,
+          project_id: service.project_id || null
+        }));
+
+        return transformedServices as ClientService[];
       } catch (error) {
         console.error('Error fetching services:', error);
         toast({
@@ -59,7 +65,7 @@ export const useServices = () => {
         throw error;
       }
     },
-    enabled: !!userId, // Only run query when we have a userId
+    enabled: !!userId,
     retry: 3,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
