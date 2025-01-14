@@ -123,15 +123,17 @@ function App() {
             });
             break;
 
-          case 'USER_DELETED':
-            localStorage.removeItem('supabase.auth.token');
-            navigate('/login', { replace: true });
+          case 'PASSWORD_RECOVERY':
+            navigate('/reset-password', { replace: true });
             toast({
-              title: "Account Deleted",
-              description: "Your account has been deleted.",
-              variant: "destructive",
+              title: "Password Recovery",
+              description: "Please check your email for password reset instructions.",
             });
             break;
+
+          default:
+            // Handle any other auth events
+            console.log('Unhandled auth event:', event);
         }
       } catch (error) {
         console.error('Auth state change error:', error);
