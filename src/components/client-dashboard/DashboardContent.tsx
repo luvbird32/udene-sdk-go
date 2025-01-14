@@ -7,13 +7,10 @@ import { GeographicDistribution } from "@/components/client-dashboard/analytics/
 import { PeakTransactionTimes } from "@/components/client-dashboard/analytics/PeakTransactionTimes";
 import { RiskDistribution } from "@/components/client-dashboard/analytics/RiskDistribution";
 import { BusinessIntelligence } from "@/components/client-dashboard/analytics/BusinessIntelligence";
-import { FlaggedDevices } from "@/components/monitoring/FlaggedDevices";
 import { AffiliateMonitoring } from "@/components/client-dashboard/analytics/AffiliateMonitoring";
 import { TrialAbuseMonitoring } from "@/components/client-dashboard/analytics/TrialAbuseMonitoring";
 import { DeviceFingerprintMonitoring } from "@/components/client-dashboard/analytics/DeviceFingerprintMonitoring";
-import { IdentityVerificationMonitoring } from "@/components/client-dashboard/analytics/IdentityVerificationMonitoring";
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
-import { SystemHealth } from "@/components/client-dashboard/monitoring/SystemHealth";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 interface DashboardContentProps {
@@ -61,10 +58,10 @@ export const DashboardContent = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ErrorBoundary>
-          <FlaggedDevices />
+          <DeviceFingerprintMonitoring />
         </ErrorBoundary>
         <ErrorBoundary>
-          <DeviceFingerprintMonitoring />
+          <UserActivityMonitoring />
         </ErrorBoundary>
       </div>
 
@@ -74,15 +71,6 @@ export const DashboardContent = ({
         </ErrorBoundary>
         <ErrorBoundary>
           <TrialAbuseMonitoring />
-        </ErrorBoundary>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <UserActivityMonitoring />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <PeakTransactionTimes />
         </ErrorBoundary>
       </div>
 
