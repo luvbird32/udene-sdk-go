@@ -1,4 +1,4 @@
-import { ProjectSwitcher } from "../projects/ProjectSwitcher";
+import { ProjectSwitcher } from "@/components/client-dashboard/projects/ProjectSwitcher";
 
 export const DashboardHeader = () => {
   return (
