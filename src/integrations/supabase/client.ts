@@ -22,27 +22,11 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   }
 });
 
-// Add error handling for auth state changes
-supabase.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_IN') {
-    console.log('User signed in:', session?.user?.id);
-  } else if (event === 'SIGNED_OUT') {
-    console.log('User signed out');
-  } else if (event === 'TOKEN_REFRESHED') {
-    console.log('Token refreshed');
-  } else if (event === 'USER_UPDATED') {
-    console.log('User updated:', session?.user?.id);
-  }
-});
-
 // Add health check function
 export const checkSupabaseHealth = async () => {
   try {
     const { data: { user }, error } = await supabase.auth.getUser();
-    if (error) {
-      console.error('Supabase health check failed:', error);
-      throw error;
-    }
+    if (error) throw error;
     return !!user;
   } catch (error) {
     console.error('Supabase health check failed:', error);

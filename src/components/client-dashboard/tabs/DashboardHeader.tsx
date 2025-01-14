@@ -1,4 +1,4 @@
-import { Settings } from "lucide-react";
+import { Settings, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ThemeToggle } from "@/components/client-dashboard/ThemeToggle";
 
@@ -13,6 +13,13 @@ export const DashboardHeader = () => {
       </div>
       <div className="flex gap-4 items-center">
         <ThemeToggle />
+        <Link 
+          to="/dashboard" 
+          className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent transition-colors"
+        >
+          <ArrowLeft className="h-5 w-5" />
+          <span>Back to Admin</span>
+        </Link>
         <Link 
           to="/client-settings" 
           className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-accent transition-colors"

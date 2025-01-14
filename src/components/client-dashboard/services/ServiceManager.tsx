@@ -3,6 +3,19 @@
  * 
  * Manages the activation and configuration of fraud prevention services.
  * Provides a centralized interface for managing all available services.
+ * 
+ * Features:
+ * - Service activation/deactivation
+ * - Service configuration
+ * - Status monitoring
+ * - Usage statistics
+ * - Integration guides
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <ServiceManager />
+ * ```
  */
 import React from 'react';
 import { ServiceHeader } from './ServiceHeader';
@@ -13,7 +26,6 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { useAIActivityMonitoring } from '@/hooks/useAIActivityMonitoring';
 import { Card } from '@/components/ui/card';
 import { Info } from 'lucide-react';
-import type { ClientService } from '@/types/services';
 
 export const ServiceManager = () => {
   const { data: activeServices, isLoading } = useServices();
@@ -36,12 +48,6 @@ export const ServiceManager = () => {
       </div>
     );
   }
-
-  // Ensure project_id is always a string, even if null/undefined
-  const servicesWithProject = (activeServices || []).map((service: ClientService) => ({
-    ...service,
-    project_id: service.project_id || ''
-  }));
 
   return (
     <TooltipProvider delayDuration={300}>
@@ -67,7 +73,7 @@ export const ServiceManager = () => {
         </Card>
 
         <ServiceList 
-          activeServices={servicesWithProject} 
+          activeServices={activeServices} 
           handleToggle={handleToggle}
         />
       </div>

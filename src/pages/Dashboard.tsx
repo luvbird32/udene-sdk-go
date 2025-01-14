@@ -6,9 +6,9 @@ import { useSessionTimeout } from "@/hooks/useSessionTimeout";
 import { useRealtimeSubscriptions } from "@/hooks/useRealtimeSubscriptions";
 import { DashboardHeader } from "@/components/dashboard/header/DashboardHeader";
 import { MatrixBackground } from "@/components/dashboard/background/MatrixBackground";
-import { DashboardTabs } from "@/components/client-dashboard/tabs/DashboardTabs";
-import { DashboardTabContent } from "@/components/client-dashboard/tabs/DashboardTabContent";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { DashboardTabs } from "@/components/dashboard/tabs/DashboardTabs";
+import { DashboardTabContent } from "@/components/dashboard/tabs/DashboardTabContent";
+import { API_CONFIG } from "@/config/api";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -32,9 +32,6 @@ const Dashboard = () => {
       }
 
       return {
-        riskScore: metricsData?.[0]?.metric_value ?? 0,
-        totalTransactions: metricsData?.[0]?.metric_value ?? 0,
-        flaggedTransactions: metricsData?.[0]?.metric_value ?? 0,
         activeUsers: metricsData?.[0]?.metric_value ?? 0,
         avgProcessingTime: 35,
         concurrentCalls: metricsData?.[0]?.metric_value ?? 0
@@ -54,21 +51,55 @@ const Dashboard = () => {
     },
   });
 
+  // Add proper error handling for rate limits query
+  const { data: rateLimits } = useQuery({
+    queryKey: ["rate-limits"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('rate_limits')
+        .select('*')
+        .order('last_request_time', { ascending: false })
+        .limit(1);
+
+      if (error) {
+        console.error("Error fetching rate limits:", error);
+        throw error;
+      }
+
+      // Return default values if no data
+      return {
+        currentRate: data?.[0]?.request_count ?? 0,
+        limit: 100,
+        remaining: 100 - (data?.[0]?.request_count ?? 0)
+      };
+    },
+    retry: 2,
+    meta: {
+      errorHandler: (error: Error) => {
+        console.error("Rate limits fetch error:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load rate limits",
+          variant: "destructive",
+        });
+      },
+    },
+  });
+
   return (
     <div className="min-h-screen bg-black text-green-400 p-6 relative overflow-hidden" role="main">
       <MatrixBackground />
+      <DashboardHeader />
+
       <div className="relative z-10">
-        <TooltipProvider>
-          <DashboardHeader />
-          <Tabs defaultValue="dashboard" className="space-y-6">
-            <DashboardTabs />
-            <DashboardTabContent 
-              metrics={metrics}
-              metricsLoading={metricsLoading}
-              metricsError={metricsError}
-            />
-          </Tabs>
-        </TooltipProvider>
+        <Tabs defaultValue="dashboard" className="space-y-4">
+          <DashboardTabs />
+          <DashboardTabContent 
+            metrics={metrics}
+            metricsLoading={metricsLoading}
+            metricsError={metricsError}
+          />
+        </Tabs>
       </div>
     </div>
   );
