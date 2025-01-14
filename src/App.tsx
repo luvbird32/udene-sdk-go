@@ -78,7 +78,7 @@ function App() {
             console.log('User profile updated');
             break;
             
-          case 'USER_DELETED':
+          case 'PASSWORD_RECOVERY':
             navigate('/login');
             toast({
               title: "Account Deleted",
