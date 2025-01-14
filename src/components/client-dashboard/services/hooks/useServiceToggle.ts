@@ -3,10 +3,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useToast } from "@/components/ui/use-toast";
 import { useBotDetection } from "@/hooks/useBotDetection";
+import { useCurrentProject } from "@/hooks/useCurrentProject";
 
 export const useServiceToggle = () => {
   const queryClient = useQueryClient();
   const { data: currentUser } = useCurrentUser();
+  const { currentProject } = useCurrentProject();
   const { toast } = useToast();
   const { isBotDetected } = useBotDetection();
 
@@ -23,6 +25,7 @@ export const useServiceToggle = () => {
         .select('*')
         .eq('service_type', serviceType)
         .eq('user_id', currentUser.id)
+        .eq('project_id', currentProject?.id)
         .maybeSingle();
 
       if (queryError) throw queryError;
@@ -32,7 +35,8 @@ export const useServiceToggle = () => {
           .from('client_services')
           .update({ is_active: isActive })
           .eq('service_type', serviceType)
-          .eq('user_id', currentUser.id);
+          .eq('user_id', currentUser.id)
+          .eq('project_id', currentProject?.id);
 
         if (error) throw error;
       } else {
@@ -42,6 +46,7 @@ export const useServiceToggle = () => {
             service_type: serviceType,
             is_active: isActive,
             user_id: currentUser.id,
+            project_id: currentProject?.id,
             settings: {}
           });
 
@@ -53,7 +58,7 @@ export const useServiceToggle = () => {
         entity_type: 'service',
         entity_id: serviceType,
         user_id: currentUser.id,
-        changes: { service_type: serviceType, is_active: isActive }
+        changes: { service_type: serviceType, is_active: isActive, project_id: currentProject?.id }
       });
     },
     onSuccess: () => {

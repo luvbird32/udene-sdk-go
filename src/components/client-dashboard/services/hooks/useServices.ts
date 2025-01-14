@@ -3,12 +3,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import type { Database } from "@/integrations/supabase/types/database";
 import { useEffect, useState } from "react";
+import { useCurrentProject } from "@/hooks/useCurrentProject";
 
 type ClientService = Database['public']['Tables']['client_services']['Row'];
 
 export const useServices = () => {
   const { toast } = useToast();
   const [userId, setUserId] = useState<string | null>(null);
+  const { currentProject } = useCurrentProject();
 
   // Get and track the current user's ID
   useEffect(() => {
@@ -26,17 +28,24 @@ export const useServices = () => {
   }, []);
 
   return useQuery({
-    queryKey: ["client-services", userId],
+    queryKey: ["client-services", userId, currentProject?.id],
     queryFn: async () => {
       if (!userId) {
         throw new Error("User not authenticated");
       }
 
       try {
-        // Removed the .eq('user_id', userId) filter to get all services
-        const { data: services, error } = await supabase
+        let query = supabase
           .from('client_services')
-          .select('*');
+          .select('*')
+          .eq('user_id', userId);
+
+        // If we have a current project, filter by it
+        if (currentProject?.id) {
+          query = query.eq('project_id', currentProject.id);
+        }
+
+        const { data: services, error } = await query;
 
         if (error) {
           console.error('Supabase error:', error);
@@ -59,7 +68,7 @@ export const useServices = () => {
         throw error;
       }
     },
-    enabled: !!userId, // Only run query when we have a userId
+    enabled: !!userId,
     retry: 3,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
