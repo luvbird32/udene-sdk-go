@@ -22,10 +22,7 @@ function App() {
     const initAuth = async () => {
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
-        if (error) {
-          console.error('Session check error:', error);
-          throw error;
-        }
+        if (error) throw error;
         
         if (session && mounted) {
           console.log('Initial session found:', session.user.id);
@@ -59,7 +56,7 @@ function App() {
 
     initAuth();
 
-    // Subscribe to auth changes
+    // Subscribe to auth changes with persistent session handling
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (!mounted) return;
       
@@ -69,6 +66,8 @@ function App() {
         switch (event) {
           case 'SIGNED_IN':
             if (session) {
+              // Store session in localStorage for persistence
+              localStorage.setItem('supabase.auth.token', session.access_token);
               await refreshSession();
               const publicRoutes = ['/', '/login', '/signup'];
               if (publicRoutes.includes(window.location.pathname)) {
@@ -82,6 +81,8 @@ function App() {
             break;
             
           case 'SIGNED_OUT':
+            // Clear stored session data
+            localStorage.removeItem('supabase.auth.token');
             navigate('/login');
             toast({
               title: "Signed out",
@@ -90,7 +91,10 @@ function App() {
             break;
             
           case 'TOKEN_REFRESHED':
-            console.log('Token refreshed successfully');
+            if (session) {
+              localStorage.setItem('supabase.auth.token', session.access_token);
+              console.log('Token refreshed successfully');
+            }
             break;
             
           case 'USER_UPDATED':
@@ -98,14 +102,6 @@ function App() {
             toast({
               title: "Profile Updated",
               description: "Your profile has been updated successfully.",
-            });
-            break;
-            
-          case 'PASSWORD_RECOVERY':
-            navigate('/login');
-            toast({
-              title: "Password Reset",
-              description: "Your password has been reset successfully.",
             });
             break;
         }

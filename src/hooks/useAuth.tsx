@@ -20,11 +20,18 @@ export const useAuth = (): AuthResponse => {
   useEffect(() => {
     const getCurrentUser = async () => {
       try {
-        const { data: { user }, error } = await supabase.auth.getUser();
+        // Check for existing session
+        const { data: { session }, error } = await supabase.auth.getSession();
         if (error) throw error;
-        setUser(user);
+        
+        setUser(session?.user ?? null);
+        
+        if (session?.user) {
+          console.log('Restored session for user:', session.user.id);
+        }
       } catch (error) {
         console.error('Error fetching user:', error);
+        localStorage.removeItem('supabase.auth.token');
       }
     };
 
@@ -35,6 +42,10 @@ export const useAuth = (): AuthResponse => {
     } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
       console.log('Auth state changed:', event, session?.user?.id);
+      
+      if (session?.user) {
+        localStorage.setItem('supabase.auth.token', session.access_token);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -109,6 +120,7 @@ export const useAuth = (): AuthResponse => {
       if (data.user) {
         console.log("Login successful, user:", data.user.id);
         setUser(data.user);
+        localStorage.setItem('supabase.auth.token', data.session?.access_token || '');
       }
     } catch (err) {
       console.error("Unexpected login error:", err);
@@ -163,6 +175,7 @@ export const useAuth = (): AuthResponse => {
       if (data?.user) {
         console.log("User created successfully:", data.user.id);
         setUser(data.user);
+        localStorage.setItem('supabase.auth.token', data.session?.access_token || '');
         toast({
           title: "Success",
           description: "Account created successfully! You can now log in.",
