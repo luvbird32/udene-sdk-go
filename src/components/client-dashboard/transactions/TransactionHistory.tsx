@@ -23,6 +23,7 @@ export const TransactionHistory = () => {
     const { data, error } = await supabase
       .from('transactions')
       .select('*')
+      .eq('customer_id', user.id)
       .order('created_at', { ascending: false })
       .limit(10);
 
