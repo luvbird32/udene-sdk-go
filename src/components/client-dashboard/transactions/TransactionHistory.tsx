@@ -19,11 +19,11 @@ export const TransactionHistory = () => {
       throw new Error("Authentication required");
     }
 
-    console.log("Fetching recent transactions...");
+    console.log("Fetching transactions for user:", user.id);
     const { data, error } = await supabase
       .from('transactions')
       .select('*')
-      .eq('customer_id', user.id)
+      .eq('customer_id', user.id.toString()) // Cast user.id to string to match the customer_id format
       .order('created_at', { ascending: false })
       .limit(10);
 
