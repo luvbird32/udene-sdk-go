@@ -1,4 +1,4 @@
-import { ArrowRight, Shield, Lock } from "lucide-react";
+import { ArrowRight, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,13 +12,13 @@ export const HeroSection = () => {
     const { data: { session } } = await supabase.auth.getSession();
     
     if (session?.user) {
-      navigate('/client-dashboard');
+      navigate('/dashboard');
     } else {
       toast({
         title: "Authentication Required",
         description: "Please sign in or create an account to start your free trial.",
       });
-      navigate('/login');
+      navigate('/signup');
     }
   };
 
