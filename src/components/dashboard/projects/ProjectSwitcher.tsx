@@ -18,27 +18,45 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ProjectForm } from "./ProjectForm";
+import { useCurrentProject } from "@/hooks/useCurrentProject";
+import { toast } from "sonner";
 
 export function ProjectSwitcher() {
   const [open, setOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<string | null>(null);
+  const { currentProject, setCurrentProject } = useCurrentProject();
 
   const { data: projects, isLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: async () => {
+      console.log("Fetching projects from Supabase...");
       const { data, error } = await supabase
         .from('projects')
         .select('*')
         .order('created_at', { ascending: false });
       
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching projects:", error);
+        toast.error("Failed to load projects");
+        throw error;
+      }
+
+      console.log("Projects fetched:", data);
       return data;
     },
   });
 
   if (isLoading) {
-    return <Button variant="outline" className="w-[200px] justify-start">Loading...</Button>;
+    return (
+      <div className="flex items-center gap-2">
+        <Button variant="outline" className="w-[200px] justify-start">
+          Loading projects...
+        </Button>
+        <Button variant="outline" size="icon" disabled>
+          <Plus className="h-4 w-4" />
+        </Button>
+      </div>
+    );
   }
 
   return (
@@ -51,8 +69,8 @@ export function ProjectSwitcher() {
             aria-expanded={open}
             className="w-[200px] justify-between"
           >
-            {selectedProject
-              ? projects?.find((project) => project.id === selectedProject)?.name
+            {currentProject
+              ? projects?.find((project) => project.id === currentProject.id)?.name
               : "Select project..."}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
@@ -66,15 +84,15 @@ export function ProjectSwitcher() {
                 <CommandItem
                   key={project.id}
                   value={project.id}
-                  onSelect={(currentValue) => {
-                    setSelectedProject(currentValue === selectedProject ? null : currentValue);
+                  onSelect={() => {
+                    setCurrentProject(project);
                     setOpen(false);
                   }}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      selectedProject === project.id ? "opacity-100" : "opacity-0"
+                      currentProject?.id === project.id ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {project.name}
