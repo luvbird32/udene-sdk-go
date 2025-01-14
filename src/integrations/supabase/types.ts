@@ -859,18 +859,27 @@ export type Database = {
       }
       metrics: {
         Row: {
+          active_users: number | null
+          avg_processing_time: number | null
+          concurrent_calls: number | null
           id: string
           metric_name: string
           metric_value: number
           timestamp: string | null
         }
         Insert: {
+          active_users?: number | null
+          avg_processing_time?: number | null
+          concurrent_calls?: number | null
           id?: string
           metric_name: string
           metric_value: number
           timestamp?: string | null
         }
         Update: {
+          active_users?: number | null
+          avg_processing_time?: number | null
+          concurrent_calls?: number | null
           id?: string
           metric_name?: string
           metric_value?: number

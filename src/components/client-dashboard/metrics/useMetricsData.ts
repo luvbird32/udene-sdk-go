@@ -40,7 +40,7 @@ export const useMetricsData = () => {
 
         // Map the database metrics to our frontend format
         return {
-          riskScore: metricsData[0].risk_score || 0,
+          riskScore: metricsData[0].metric_value || 0,
           totalTransactions: metricsData[0].total_transactions || 0,
           flaggedTransactions: metricsData[0].flagged_transactions || 0,
           avgProcessingTime: metricsData[0].avg_processing_time || 35,
