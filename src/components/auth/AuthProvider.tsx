@@ -8,12 +8,8 @@ interface AuthContextType {
   loading: boolean;
 }
 
-export const AuthContext = createContext<AuthContextType>({
-  user: null,
-  loading: true,
-});
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Add the useAuth hook
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
