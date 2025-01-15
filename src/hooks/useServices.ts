@@ -23,15 +23,14 @@ export const useServices = () => {
         console.log('Authenticated user:', user.id);
         console.log('Current project:', currentProject?.id);
 
-        const query = supabase
+        // First try to get project-specific services
+        let query = supabase
           .from('client_services')
           .select('*')
           .eq('user_id', user.id);
 
-        // Add project filter if a project is selected
         if (currentProject?.id) {
-          console.log('Filtering by project:', currentProject.id);
-          query.eq('project_id', currentProject.id);
+          query = query.eq('project_id', currentProject.id);
         }
 
         const { data, error } = await query;
