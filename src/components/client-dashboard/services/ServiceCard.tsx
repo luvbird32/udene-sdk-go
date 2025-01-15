@@ -1,14 +1,14 @@
-import { useState } from "react";
 import { Card } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
 import { ServiceDetailsDialog } from "./ServiceDetailsDialog";
 import { ServiceDescription } from "./components/ServiceDescription";
 import { ServiceFeatureList } from "./components/ServiceFeatureList";
 import { ServiceControls } from "./components/ServiceControls";
-import { ServiceToggle } from "./components/ServiceToggle";
+import { ServiceStatus } from "./components/ServiceStatus";
 import { ServiceActionPreferences } from "./components/ServiceActionPreferences";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServicePreferences } from "./hooks/useServicePreferences";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
 
 interface ServiceCardProps {
   title: string;
@@ -27,119 +27,28 @@ export const ServiceCard = ({
   serviceType,
   onToggle,
 }: ServiceCardProps) => {
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
-  const [isToggling, setIsToggling] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const [isUpdatingPreferences, setIsUpdatingPreferences] = useState(false);
+  const { isUpdatingPreferences, handlePreferencesChange } = useServicePreferences(serviceType);
 
-  // Query to get the current service status and preferences
-  const { data: serviceData, error: serviceError } = useQuery({
+  const { data: serviceData } = useQuery({
     queryKey: ["service-status", serviceType],
     queryFn: async () => {
-      try {
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
-        if (authError) throw authError;
-        if (!user) throw new Error("No authenticated user");
-
-        const { data, error } = await supabase
-          .from('client_services')
-          .select('is_active, action_preferences')
-          .eq('user_id', user.id)
-          .eq('service_type', serviceType)
-          .maybeSingle();
-
-        if (error) throw error;
-
-        if (!data) {
-          const { data: newService, error: insertError } = await supabase
-            .from('client_services')
-            .insert({
-              user_id: user.id,
-              service_type: serviceType,
-              is_active: initialIsActive,
-            })
-            .select('is_active, action_preferences')
-            .single();
-
-          if (insertError) throw insertError;
-          return newService;
-        }
-
-        return data;
-      } catch (error) {
-        console.error("Service status query error:", error);
-        toast({
-          title: "Error loading service status",
-          description: "Failed to load service status. Please try again.",
-          variant: "destructive",
-        });
-        throw error;
-      }
-    },
-    retry: 1,
-    staleTime: 1000 * 60,
-  });
-
-  if (serviceError) {
-    console.error("Service query error:", serviceError);
-  }
-
-  const isActive = serviceData?.is_active ?? initialIsActive;
-
-  const handlePreferencesChange = async (newPreferences: any) => {
-    setIsUpdatingPreferences(true);
-    try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("No authenticated user");
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('client_services')
-        .update({ action_preferences: newPreferences })
+        .select('is_active, action_preferences')
         .eq('user_id', user.id)
-        .eq('service_type', serviceType);
+        .eq('service_type', serviceType)
+        .maybeSingle();
 
       if (error) throw error;
+      return data;
+    },
+  });
 
-      queryClient.invalidateQueries({ queryKey: ["service-status", serviceType] });
-      toast({
-        title: "Preferences Updated",
-        description: "Service action preferences have been updated successfully.",
-      });
-    } catch (error) {
-      console.error("Preferences update error:", error);
-      toast({
-        title: "Error",
-        description: "Failed to update preferences. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsUpdatingPreferences(false);
-    }
-  };
-
-  const handleToggle = async (checked: boolean) => {
-    if (isToggling) return;
-    
-    setIsToggling(true);
-    try {
-      await onToggle(serviceType, checked);
-      queryClient.invalidateQueries({ queryKey: ["service-status", serviceType] });
-      toast({
-        title: checked ? "Service activated" : "Service deactivated",
-        description: `${title} has been ${checked ? "activated" : "deactivated"} successfully.`,
-      });
-    } catch (error) {
-      console.error("Toggle error:", error);
-      toast({
-        title: "Error",
-        description: "Failed to update service status. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsToggling(false);
-    }
-  };
+  const isActive = serviceData?.is_active ?? initialIsActive;
 
   return (
     <>
@@ -151,11 +60,11 @@ export const ServiceCard = ({
             serviceType={serviceType}
             isActive={isActive}
           />
-          <ServiceToggle 
+          <ServiceStatus 
+            title={title}
+            serviceType={serviceType}
             isActive={isActive}
-            isToggling={isToggling}
-            onToggle={handleToggle}
-            serviceName={title}
+            onToggle={onToggle}
           />
         </div>
         
