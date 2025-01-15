@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 interface Project {
   id: string;
@@ -19,6 +20,7 @@ export const ProjectSelector = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [newProjectName, setNewProjectName] = useState("");
   const [newProjectDescription, setNewProjectDescription] = useState("");
+  const { data: currentUser } = useCurrentUser();
 
   const { data: projects, isLoading } = useQuery({
     queryKey: ["projects"],
@@ -35,12 +37,17 @@ export const ProjectSelector = () => {
 
   const handleCreateProject = async () => {
     try {
+      if (!currentUser?.id) {
+        throw new Error("No authenticated user found");
+      }
+
       const { error } = await supabase
         .from("projects")
         .insert([
           {
             name: newProjectName,
             description: newProjectDescription || null,
+            user_id: currentUser.id,  // Explicitly set the user_id
           },
         ]);
 
