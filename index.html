@@ -7,13 +7,14 @@
     <meta http-equiv="Content-Security-Policy" 
       content="default-src 'self' https://*.supabase.co https://*.lovable.dev;
                connect-src 'self' https://*.supabase.co https://*.lovable.dev ws://localhost:* http://localhost:*;
-               script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.lovable.dev;
+               script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.lovable.dev https://cdn.gpteng.co;
                style-src 'self' 'unsafe-inline';
                img-src 'self' data: blob: https://*.supabase.co https://*.lovable.dev;" />
     <title>Udene</title>
   </head>
   <body>
     <div id="root"></div>
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
