@@ -9,16 +9,18 @@ import Users from '@/pages/Users'
 import ClientSettings from '@/pages/ClientSettings'
 import { AuthProvider } from '@/components/auth/AuthProvider'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
-import { Loader2 } from 'lucide-react'
+import { useAuth } from './components/auth/AuthProvider'
 
 function App() {
+  const { user } = useAuth();
+
   return (
     <AuthProvider>
       <Routes>
         {/* Public routes */}
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/" element={user ? <Navigate to="/dashboard" replace /> : <Landing />} />
+        <Route path="/login" element={user ? <Navigate to="/dashboard" replace /> : <Login />} />
+        <Route path="/signup" element={user ? <Navigate to="/dashboard" replace /> : <Signup />} />
         
         {/* Protected routes */}
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
@@ -27,7 +29,7 @@ function App() {
         <Route path="/client-settings" element={<ProtectedRoute><ClientSettings /></ProtectedRoute>} />
         
         {/* Catch-all redirect */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} replace />} />
       </Routes>
       <Toaster />
     </AuthProvider>
