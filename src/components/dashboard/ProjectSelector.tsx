@@ -22,15 +22,20 @@ export const ProjectSelector = () => {
   const [newProjectDescription, setNewProjectDescription] = useState("");
   const { data: currentUser } = useCurrentUser();
 
-  const { data: projects, isLoading } = useQuery({
+  const { data: projects, isLoading, refetch } = useQuery({
     queryKey: ["projects"],
     queryFn: async () => {
+      console.log("Fetching projects...");
       const { data, error } = await supabase
         .from("projects")
         .select("*")
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching projects:", error);
+        throw error;
+      }
+      console.log("Projects fetched:", data);
       return data as Project[];
     },
   });
@@ -38,21 +43,38 @@ export const ProjectSelector = () => {
   const handleCreateProject = async () => {
     try {
       if (!currentUser?.id) {
-        throw new Error("No authenticated user found");
+        console.error("No authenticated user found");
+        toast({
+          title: "Error",
+          description: "You must be logged in to create a project",
+          variant: "destructive",
+        });
+        return;
       }
 
-      const { error } = await supabase
+      console.log("Creating project with user_id:", currentUser.id);
+      const { data, error } = await supabase
         .from("projects")
         .insert([
           {
             name: newProjectName,
             description: newProjectDescription || null,
-            user_id: currentUser.id,  // Explicitly set the user_id
+            user_id: currentUser.id,
           },
-        ]);
+        ])
+        .select();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error creating project:", error);
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
+      }
 
+      console.log("Project created successfully:", data);
       toast({
         title: "Success",
         description: "Project created successfully",
@@ -60,8 +82,9 @@ export const ProjectSelector = () => {
       setIsOpen(false);
       setNewProjectName("");
       setNewProjectDescription("");
+      refetch(); // Refresh the projects list
     } catch (error) {
-      console.error("Error creating project:", error);
+      console.error("Error in handleCreateProject:", error);
       toast({
         title: "Error",
         description: "Failed to create project",
