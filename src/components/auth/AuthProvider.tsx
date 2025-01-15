@@ -24,17 +24,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const initAuth = async () => {
       try {
+        // Get initial session
         const { data: { session }, error } = await supabase.auth.getSession();
-        if (error) throw error;
+        if (error) {
+          console.error('Session retrieval error:', error);
+          throw error;
+        }
 
         if (mounted) {
-          setUser(session?.user ?? null);
           if (session?.user) {
             console.log('Session found for user:', session.user.id);
+            setUser(session.user);
+          } else {
+            console.log('No active session found');
+            setUser(null);
           }
         }
       } catch (error) {
         console.error('Auth initialization error:', error);
+        // Clear any stale session data
+        localStorage.removeItem('supabase.auth.token');
         toast({
           title: "Authentication Error",
           description: "Failed to initialize authentication",
@@ -47,11 +56,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     initAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    // Set up auth state change listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (!mounted) return;
 
       console.log('Auth state changed:', event);
-      setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        setUser(session.user);
+        // Store the session
+        localStorage.setItem('supabase.auth.token', session.access_token);
+      } else {
+        setUser(null);
+        // Clear session data
+        localStorage.removeItem('supabase.auth.token');
+      }
 
       switch (event) {
         case 'SIGNED_IN':
@@ -68,6 +87,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             title: "Signed out",
             description: "You have been signed out successfully.",
           });
+          break;
+
+        case 'TOKEN_REFRESHED':
+          console.log('Token refreshed successfully');
+          if (session) {
+            localStorage.setItem('supabase.auth.token', session.access_token);
+          }
           break;
       }
     });
