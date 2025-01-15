@@ -15,32 +15,97 @@ import { useAuth } from './components/auth/AuthProvider'
 // Separate component to use auth hook after AuthProvider is mounted
 const AppRoutes = () => {
   const { user, loading } = useAuth();
+  
+  console.log("AppRoutes rendering with:", { user, loading });
 
   // Show loading state while checking authentication
   if (loading) {
+    console.log("AppRoutes showing loading state");
     return <div>Loading...</div>;
   }
 
+  console.log("AppRoutes rendering routes");
   return (
     <Routes>
       {/* Public routes */}
-      <Route path="/" element={user ? <Navigate to="/dashboard" replace /> : <Landing />} />
-      <Route path="/login" element={user ? <Navigate to="/dashboard" replace /> : <Login />} />
-      <Route path="/signup" element={user ? <Navigate to="/dashboard" replace /> : <Signup />} />
+      <Route 
+        path="/" 
+        element={
+          user ? (
+            <Navigate to="/dashboard" replace /> 
+          ) : (
+            <Landing />
+          )
+        } 
+      />
+      <Route 
+        path="/login" 
+        element={
+          user ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <Login />
+          )
+        } 
+      />
+      <Route 
+        path="/signup" 
+        element={
+          user ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <Signup />
+          )
+        } 
+      />
       
       {/* Protected routes */}
-      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-      <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
-      <Route path="/client-settings" element={<ProtectedRoute><ClientSettings /></ProtectedRoute>} />
+      <Route 
+        path="/dashboard" 
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/settings" 
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/users" 
+        element={
+          <ProtectedRoute>
+            <Users />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/client-settings" 
+        element={
+          <ProtectedRoute>
+            <ClientSettings />
+          </ProtectedRoute>
+        } 
+      />
       
       {/* Catch-all redirect */}
-      <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} replace />} />
+      <Route 
+        path="*" 
+        element={
+          <Navigate to={user ? "/dashboard" : "/"} replace />
+        } 
+      />
     </Routes>
   );
 };
 
 function App() {
+  console.log("App component rendering");
   return (
     <BrowserRouter>
       <AuthProvider>
