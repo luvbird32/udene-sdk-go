@@ -24,8 +24,8 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
       }
 
       const { data: { session } } = await supabase.auth.getSession();
-      if (session && new Date(session.expires_at * 1000) < new Date()) {
-        console.log('Session expired, signing out');
+      if (!session || (session && new Date(session.expires_at * 1000) < new Date())) {
+        console.log('Session expired or invalid, signing out');
         await supabase.auth.signOut();
         toast({
           title: "Session Expired",
@@ -49,5 +49,6 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  return <>{children}</>;
+  // If we have a user and they're not being redirected, render the protected content
+  return user ? <>{children}</> : null;
 };
