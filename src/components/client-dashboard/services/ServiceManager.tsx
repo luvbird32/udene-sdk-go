@@ -15,6 +15,7 @@ import { Card } from '@/components/ui/card';
 import { Info } from 'lucide-react';
 import { useProject } from '@/contexts/ProjectContext';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import type { ClientService } from '@/integrations/supabase/types/client-services';
 
 export const ServiceManager = () => {
   const { data: activeServices, isLoading } = useServices();
@@ -72,7 +73,7 @@ export const ServiceManager = () => {
   // Filter services by current project
   const projectServices = activeServices?.filter(
     service => service.project_id === currentProject.id
-  );
+  ) as ClientService[];
 
   return (
     <TooltipProvider delayDuration={300}>

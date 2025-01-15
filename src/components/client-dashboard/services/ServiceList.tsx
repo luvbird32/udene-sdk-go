@@ -25,7 +25,7 @@
 import React from 'react';
 import { ServiceCard } from './ServiceCard';
 import { FRAUD_DETECTION_SERVICES } from './config';
-import type { ClientService } from '@/types/services';
+import type { ClientService } from '@/integrations/supabase/types/client-services';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
