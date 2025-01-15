@@ -1,20 +1,16 @@
-import { DashboardContent } from "@/components/dashboard/DashboardContent";
+import { DashboardTabContent } from "@/components/dashboard/tabs/DashboardTabContent";
+import { DashboardTabs } from "@/components/dashboard/tabs/DashboardTabs";
 import { ProjectSelector } from "@/components/dashboard/ProjectSelector";
-import { ProjectManagement } from "@/components/dashboard/ProjectManagement";
-import { useProject } from "@/contexts/ProjectContext";
+import { Tabs } from "@/components/ui/tabs";
 
 const Dashboard = () => {
-  const { currentProject } = useProject();
-
   return (
     <div className="container mx-auto py-6 space-y-8">
       <ProjectSelector />
-      
-      {currentProject ? (
-        <DashboardContent />
-      ) : (
-        <ProjectManagement />
-      )}
+      <Tabs defaultValue="dashboard" className="space-y-6">
+        <DashboardTabs />
+        <DashboardTabContent />
+      </Tabs>
     </div>
   );
 };

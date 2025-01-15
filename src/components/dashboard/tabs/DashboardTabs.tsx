@@ -1,13 +1,26 @@
-import { Activity } from "lucide-react";
-import { TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useProject } from "@/contexts/ProjectContext";
 
 export const DashboardTabs = () => {
+  const { currentProject } = useProject();
+
   return (
-    <TabsList className="glass-card p-1">
-      <TabsTrigger value="dashboard" className="data-[state=active]:bg-green-900/40">
-        <Activity className="h-4 w-4 mr-2" />
-        System Overview
-      </TabsTrigger>
-    </TabsList>
+    <Tabs defaultValue="dashboard" className="space-y-4">
+      <TabsList>
+        <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+        <TabsTrigger value="services">Services</TabsTrigger>
+        <TabsTrigger value="security">Security</TabsTrigger>
+        <TabsTrigger value="reports">Reports</TabsTrigger>
+        <TabsTrigger value="api">API</TabsTrigger>
+        <TabsTrigger value="webhooks">Webhooks</TabsTrigger>
+        <TabsTrigger value="triggers">Triggers</TabsTrigger>
+        <TabsTrigger value="profile">Profile</TabsTrigger>
+        <TabsTrigger value="investigations">Investigations</TabsTrigger>
+        {currentProject && (
+          <TabsTrigger value="project-settings">Project Settings</TabsTrigger>
+        )}
+        <TabsTrigger value="project-management">Projects</TabsTrigger>
+      </TabsList>
+    </Tabs>
   );
 };
