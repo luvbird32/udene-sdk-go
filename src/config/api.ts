@@ -1,7 +1,7 @@
 export const API_CONFIG = {
   BASE_URL: import.meta.env.PROD 
     ? 'https://udene.net/v1'
-    : 'http://localhost:3000/v1',
+    : 'http://localhost:8080/v1',
   ENDPOINTS: {
     METRICS: '/metrics',
     ACTIVITY: '/activity',
