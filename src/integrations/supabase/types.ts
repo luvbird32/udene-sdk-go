@@ -340,6 +340,7 @@ export type Database = {
           id: string
           metric_name: string
           metric_value: number
+          project_id: string | null
           timestamp: string | null
           user_id: string
         }
@@ -347,6 +348,7 @@ export type Database = {
           id?: string
           metric_name: string
           metric_value: number
+          project_id?: string | null
           timestamp?: string | null
           user_id: string
         }
@@ -354,10 +356,19 @@ export type Database = {
           id?: string
           metric_name?: string
           metric_value?: number
+          project_id?: string | null
           timestamp?: string | null
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "client_metrics_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       client_services: {
         Row: {
