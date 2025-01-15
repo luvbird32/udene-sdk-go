@@ -1,37 +1,34 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import React, { createContext, useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 interface AuthContextType {
   user: User | null;
-  isLoading: boolean;
+  loading: boolean;
 }
 
-const AuthContext = createContext<AuthContextType>({ user: null, isLoading: true });
-
-export const useAuth = () => useContext(AuthContext);
+export const AuthContext = createContext<AuthContextType>({
+  user: null,
+  loading: true,
+});
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const mounted = React.useRef(true);
 
   useEffect(() => {
-    let mounted = true;
-
     const initAuth = async () => {
       try {
-        // Get initial session
         const { data: { session }, error } = await supabase.auth.getSession();
         if (error) {
           console.error('Session retrieval error:', error);
           throw error;
         }
 
-        if (mounted) {
+        if (mounted.current) {
           if (session?.user) {
             console.log('Session found for user:', session.user.id);
             setUser(session.user);
@@ -42,70 +39,64 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
       } catch (error) {
         console.error('Auth initialization error:', error);
-        // Clear any stale session data
-        localStorage.removeItem('supabase.auth.token');
         toast({
           title: "Authentication Error",
           description: "Failed to initialize authentication",
           variant: "destructive",
         });
       } finally {
-        if (mounted) setIsLoading(false);
+        if (mounted.current) {
+          setLoading(false);
+        }
       }
     };
 
     initAuth();
 
-    // Set up auth state change listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (!mounted) return;
+      if (!mounted.current) return;
 
-      console.log('Auth state changed:', event);
+      console.log('Auth state changed:', event, session?.user?.id);
       
       if (session?.user) {
         setUser(session.user);
-        // Store the session
-        localStorage.setItem('supabase.auth.token', session.access_token);
       } else {
         setUser(null);
-        // Clear session data
-        localStorage.removeItem('supabase.auth.token');
       }
 
       switch (event) {
         case 'SIGNED_IN':
-          navigate('/dashboard', { replace: true });
           toast({
-            title: "Welcome back!",
-            description: "You have successfully signed in.",
+            title: "Welcome!",
+            description: "You have been signed in successfully.",
           });
           break;
 
         case 'SIGNED_OUT':
-          navigate('/login', { replace: true });
           toast({
-            title: "Signed out",
+            title: "Goodbye!",
             description: "You have been signed out successfully.",
           });
           break;
 
         case 'TOKEN_REFRESHED':
           console.log('Token refreshed successfully');
-          if (session) {
-            localStorage.setItem('supabase.auth.token', session.access_token);
-          }
+          break;
+
+        case 'USER_UPDATED':
+          console.log('User data updated');
           break;
       }
     });
 
     return () => {
-      mounted = false;
+      mounted.current = false;
       subscription.unsubscribe();
     };
-  }, [navigate, toast]);
+  }, [toast]);
 
   return (
-    <AuthContext.Provider value={{ user, isLoading }}>
+    <AuthContext.Provider value={{ user, loading }}>
       {children}
     </AuthContext.Provider>
   );
