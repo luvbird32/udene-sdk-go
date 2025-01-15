@@ -1,10 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-import type { Database } from "@/integrations/supabase/types/database";
+import type { ClientService } from "@/integrations/supabase/types/client-services";
 import { useEffect, useState } from "react";
-
-type ClientService = Database['public']['Tables']['client_services']['Row'];
 
 export const useServices = () => {
   const { toast } = useToast();
@@ -59,7 +57,7 @@ export const useServices = () => {
         throw error;
       }
     },
-    enabled: !!userId, // Only run query when we have a userId
+    enabled: !!userId,
     retry: 3,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
