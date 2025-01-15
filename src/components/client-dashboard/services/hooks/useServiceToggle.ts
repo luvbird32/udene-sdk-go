@@ -3,6 +3,25 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useToast } from "@/components/ui/use-toast";
 import { useBotDetection } from "@/hooks/useBotDetection";
+import type { Json } from "@/integrations/supabase/types";
+
+interface ToggleServiceParams {
+  serviceType: string;
+  isActive: boolean;
+  project_id: string;
+  action_preferences?: {
+    action_type: string;
+    automatic_actions: {
+      block_ip: boolean;
+      block_device: boolean;
+      block_user: boolean;
+    };
+    notification_settings: {
+      email: boolean;
+      dashboard: boolean;
+    };
+  };
+}
 
 export const useServiceToggle = () => {
   const queryClient = useQueryClient();
@@ -11,7 +30,7 @@ export const useServiceToggle = () => {
   const { isBotDetected } = useBotDetection();
 
   const toggleService = useMutation({
-    mutationFn: async ({ serviceType, isActive }: { serviceType: string; isActive: boolean }) => {
+    mutationFn: async ({ serviceType, isActive, project_id, action_preferences }: ToggleServiceParams) => {
       if (!currentUser?.id) throw new Error("No user found");
       
       if (isBotDetected) {
@@ -30,7 +49,11 @@ export const useServiceToggle = () => {
       if (existingService) {
         const { error } = await supabase
           .from('client_services')
-          .update({ is_active: isActive })
+          .update({ 
+            is_active: isActive,
+            project_id,
+            action_preferences: action_preferences as Json
+          })
           .eq('service_type', serviceType)
           .eq('user_id', currentUser.id);
 
@@ -42,6 +65,8 @@ export const useServiceToggle = () => {
             service_type: serviceType,
             is_active: isActive,
             user_id: currentUser.id,
+            project_id,
+            action_preferences: action_preferences as Json,
             settings: {}
           });
 

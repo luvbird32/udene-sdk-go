@@ -13,7 +13,6 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { useAIActivityMonitoring } from '@/hooks/useAIActivityMonitoring';
 import { Card } from '@/components/ui/card';
 import { Info } from 'lucide-react';
-import type { ClientService } from '@/types/services';
 import { useProject } from '@/contexts/ProjectContext';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
@@ -31,7 +30,19 @@ export const ServiceManager = () => {
     await toggleService.mutateAsync({ 
       serviceType, 
       isActive,
-      projectId: currentProject.id 
+      project_id: currentProject.id,
+      action_preferences: {
+        action_type: 'manual',
+        automatic_actions: {
+          block_ip: true,
+          block_device: true,
+          block_user: true
+        },
+        notification_settings: {
+          email: true,
+          dashboard: true
+        }
+      }
     });
   };
 
