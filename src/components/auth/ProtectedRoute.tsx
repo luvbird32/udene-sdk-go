@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user, isLoading } = useAuth();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
     const checkSession = async () => {
@@ -36,12 +36,12 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
       }
     };
 
-    if (!isLoading) {
+    if (!loading) {
       checkSession();
     }
-  }, [user, isLoading, navigate, toast]);
+  }, [user, loading, navigate, toast]);
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin text-green-500" />
