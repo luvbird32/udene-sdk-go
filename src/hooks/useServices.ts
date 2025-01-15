@@ -12,10 +12,16 @@ export const useServices = () => {
     queryKey: ["client-services", currentProject?.id],
     queryFn: async () => {
       try {
-        console.log('Fetching services for project:', currentProject?.id);
+        console.log('Fetching services - Starting query');
         
         const { data: { user } } = await supabase.auth.getUser();
-        if (!user) throw new Error("No authenticated user");
+        if (!user) {
+          console.error('No authenticated user found');
+          throw new Error("No authenticated user");
+        }
+        
+        console.log('Authenticated user:', user.id);
+        console.log('Current project:', currentProject?.id);
 
         const query = supabase
           .from('client_services')

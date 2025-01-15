@@ -1,27 +1,3 @@
-/**
- * ServiceList Component
- * 
- * Displays a grid of available fraud detection services that can be activated
- * or deactivated by the user. Shows an alert when no services are active.
- * 
- * Features:
- * - Responsive grid layout of service cards
- * - Empty state handling with alert message
- * - Service activation/deactivation functionality
- * - Real-time service status updates
- * 
- * @param {Object} props
- * @param {ClientService[] | undefined} props.activeServices - Array of currently active services
- * @param {(serviceType: string, isActive: boolean) => Promise<void>} props.handleToggle - Function to toggle service status
- * 
- * @example
- * ```tsx
- * <ServiceList 
- *   activeServices={activeServices} 
- *   handleToggle={handleToggle}
- * />
- * ```
- */
 import React from 'react';
 import { ServiceCard } from './ServiceCard';
 import { FRAUD_DETECTION_SERVICES } from './config';
@@ -29,6 +5,7 @@ import type { ClientService } from '@/integrations/supabase/types/client-service
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useProject } from '@/contexts/ProjectContext';
+import { useAuth } from '@/components/auth/AuthProvider';
 
 interface ServiceListProps {
   activeServices: ClientService[] | undefined;
@@ -37,11 +14,24 @@ interface ServiceListProps {
 
 export const ServiceList = ({ activeServices, handleToggle }: ServiceListProps) => {
   const { currentProject } = useProject();
+  const { user } = useAuth();
   
   console.log('ServiceList rendering with:', { 
     activeServices, 
-    projectId: currentProject?.id 
+    projectId: currentProject?.id,
+    userId: user?.id
   });
+
+  if (!user) {
+    return (
+      <Alert>
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>
+          Please sign in to view services.
+        </AlertDescription>
+      </Alert>
+    );
+  }
 
   if (!currentProject) {
     return (
