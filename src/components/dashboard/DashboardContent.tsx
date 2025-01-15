@@ -32,13 +32,21 @@ export const DashboardContent = ({
   metricsLoading, 
   metricsError 
 }: DashboardContentProps) => {
+  console.log("DashboardContent rendering with:", { metrics, metricsLoading, metricsError });
+
   return (
     <div className="space-y-8">
-      <MetricsSection 
-        metrics={metrics}
-        metricsLoading={metricsLoading}
-        metricsError={metricsError}
-      />
+      <ErrorBoundary>
+        <ApiCreditsDisplay />
+      </ErrorBoundary>
+      
+      <ErrorBoundary>
+        <MetricsSection 
+          metrics={metrics}
+          metricsLoading={metricsLoading}
+          metricsError={metricsError}
+        />
+      </ErrorBoundary>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ErrorBoundary>
