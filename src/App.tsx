@@ -10,6 +10,7 @@ import ClientSettings from '@/pages/ClientSettings'
 import { AuthProvider } from '@/components/auth/AuthProvider'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { useAuth } from './components/auth/AuthProvider'
+import { BrowserRouter } from 'react-router-dom'
 
 // Separate component to use auth hook
 const AppRoutes = () => {
@@ -36,10 +37,12 @@ const AppRoutes = () => {
 
 function App() {
   return (
-    <AuthProvider>
-      <AppRoutes />
-      <Toaster />
-    </AuthProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <AppRoutes />
+        <Toaster />
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
