@@ -14,6 +14,7 @@ import { RewardProgramMonitoring } from "@/components/client-dashboard/analytics
 import { DeviceFingerprintMonitoring } from "@/components/client-dashboard/analytics/DeviceFingerprintMonitoring";
 import { IdentityVerificationMonitoring } from "@/components/client-dashboard/analytics/IdentityVerificationMonitoring";
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
+import { ProjectManager } from "@/components/client-dashboard/projects/ProjectManager";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 interface DashboardContentProps {
@@ -34,6 +35,10 @@ export const DashboardContent = ({
   return (
     <div className="space-y-8">
       <ApiCreditsDisplay />
+      
+      <ErrorBoundary>
+        <ProjectManager />
+      </ErrorBoundary>
       
       <ClientMetrics 
         metrics={metrics}
