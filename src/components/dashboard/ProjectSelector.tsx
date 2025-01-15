@@ -8,12 +8,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-
-interface Project {
-  id: string;
-  name: string;
-  description: string | null;
-}
+import { useProject } from "@/contexts/ProjectContext";
 
 export const ProjectSelector = () => {
   const { toast } = useToast();
@@ -21,24 +16,7 @@ export const ProjectSelector = () => {
   const [newProjectName, setNewProjectName] = useState("");
   const [newProjectDescription, setNewProjectDescription] = useState("");
   const { data: currentUser } = useCurrentUser();
-
-  const { data: projects, isLoading, refetch } = useQuery({
-    queryKey: ["projects"],
-    queryFn: async () => {
-      console.log("Fetching projects...");
-      const { data, error } = await supabase
-        .from("projects")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        console.error("Error fetching projects:", error);
-        throw error;
-      }
-      console.log("Projects fetched:", data);
-      return data as Project[];
-    },
-  });
+  const { currentProject, setCurrentProject, projects, isLoading } = useProject();
 
   const handleCreateProject = async () => {
     try {
@@ -82,7 +60,11 @@ export const ProjectSelector = () => {
       setIsOpen(false);
       setNewProjectName("");
       setNewProjectDescription("");
-      refetch(); // Refresh the projects list
+      
+      // Set the newly created project as current
+      if (data?.[0]) {
+        setCurrentProject(data[0]);
+      }
     } catch (error) {
       console.error("Error in handleCreateProject:", error);
       toast({
@@ -93,9 +75,18 @@ export const ProjectSelector = () => {
     }
   };
 
+  const handleProjectChange = (projectId: string) => {
+    const selectedProject = projects.find(p => p.id === projectId);
+    setCurrentProject(selectedProject || null);
+  };
+
   return (
     <div className="flex items-center gap-4 mb-6">
-      <Select disabled={isLoading}>
+      <Select 
+        disabled={isLoading} 
+        value={currentProject?.id} 
+        onValueChange={handleProjectChange}
+      >
         <SelectTrigger className="w-[200px]">
           <SelectValue placeholder="Select project" />
         </SelectTrigger>

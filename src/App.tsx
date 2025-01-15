@@ -12,6 +12,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { BrowserRouter } from 'react-router-dom'
 import { useAuth } from './components/auth/AuthProvider'
 import { LoadingSpinner } from './components/ui/states/LoadingSpinner'
+import { ProjectProvider } from './contexts/ProjectContext'
 
 // Separate component to use auth hook after AuthProvider is mounted
 const AppRoutes = () => {
@@ -65,7 +66,9 @@ const AppRoutes = () => {
         path="/dashboard" 
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <ProjectProvider>
+              <Dashboard />
+            </ProjectProvider>
           </ProtectedRoute>
         } 
       />
@@ -73,7 +76,9 @@ const AppRoutes = () => {
         path="/settings" 
         element={
           <ProtectedRoute>
-            <Settings />
+            <ProjectProvider>
+              <Settings />
+            </ProjectProvider>
           </ProtectedRoute>
         } 
       />
@@ -89,7 +94,9 @@ const AppRoutes = () => {
         path="/client-settings" 
         element={
           <ProtectedRoute>
-            <ClientSettings />
+            <ProjectProvider>
+              <ClientSettings />
+            </ProjectProvider>
           </ProtectedRoute>
         } 
       />
