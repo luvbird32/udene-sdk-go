@@ -25,11 +25,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const mounted = React.useRef(true);
 
   useEffect(() => {
-    console.log('AuthProvider: Initializing auth state');
+    console.log('AuthProvider: Starting authentication initialization');
+    let authListener: any;
     
     const initAuth = async () => {
       try {
-        console.log('AuthProvider: Getting session');
+        console.log('AuthProvider: Fetching initial session');
         const { data: { session }, error } = await supabase.auth.getSession();
         
         if (error) {
@@ -39,16 +40,58 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
         if (mounted.current) {
           if (session?.user) {
-            console.log('AuthProvider: Session found for user:', session.user.id);
+            console.log('AuthProvider: Initial session found for user:', session.user.id);
             setUser(session.user);
           } else {
-            console.log('AuthProvider: No active session found');
+            console.log('AuthProvider: No initial session found');
             setUser(null);
           }
           setLoading(false);
         }
+
+        // Set up real-time auth listener
+        console.log('AuthProvider: Setting up auth state listener');
+        authListener = supabase.auth.onAuthStateChange((event, session) => {
+          if (!mounted.current) return;
+
+          console.log('AuthProvider: Auth state changed:', event, session?.user?.id);
+          
+          if (session?.user) {
+            setUser(session.user);
+          } else {
+            setUser(null);
+          }
+          setLoading(false);
+
+          switch (event) {
+            case 'SIGNED_IN':
+              console.log('AuthProvider: User signed in successfully');
+              toast({
+                title: "Welcome!",
+                description: "You have been signed in successfully.",
+              });
+              break;
+
+            case 'SIGNED_OUT':
+              console.log('AuthProvider: User signed out successfully');
+              toast({
+                title: "Goodbye!",
+                description: "You have been signed out successfully.",
+              });
+              break;
+
+            case 'TOKEN_REFRESHED':
+              console.log('AuthProvider: Token refreshed successfully');
+              break;
+
+            case 'USER_UPDATED':
+              console.log('AuthProvider: User data updated');
+              break;
+          }
+        });
+
       } catch (error) {
-        console.error('AuthProvider: Auth initialization error:', error);
+        console.error('AuthProvider: Authentication initialization error:', error);
         if (mounted.current) {
           setLoading(false);
           toast({
@@ -62,48 +105,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     initAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (!mounted.current) return;
-
-      console.log('AuthProvider: Auth state changed:', event, session?.user?.id);
-      
-      if (session?.user) {
-        setUser(session.user);
-      } else {
-        setUser(null);
-      }
-      setLoading(false);
-
-      switch (event) {
-        case 'SIGNED_IN':
-          toast({
-            title: "Welcome!",
-            description: "You have been signed in successfully.",
-          });
-          break;
-
-        case 'SIGNED_OUT':
-          toast({
-            title: "Goodbye!",
-            description: "You have been signed out successfully.",
-          });
-          break;
-
-        case 'TOKEN_REFRESHED':
-          console.log('AuthProvider: Token refreshed successfully');
-          break;
-
-        case 'USER_UPDATED':
-          console.log('AuthProvider: User data updated');
-          break;
-      }
-    });
-
     return () => {
+      console.log('AuthProvider: Cleaning up auth listener');
       mounted.current = false;
-      subscription.unsubscribe();
+      if (authListener) {
+        authListener.unsubscribe();
+      }
     };
   }, [toast]);
+
+  console.log('AuthProvider: Current state:', { user: user?.id, loading });
 
   return (
     <AuthContext.Provider value={{ user, loading }}>
