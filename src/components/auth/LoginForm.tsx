@@ -1,16 +1,28 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { isLoading, handleLogin } = useAuth();
+  const { loading: isLoading, user } = useAuth();
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await handleLogin(email, password);
+    const { data: { session }, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) {
+      console.error('Login error:', error.message);
+      return;
+    }
+
+    if (session) {
+      console.log('Login successful');
+    }
   };
 
   return (
