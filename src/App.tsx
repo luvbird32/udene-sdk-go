@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from '@/components/ui/toaster'
+import Landing from '@/pages/Landing'
 import Login from '@/pages/Login'
 import Signup from '@/pages/Signup'
-import Landing from '@/pages/Landing'
 import Dashboard from '@/pages/Dashboard'
 import Settings from '@/pages/Settings'
 import Users from '@/pages/Users'
@@ -10,30 +10,40 @@ import ClientSettings from '@/pages/ClientSettings'
 import { AuthProvider } from '@/components/auth/AuthProvider'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { BrowserRouter } from 'react-router-dom'
+import { useAuth } from './components/auth/AuthProvider'
+
+// Separate component to use auth hook after AuthProvider is mounted
+const AppRoutes = () => {
+  const { user } = useAuth();
+
+  return (
+    <Routes>
+      {/* Public routes - redirect to dashboard if already authenticated */}
+      <Route path="/" element={user ? <Navigate to="/dashboard" replace /> : <Landing />} />
+      <Route path="/login" element={user ? <Navigate to="/dashboard" replace /> : <Login />} />
+      <Route path="/signup" element={user ? <Navigate to="/dashboard" replace /> : <Signup />} />
+      
+      {/* Protected routes - require authentication */}
+      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+      <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
+      <Route path="/client-settings" element={<ProtectedRoute><ClientSettings /></ProtectedRoute>} />
+      
+      {/* Catch-all redirect - send to dashboard if authenticated, login if not */}
+      <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} replace />} />
+    </Routes>
+  );
+};
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          {/* Public routes */}
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          
-          {/* Protected routes */}
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-          <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
-          <Route path="/client-settings" element={<ProtectedRoute><ClientSettings /></ProtectedRoute>} />
-          
-          {/* Catch-all redirect */}
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
+        <AppRoutes />
         <Toaster />
       </AuthProvider>
     </BrowserRouter>
   );
 }
 
-export default App
+export default App;
