@@ -11,6 +11,7 @@ import { AuthProvider } from '@/components/auth/AuthProvider'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { BrowserRouter } from 'react-router-dom'
 import { useAuth } from './components/auth/AuthProvider'
+import { LoadingSpinner } from './components/ui/states/LoadingSpinner'
 
 // Separate component to use auth hook after AuthProvider is mounted
 const AppRoutes = () => {
@@ -21,7 +22,7 @@ const AppRoutes = () => {
   // Show loading state while checking authentication
   if (loading) {
     console.log("AppRoutes showing loading state");
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   console.log("AppRoutes rendering routes");

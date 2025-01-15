@@ -4,21 +4,16 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Content-Security-Policy" content="
-      default-src 'self';
-      connect-src 'self' https://*.supabase.co https://*.lovableproject.com wss://*.supabase.co http://localhost:* https://localhost:*;
-      script-src 'self' 'unsafe-inline' 'unsafe-eval';
-      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-      img-src 'self' data: blob: https:;
-      font-src 'self' data: https://fonts.gstatic.com;
-      frame-src 'self';
-      worker-src 'self' blob:;
-    ">
+    <meta http-equiv="Content-Security-Policy" 
+      content="default-src 'self' https://*.supabase.co https://*.lovable.dev;
+               connect-src 'self' https://*.supabase.co https://*.lovable.dev ws://localhost:* http://localhost:*;
+               script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.lovable.dev;
+               style-src 'self' 'unsafe-inline';
+               img-src 'self' data: blob: https://*.supabase.co https://*.lovable.dev;" />
     <title>Udene</title>
   </head>
   <body>
     <div id="root"></div>
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
