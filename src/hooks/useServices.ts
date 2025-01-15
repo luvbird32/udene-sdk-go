@@ -12,6 +12,8 @@ export const useServices = () => {
     queryKey: ["client-services", currentProject?.id],
     queryFn: async () => {
       try {
+        console.log('Fetching services for project:', currentProject?.id);
+        
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) throw new Error("No authenticated user");
 
@@ -22,6 +24,7 @@ export const useServices = () => {
 
         // Add project filter if a project is selected
         if (currentProject?.id) {
+          console.log('Filtering by project:', currentProject.id);
           query.eq('project_id', currentProject.id);
         }
 

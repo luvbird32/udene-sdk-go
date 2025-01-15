@@ -28,6 +28,7 @@ import { FRAUD_DETECTION_SERVICES } from './config';
 import type { ClientService } from '@/integrations/supabase/types/client-services';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { useProject } from '@/contexts/ProjectContext';
 
 interface ServiceListProps {
   activeServices: ClientService[] | undefined;
@@ -35,6 +36,24 @@ interface ServiceListProps {
 }
 
 export const ServiceList = ({ activeServices, handleToggle }: ServiceListProps) => {
+  const { currentProject } = useProject();
+  
+  console.log('ServiceList rendering with:', { 
+    activeServices, 
+    projectId: currentProject?.id 
+  });
+
+  if (!currentProject) {
+    return (
+      <Alert>
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>
+          Please select a project to view available services.
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
   if (!activeServices?.length) {
     return (
       <Alert>
