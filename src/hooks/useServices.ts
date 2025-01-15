@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useProject } from "@/contexts/ProjectContext";
+import type { ClientService } from "@/types/services";
 
 export const useServices = () => {
   const { toast } = useToast();
@@ -20,7 +21,7 @@ export const useServices = () => {
           .eq('user_id', user.id);
 
         // Add project filter if a project is selected
-        if (currentProject) {
+        if (currentProject?.id) {
           query.eq('project_id', currentProject.id);
         }
 
@@ -28,10 +29,16 @@ export const useServices = () => {
 
         if (error) {
           console.error('Error fetching services:', error);
+          toast({
+            title: "Error",
+            description: "Failed to load services. Please try again.",
+            variant: "destructive",
+          });
           throw error;
         }
 
-        return data;
+        console.log('Fetched services:', data);
+        return data as ClientService[];
       } catch (error) {
         console.error('Error in useServices:', error);
         toast({
