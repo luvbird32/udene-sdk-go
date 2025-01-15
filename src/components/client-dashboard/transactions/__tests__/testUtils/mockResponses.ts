@@ -1,11 +1,11 @@
 import { TransactionResponse } from './types';
-import { mockTransactionData } from './mockData';
+import { mockTransactions } from './mockData';
 import { createBaseResponse } from './responseBuilder';
 
 export const createMockResponse = (): TransactionResponse => {
   return {
     ...createBaseResponse(),
-    data: mockTransactionData,
+    data: mockTransactions,
   } as unknown as TransactionResponse;
 };
 

@@ -1,4 +1,4 @@
-import { mockTransactionData } from './mockData';
+import { mockTransactions } from './mockData';
 import { TransactionResponse } from './types';
 
 export const createBaseResponse = () => ({
@@ -7,9 +7,9 @@ export const createBaseResponse = () => ({
   count: null,
   status: 200,
   statusText: 'OK',
-  then: () => Promise.resolve(mockTransactionData),
-  catch: () => Promise.resolve(mockTransactionData),
-  finally: () => Promise.resolve(mockTransactionData),
+  then: () => Promise.resolve(mockTransactions),
+  catch: () => Promise.resolve(mockTransactions),
+  finally: () => Promise.resolve(mockTransactions),
   throwOnError: () => createBaseResponse(),
   limit: () => createBaseResponse(),
   order: () => createBaseResponse(),

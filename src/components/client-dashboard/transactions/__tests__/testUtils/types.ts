@@ -1,4 +1,12 @@
+import { PostgrestFilterBuilder } from '@supabase/postgrest-js';
+import { Database } from '@/integrations/supabase/types';
 import { DatabaseTransaction as Transaction } from "@/integrations/supabase/types/transactions";
+
+export type TransactionResponse = PostgrestFilterBuilder<
+  Database['public'],
+  Database['public']['Tables']['transactions']['Row'],
+  Transaction[]
+>;
 
 export type MockTransaction = Transaction & {
   // Add any additional mock properties if needed
