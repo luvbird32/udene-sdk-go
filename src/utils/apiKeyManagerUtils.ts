@@ -10,7 +10,8 @@ export const useApiKeyMutations = (queryClient: any, tableName: TableName) => {
   const createApiKey = async (
     projectName: string, 
     projectDescription: string, 
-    userId?: string, 
+    userId?: string,
+    projectId?: string,
     keyType: 'testing' | 'production' = 'testing'
   ) => {
     if (!projectName.trim()) {
@@ -24,6 +25,7 @@ export const useApiKeyMutations = (queryClient: any, tableName: TableName) => {
       description: projectDescription.trim() || null,
       status: 'active',
       key_type: keyType,
+      project_id: projectId || null,
       ...(userId && { user_id: userId }),
     };
 

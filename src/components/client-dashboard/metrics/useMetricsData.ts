@@ -1,12 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useProject } from "@/contexts/ProjectContext";
 
 export const useMetricsData = () => {
   const { toast } = useToast();
+  const { currentProject } = useProject();
 
   return useQuery({
-    queryKey: ["dashboard-metrics"],
+    queryKey: ["dashboard-metrics", currentProject?.id],
     queryFn: async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
@@ -14,12 +16,19 @@ export const useMetricsData = () => {
           throw new Error("No user found");
         }
 
-        // Fetch metrics from Supabase
-        const { data: metricsData, error } = await supabase
-          .from('metrics')
+        // Query metrics filtered by project if one is selected
+        const query = supabase
+          .from('client_metrics')
           .select('*')
-          .order('timestamp', { ascending: false })
-          .limit(1);
+          .eq('user_id', user.id)
+          .order('timestamp', { ascending: false });
+
+        // Add project filter if a project is selected
+        if (currentProject?.id) {
+          query.eq('project_id', currentProject.id);
+        }
+
+        const { data: metricsData, error } = await query.limit(1);
 
         if (error) {
           console.error("Error fetching metrics:", error);
@@ -32,7 +41,7 @@ export const useMetricsData = () => {
             riskScore: 0,
             totalTransactions: 0,
             flaggedTransactions: 0,
-            avgProcessingTime: 35, // Default processing time in ms
+            avgProcessingTime: 35,
             concurrentCalls: 0,
             activeUsers: 0
           };
@@ -57,6 +66,6 @@ export const useMetricsData = () => {
         throw error;
       }
     },
-    refetchInterval: 30000, // Refetch every 30 seconds
+    refetchInterval: 30000,
   });
 };

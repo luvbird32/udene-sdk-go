@@ -7,21 +7,30 @@ import { ApiKeyForm } from "@/components/shared/ApiKeyForm";
 import { ApiKeyList } from "@/components/shared/ApiKeyList";
 import { useApiKeyMutations } from "@/utils/apiKeyManagerUtils";
 import { supabase } from "@/integrations/supabase/client";
+import { useProject } from "@/contexts/ProjectContext";
 
 export const ClientApiKeyManager = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { data: user } = useCurrentUser();
+  const { currentProject } = useProject();
   const { createApiKey, deleteApiKey } = useApiKeyMutations(queryClient, 'client_api_keys');
 
   const { data: apiKeys, isLoading } = useQuery({
-    queryKey: ['udene-api-keys'],
+    queryKey: ['udene-api-keys', currentProject?.id],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const query = supabase
         .from('client_api_keys')
         .select('*')
         .order('created_at', { ascending: false });
+
+      // Filter by project if one is selected
+      if (currentProject?.id) {
+        query.eq('project_id', currentProject.id);
+      }
+      
+      const { data, error } = await query;
       
       if (error) throw error;
       return data;
@@ -30,10 +39,10 @@ export const ClientApiKeyManager = () => {
 
   const createKeyMutation = useMutation({
     mutationFn: async ({ name, description }: { name: string; description: string }) => {
-      return createApiKey(name, description, user?.id);
+      return createApiKey(name, description, user?.id, currentProject?.id);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['udene-api-keys'] });
+      queryClient.invalidateQueries({ queryKey: ['udene-api-keys', currentProject?.id] });
       toast({
         title: "API Key Generated",
         description: "Your new Udene API key has been created successfully.",
@@ -51,7 +60,7 @@ export const ClientApiKeyManager = () => {
   const deleteKeyMutation = useMutation({
     mutationFn: deleteApiKey,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['udene-api-keys'] });
+      queryClient.invalidateQueries({ queryKey: ['udene-api-keys', currentProject?.id] });
       toast({
         title: "API Key Deleted",
         description: "The Udene API key has been deleted successfully.",
@@ -78,7 +87,10 @@ export const ClientApiKeyManager = () => {
   return (
     <div className="space-y-6">
       <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Generate New Udene API Key</h3>
+        <h3 className="text-lg font-semibold mb-4">
+          Generate New API Key
+          {currentProject && ` for ${currentProject.name}`}
+        </h3>
         <ApiKeyForm 
           onSubmit={handleGenerateKey}
           isGenerating={isGenerating}
@@ -86,7 +98,10 @@ export const ClientApiKeyManager = () => {
       </Card>
 
       <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Your Udene API Keys</h3>
+        <h3 className="text-lg font-semibold mb-4">
+          Your API Keys
+          {currentProject && ` (${currentProject.name})`}
+        </h3>
         <ApiKeyList 
           apiKeys={apiKeys}
           isLoading={isLoading}
