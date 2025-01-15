@@ -9,6 +9,7 @@ import { MatrixBackground } from "@/components/dashboard/background/MatrixBackgr
 import { DashboardTabs } from "@/components/client-dashboard/tabs/DashboardTabs";
 import { DashboardTabContent } from "@/components/client-dashboard/tabs/DashboardTabContent";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ProjectSelector } from "@/components/dashboard/ProjectSelector";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -60,6 +61,7 @@ const Dashboard = () => {
       <div className="relative z-10">
         <TooltipProvider>
           <DashboardHeader />
+          <ProjectSelector />
           <Tabs defaultValue="dashboard" className="space-y-6">
             <DashboardTabs />
             <DashboardTabContent 
