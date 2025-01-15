@@ -1,16 +1,16 @@
 import { FraudDetectionService } from "@/types/services";
 import { abusePreventionServices } from "./abusePreventionServices";
-import { botProtectionServices } from "./botProtectionServices";
-import { fraudProtectionServices } from "./fraudProtectionServices";
-import { identityServices } from "./identityServices";
-import { securityServices } from "./securityServices";
+import { BOT_PROTECTION_SERVICES } from "./botProtectionServices";
+import { FRAUD_PROTECTION_SERVICES } from "./fraudProtectionServices";
+import { IDENTITY_SERVICES } from "./identityServices";
+import { SECURITY_SERVICES } from "./securityServices";
 
 export const FRAUD_DETECTION_SERVICES: FraudDetectionService[] = [
   ...abusePreventionServices,
-  ...botProtectionServices,
-  ...fraudProtectionServices,
-  ...identityServices,
-  ...securityServices
+  ...BOT_PROTECTION_SERVICES,
+  ...FRAUD_PROTECTION_SERVICES,
+  ...IDENTITY_SERVICES,
+  ...SECURITY_SERVICES
 ];
 
 export * from "./abusePreventionServices";
