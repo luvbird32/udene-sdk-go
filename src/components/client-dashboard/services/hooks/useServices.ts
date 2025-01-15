@@ -8,14 +8,11 @@ export const useServices = () => {
   const { toast } = useToast();
   const [userId, setUserId] = useState<string | null>(null);
 
-  // Get and track the current user's ID
   useEffect(() => {
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUserId(session?.user?.id || null);
     });
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUserId(session?.user?.id || null);
     });
@@ -31,10 +28,10 @@ export const useServices = () => {
       }
 
       try {
-        // Removed the .eq('user_id', userId) filter to get all services
         const { data: services, error } = await supabase
           .from('client_services')
-          .select('*');
+          .select('*')
+          .eq('user_id', userId);
 
         if (error) {
           console.error('Supabase error:', error);
