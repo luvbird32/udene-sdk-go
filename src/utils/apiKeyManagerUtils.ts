@@ -11,8 +11,7 @@ export const useApiKeyMutations = (queryClient: any, tableName: TableName) => {
     projectName: string, 
     projectDescription: string, 
     userId?: string, 
-    keyType: 'testing' | 'production' = 'testing',
-    projectId?: string | null
+    keyType: 'testing' | 'production' = 'testing'
   ) => {
     if (!projectName.trim()) {
       throw new Error("Project name is required");
@@ -25,7 +24,6 @@ export const useApiKeyMutations = (queryClient: any, tableName: TableName) => {
       description: projectDescription.trim() || null,
       status: 'active',
       key_type: keyType,
-      project_id: projectId || null,
       ...(userId && { user_id: userId }),
     };
 
