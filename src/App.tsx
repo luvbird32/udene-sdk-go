@@ -14,22 +14,27 @@ import { useAuth } from './components/auth/AuthProvider'
 
 // Separate component to use auth hook after AuthProvider is mounted
 const AppRoutes = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  // Show loading state while checking authentication
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Routes>
-      {/* Public routes - redirect to dashboard if already authenticated */}
+      {/* Public routes */}
       <Route path="/" element={user ? <Navigate to="/dashboard" replace /> : <Landing />} />
       <Route path="/login" element={user ? <Navigate to="/dashboard" replace /> : <Login />} />
       <Route path="/signup" element={user ? <Navigate to="/dashboard" replace /> : <Signup />} />
       
-      {/* Protected routes - require authentication */}
+      {/* Protected routes */}
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
       <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
       <Route path="/client-settings" element={<ProtectedRoute><ClientSettings /></ProtectedRoute>} />
       
-      {/* Catch-all redirect - send to dashboard if authenticated, login if not */}
+      {/* Catch-all redirect */}
       <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} replace />} />
     </Routes>
   );
