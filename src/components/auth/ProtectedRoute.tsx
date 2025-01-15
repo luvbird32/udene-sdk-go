@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from './AuthProvider';
+import { LoadingSpinner } from '@/components/ui/states/LoadingSpinner';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -15,7 +16,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   });
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   if (!user) {

@@ -25,49 +25,54 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const mounted = React.useRef(true);
 
   useEffect(() => {
+    console.log('AuthProvider: Initializing auth state');
+    
     const initAuth = async () => {
       try {
+        console.log('AuthProvider: Getting session');
         const { data: { session }, error } = await supabase.auth.getSession();
+        
         if (error) {
-          console.error('Session retrieval error:', error);
+          console.error('AuthProvider: Session retrieval error:', error);
           throw error;
         }
 
         if (mounted.current) {
           if (session?.user) {
-            console.log('Session found for user:', session.user.id);
+            console.log('AuthProvider: Session found for user:', session.user.id);
             setUser(session.user);
           } else {
-            console.log('No active session found');
+            console.log('AuthProvider: No active session found');
             setUser(null);
           }
+          setLoading(false);
         }
       } catch (error) {
-        console.error('Auth initialization error:', error);
-        toast({
-          title: "Authentication Error",
-          description: "Failed to initialize authentication",
-          variant: "destructive",
-        });
-      } finally {
+        console.error('AuthProvider: Auth initialization error:', error);
         if (mounted.current) {
           setLoading(false);
+          toast({
+            title: "Authentication Error",
+            description: "Failed to initialize authentication. Please try refreshing the page.",
+            variant: "destructive",
+          });
         }
       }
     };
 
     initAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (!mounted.current) return;
 
-      console.log('Auth state changed:', event, session?.user?.id);
+      console.log('AuthProvider: Auth state changed:', event, session?.user?.id);
       
       if (session?.user) {
         setUser(session.user);
       } else {
         setUser(null);
       }
+      setLoading(false);
 
       switch (event) {
         case 'SIGNED_IN':
@@ -85,11 +90,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           break;
 
         case 'TOKEN_REFRESHED':
-          console.log('Token refreshed successfully');
+          console.log('AuthProvider: Token refreshed successfully');
           break;
 
         case 'USER_UPDATED':
-          console.log('User data updated');
+          console.log('AuthProvider: User data updated');
           break;
       }
     });
