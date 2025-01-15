@@ -361,6 +361,7 @@ export type Database = {
       }
       client_services: {
         Row: {
+          action_preferences: Json | null
           created_at: string | null
           id: string
           is_active: boolean | null
@@ -371,6 +372,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          action_preferences?: Json | null
           created_at?: string | null
           id?: string
           is_active?: boolean | null
@@ -381,6 +383,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          action_preferences?: Json | null
           created_at?: string | null
           id?: string
           is_active?: boolean | null

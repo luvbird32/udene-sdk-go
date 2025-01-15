@@ -6,6 +6,7 @@ import { ServiceDescription } from "./components/ServiceDescription";
 import { ServiceFeatureList } from "./components/ServiceFeatureList";
 import { ServiceControls } from "./components/ServiceControls";
 import { ServiceToggle } from "./components/ServiceToggle";
+import { ServiceActionPreferences } from "./components/ServiceActionPreferences";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -30,38 +31,27 @@ export const ServiceCard = ({
   const queryClient = useQueryClient();
   const [isToggling, setIsToggling] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+  const [isUpdatingPreferences, setIsUpdatingPreferences] = useState(false);
 
-  // Query to get the current service status
+  // Query to get the current service status and preferences
   const { data: serviceData, error: serviceError } = useQuery({
     queryKey: ["service-status", serviceType],
     queryFn: async () => {
       try {
         const { data: { user }, error: authError } = await supabase.auth.getUser();
-        if (authError) {
-          console.error("Auth error:", authError);
-          throw new Error("Authentication failed");
-        }
-        
-        if (!user) {
-          throw new Error("No authenticated user");
-        }
+        if (authError) throw authError;
+        if (!user) throw new Error("No authenticated user");
 
-        // First try to get existing service
         const { data, error } = await supabase
           .from('client_services')
-          .select('is_active')
+          .select('is_active, action_preferences')
           .eq('user_id', user.id)
           .eq('service_type', serviceType)
           .maybeSingle();
 
-        if (error) {
-          console.error("Service fetch error:", error);
-          throw error;
-        }
+        if (error) throw error;
 
-        // If no record exists, create one with default state
         if (!data) {
-          console.log("Creating new service record for:", serviceType);
           const { data: newService, error: insertError } = await supabase
             .from('client_services')
             .insert({
@@ -69,14 +59,10 @@ export const ServiceCard = ({
               service_type: serviceType,
               is_active: initialIsActive,
             })
-            .select('is_active')
+            .select('is_active, action_preferences')
             .single();
 
-          if (insertError) {
-            console.error("Service creation error:", insertError);
-            throw insertError;
-          }
-
+          if (insertError) throw insertError;
           return newService;
         }
 
@@ -92,16 +78,45 @@ export const ServiceCard = ({
       }
     },
     retry: 1,
-    staleTime: 1000 * 60, // Consider data fresh for 1 minute
+    staleTime: 1000 * 60,
   });
 
-  // Show error toast if service query fails
   if (serviceError) {
     console.error("Service query error:", serviceError);
   }
 
-  // Use the queried status if available, otherwise fall back to the prop
   const isActive = serviceData?.is_active ?? initialIsActive;
+
+  const handlePreferencesChange = async (newPreferences: any) => {
+    setIsUpdatingPreferences(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No authenticated user");
+
+      const { error } = await supabase
+        .from('client_services')
+        .update({ action_preferences: newPreferences })
+        .eq('user_id', user.id)
+        .eq('service_type', serviceType);
+
+      if (error) throw error;
+
+      queryClient.invalidateQueries({ queryKey: ["service-status", serviceType] });
+      toast({
+        title: "Preferences Updated",
+        description: "Service action preferences have been updated successfully.",
+      });
+    } catch (error) {
+      console.error("Preferences update error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update preferences. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdatingPreferences(false);
+    }
+  };
 
   const handleToggle = async (checked: boolean) => {
     if (isToggling) return;
@@ -109,7 +124,6 @@ export const ServiceCard = ({
     setIsToggling(true);
     try {
       await onToggle(serviceType, checked);
-      // Invalidate the query to refetch the latest status
       queryClient.invalidateQueries({ queryKey: ["service-status", serviceType] });
       toast({
         title: checked ? "Service activated" : "Service deactivated",
@@ -145,6 +159,25 @@ export const ServiceCard = ({
           />
         </div>
         
+        {isActive && (
+          <ServiceActionPreferences
+            preferences={serviceData?.action_preferences || {
+              action_type: 'manual',
+              automatic_actions: {
+                block_ip: true,
+                block_device: true,
+                block_user: true
+              },
+              notification_settings: {
+                email: true,
+                dashboard: true
+              }
+            }}
+            onPreferencesChange={handlePreferencesChange}
+            isUpdating={isUpdatingPreferences}
+          />
+        )}
+
         <ServiceFeatureList features={features} />
         <ServiceControls
           isActive={isActive}
