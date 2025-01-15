@@ -26,6 +26,8 @@ export interface DatabaseTransaction {
   interaction_patterns: Json | null;
 }
 
+export type Transaction = DatabaseTransaction;
+
 export interface TransactionWithPatterns {
   id: string;
   amount: number;
