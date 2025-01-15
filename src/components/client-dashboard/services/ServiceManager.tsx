@@ -14,15 +14,36 @@ import { useAIActivityMonitoring } from '@/hooks/useAIActivityMonitoring';
 import { Card } from '@/components/ui/card';
 import { Info } from 'lucide-react';
 import type { ClientService } from '@/types/services';
+import { useProject } from '@/contexts/ProjectContext';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export const ServiceManager = () => {
   const { data: activeServices, isLoading } = useServices();
   const toggleService = useServiceToggle();
+  const { currentProject } = useProject();
   useAIActivityMonitoring();
 
   const handleToggle = async (serviceType: string, isActive: boolean) => {
-    await toggleService.mutateAsync({ serviceType, isActive });
+    if (!currentProject) {
+      console.error('No project selected');
+      return;
+    }
+    await toggleService.mutateAsync({ 
+      serviceType, 
+      isActive,
+      projectId: currentProject.id 
+    });
   };
+
+  if (!currentProject) {
+    return (
+      <Alert>
+        <AlertDescription>
+          Please select a project to manage services.
+        </AlertDescription>
+      </Alert>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -37,11 +58,10 @@ export const ServiceManager = () => {
     );
   }
 
-  // Ensure project_id is always a string, even if null/undefined
-  const servicesWithProject = (activeServices || []).map((service: ClientService) => ({
-    ...service,
-    project_id: service.project_id || ''
-  }));
+  // Filter services by current project
+  const projectServices = activeServices?.filter(
+    service => service.project_id === currentProject.id
+  );
 
   return (
     <TooltipProvider delayDuration={300}>
@@ -67,7 +87,7 @@ export const ServiceManager = () => {
         </Card>
 
         <ServiceList 
-          activeServices={servicesWithProject} 
+          activeServices={projectServices} 
           handleToggle={handleToggle}
         />
       </div>

@@ -9,6 +9,7 @@ import { TriggerManager } from "@/components/client-dashboard/triggers/TriggerMa
 import { ClientProfile } from "@/components/client-dashboard/ClientProfile";
 import { InvestigationLogs } from "@/components/client-dashboard/investigation/InvestigationLogs";
 import { DashboardContent } from "../DashboardContent";
+import { ProjectSettings } from "../projects/ProjectSettings";
 
 interface DashboardTabContentProps {
   metrics?: {
@@ -66,6 +67,10 @@ export const DashboardTabContent = ({
 
       <TabsContent value="investigations" className="space-y-6">
         <InvestigationLogs />
+      </TabsContent>
+
+      <TabsContent value="project-settings" className="space-y-6">
+        <ProjectSettings />
       </TabsContent>
     </>
   );
