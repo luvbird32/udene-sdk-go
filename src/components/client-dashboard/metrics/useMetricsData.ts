@@ -11,24 +11,20 @@ export const useMetricsData = () => {
     queryKey: ["dashboard-metrics", currentProject?.id],
     queryFn: async () => {
       try {
+        console.log("Fetching metrics data...");
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
+          console.error("No user found");
           throw new Error("No user found");
         }
 
         // Query client_metrics filtered by project if one is selected
-        const query = supabase
+        const { data, error } = await supabase
           .from('client_metrics')
           .select('*')
           .eq('user_id', user.id)
-          .order('timestamp', { ascending: false });
-
-        // Add project filter if a project is selected
-        if (currentProject?.id) {
-          query.eq('project_id', currentProject.id);
-        }
-
-        const { data: metricsData, error } = await query.maybeSingle();
+          .order('timestamp', { ascending: false })
+          .maybeSingle();
 
         if (error) {
           console.error("Error fetching metrics:", error);
@@ -36,7 +32,7 @@ export const useMetricsData = () => {
         }
 
         // If no metrics exist yet, return default values
-        if (!metricsData) {
+        if (!data) {
           console.log("No metrics data found, returning defaults");
           return {
             riskScore: 0,
@@ -50,12 +46,12 @@ export const useMetricsData = () => {
 
         // Map the database metrics to our frontend format
         return {
-          riskScore: metricsData.metric_value || 0,
-          totalTransactions: metricsData.total_transactions || 0,
-          flaggedTransactions: metricsData.flagged_transactions || 0,
-          avgProcessingTime: metricsData.avg_processing_time || 35,
-          concurrentCalls: metricsData.concurrent_calls || 0,
-          activeUsers: metricsData.active_users || 0
+          riskScore: data.metric_value || 0,
+          totalTransactions: data.total_transactions || 0,
+          flaggedTransactions: data.flagged_transactions || 0,
+          avgProcessingTime: data.avg_processing_time || 35,
+          concurrentCalls: data.concurrent_calls || 0,
+          activeUsers: data.active_users || 0
         };
       } catch (error) {
         console.error("Metrics fetch error:", error);
