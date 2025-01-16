@@ -5,8 +5,8 @@
  * Provides a centralized interface for managing all available services.
  */
 import React from 'react';
-import { ServiceHeader } from './ServiceHeader';
-import { ServiceList } from './ServiceList';
+import { ServiceHeader } from './components/ServiceHeader';
+import { ServiceList } from './components/ServiceList';
 import { useServices } from './hooks/useServices';
 import { useServiceToggle } from './hooks/useServiceToggle';
 import { TooltipProvider } from '@/components/ui/tooltip';
