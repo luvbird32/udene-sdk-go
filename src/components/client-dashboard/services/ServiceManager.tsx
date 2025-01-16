@@ -1,12 +1,6 @@
-/**
- * ServiceManager Component
- * 
- * Manages the activation and configuration of fraud prevention services.
- * Provides a centralized interface for managing all available services.
- */
 import React from 'react';
 import { ServiceHeader } from './components/ServiceHeader';
-import { ServiceList } from './components/ServiceList';
+import { ServiceList } from './ServiceList';
 import { useServices } from './hooks/useServices';
 import { useServiceToggle } from './hooks/useServiceToggle';
 import { TooltipProvider } from '@/components/ui/tooltip';
