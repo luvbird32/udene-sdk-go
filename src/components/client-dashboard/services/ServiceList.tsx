@@ -74,7 +74,10 @@ export const ServiceList = ({ activeServices, handleToggle }: ServiceListProps) 
             automatic_actions: {
               block_ip: true,
               block_device: true,
-              block_user: true
+              block_user: true,
+              block_email: false,
+              restrict_access: false,
+              notify_admin: false
             },
             notification_settings: {
               email: true,

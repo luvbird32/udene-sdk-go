@@ -11,6 +11,9 @@ interface ServiceActionPreferencesProps {
       block_ip: boolean;
       block_device: boolean;
       block_user: boolean;
+      block_email: boolean;
+      restrict_access: boolean;
+      notify_admin: boolean;
     };
     notification_settings: {
       email: boolean;
@@ -91,6 +94,33 @@ export const ServiceActionPreferences = ({
               id="block-user"
               checked={preferences.automatic_actions.block_user}
               onCheckedChange={() => handleAutomaticActionChange('block_user')}
+              disabled={isUpdating}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="block-email">Block Suspicious Emails</Label>
+            <Switch
+              id="block-email"
+              checked={preferences.automatic_actions.block_email}
+              onCheckedChange={() => handleAutomaticActionChange('block_email')}
+              disabled={isUpdating}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="restrict-access">Restrict Account Access</Label>
+            <Switch
+              id="restrict-access"
+              checked={preferences.automatic_actions.restrict_access}
+              onCheckedChange={() => handleAutomaticActionChange('restrict_access')}
+              disabled={isUpdating}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="notify-admin">Notify Administrator</Label>
+            <Switch
+              id="notify-admin"
+              checked={preferences.automatic_actions.notify_admin}
+              onCheckedChange={() => handleAutomaticActionChange('notify_admin')}
               disabled={isUpdating}
             />
           </div>
