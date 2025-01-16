@@ -6,7 +6,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { MetricsSection } from "./MetricsSection";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
-export const DashboardContent = () => {
+interface DashboardContentProps {
+  metrics: any;
+  metricsLoading: boolean;
+  metricsError: Error | null;
+}
+
+export const DashboardContent = ({ metrics, metricsLoading, metricsError }: DashboardContentProps) => {
   const { toast } = useToast();
   const [connectionStatus, setConnectionStatus] = useState<'checking' | 'connected' | 'error'>('checking');
   
@@ -64,7 +70,11 @@ export const DashboardContent = () => {
       )}
 
       <ErrorBoundary>
-        <MetricsSection />
+        <MetricsSection 
+          metrics={metrics}
+          metricsLoading={metricsLoading}
+          metricsError={metricsError}
+        />
       </ErrorBoundary>
     </div>
   );
