@@ -5,7 +5,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useSessionTimeout } from '@/hooks/useSessionTimeout';
 import { supabase } from '@/integrations/supabase/client';
 import { sanitizeHtml } from '@/utils/security';
-import DashboardContent from '@/components/dashboard/DashboardContent';
+import { DashboardContent } from '@/components/dashboard/DashboardContent';
 import { LoadingSpinner } from '@/components/ui/states/LoadingSpinner';
 
 const Dashboard = () => {
