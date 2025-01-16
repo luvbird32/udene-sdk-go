@@ -1,77 +1,93 @@
-import { useToast } from "@/hooks/use-toast";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Tabs } from "@/components/ui/tabs";
-import { useSessionTimeout } from "@/hooks/useSessionTimeout";
-import { useRealtimeSubscriptions } from "@/hooks/useRealtimeSubscriptions";
-import { DashboardHeader } from "@/components/dashboard/header/DashboardHeader";
-import { MatrixBackground } from "@/components/dashboard/background/MatrixBackground";
-import { DashboardTabs } from "@/components/client-dashboard/tabs/DashboardTabs";
-import { DashboardTabContent } from "@/components/client-dashboard/tabs/DashboardTabContent";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { ProjectSelector } from "@/components/dashboard/ProjectSelector";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/components/auth/AuthProvider';
+import { useToast } from '@/hooks/use-toast';
+import { useSessionTimeout } from '@/hooks/useSessionTimeout';
+import { supabase } from '@/integrations/supabase/client';
+import { sanitizeHtml } from '@/utils/security';
+import DashboardContent from '@/components/dashboard/DashboardContent';
+import { LoadingSpinner } from '@/components/ui/states/LoadingSpinner';
 
 const Dashboard = () => {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
   const { toast } = useToast();
   
+  // Implement session timeout monitoring
   useSessionTimeout();
-  useRealtimeSubscriptions();
 
-  const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
-    queryKey: ["metrics"],
-    queryFn: async () => {
-      console.log("Fetching metrics from Supabase...");
-      const { data: metricsData, error: metricsError } = await supabase
-        .from('metrics')
-        .select('*')
-        .order('timestamp', { ascending: false })
-        .limit(1);
+  // Check for concurrent sessions
+  useEffect(() => {
+    const checkConcurrentSessions = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          const { data: activities } = await supabase
+            .from('user_activities')
+            .select('*')
+            .eq('profile_id', session.user.id)
+            .eq('activity_type', 'login')
+            .order('created_at', { ascending: false })
+            .limit(2);
 
-      if (metricsError) {
-        console.error("Error fetching metrics:", metricsError);
-        throw metricsError;
+          if (activities && activities.length > 1) {
+            const timeDiff = new Date(activities[0].created_at).getTime() - 
+                           new Date(activities[1].created_at).getTime();
+            
+            // If less than 1 minute between logins from different devices/browsers
+            if (timeDiff < 60000 && activities[0].metadata?.device_id !== activities[1].metadata?.device_id) {
+              toast({
+                title: "Security Alert",
+                description: "Multiple active sessions detected. Please verify your account security.",
+                variant: "destructive"
+              });
+
+              // Log security event
+              await supabase.from('audit_logs').insert({
+                event_type: 'concurrent_session_detected',
+                user_id: session.user.id,
+                changes: {
+                  recent_activities: activities
+                }
+              });
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error checking concurrent sessions:', error);
       }
+    };
 
-      return {
-        riskScore: metricsData?.[0]?.metric_value ?? 0,
-        totalTransactions: metricsData?.[0]?.metric_value ?? 0,
-        flaggedTransactions: metricsData?.[0]?.metric_value ?? 0,
-        activeUsers: metricsData?.[0]?.metric_value ?? 0,
-        avgProcessingTime: 35,
-        concurrentCalls: metricsData?.[0]?.metric_value ?? 0
-      };
-    },
-    refetchInterval: 3000,
-    retry: 1,
-    meta: {
-      errorHandler: (error: Error) => {
-        console.error("Metrics fetch error:", error);
-        toast({
-          title: "Error",
-          description: "Failed to load metrics data",
-          variant: "destructive",
-        });
-      },
-    },
-  });
+    checkConcurrentSessions();
+  }, [toast]);
+
+  // Protect against unauthenticated access
+  useEffect(() => {
+    if (!loading && !user) {
+      console.log('Unauthorized access attempt to dashboard');
+      navigate('/login');
+      
+      toast({
+        title: "Access Denied",
+        description: "Please log in to access the dashboard",
+        variant: "destructive"
+      });
+    }
+  }, [user, loading, navigate, toast]);
+
+  // Show loading state while checking auth
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  // Prevent rendering if not authenticated
+  if (!user) {
+    return null;
+  }
 
   return (
-    <div className="min-h-screen bg-black text-green-400 p-6 relative overflow-hidden" role="main">
-      <MatrixBackground />
-      <div className="relative z-10">
-        <TooltipProvider>
-          <DashboardHeader />
-          <ProjectSelector />
-          <Tabs defaultValue="dashboard" className="space-y-6">
-            <DashboardTabs />
-            <DashboardTabContent 
-              metrics={metrics}
-              metricsLoading={metricsLoading}
-              metricsError={metricsError}
-            />
-          </Tabs>
-        </TooltipProvider>
-      </div>
+    <div className="min-h-screen bg-background">
+      <DashboardContent />
     </div>
   );
 };
