@@ -26,6 +26,32 @@ export const abusePreventionServices: FraudDetectionService[] = [
     ]
   },
   {
+    type: "affiliate_abuse_prevention",
+    title: "Affiliate Program Protection",
+    description: "Detect and prevent fraudulent affiliate program activities",
+    features: [
+      "Click fraud detection",
+      "Conversion validation",
+      "IP/Device correlation",
+      "Pattern analysis",
+      "Automated fraud scoring",
+      "Real-time monitoring"
+    ]
+  },
+  {
+    type: "promo_code_protection",
+    title: "Promo Code Abuse Prevention",
+    description: "Protect against systematic abuse of promotional codes",
+    features: [
+      "Multiple account detection",
+      "Usage pattern analysis",
+      "Device fingerprinting",
+      "Velocity checks",
+      "Automated blocking",
+      "Risk-based validation"
+    ]
+  },
+  {
     type: "romance_scam_detection",
     title: "Romance Scam Detection",
     description: "Identify and prevent dating fraud schemes",
