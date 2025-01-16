@@ -35,6 +35,13 @@ export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
     }
   };
 
+  // Validate and ensure actionPreferences matches the expected type
+  const validatedPreferences: ServiceActionPreferencesType = 
+    actionPreferences && 
+    typeof actionPreferences === 'object' && 
+    'action_type' in actionPreferences ? 
+    actionPreferences : defaultPreferences;
+
   return (
     <>
       <Card className="p-6 space-y-4">
@@ -55,7 +62,7 @@ export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
         
         {service.is_active && (
           <ServiceActionPreferences
-            preferences={actionPreferences || defaultPreferences}
+            preferences={validatedPreferences}
             onPreferencesChange={handlePreferencesChange}
             isUpdating={isUpdatingPreferences}
           />
