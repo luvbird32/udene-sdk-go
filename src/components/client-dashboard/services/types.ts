@@ -10,6 +10,9 @@ export interface ServiceActionPreferences {
     block_ip: boolean;
     block_device: boolean;
     block_user: boolean;
+    block_email: boolean;
+    restrict_access: boolean;
+    notify_admin: boolean;
   };
   notification_settings: {
     email: boolean;
