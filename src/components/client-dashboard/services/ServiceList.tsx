@@ -67,9 +67,20 @@ export const ServiceList = ({ activeServices, handleToggle }: ServiceListProps) 
           service_type: serviceConfig.type,
           description: serviceConfig.description,
           features: serviceConfig.features,
-          is_active: !!activeService?.is_active,
+          is_active: activeService ? activeService.is_active : false,
           settings: activeService?.settings || {},
-          action_preferences: activeService?.action_preferences
+          action_preferences: activeService?.action_preferences || {
+            action_type: 'manual',
+            automatic_actions: {
+              block_ip: true,
+              block_device: true,
+              block_user: true
+            },
+            notification_settings: {
+              email: true,
+              dashboard: true
+            }
+          }
         };
 
         return (

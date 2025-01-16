@@ -26,6 +26,14 @@ export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
     }
   };
 
+  const handleToggle = async (serviceType: string, isActive: boolean) => {
+    try {
+      await onToggle(serviceType, isActive);
+    } catch (error) {
+      console.error('Error toggling service:', error);
+    }
+  };
+
   return (
     <>
       <Card className="p-6 space-y-4">
@@ -40,7 +48,7 @@ export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
             title={service.service_type}
             serviceType={service.service_type}
             isActive={service.is_active}
-            onToggle={onToggle}
+            onToggle={handleToggle}
           />
         </div>
         
