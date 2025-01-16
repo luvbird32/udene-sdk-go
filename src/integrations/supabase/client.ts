@@ -20,7 +20,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 });
 
 // Configure global error handler for WebSocket connection issues
-const channel = supabase.channel('system');
+const channel = supabase.channel('system-status');
 channel
   .subscribe((status) => {
     if (status === 'CHANNEL_ERROR') {
