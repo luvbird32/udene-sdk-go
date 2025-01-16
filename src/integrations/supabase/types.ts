@@ -1726,6 +1726,45 @@ export type Database = {
         }
         Relationships: []
       }
+      uptime_metrics: {
+        Row: {
+          anomaly_detected: boolean | null
+          created_at: string | null
+          error_type: string | null
+          id: string
+          incident_details: Json | null
+          prediction_score: number | null
+          response_time: number | null
+          service_status: boolean
+          timestamp: string
+          updated_at: string | null
+        }
+        Insert: {
+          anomaly_detected?: boolean | null
+          created_at?: string | null
+          error_type?: string | null
+          id?: string
+          incident_details?: Json | null
+          prediction_score?: number | null
+          response_time?: number | null
+          service_status: boolean
+          timestamp?: string
+          updated_at?: string | null
+        }
+        Update: {
+          anomaly_detected?: boolean | null
+          created_at?: string | null
+          error_type?: string | null
+          id?: string
+          incident_details?: Json | null
+          prediction_score?: number | null
+          response_time?: number | null
+          service_status?: boolean
+          timestamp?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       user_activities: {
         Row: {
           activity_type: string

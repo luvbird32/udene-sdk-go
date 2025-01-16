@@ -16,6 +16,11 @@ import { IdentityVerificationMonitoring } from "@/components/client-dashboard/an
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { MetricsSection } from "./MetricsSection";
+import { Card } from "@/components/ui/card";
+import { Check } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface DashboardContentProps {
   metrics?: {
@@ -32,10 +37,35 @@ export const DashboardContent = ({
   metricsLoading, 
   metricsError 
 }: DashboardContentProps) => {
-  console.log("DashboardContent rendering with:", { metrics, metricsLoading, metricsError });
+  const { toast } = useToast();
+  
+  useEffect(() => {
+    const checkConnection = async () => {
+      try {
+        const { data, error } = await supabase.from('metrics').select('*').limit(1);
+        if (!error) {
+          toast({
+            title: "Connection Successful",
+            description: "Your application is successfully connected to Udene",
+          });
+        }
+      } catch (error) {
+        console.error("Connection check failed:", error);
+      }
+    };
+
+    checkConnection();
+  }, [toast]);
 
   return (
     <div className="space-y-8">
+      <Card className="p-4 bg-green-50 border-green-200">
+        <div className="flex items-center space-x-2 text-green-600">
+          <Check className="h-5 w-5" />
+          <span className="font-medium">Successfully connected to Udene</span>
+        </div>
+      </Card>
+
       <ErrorBoundary>
         <ApiCreditsDisplay />
       </ErrorBoundary>
