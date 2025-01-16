@@ -12,12 +12,15 @@ import type { ServiceCardProps } from "./types";
 export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
   const [showDetails, setShowDetails] = useState(false);
   const { isUpdatingPreferences, handlePreferencesChange } = useServicePreferences(service.service_type);
+  const [isActive, setIsActive] = useState(service.is_active);
 
-  const handleToggle = async (serviceType: string, isActive: boolean) => {
+  const handleToggle = async (serviceType: string, newActiveState: boolean) => {
     try {
-      await onToggle(serviceType, isActive);
+      await onToggle(serviceType, newActiveState);
+      setIsActive(newActiveState);
     } catch (error) {
       console.error('Error toggling service:', error);
+      // State will be handled by ServiceStatus component
     }
   };
 
@@ -29,17 +32,17 @@ export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
             title={service.service_type}
             description={service.description}
             serviceType={service.service_type}
-            isActive={service.is_active}
+            isActive={isActive}
           />
           <ServiceStatus 
             title={service.service_type}
             serviceType={service.service_type}
-            isActive={service.is_active}
+            isActive={isActive}
             onToggle={handleToggle}
           />
         </div>
         
-        {service.is_active && (
+        {isActive && (
           <ServiceActionPreferences
             preferences={service.action_preferences}
             onPreferencesChange={handlePreferencesChange}
@@ -49,7 +52,7 @@ export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
 
         <ServiceFeatureList features={service.features} />
         <ServiceControls
-          isActive={service.is_active}
+          isActive={isActive}
           serviceType={service.service_type}
           onShowDetails={() => setShowDetails(true)}
         />

@@ -17,7 +17,7 @@ export const ServiceToggle = ({
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <div className={isToggling ? 'opacity-50' : ''}>
+        <div className={`transition-opacity duration-200 ${isToggling ? 'opacity-50' : ''}`}>
           <Switch 
             checked={isActive}
             onCheckedChange={onToggle}

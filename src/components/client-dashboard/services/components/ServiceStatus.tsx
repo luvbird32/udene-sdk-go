@@ -17,6 +17,7 @@ export const ServiceStatus = ({
 }: ServiceStatusProps) => {
   const { toast } = useToast();
   const [isToggling, setIsToggling] = useState(false);
+  const [currentState, setCurrentState] = useState(isActive);
 
   const handleToggle = async (checked: boolean) => {
     if (isToggling) return;
@@ -24,12 +25,15 @@ export const ServiceStatus = ({
     setIsToggling(true);
     try {
       await onToggle(serviceType, checked);
+      setCurrentState(checked);
       toast({
         title: checked ? "Service activated" : "Service deactivated",
         description: `${title} has been ${checked ? "activated" : "deactivated"} successfully.`,
       });
     } catch (error) {
       console.error("Toggle error:", error);
+      // Revert the toggle state on error
+      setCurrentState(!checked);
       toast({
         title: "Error",
         description: "Failed to update service status. Please try again.",
@@ -42,7 +46,7 @@ export const ServiceStatus = ({
 
   return (
     <ServiceToggle 
-      isActive={isActive}
+      isActive={currentState}
       isToggling={isToggling}
       onToggle={handleToggle}
       serviceName={title}
