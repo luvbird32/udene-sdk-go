@@ -1,11 +1,5 @@
 import { ServiceIcon } from "./ServiceIcon";
-
-interface ServiceHeaderProps {
-  title: string;
-  description: string;
-  serviceType: string;
-  isActive: boolean;
-}
+import type { ServiceHeaderProps } from "../types";
 
 export const ServiceHeader = ({ title, description, serviceType, isActive }: ServiceHeaderProps) => {
   return (

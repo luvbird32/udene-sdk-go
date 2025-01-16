@@ -60,7 +60,12 @@ export const ServiceManager = () => {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <ServiceHeader />
+        <ServiceHeader 
+          title="Fraud Detection Services"
+          description="Loading services..."
+          serviceType="loading"
+          isActive={false}
+        />
         <div className="grid gap-4 animate-pulse">
           {[1, 2, 3, 4].map((i) => (
             <Card key={i} className="h-48 bg-muted/50" />
@@ -78,7 +83,12 @@ export const ServiceManager = () => {
   return (
     <TooltipProvider delayDuration={300}>
       <div className="space-y-6">
-        <ServiceHeader />
+        <ServiceHeader 
+          title="Fraud Detection Services"
+          description="Customize your fraud detection strategy by activating the services that best fit your needs"
+          serviceType="fraud-detection"
+          isActive={true}
+        />
         
         <Card className="p-6 bg-muted/50 border-none">
           <div className="flex items-start gap-3">
