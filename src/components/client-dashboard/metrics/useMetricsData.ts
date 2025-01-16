@@ -16,7 +16,7 @@ export const useMetricsData = () => {
           throw new Error("No user found");
         }
 
-        // Query metrics filtered by project if one is selected
+        // Query client_metrics filtered by project if one is selected
         const query = supabase
           .from('client_metrics')
           .select('*')
