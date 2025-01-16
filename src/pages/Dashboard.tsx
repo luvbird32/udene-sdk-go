@@ -7,11 +7,15 @@ import { supabase } from '@/integrations/supabase/client';
 import { sanitizeHtml } from '@/utils/security';
 import { DashboardContent } from '@/components/dashboard/DashboardContent';
 import { LoadingSpinner } from '@/components/ui/states/LoadingSpinner';
+import { useMetricsData } from '@/components/client-dashboard/metrics/useMetricsData';
 
 const Dashboard = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  
+  // Fetch metrics data
+  const { data: metrics, isLoading: metricsLoading, error: metricsError } = useMetricsData();
   
   // Implement session timeout monitoring
   useSessionTimeout();
@@ -87,7 +91,11 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <DashboardContent />
+      <DashboardContent 
+        metrics={metrics}
+        metricsLoading={metricsLoading}
+        metricsError={metricsError}
+      />
     </div>
   );
 };
