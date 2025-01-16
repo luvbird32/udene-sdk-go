@@ -1,4 +1,5 @@
 import { ServiceCard } from './ServiceCard';
+import { ServiceGuide } from './ServiceGuide';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { LoadingSpinner } from '@/components/ui/states/LoadingSpinner';
 import type { ClientService } from '@/integrations/supabase/types/client-services';
@@ -20,14 +21,17 @@ export const ServiceList = ({ activeServices, handleToggle }: ServiceListProps) 
   }
 
   return (
-    <div className="grid gap-6">
-      {activeServices.map((service) => (
-        <ServiceCard
-          key={service.id}
-          service={service}
-          onToggle={handleToggle}
-        />
-      ))}
+    <div className="space-y-6">
+      <ServiceGuide />
+      <div className="grid gap-6">
+        {activeServices.map((service) => (
+          <ServiceCard
+            key={service.id}
+            service={service}
+            onToggle={handleToggle}
+          />
+        ))}
+      </div>
     </div>
   );
 };
