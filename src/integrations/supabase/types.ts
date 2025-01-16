@@ -219,8 +219,6 @@ export type Database = {
           ip_address: string | null
           performance_metrics: Json | null
           request_payload: Json | null
-          risk_level: string | null
-          security_context: Json | null
           user_agent: string | null
           user_id: string | null
         }
@@ -235,8 +233,6 @@ export type Database = {
           ip_address?: string | null
           performance_metrics?: Json | null
           request_payload?: Json | null
-          risk_level?: string | null
-          security_context?: Json | null
           user_agent?: string | null
           user_id?: string | null
         }
@@ -251,8 +247,6 @@ export type Database = {
           ip_address?: string | null
           performance_metrics?: Json | null
           request_payload?: Json | null
-          risk_level?: string | null
-          security_context?: Json | null
           user_agent?: string | null
           user_id?: string | null
         }
@@ -797,9 +791,7 @@ export type Database = {
           document_expiry: string | null
           document_files: Json | null
           document_number: string | null
-          document_number_encrypted: string | null
           document_type: string | null
-          encryption_iv: string | null
           id: string
           rejection_reason: string | null
           risk_flags: Json | null
@@ -818,9 +810,7 @@ export type Database = {
           document_expiry?: string | null
           document_files?: Json | null
           document_number?: string | null
-          document_number_encrypted?: string | null
           document_type?: string | null
-          encryption_iv?: string | null
           id?: string
           rejection_reason?: string | null
           risk_flags?: Json | null
@@ -839,9 +829,7 @@ export type Database = {
           document_expiry?: string | null
           document_files?: Json | null
           document_number?: string | null
-          document_number_encrypted?: string | null
           document_type?: string | null
-          encryption_iv?: string | null
           id?: string
           rejection_reason?: string | null
           risk_flags?: Json | null
