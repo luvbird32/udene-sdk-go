@@ -18,13 +18,19 @@ export const useMetricsData = () => {
           throw new Error("No user found");
         }
 
-        // Query client_metrics filtered by project if one is selected
-        const { data, error } = await supabase
+        // Build the base query
+        let query = supabase
           .from('client_metrics')
           .select('*')
           .eq('user_id', user.id)
-          .order('timestamp', { ascending: false })
-          .maybeSingle();
+          .order('timestamp', { ascending: false });
+
+        // Add project filter if one is selected
+        if (currentProject?.id) {
+          query = query.eq('project_id', currentProject.id);
+        }
+
+        const { data, error } = await query.maybeSingle();
 
         if (error) {
           console.error("Error fetching metrics:", error);
@@ -43,6 +49,8 @@ export const useMetricsData = () => {
             activeUsers: 0
           };
         }
+
+        console.log("Fetched metrics data:", data);
 
         // Map the database metrics to our frontend format
         return {
@@ -63,6 +71,6 @@ export const useMetricsData = () => {
         throw error;
       }
     },
-    refetchInterval: 30000,
+    refetchInterval: 30000, // Refresh every 30 seconds
   });
 };
