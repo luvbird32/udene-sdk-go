@@ -16,9 +16,9 @@ export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
   const defaultPreferences = {
     action_type: 'manual' as const,
     automatic_actions: {
-      block_ip: true,
-      block_device: true,
-      block_user: true,
+      block_ip: false,
+      block_device: false,
+      block_user: false,
       block_email: false,
       restrict_access: false,
       notify_admin: false
