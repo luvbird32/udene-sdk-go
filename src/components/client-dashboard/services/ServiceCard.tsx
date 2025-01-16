@@ -6,7 +6,7 @@ import { ServiceControls } from "./components/ServiceControls";
 import { ServiceStatus } from "./components/ServiceStatus";
 import { ServiceActionPreferences } from "./components/ServiceActionPreferences";
 import { useServicePreferences } from "./hooks/useServicePreferences";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import type { ServiceCardProps } from "./types";
 
 export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
@@ -14,15 +14,15 @@ export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
   const { isUpdatingPreferences, handlePreferencesChange } = useServicePreferences(service.service_type);
   const [isActive, setIsActive] = useState(service.is_active);
 
-  const handleToggle = async (serviceType: string, newActiveState: boolean) => {
+  const handleToggle = useCallback(async (serviceType: string, newActiveState: boolean) => {
     try {
       await onToggle(serviceType, newActiveState);
       setIsActive(newActiveState);
     } catch (error) {
       console.error('Error toggling service:', error);
-      // State will be handled by ServiceStatus component
+      throw error; // Let ServiceStatus handle the error
     }
-  };
+  }, [onToggle]);
 
   return (
     <>

@@ -22,10 +22,12 @@ export const ServiceStatus = ({
   const handleToggle = async (checked: boolean) => {
     if (isToggling) return;
     
+    // Immediately update UI state
+    setCurrentState(checked);
     setIsToggling(true);
+
     try {
       await onToggle(serviceType, checked);
-      setCurrentState(checked);
       toast({
         title: checked ? "Service activated" : "Service deactivated",
         description: `${title} has been ${checked ? "activated" : "deactivated"} successfully.`,

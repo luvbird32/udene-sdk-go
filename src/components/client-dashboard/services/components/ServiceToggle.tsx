@@ -1,5 +1,6 @@
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { memo } from "react";
 
 interface ServiceToggleProps {
   isActive: boolean;
@@ -8,7 +9,7 @@ interface ServiceToggleProps {
   serviceName: string;
 }
 
-export const ServiceToggle = ({ 
+export const ServiceToggle = memo(({ 
   isActive, 
   isToggling, 
   onToggle, 
@@ -17,7 +18,7 @@ export const ServiceToggle = ({
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <div className={`transition-opacity duration-200 ${isToggling ? 'opacity-50' : ''}`}>
+        <div className={`transition-opacity duration-100 ${isToggling ? 'opacity-50' : ''}`}>
           <Switch 
             checked={isActive}
             onCheckedChange={onToggle}
@@ -33,4 +34,6 @@ export const ServiceToggle = ({
       </TooltipContent>
     </Tooltip>
   );
-};
+});
+
+ServiceToggle.displayName = 'ServiceToggle';
