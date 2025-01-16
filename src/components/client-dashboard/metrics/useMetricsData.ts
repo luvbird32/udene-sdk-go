@@ -28,7 +28,7 @@ export const useMetricsData = () => {
           query.eq('project_id', currentProject.id);
         }
 
-        const { data: metricsData, error } = await query.limit(1);
+        const { data: metricsData, error } = await query.maybeSingle();
 
         if (error) {
           console.error("Error fetching metrics:", error);
@@ -36,7 +36,8 @@ export const useMetricsData = () => {
         }
 
         // If no metrics exist yet, return default values
-        if (!metricsData || metricsData.length === 0) {
+        if (!metricsData) {
+          console.log("No metrics data found, returning defaults");
           return {
             riskScore: 0,
             totalTransactions: 0,
@@ -49,12 +50,12 @@ export const useMetricsData = () => {
 
         // Map the database metrics to our frontend format
         return {
-          riskScore: metricsData[0].metric_value || 0,
-          totalTransactions: metricsData[0].total_transactions || 0,
-          flaggedTransactions: metricsData[0].flagged_transactions || 0,
-          avgProcessingTime: metricsData[0].avg_processing_time || 35,
-          concurrentCalls: metricsData[0].concurrent_calls || 0,
-          activeUsers: metricsData[0].active_users || 0
+          riskScore: metricsData.metric_value || 0,
+          totalTransactions: metricsData.total_transactions || 0,
+          flaggedTransactions: metricsData.flagged_transactions || 0,
+          avgProcessingTime: metricsData.avg_processing_time || 35,
+          concurrentCalls: metricsData.concurrent_calls || 0,
+          activeUsers: metricsData.active_users || 0
         };
       } catch (error) {
         console.error("Metrics fetch error:", error);
