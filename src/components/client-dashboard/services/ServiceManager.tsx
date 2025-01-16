@@ -4,107 +4,62 @@ import { ServiceList } from './ServiceList';
 import { useServices } from './hooks/useServices';
 import { useServiceToggle } from './hooks/useServiceToggle';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { useAIActivityMonitoring } from '@/hooks/useAIActivityMonitoring';
-import { Card } from '@/components/ui/card';
-import { Info } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle, Loader2 } from "lucide-react";
 import { useProject } from '@/contexts/ProjectContext';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import type { ClientService } from '@/integrations/supabase/types/client-services';
 
 export const ServiceManager = () => {
-  const { data: activeServices, isLoading } = useServices();
-  const toggleService = useServiceToggle();
+  const { user } = useAuth();
   const { currentProject } = useProject();
-  useAIActivityMonitoring();
+  const { data: services, isLoading, error } = useServices();
+  const { toggleService } = useServiceToggle();
 
-  const handleToggle = async (serviceType: string, isActive: boolean) => {
-    if (!currentProject) {
-      console.error('No project selected');
-      return;
-    }
-    await toggleService.mutateAsync({ 
-      serviceType, 
-      isActive,
-      project_id: currentProject.id,
-      action_preferences: {
-        action_type: 'manual',
-        automatic_actions: {
-          block_ip: true,
-          block_device: true,
-          block_user: true
-        },
-        notification_settings: {
-          email: true,
-          dashboard: true
-        }
-      }
-    });
-  };
+  console.log("ServiceManager - User:", user?.id);
+  console.log("ServiceManager - Project:", currentProject?.id);
+  console.log("ServiceManager - Services:", services);
 
-  if (!currentProject) {
+  if (isLoading) {
     return (
-      <Alert>
+      <div className="flex items-center justify-center p-8">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <Alert variant="destructive">
+        <AlertCircle className="h-4 w-4" />
         <AlertDescription>
-          Please select a project to manage services.
+          Failed to load services. Please try refreshing the page.
         </AlertDescription>
       </Alert>
     );
   }
 
-  if (isLoading) {
+  if (!user) {
     return (
-      <div className="space-y-6">
-        <ServiceHeader 
-          title="Fraud Detection Services"
-          description="Loading services..."
-          serviceType="loading"
-          isActive={false}
-        />
-        <div className="grid gap-4 animate-pulse">
-          {[1, 2, 3, 4].map((i) => (
-            <Card key={i} className="h-48 bg-muted/50" />
-          ))}
-        </div>
-      </div>
+      <Alert>
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>
+          Please sign in to manage services.
+        </AlertDescription>
+      </Alert>
     );
   }
 
-  // Filter services by current project
-  const projectServices = activeServices?.filter(
-    service => service.project_id === currentProject.id
-  ) as ClientService[];
+  const projectServices = services?.filter(
+    service => service.project_id === currentProject?.id
+  ) || [];
 
   return (
-    <TooltipProvider delayDuration={300}>
+    <TooltipProvider>
       <div className="space-y-6">
-        <ServiceHeader 
-          title="Fraud Detection Services"
-          description="Customize your fraud detection strategy by activating the services that best fit your needs"
-          serviceType="fraud-detection"
-          isActive={true}
-        />
-        
-        <Card className="p-6 bg-muted/50 border-none">
-          <div className="flex items-start gap-3">
-            <Info className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
-            <div className="space-y-2">
-              <h3 className="font-medium">Getting Started with Services</h3>
-              <div className="text-sm text-muted-foreground space-y-1">
-                <p>Each service can be activated independently to build your custom fraud prevention strategy:</p>
-                <ul className="list-disc list-inside ml-4 space-y-1">
-                  <li>Toggle services on/off at any time</li>
-                  <li>Customize settings for each active service</li>
-                  <li>Monitor service performance in real-time</li>
-                  <li>Receive alerts for suspicious activities</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </Card>
-
+        <ServiceHeader />
         <ServiceList 
-          activeServices={projectServices} 
-          handleToggle={handleToggle}
+          activeServices={projectServices}
+          handleToggle={toggleService}
         />
       </div>
     </TooltipProvider>

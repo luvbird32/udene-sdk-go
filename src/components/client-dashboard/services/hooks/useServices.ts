@@ -1,60 +1,40 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import type { ClientService } from "@/integrations/supabase/types/client-services";
-import { useEffect, useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 export const useServices = () => {
   const { toast } = useToast();
-  const [userId, setUserId] = useState<string | null>(null);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUserId(session?.user?.id || null);
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUserId(session?.user?.id || null);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
+  const { user } = useAuth();
 
   return useQuery({
-    queryKey: ["client-services", userId],
+    queryKey: ["client-services", user?.id],
     queryFn: async () => {
-      if (!userId) {
+      if (!user) {
         throw new Error("User not authenticated");
       }
 
-      try {
-        const { data: services, error } = await supabase
-          .from('client_services')
-          .select('*')
-          .eq('user_id', userId);
+      console.log("Fetching services for user:", user.id);
+      
+      const { data: services, error } = await supabase
+        .from('client_services')
+        .select('*')
+        .eq('user_id', user.id);
 
-        if (error) {
-          console.error('Supabase error:', error);
-          toast({
-            title: "Error loading services",
-            description: error.message,
-            variant: "destructive"
-          });
-          throw error;
-        }
-
-        return services as ClientService[];
-      } catch (error) {
+      if (error) {
         console.error('Error fetching services:', error);
         toast({
-          title: "Connection Error",
-          description: "Failed to load services. Please check your connection and try again.",
+          title: "Error loading services",
+          description: error.message,
           variant: "destructive"
         });
         throw error;
       }
+
+      console.log("Fetched services:", services);
+      return services;
     },
-    enabled: !!userId,
+    enabled: !!user,
     retry: 3,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
