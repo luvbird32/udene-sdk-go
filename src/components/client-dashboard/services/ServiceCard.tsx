@@ -13,22 +13,6 @@ export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
   const [showDetails, setShowDetails] = useState(false);
   const { isUpdatingPreferences, handlePreferencesChange } = useServicePreferences(service.service_type);
 
-  const defaultPreferences = {
-    action_type: 'manual' as const,
-    automatic_actions: {
-      block_ip: false,
-      block_device: false,
-      block_user: false,
-      block_email: false,
-      restrict_access: false,
-      notify_admin: false
-    },
-    notification_settings: {
-      email: true,
-      dashboard: true
-    }
-  };
-
   const handleToggle = async (serviceType: string, isActive: boolean) => {
     try {
       await onToggle(serviceType, isActive);
@@ -57,7 +41,7 @@ export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
         
         {service.is_active && (
           <ServiceActionPreferences
-            preferences={service.action_preferences || defaultPreferences}
+            preferences={service.action_preferences}
             onPreferencesChange={handlePreferencesChange}
             isUpdating={isUpdatingPreferences}
           />

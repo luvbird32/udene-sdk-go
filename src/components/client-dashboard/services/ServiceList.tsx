@@ -63,29 +63,27 @@ export const ServiceList = ({ activeServices, handleToggle }: ServiceListProps) 
           (s) => s.service_type === serviceConfig.type
         );
 
-        const defaultActionPreferences = {
-          action_type: 'manual' as const,
-          automatic_actions: {
-            block_ip: false,
-            block_device: false,
-            block_user: false,
-            block_email: false,
-            restrict_access: false,
-            notify_admin: false
-          },
-          notification_settings: {
-            email: true,
-            dashboard: true
-          }
-        };
-
         const service = {
           service_type: serviceConfig.type,
           description: serviceConfig.description,
           features: serviceConfig.features,
           is_active: activeService ? activeService.is_active : false,
           settings: activeService?.settings || {},
-          action_preferences: activeService?.action_preferences || defaultActionPreferences
+          action_preferences: activeService?.action_preferences || {
+            action_type: 'manual',
+            automatic_actions: {
+              block_ip: false,
+              block_device: false,
+              block_user: false,
+              block_email: false,
+              restrict_access: false,
+              notify_admin: false
+            },
+            notification_settings: {
+              email: true,
+              dashboard: true
+            }
+          }
         };
 
         return (

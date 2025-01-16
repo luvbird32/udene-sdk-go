@@ -30,9 +30,10 @@ export const ServiceActionPreferences = ({
   isUpdating
 }: ServiceActionPreferencesProps) => {
   const handleActionTypeChange = (checked: boolean) => {
+    const newActionType = checked ? 'automatic' : 'manual';
     onPreferencesChange({
       ...preferences,
-      action_type: checked ? 'automatic' : 'manual'
+      action_type: newActionType
     });
   };
 
