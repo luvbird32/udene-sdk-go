@@ -1,5 +1,5 @@
 import React from 'react';
-import { ServiceHeader } from './components/ServiceHeader';
+import { ServiceHeader } from './ServiceHeader';
 import { ServiceList } from './ServiceList';
 import { useServices } from './hooks/useServices';
 import { useServiceToggle } from './hooks/useServiceToggle';
@@ -13,7 +13,7 @@ export const ServiceManager = () => {
   const { user } = useAuth();
   const { currentProject } = useProject();
   const { data: services, isLoading, error } = useServices();
-  const { toggleService } = useServiceToggle();
+  const toggleServiceMutation = useServiceToggle();
 
   console.log("ServiceManager - User:", user?.id);
   console.log("ServiceManager - Project:", currentProject?.id);
@@ -53,13 +53,30 @@ export const ServiceManager = () => {
     service => service.project_id === currentProject?.id
   ) || [];
 
+  const firstService = projectServices[0] || {
+    service_type: 'Fraud Detection',
+    is_active: false,
+    description: 'Customize your fraud detection strategy'
+  };
+
   return (
     <TooltipProvider>
       <div className="space-y-6">
-        <ServiceHeader />
+        <ServiceHeader 
+          title="Fraud Detection Services"
+          description="Customize your fraud detection strategy by activating the services that best fit your needs"
+          serviceType={firstService.service_type}
+          isActive={firstService.is_active}
+        />
         <ServiceList 
           activeServices={projectServices}
-          handleToggle={toggleService}
+          handleToggle={(serviceType, isActive) => 
+            toggleServiceMutation.mutateAsync({ 
+              serviceType, 
+              isActive, 
+              project_id: currentProject?.id || '' 
+            })
+          }
         />
       </div>
     </TooltipProvider>

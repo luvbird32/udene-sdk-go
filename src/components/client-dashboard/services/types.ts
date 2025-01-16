@@ -23,3 +23,15 @@ export interface ServiceHeaderProps {
   serviceType: string;
   isActive: boolean;
 }
+
+export interface ServiceCardProps {
+  service: {
+    service_type: string;
+    description: string;
+    features: string[];
+    is_active: boolean;
+    settings?: ServiceSettings;
+    action_preferences?: ServiceActionPreferences;
+  };
+  onToggle: (serviceType: string, isActive: boolean) => Promise<void>;
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import { ServiceCard } from "./components/ServiceCard";
+import { ServiceCard } from "./ServiceCard";
 import { FRAUD_DETECTION_SERVICES } from "./config";
 import { useProject } from "@/contexts/ProjectContext";
 import { useAuth } from "@/hooks/useAuth";
@@ -58,24 +58,24 @@ export const ServiceList = ({ activeServices, handleToggle }: ServiceListProps) 
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
-      {FRAUD_DETECTION_SERVICES.map((service) => {
-        const isServiceActive = activeServices?.some(
-          (s) => 
-            s.service_type === service.type && 
-            s.project_id === currentProject.id && 
-            s.is_active
+      {FRAUD_DETECTION_SERVICES.map((serviceConfig) => {
+        const activeService = activeServices?.find(
+          (s) => s.service_type === serviceConfig.type
         );
 
-        console.log(`Service ${service.type} active status:`, isServiceActive);
+        const service = {
+          service_type: serviceConfig.type,
+          description: serviceConfig.description,
+          features: serviceConfig.features,
+          is_active: !!activeService?.is_active,
+          settings: activeService?.settings || {},
+          action_preferences: activeService?.action_preferences
+        };
 
         return (
           <ServiceCard
-            key={service.type}
-            title={service.title}
-            description={service.description}
-            features={service.features}
-            serviceType={service.type}
-            isActive={isServiceActive || false}
+            key={service.service_type}
+            service={service}
             onToggle={handleServiceToggle}
           />
         );
