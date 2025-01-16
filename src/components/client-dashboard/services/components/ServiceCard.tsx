@@ -20,7 +20,7 @@ export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
   const { isUpdatingPreferences, handlePreferencesChange } = useServicePreferences(service.service_type);
   
   const settings = service.settings as ServiceSettings;
-  const actionPreferences = service.action_preferences as ServiceActionPreferencesType;
+  const actionPreferences = service.action_preferences as unknown as ServiceActionPreferencesType;
 
   const defaultPreferences: ServiceActionPreferencesType = {
     action_type: 'manual',
