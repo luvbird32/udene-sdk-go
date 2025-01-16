@@ -1,11 +1,10 @@
 import { ServiceCard } from './ServiceCard';
 import { ServiceGuide } from './ServiceGuide';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { LoadingSpinner } from '@/components/ui/states/LoadingSpinner';
 import type { ClientService } from '@/integrations/supabase/types/client-services';
 
 interface ServiceListProps {
-  activeServices?: ClientService[] | null;
+  activeServices: ClientService[];
   handleToggle: (serviceType: string, isActive: boolean) => Promise<void>;
 }
 
