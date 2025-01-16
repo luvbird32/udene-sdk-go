@@ -1,50 +1,14 @@
-/**
- * ServiceHeader Component
- * 
- * Header component for the fraud detection services section, displaying
- * the main title, description, and a status badge.
- * 
- * Features:
- * - Section title with icon
- * - Descriptive subtitle
- * - Status badge
- * - Tooltip with additional information
- * - Responsive layout
- * 
- * @example
- * ```tsx
- * <ServiceHeader />
- * ```
- */
-import React from 'react';
-import { Shield } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Badge } from "@/components/ui/badge";
+import { ServiceIcon } from "./components/ServiceIcon";
+import type { ServiceHeaderProps } from "./types";
 
-export const ServiceHeader = () => {
+export const ServiceHeader = ({ title, description, serviceType, isActive }: ServiceHeaderProps) => {
   return (
-    <TooltipProvider>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Shield className="h-8 w-8 text-primary cursor-help" />
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Comprehensive fraud protection services</p>
-            </TooltipContent>
-          </Tooltip>
-          <div>
-            <h2 className="text-2xl font-bold">Fraud Detection Services</h2>
-            <p className="text-muted-foreground mt-1">
-              Customize your fraud detection strategy by activating the services that best fit your needs
-            </p>
-          </div>
-        </div>
-        <Badge variant="outline" className="ml-auto">
-          Services Dashboard
-        </Badge>
+    <div className="flex items-start gap-3">
+      <ServiceIcon serviceType={serviceType} isActive={isActive} />
+      <div>
+        <h3 className="text-lg font-semibold">{title}</h3>
+        <p className="text-sm text-muted-foreground mt-1">{description}</p>
       </div>
-    </TooltipProvider>
+    </div>
   );
 };
