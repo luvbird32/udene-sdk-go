@@ -14,7 +14,7 @@ export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
   const { isUpdatingPreferences, handlePreferencesChange } = useServicePreferences(service.service_type);
 
   const defaultPreferences = {
-    action_type: 'manual',
+    action_type: 'manual' as const,
     automatic_actions: {
       block_ip: true,
       block_device: true,
