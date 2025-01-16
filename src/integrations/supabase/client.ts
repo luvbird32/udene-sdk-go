@@ -16,12 +16,25 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true
+  },
+  global: {
+    headers: {
+      'X-Client-Info': 'supabase-js-web'
+    }
   }
 });
 
 // Configure global error handler for WebSocket connection issues
-const channel = supabase.channel('system-status');
+const channel = supabase.channel('system-status', {
+  config: {
+    broadcast: { self: true }
+  }
+});
+
 channel
+  .on('system', { event: 'error' }, (payload) => {
+    console.error('Realtime subscription error occurred:', payload);
+  })
   .subscribe((status) => {
     if (status === 'CHANNEL_ERROR') {
       console.error('Realtime subscription error occurred');
