@@ -20,7 +20,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 });
 
 // Configure global error handler for WebSocket connection issues
-supabase.realtime.onError((error) => {
+supabase.realtime.on('error', (error) => {
   console.error('Realtime subscription error:', error);
 });
 
