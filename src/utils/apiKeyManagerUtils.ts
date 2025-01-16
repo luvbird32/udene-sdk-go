@@ -18,7 +18,9 @@ export const useApiKeyMutations = (queryClient: any, tableName: TableName) => {
       throw new Error("Project name is required");
     }
 
-    const newApiKey = generateSecureApiKey(32);
+    const prefix = keyType === 'production' ? 'live' : 'test';
+    const newApiKey = `${prefix}_${generateSecureApiKey(32)}`;
+    
     const insertData = {
       key_value: newApiKey,
       name: projectName.trim(),

@@ -25,7 +25,6 @@ export const ClientApiKeyManager = () => {
         .select('*')
         .order('created_at', { ascending: false });
 
-      // Filter by project if one is selected
       if (currentProject?.id) {
         query.eq('project_id', currentProject.id);
       }
@@ -38,8 +37,8 @@ export const ClientApiKeyManager = () => {
   });
 
   const createKeyMutation = useMutation({
-    mutationFn: async ({ name, description }: { name: string; description: string }) => {
-      return createApiKey(name, description, user?.id, currentProject?.id);
+    mutationFn: async ({ name, description, keyType }: { name: string; description: string; keyType: 'testing' | 'production' }) => {
+      return createApiKey(name, description, user?.id, currentProject?.id, keyType);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['udene-api-keys', currentProject?.id] });
@@ -75,10 +74,10 @@ export const ClientApiKeyManager = () => {
     }
   });
 
-  const handleGenerateKey = async (name: string, description: string) => {
+  const handleGenerateKey = async (name: string, description: string, keyType: 'testing' | 'production') => {
     setIsGenerating(true);
     try {
-      await createKeyMutation.mutateAsync({ name, description });
+      await createKeyMutation.mutateAsync({ name, description, keyType });
     } finally {
       setIsGenerating(false);
     }
