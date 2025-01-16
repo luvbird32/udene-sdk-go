@@ -20,9 +20,13 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 });
 
 // Configure global error handler for WebSocket connection issues
-supabase.realtime.on('error', (error) => {
-  console.error('Realtime subscription error:', error);
-});
+const channel = supabase.channel('system');
+channel
+  .subscribe((status) => {
+    if (status === 'CHANNEL_ERROR') {
+      console.error('Realtime subscription error occurred');
+    }
+  });
 
 // Configure automatic reconnection
 supabase.realtime.setAuth(supabaseAnonKey);
