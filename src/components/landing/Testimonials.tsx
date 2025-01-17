@@ -19,6 +19,24 @@ export const Testimonials = () => {
       author: "Dr. Emily Watson",
       role: "COO",
       company: "EduTech Solutions"
+    },
+    {
+      quote: "As a B2B software provider, we struggled with companies sharing single licenses across multiple teams. Udene's device fingerprinting helped us identify and prevent this abuse, leading to a 45% increase in enterprise subscriptions.",
+      author: "James Foster",
+      role: "VP of Sales",
+      company: "CloudStack Enterprise"
+    },
+    {
+      quote: "The real-time monitoring caught a sophisticated ring of users exploiting our referral program. Within weeks of implementing Udene, we prevented over $100K in fraudulent reward claims and strengthened our program integrity.",
+      author: "Lisa Thompson",
+      role: "Fraud Prevention Manager",
+      company: "RewardsPro"
+    },
+    {
+      quote: "Our gaming platform faced massive abuse from users creating multiple accounts for free items. Udene's behavioral analysis helped us identify patterns we never saw before. Account abuse dropped by 85% in just two months.",
+      author: "David Park",
+      role: "Gaming Operations Director",
+      company: "GameVerse"
     }
   ];
 
