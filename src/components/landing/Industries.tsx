@@ -3,54 +3,54 @@ import { Building2, ShoppingCart, Plane, Building, Briefcase, Hospital, Gamepad2
 export const Industries = () => {
   const industries = [
     {
-      icon: Building2,
-      name: "Financial Services",
-      description: "Protect banking transactions, detect credit card fraud, and secure digital payments with AI-powered monitoring"
+      icon: Smartphone,
+      name: "SaaS & Digital Services",
+      description: "Prevent trial abuse, stop subscription fraud, and protect your revenue with advanced user behavior analysis"
     },
     {
       icon: ShoppingCart,
-      name: "E-commerce",
-      description: "Prevent account takeover, fight chargeback fraud, and secure marketplace transactions with real-time protection"
+      name: "E-commerce & Marketplaces",
+      description: "Stop promotion abuse, prevent account sharing, and secure marketplace transactions with real-time protection"
     },
     {
-      icon: Smartphone,
-      name: "Digital Services",
-      description: "Protect user accounts, prevent subscription fraud, and secure digital content with advanced fraud detection"
-    },
-    {
-      icon: Heart,
-      name: "Dating Applications",
-      description: "Prevent romance scams, verify user identities, and protect user interactions with behavioral analysis"
+      icon: Building2,
+      name: "Financial Technology",
+      description: "Protect against bonus abuse, prevent multi-accounting, and secure financial transactions with AI-powered monitoring"
     },
     {
       icon: Gamepad2,
       name: "Gaming & Entertainment",
-      description: "Fight virtual currency fraud, prevent cheating, and secure in-game transactions with real-time monitoring"
+      description: "Stop trial exploitation, prevent reward abuse, and secure in-game economies with behavioral pattern detection"
+    },
+    {
+      icon: Heart,
+      name: "Dating & Social",
+      description: "Prevent free feature abuse, stop fake premium accounts, and protect user interactions with cross-platform tracking"
+    },
+    {
+      icon: Globe,
+      name: "EdTech & Learning",
+      description: "Stop trial hopping, prevent course sharing, and protect educational content with advanced fraud detection"
+    },
+    {
+      icon: Building,
+      name: "Subscription Services",
+      description: "Prevent subscription abuse, stop account sharing, and protect recurring revenue with behavioral analysis"
     },
     {
       icon: Hospital,
-      name: "Healthcare",
-      description: "Protect patient data, prevent insurance fraud, and secure telehealth services with compliant security measures"
-    },
-    {
-      icon: Building2,
-      name: "Real Estate",
-      description: "Prevent rental scams, secure property transactions, and fight identity theft with comprehensive protection"
+      name: "Digital Healthcare",
+      description: "Protect telemedicine services, prevent trial exploitation, and secure patient interactions with compliant monitoring"
     },
     {
       icon: Plane,
       name: "Travel & Hospitality",
-      description: "Combat booking fraud, prevent loyalty program abuse, and secure reservations with advanced detection"
-    },
-    {
-      icon: Globe,
-      name: "Online Platforms",
-      description: "Secure user registrations, prevent fake profiles, and protect digital interactions with AI-powered verification"
+      description: "Stop loyalty program abuse, prevent booking fraud, and secure reservations with AI-powered verification"
     },
     {
       icon: Briefcase,
-      name: "Professional Services",
-      description: "Secure client data, prevent payment fraud, and protect business transactions with enterprise-grade security"
+      name: "B2B Software",
+      description: "Prevent enterprise trial abuse, stop license sharing, and protect API access with comprehensive monitoring"
     }
   ];
 
@@ -59,10 +59,10 @@ export const Industries = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-green-400 mb-4">
-            Industries We Protect
+            Industries Protected Against System Exploitation
           </h2>
           <p className="text-xl text-green-300/80 max-w-3xl mx-auto">
-            Our advanced fraud detection system adapts to the unique challenges of every industry
+            Our intelligent system adapts to prevent exploitation across different business models
           </p>
         </div>
 
