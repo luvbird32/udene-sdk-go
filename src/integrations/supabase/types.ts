@@ -1077,7 +1077,11 @@ export type Database = {
           organization_id: string | null
           organization_name: string | null
           organization_role: string | null
+          organization_role_encrypted: string | null
+          organization_role_iv: string | null
           phone_number: string | null
+          phone_number_encrypted: string | null
+          phone_number_iv: string | null
           preferences: Json | null
           security_settings: Json | null
           session_timeout_minutes: number | null
@@ -1100,7 +1104,11 @@ export type Database = {
           organization_id?: string | null
           organization_name?: string | null
           organization_role?: string | null
+          organization_role_encrypted?: string | null
+          organization_role_iv?: string | null
           phone_number?: string | null
+          phone_number_encrypted?: string | null
+          phone_number_iv?: string | null
           preferences?: Json | null
           security_settings?: Json | null
           session_timeout_minutes?: number | null
@@ -1123,7 +1131,11 @@ export type Database = {
           organization_id?: string | null
           organization_name?: string | null
           organization_role?: string | null
+          organization_role_encrypted?: string | null
+          organization_role_iv?: string | null
           phone_number?: string | null
+          phone_number_encrypted?: string | null
+          phone_number_iv?: string | null
           preferences?: Json | null
           security_settings?: Json | null
           session_timeout_minutes?: number | null
@@ -2152,6 +2164,13 @@ export type Database = {
           p_window_minutes?: number
         }
         Returns: boolean
+      }
+      decrypt_sensitive_data: {
+        Args: {
+          encrypted_data: string
+          iv: string
+        }
+        Returns: string
       }
       log_detailed_error: {
         Args: {

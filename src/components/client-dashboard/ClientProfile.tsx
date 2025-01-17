@@ -20,13 +20,14 @@ const ProfileContent = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("No user found");
 
+      // Only send non-sensitive data directly
       const { error } = await supabase
         .from("profiles")
         .update({
           username: formData.username,
           organization_name: formData.organization_name,
-          organization_role: formData.organization_role,
-          phone_number: formData.phone_number,
+          phone_number: formData.phone_number, // Will be encrypted by trigger
+          organization_role: formData.organization_role, // Will be encrypted by trigger
           timezone: formData.timezone,
           preferences: formData.preferences,
           updated_at: new Date().toISOString(),
