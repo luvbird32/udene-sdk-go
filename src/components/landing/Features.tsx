@@ -5,20 +5,20 @@ export const Features = () => {
     <section className="py-24 bg-black/40">
       <div className="container mx-auto px-4">
         <h2 className="text-4xl font-bold text-center mb-16 text-green-400">
-          Unique Protection Features That Others Don't Offer
+          Advanced Protection Features That Others Don't Offer
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <FeatureCard
             icon={<Lock className="w-8 h-8 text-green-400" />}
-            title="Trial Abuse Prevention"
-            description="Industry-first solution that stops users from exploiting free trials through sophisticated pattern detection and cross-platform tracking."
+            title="System Exploitation Prevention"
+            description="Industry-first solution that stops users from exploiting your systems through sophisticated pattern detection and cross-platform tracking."
           />
           
           <FeatureCard
             icon={<Fingerprint className="w-8 h-8 text-green-400" />}
             title="Advanced Device Intelligence"
-            description="Proprietary device fingerprinting that tracks over 100 unique signals to identify repeat abusers, even when they switch devices or use VPNs."
+            description="Proprietary device fingerprinting that tracks over 100 unique signals to identify repeat offenders, even when they switch devices or use VPNs."
           />
           
           <FeatureCard
@@ -35,8 +35,8 @@ export const Features = () => {
           
           <FeatureCard
             icon={<Shield className="w-8 h-8 text-green-400" />}
-            title="Account Takeover Prevention"
-            description="Real-time monitoring of login patterns, device changes, and user behavior to prevent unauthorized account access and fraud."
+            title="Account Protection"
+            description="Real-time monitoring of user patterns, device changes, and behavior to prevent unauthorized access and fraudulent activities."
           />
           
           <FeatureCard
