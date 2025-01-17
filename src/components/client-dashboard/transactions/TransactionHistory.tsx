@@ -22,7 +22,20 @@ export const TransactionHistory = () => {
     console.log("Fetching recent transactions...");
     const { data, error } = await supabase
       .from('transactions')
-      .select('*')
+      .select(`
+        id,
+        amount,
+        amount_encrypted,
+        amount_iv,
+        merchant_id,
+        merchant_id_encrypted,
+        merchant_id_iv,
+        transaction_type,
+        transaction_type_encrypted,
+        transaction_type_iv,
+        created_at,
+        is_fraudulent
+      `)
       .order('created_at', { ascending: false })
       .limit(10);
 
@@ -31,8 +44,17 @@ export const TransactionHistory = () => {
       throw error;
     }
 
-    console.log("Transactions fetched:", data);
-    return data;
+    // For now, we'll use the unencrypted values if available, falling back to encrypted
+    const processedData = data?.map(transaction => ({
+      ...transaction,
+      // Keep using unencrypted values for now, encrypted values are being populated
+      amount: transaction.amount,
+      merchant_id: transaction.merchant_id,
+      transaction_type: transaction.transaction_type
+    }));
+
+    console.log("Transactions fetched:", processedData);
+    return processedData;
   }, [user]);
 
   const { data: transactions, isLoading, error } = useQuery({

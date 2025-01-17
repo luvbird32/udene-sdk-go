@@ -24,6 +24,13 @@ export interface DatabaseTransaction {
   message_velocity: number | null;
   profile_changes: Json | null;
   interaction_patterns: Json | null;
+  // New encrypted fields
+  amount_encrypted?: Uint8Array;
+  amount_iv?: Uint8Array;
+  merchant_id_encrypted?: Uint8Array;
+  merchant_id_iv?: Uint8Array;
+  transaction_type_encrypted?: Uint8Array;
+  transaction_type_iv?: Uint8Array;
 }
 
 export interface TransactionWithPatterns {

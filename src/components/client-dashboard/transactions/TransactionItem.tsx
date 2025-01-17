@@ -14,7 +14,7 @@ export const TransactionItem = memo(function TransactionItem({ transaction }: Tr
       className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
     >
       <div>
-        <p className="font-medium">${transaction.amount}</p>
+        <p className="font-medium">${transaction.amount?.toLocaleString()}</p>
         <p className="text-sm text-muted-foreground">
           {transaction.created_at 
             ? format(new Date(transaction.created_at), 'MMM d, yyyy HH:mm') 
