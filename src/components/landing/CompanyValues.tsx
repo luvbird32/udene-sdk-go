@@ -7,13 +7,13 @@ const CompanyValues = () => {
         {/* Why Section */}
         <div className="max-w-5xl mx-auto">
           <div className="flex items-center gap-3 justify-center mb-6">
-            <Heart className="w-8 h-8 text-primary" />
-            <h2 className="text-4xl font-bold text-center text-primary">Why We Exist</h2>
+            <Heart className="w-8 h-8 text-green-400" />
+            <h2 className="text-4xl font-bold text-center text-green-400">Why We Exist</h2>
           </div>
-          <p className="text-xl text-primary-light/90 text-center mb-8">
+          <p className="text-xl text-green-300/90 text-center mb-8">
             In today's digital landscape, businesses face unprecedented challenges from sophisticated fraud and system exploitation. We witnessed countless organizations struggling to protect their resources, revenue, and reputation from evolving threats.
           </p>
-          <div className="grid md:grid-cols-2 gap-8 text-lg text-primary-light/80">
+          <div className="grid md:grid-cols-2 gap-8 text-lg text-green-100/80">
             <div className="space-y-4">
               <p>Every year, businesses lose billions to various forms of digital fraud and system exploitation. Traditional security measures often fail to adapt to new threats, leaving organizations vulnerable to sophisticated attacks.</p>
               <p>We believe that every business, regardless of size, deserves access to enterprise-grade protection that evolves with the threat landscape.</p>
