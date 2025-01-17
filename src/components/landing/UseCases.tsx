@@ -5,38 +5,38 @@ export const UseCases = () => {
     {
       icon: ShieldCheck,
       title: "Account Protection",
-      description: "Prevent account takeovers and unauthorized access with real-time monitoring and behavioral analysis",
-      metrics: ["98% reduction in account fraud", "500ms response time"]
+      description: "Prevent account takeovers with real-time behavioral monitoring and multi-factor device fingerprinting",
+      metrics: ["500ms response time", "99.9% accuracy rate"]
     },
     {
       icon: Activity,
       title: "Transaction Monitoring",
-      description: "Detect and prevent fraudulent transactions using AI-powered risk scoring and pattern recognition",
-      metrics: ["$2M+ saved monthly", "99.9% accuracy rate"]
+      description: "Detect fraudulent transactions using ML-powered risk scoring and advanced pattern recognition",
+      metrics: ["Real-time processing", "Custom risk models"]
     },
     {
       icon: UserCheck,
       title: "Identity Verification",
-      description: "Verify user identities in real-time while maintaining a smooth onboarding experience",
-      metrics: ["2s average verification time", "95% first-try success"]
+      description: "Comprehensive identity validation with document verification and advanced risk assessment",
+      metrics: ["Multiple verification methods", "Automated validation"]
     },
     {
       icon: Clock,
       title: "Real-time Prevention",
-      description: "Stop fraud attempts before they succeed with instant detection and automated responses",
-      metrics: ["<100ms response time", "24/7 protection"]
+      description: "Stop fraud attempts instantly with automated response systems and continuous monitoring",
+      metrics: ["24/7 protection", "Instant alerts"]
     },
     {
       icon: LineChart,
       title: "Risk Analytics",
-      description: "Get deep insights into fraud patterns and risk factors with advanced analytics",
-      metrics: ["Custom risk models", "Daily insights"]
+      description: "Deep insights into fraud patterns with ML-powered analysis and custom risk modeling",
+      metrics: ["Advanced ML models", "Pattern recognition"]
     },
     {
       icon: Bell,
       title: "Alert Management",
-      description: "Streamline fraud investigation with intelligent alerts and case management",
-      metrics: ["90% faster resolution", "Smart prioritization"]
+      description: "Intelligent alert system with automated prioritization and comprehensive case management",
+      metrics: ["Smart prioritization", "Custom alert rules"]
     }
   ];
 
@@ -48,7 +48,7 @@ export const UseCases = () => {
             Fraud Prevention Use Cases
           </h2>
           <p className="text-xl text-green-300/80 max-w-3xl mx-auto">
-            Comprehensive protection across all critical business operations
+            Enterprise-grade protection across all critical business operations
           </p>
         </div>
 
