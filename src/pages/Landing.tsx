@@ -9,6 +9,7 @@ import { MatrixBackground } from "@/components/landing/MatrixBackground";
 import { Header } from "@/components/landing/Header";
 import { Compliance } from "@/components/landing/Compliance";
 import { Terms } from "@/components/landing/Terms";
+import { Testimonials } from "@/components/landing/Testimonials";
 import { useEffect } from "react";
 
 const Landing = () => {
@@ -31,6 +32,9 @@ const Landing = () => {
       </div>
       <div id="industries">
         <Industries />
+      </div>
+      <div id="testimonials">
+        <Testimonials />
       </div>
       <div id="use-cases">
         <UseCases />
