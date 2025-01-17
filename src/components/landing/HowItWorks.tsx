@@ -10,12 +10,12 @@ export const HowItWorks = () => {
     {
       icon: Shield,
       title: "Automatic Protection",
-      description: "Our system starts monitoring for suspicious patterns and trial abuse attempts"
+      description: "Our system starts monitoring for suspicious patterns and fraudulent behavior across your platform"
     },
     {
       icon: Check,
       title: "Prevent Losses",
-      description: "Stop trial abuse and system exploitation before they impact your revenue"
+      description: "Stop exploitation and system abuse before they impact your revenue and user experience"
     }
   ];
 
@@ -23,17 +23,17 @@ export const HowItWorks = () => {
     {
       icon: CircuitBoard,
       title: "Advanced Device Fingerprinting",
-      description: "Multi-layered device identification using browser, hardware, and network signatures to track cross-platform abuse attempts"
+      description: "Multi-layered device identification using browser, hardware, and network signatures to track cross-platform exploitation attempts"
     },
     {
       icon: Database,
       title: "Behavioral Analysis Engine",
-      description: "Real-time pattern detection using ML models to identify suspicious usage patterns and automated exploitation attempts"
+      description: "Real-time pattern detection using ML models to identify suspicious usage patterns and automated system manipulation"
     },
     {
       icon: Network,
       title: "Cross-Platform Protection",
-      description: "Unified API endpoints with rate limiting, request validation, and automated response mechanisms to prevent system gaming"
+      description: "Unified API endpoints with rate limiting, request validation, and automated response mechanisms to prevent fraudulent activities"
     }
   ];
 
