@@ -10,6 +10,7 @@ import { Header } from "@/components/landing/Header";
 import { Compliance } from "@/components/landing/Compliance";
 import { Terms } from "@/components/landing/Terms";
 import { Testimonials } from "@/components/landing/Testimonials";
+import { HowItWorks } from "@/components/landing/HowItWorks";
 import { useEffect } from "react";
 
 const Landing = () => {
@@ -29,6 +30,9 @@ const Landing = () => {
       
       <div id="features">
         <Features />
+      </div>
+      <div id="how-it-works">
+        <HowItWorks />
       </div>
       <div id="industries">
         <Industries />
