@@ -585,17 +585,23 @@ export type Database = {
         Row: {
           audio_fingerprint: string | null
           browser_info: Json
+          browser_info_encrypted: string | null
+          browser_info_iv: string | null
           canvas_fingerprint: string | null
           color_depth: number | null
           created_at: string | null
           fingerprint_hash: string
           font_fingerprint: Json | null
           hardware_info: Json
+          hardware_info_encrypted: string | null
+          hardware_info_iv: string | null
           id: string
           is_suspicious: boolean | null
           language_info: string | null
           last_seen: string | null
           network_info: Json
+          network_info_encrypted: string | null
+          network_info_iv: string | null
           os_info: Json
           plugin_fingerprint: Json | null
           risk_score: number | null
@@ -608,17 +614,23 @@ export type Database = {
         Insert: {
           audio_fingerprint?: string | null
           browser_info: Json
+          browser_info_encrypted?: string | null
+          browser_info_iv?: string | null
           canvas_fingerprint?: string | null
           color_depth?: number | null
           created_at?: string | null
           fingerprint_hash: string
           font_fingerprint?: Json | null
           hardware_info: Json
+          hardware_info_encrypted?: string | null
+          hardware_info_iv?: string | null
           id?: string
           is_suspicious?: boolean | null
           language_info?: string | null
           last_seen?: string | null
           network_info: Json
+          network_info_encrypted?: string | null
+          network_info_iv?: string | null
           os_info: Json
           plugin_fingerprint?: Json | null
           risk_score?: number | null
@@ -631,17 +643,23 @@ export type Database = {
         Update: {
           audio_fingerprint?: string | null
           browser_info?: Json
+          browser_info_encrypted?: string | null
+          browser_info_iv?: string | null
           canvas_fingerprint?: string | null
           color_depth?: number | null
           created_at?: string | null
           fingerprint_hash?: string
           font_fingerprint?: Json | null
           hardware_info?: Json
+          hardware_info_encrypted?: string | null
+          hardware_info_iv?: string | null
           id?: string
           is_suspicious?: boolean | null
           language_info?: string | null
           last_seen?: string | null
           network_info?: Json
+          network_info_encrypted?: string | null
+          network_info_iv?: string | null
           os_info?: Json
           plugin_fingerprint?: Json | null
           risk_score?: number | null

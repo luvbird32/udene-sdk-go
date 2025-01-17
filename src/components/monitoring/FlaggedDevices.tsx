@@ -20,6 +20,8 @@ export const FlaggedDevices = () => {
         .order('risk_score', { ascending: false });
 
       if (error) throw error;
+      
+      // The encrypted data is handled by the database, we just use the regular fields
       return data as DeviceFingerprint[];
     },
   });
