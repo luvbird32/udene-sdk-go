@@ -11,6 +11,7 @@ import { Compliance } from "@/components/landing/Compliance";
 import { Terms } from "@/components/landing/Terms";
 import { Testimonials } from "@/components/landing/Testimonials";
 import { HowItWorks } from "@/components/landing/HowItWorks";
+import { CompanyValues } from "@/components/landing/CompanyValues";
 import { useEffect } from "react";
 
 const Landing = () => {
@@ -33,6 +34,9 @@ const Landing = () => {
       </div>
       <div id="how-it-works">
         <HowItWorks />
+      </div>
+      <div id="company-values">
+        <CompanyValues />
       </div>
       <div id="industries">
         <Industries />
