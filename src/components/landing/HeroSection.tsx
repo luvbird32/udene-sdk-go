@@ -1,4 +1,4 @@
-import { ArrowRight, Shield, Lock } from "lucide-react";
+import { ArrowRight, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,15 +26,15 @@ export const HeroSection = () => {
     <section className="relative z-10 py-24">
       <div className="glass-card p-12 rounded-xl max-w-5xl mx-auto text-center backdrop-blur-lg border border-green-500/20">
         <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-green-500/10 p-4 rounded-full border border-green-400/20">
-          <Lock className="w-8 h-8 text-green-400" />
+          <Shield className="w-8 h-8 text-green-400" />
         </div>
         
-        <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text" tabIndex={0}>
-          AI-Powered Fraud Prevention Platform
+        <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
+          Stop Bad Actors Before They Cost You Money
         </h1>
         
-        <p className="text-xl text-green-300/90 mb-8 max-w-2xl mx-auto leading-relaxed" tabIndex={0}>
-          Enterprise-grade fraud detection powered by real-time behavioral analysis, machine learning, and advanced device fingerprinting. Protect your business with our comprehensive solution.
+        <p className="text-xl text-green-300/90 mb-8 max-w-2xl mx-auto leading-relaxed">
+          Industry-leading fraud prevention that stops trial abuse, account takeovers, and system exploitation. Protect your revenue with real-time behavioral analysis and machine learning that catches what others miss.
         </p>
         
         <div className="flex flex-col sm:flex-row justify-center gap-4 items-center">
@@ -48,16 +48,16 @@ export const HeroSection = () => {
 
         <div className="mt-12 pt-12 border-t border-green-500/20 grid grid-cols-1 sm:grid-cols-3 gap-8">
           <div className="flex flex-col items-center">
+            <div className="text-4xl font-bold text-green-400 mb-2">97%</div>
+            <div className="text-green-300/80">Trial Abuse Prevention Rate</div>
+          </div>
+          <div className="flex flex-col items-center">
             <div className="text-4xl font-bold text-green-400 mb-2">500ms</div>
-            <div className="text-green-300/80">Response Time</div>
+            <div className="text-green-300/80">Real-time Detection</div>
           </div>
           <div className="flex flex-col items-center">
-            <div className="text-4xl font-bold text-green-400 mb-2">99.9%</div>
-            <div className="text-green-300/80">Detection Accuracy</div>
-          </div>
-          <div className="flex flex-col items-center">
-            <div className="text-4xl font-bold text-green-400 mb-2">24/7</div>
-            <div className="text-green-300/80">Real-time Protection</div>
+            <div className="text-4xl font-bold text-green-400 mb-2">$1M+</div>
+            <div className="text-green-300/80">Customer Savings</div>
           </div>
         </div>
       </div>
