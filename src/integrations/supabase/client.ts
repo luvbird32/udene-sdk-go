@@ -8,7 +8,10 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables');
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+// Ensure URL is using HTTPS
+const secureSupabaseUrl = supabaseUrl.replace('http:', 'https:');
+
+export const supabase = createClient(secureSupabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
@@ -18,6 +21,11 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   global: {
     headers: {
       'x-application-name': 'fraud-detection-dashboard'
+    }
+  },
+  realtime: {
+    params: {
+      eventsPerSecond: 10
     }
   }
 });
