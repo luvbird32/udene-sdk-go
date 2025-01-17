@@ -1647,7 +1647,6 @@ export type Database = {
       }
       transactions: {
         Row: {
-          amount: number
           amount_encrypted: string | null
           amount_iv: string | null
           appeal_timestamp: string | null
@@ -1663,7 +1662,6 @@ export type Database = {
           ip_address: string
           is_fraudulent: boolean | null
           location: string
-          merchant_id: string
           merchant_id_encrypted: string | null
           merchant_id_iv: string | null
           message_velocity: number | null
@@ -1672,13 +1670,11 @@ export type Database = {
           risk_factors: Json | null
           risk_score: number | null
           timestamp: string
-          transaction_type: string
           transaction_type_encrypted: string | null
           transaction_type_iv: string | null
           updated_at: string | null
         }
         Insert: {
-          amount: number
           amount_encrypted?: string | null
           amount_iv?: string | null
           appeal_timestamp?: string | null
@@ -1694,7 +1690,6 @@ export type Database = {
           ip_address: string
           is_fraudulent?: boolean | null
           location: string
-          merchant_id: string
           merchant_id_encrypted?: string | null
           merchant_id_iv?: string | null
           message_velocity?: number | null
@@ -1703,13 +1698,11 @@ export type Database = {
           risk_factors?: Json | null
           risk_score?: number | null
           timestamp?: string
-          transaction_type: string
           transaction_type_encrypted?: string | null
           transaction_type_iv?: string | null
           updated_at?: string | null
         }
         Update: {
-          amount?: number
           amount_encrypted?: string | null
           amount_iv?: string | null
           appeal_timestamp?: string | null
@@ -1725,7 +1718,6 @@ export type Database = {
           ip_address?: string
           is_fraudulent?: boolean | null
           location?: string
-          merchant_id?: string
           merchant_id_encrypted?: string | null
           merchant_id_iv?: string | null
           message_velocity?: number | null
@@ -1734,7 +1726,6 @@ export type Database = {
           risk_factors?: Json | null
           risk_score?: number | null
           timestamp?: string
-          transaction_type?: string
           transaction_type_encrypted?: string | null
           transaction_type_iv?: string | null
           updated_at?: string | null
