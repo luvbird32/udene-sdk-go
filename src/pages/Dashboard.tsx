@@ -10,7 +10,6 @@ import { DashboardTabs } from "@/components/client-dashboard/tabs/DashboardTabs"
 import { DashboardTabContent } from "@/components/client-dashboard/tabs/DashboardTabContent";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ProjectSelector } from "@/components/dashboard/ProjectSelector";
-import { DashboardContent } from "@/components/dashboard/DashboardContent"; // Changed to named import
 
 const Dashboard = () => {
   const { toast } = useToast();
