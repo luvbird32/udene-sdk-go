@@ -18,7 +18,7 @@ export const useAuth = () => {
   return context;
 };
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -63,18 +63,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           }
           setLoading(false);
 
-          if (event === 'SIGNED_IN') {
-            console.log('AuthProvider: User signed in successfully');
-            toast({
-              title: "Welcome!",
-              description: "You have been signed in successfully.",
-            });
-          } else if (event === 'SIGNED_OUT') {
-            console.log('AuthProvider: User signed out successfully');
-            toast({
-              title: "Goodbye!",
-              description: "You have been signed out successfully.",
-            });
+          switch (event) {
+            case 'SIGNED_IN':
+              console.log('AuthProvider: User signed in successfully');
+              toast({
+                title: "Welcome!",
+                description: "You have been signed in successfully.",
+              });
+              break;
+
+            case 'SIGNED_OUT':
+              console.log('AuthProvider: User signed out successfully');
+              toast({
+                title: "Goodbye!",
+                description: "You have been signed out successfully.",
+              });
+              break;
+
+            case 'TOKEN_REFRESHED':
+              console.log('AuthProvider: Token refreshed successfully');
+              break;
+
+            case 'USER_UPDATED':
+              console.log('AuthProvider: User data updated');
+              break;
           }
         });
 
@@ -100,7 +112,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         authListener.unsubscribe();
       }
     };
-  }, []); // Remove toast from dependencies to avoid re-initialization
+  }, [toast]);
 
   console.log('AuthProvider: Current state:', { user: user?.id, loading });
 

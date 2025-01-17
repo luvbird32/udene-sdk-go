@@ -17,11 +17,11 @@ export const useSessionTimeout = () => {
       lastActivity = Date.now();
     };
 
-    const checkTimeout = async () => {
+    const checkTimeout = () => {
       const now = Date.now();
       if (now - lastActivity >= SESSION_TIMEOUT) {
         // Session expired
-        await supabase.auth.signOut();
+        supabase.auth.signOut();
         navigate('/login');
         toast({
           title: "Session Expired",
