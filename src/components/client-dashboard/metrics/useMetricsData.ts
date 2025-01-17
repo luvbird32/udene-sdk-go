@@ -11,26 +11,24 @@ export const useMetricsData = () => {
     queryKey: ["dashboard-metrics", currentProject?.id],
     queryFn: async () => {
       try {
-        console.log("Fetching metrics data...");
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
-          console.error("No user found");
           throw new Error("No user found");
         }
 
-        // Build the base query
-        let query = supabase
+        // Query metrics filtered by project if one is selected
+        const query = supabase
           .from('client_metrics')
           .select('*')
           .eq('user_id', user.id)
           .order('timestamp', { ascending: false });
 
-        // Add project filter if one is selected
+        // Add project filter if a project is selected
         if (currentProject?.id) {
-          query = query.eq('project_id', currentProject.id);
+          query.eq('project_id', currentProject.id);
         }
 
-        const { data, error } = await query.maybeSingle();
+        const { data: metricsData, error } = await query.limit(1);
 
         if (error) {
           console.error("Error fetching metrics:", error);
@@ -38,8 +36,7 @@ export const useMetricsData = () => {
         }
 
         // If no metrics exist yet, return default values
-        if (!data) {
-          console.log("No metrics data found, returning defaults");
+        if (!metricsData || metricsData.length === 0) {
           return {
             riskScore: 0,
             totalTransactions: 0,
@@ -50,16 +47,14 @@ export const useMetricsData = () => {
           };
         }
 
-        console.log("Fetched metrics data:", data);
-
         // Map the database metrics to our frontend format
         return {
-          riskScore: data.metric_value || 0,
-          totalTransactions: data.total_transactions || 0,
-          flaggedTransactions: data.flagged_transactions || 0,
-          avgProcessingTime: data.avg_processing_time || 35,
-          concurrentCalls: data.concurrent_calls || 0,
-          activeUsers: data.active_users || 0
+          riskScore: metricsData[0].metric_value || 0,
+          totalTransactions: metricsData[0].total_transactions || 0,
+          flaggedTransactions: metricsData[0].flagged_transactions || 0,
+          avgProcessingTime: metricsData[0].avg_processing_time || 35,
+          concurrentCalls: metricsData[0].concurrent_calls || 0,
+          activeUsers: metricsData[0].active_users || 0
         };
       } catch (error) {
         console.error("Metrics fetch error:", error);
@@ -71,6 +66,6 @@ export const useMetricsData = () => {
         throw error;
       }
     },
-    refetchInterval: 30000, // Refresh every 30 seconds
+    refetchInterval: 30000,
   });
 };

@@ -1,54 +1,66 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Session, User } from '@supabase/supabase-js';
+import { User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 interface AuthContextType {
   user: User | null;
-  session: Session | null;
   loading: boolean;
-  signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function useAuth() {
+export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-}
+};
 
-interface AuthProviderProps {
-  children: React.ReactNode;
-}
-
-export function AuthProvider({ children }: AuthProviderProps) {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+  const mounted = React.useRef(true);
 
   useEffect(() => {
-    let mounted = true;
-
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
-      if (mounted) {
-        if (initialSession) {
-          setSession(initialSession);
-          setUser(initialSession.user);
+    console.log('AuthProvider: Starting authentication initialization');
+    let authListener: any;
+    
+    const initAuth = async () => {
+      try {
+        console.log('AuthProvider: Fetching initial session');
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('AuthProvider: Session retrieval error:', error);
+          throw error;
         }
-        setLoading(false);
-      }
-    });
 
-    // Listen for auth changes
-    const { data: { subscription: authListener } } = supabase.auth.onAuthStateChange(
-      async (event, currentSession) => {
-        if (mounted) {
-          setSession(currentSession);
-          setUser(currentSession?.user ?? null);
+        if (mounted.current) {
+          if (session?.user) {
+            console.log('AuthProvider: Initial session found for user:', session.user.id);
+            setUser(session.user);
+          } else {
+            console.log('AuthProvider: No initial session found');
+            setUser(null);
+          }
+          setLoading(false);
+        }
+
+        // Set up real-time auth listener
+        console.log('AuthProvider: Setting up auth state listener');
+        authListener = supabase.auth.onAuthStateChange((event, session) => {
+          if (!mounted.current) return;
+
+          console.log('AuthProvider: Auth state changed:', event, session?.user?.id);
+          
+          if (session?.user) {
+            setUser(session.user);
+          } else {
+            setUser(null);
+          }
           setLoading(false);
 
           if (event === 'SIGNED_IN') {
@@ -64,40 +76,37 @@ export function AuthProvider({ children }: AuthProviderProps) {
               description: "You have been signed out successfully.",
             });
           }
+        });
+
+      } catch (error) {
+        console.error('AuthProvider: Authentication initialization error:', error);
+        if (mounted.current) {
+          setLoading(false);
+          toast({
+            title: "Authentication Error",
+            description: "Failed to initialize authentication. Please try refreshing the page.",
+            variant: "destructive",
+          });
         }
       }
-    );
-
-    // Cleanup function
-    return () => {
-      mounted = false;
-      authListener.unsubscribe();
     };
-  }, []); // No dependencies needed since we're using closure for mounted flag
 
-  const signOut = async () => {
-    try {
-      await supabase.auth.signOut();
-    } catch (error) {
-      console.error('Error signing out:', error);
-      toast({
-        title: "Error",
-        description: "Failed to sign out. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
+    initAuth();
 
-  const value = {
-    user,
-    session,
-    loading,
-    signOut,
-  };
+    return () => {
+      console.log('AuthProvider: Cleaning up auth listener');
+      mounted.current = false;
+      if (authListener) {
+        authListener.unsubscribe();
+      }
+    };
+  }, []); // Remove toast from dependencies to avoid re-initialization
+
+  console.log('AuthProvider: Current state:', { user: user?.id, loading });
 
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={{ user, loading }}>
       {children}
     </AuthContext.Provider>
   );
-}
+};
