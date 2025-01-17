@@ -30,11 +30,11 @@ export const HeroSection = () => {
         </div>
         
         <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text" tabIndex={0}>
-          Next-Gen Fraud Detection
+          Advanced Fraud Prevention Platform
         </h1>
         
         <p className="text-xl text-green-300/90 mb-8 max-w-2xl mx-auto leading-relaxed" tabIndex={0}>
-          Protect your business with enterprise-grade security powered by advanced AI algorithms and real-time threat monitoring
+          Protect your business with our comprehensive fraud detection system featuring real-time behavioral analysis, advanced device fingerprinting, and ML-powered risk assessment.
         </p>
         
         <div className="flex flex-col sm:flex-row justify-center gap-4 items-center">
@@ -48,16 +48,16 @@ export const HeroSection = () => {
 
         <div className="mt-12 pt-12 border-t border-green-500/20 grid grid-cols-1 sm:grid-cols-3 gap-8">
           <div className="flex flex-col items-center">
-            <div className="text-4xl font-bold text-green-400 mb-2">99.9%</div>
-            <div className="text-green-300/80">Threat Detection Rate</div>
+            <div className="text-4xl font-bold text-green-400 mb-2">Real-time</div>
+            <div className="text-green-300/80">Behavioral Analysis</div>
           </div>
           <div className="flex flex-col items-center">
-            <div className="text-4xl font-bold text-green-400 mb-2">24/7</div>
-            <div className="text-green-300/80">Real-time Monitoring</div>
+            <div className="text-4xl font-bold text-green-400 mb-2">ML-Powered</div>
+            <div className="text-green-300/80">Risk Assessment</div>
           </div>
           <div className="flex flex-col items-center">
-            <div className="text-4xl font-bold text-green-400 mb-2">500+</div>
-            <div className="text-green-300/80">Enterprise Clients</div>
+            <div className="text-4xl font-bold text-green-400 mb-2">Advanced</div>
+            <div className="text-green-300/80">Device Fingerprinting</div>
           </div>
         </div>
       </div>

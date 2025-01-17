@@ -1,68 +1,61 @@
-import { Shield, Zap, ChartBar, Bell, Cloud, Users } from "lucide-react";
+import { Shield, Activity, Fingerprint, Globe, Bell, Lock } from "lucide-react";
 
 export const Features = () => {
-  const features = [
-    {
-      icon: Shield,
-      title: "Comprehensive Protection",
-      description: "Multi-layered security with AI-powered threat detection, covering everything from bot prevention to transaction monitoring"
-    },
-    {
-      icon: Zap,
-      title: "Real-time Detection",
-      description: "Instant identification of suspicious activities across all services, from romance scams to affiliate fraud"
-    },
-    {
-      icon: ChartBar,
-      title: "Advanced Analytics",
-      description: "Deep insights into fraud patterns with machine learning-powered risk scoring and behavioral analysis"
-    },
-    {
-      icon: Bell,
-      title: "Smart Alerts",
-      description: "Intelligent notification system for suspicious activities, unusual patterns, and potential security threats"
-    },
-    {
-      icon: Cloud,
-      title: "Enterprise Integration",
-      description: "Seamless integration with your existing infrastructure through our robust API and comprehensive SDKs"
-    },
-    {
-      icon: Users,
-      title: "Collaborative Security",
-      description: "Built-in tools for team coordination and automated response systems for efficient threat management"
-    }
-  ];
-
   return (
-    <section className="relative z-10 py-24">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-green-400 mb-4">
-            Enterprise-Grade Protection
-          </h2>
-          <p className="text-xl text-green-300/80 max-w-3xl mx-auto">
-            Comprehensive security platform with advanced fraud detection across all business operations
-          </p>
-        </div>
-
+    <section className="py-24 bg-black/40">
+      <div className="container mx-auto px-4">
+        <h2 className="text-4xl font-bold text-center mb-16 text-green-400">
+          Comprehensive Fraud Prevention
+        </h2>
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <div 
-              key={index}
-              className="glass-card p-8 rounded-xl transition-all duration-300 hover:scale-105 hover:bg-green-900/20"
-            >
-              <feature.icon className="w-12 h-12 text-green-400 mb-6 mx-auto" />
-              <h3 className="text-2xl font-semibold text-green-300 mb-4 text-center">
-                {feature.title}
-              </h3>
-              <p className="text-green-300/80 text-center leading-relaxed">
-                {feature.description}
-              </p>
-            </div>
-          ))}
+          <FeatureCard
+            icon={<Activity className="w-8 h-8 text-green-400" />}
+            title="Behavioral Analysis"
+            description="Track mouse movements, typing patterns, navigation behavior, and session analysis in real-time."
+          />
+          
+          <FeatureCard
+            icon={<Globe className="w-8 h-8 text-green-400" />}
+            title="Network Intelligence"
+            description="Detect VPNs, analyze IP reputation, identify geographic anomalies, and monitor connection patterns."
+          />
+          
+          <FeatureCard
+            icon={<Fingerprint className="w-8 h-8 text-green-400" />}
+            title="Device Fingerprinting"
+            description="Advanced device recognition with hardware, browser, and network fingerprinting capabilities."
+          />
+          
+          <FeatureCard
+            icon={<Shield className="w-8 h-8 text-green-400" />}
+            title="Risk Assessment"
+            description="ML-powered risk scoring using historical behavior, device reputation, and transaction patterns."
+          />
+          
+          <FeatureCard
+            icon={<Bell className="w-8 h-8 text-green-400" />}
+            title="Real-time Monitoring"
+            description="Instant alerts, custom dashboards, and comprehensive analytics for fraud prevention."
+          />
+          
+          <FeatureCard
+            icon={<Lock className="w-8 h-8 text-green-400" />}
+            title="Security & Compliance"
+            description="GDPR compliant with end-to-end encryption, data masking, and comprehensive audit logging."
+          />
         </div>
       </div>
     </section>
+  );
+};
+
+const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) => {
+  return (
+    <div className="glass-card p-6 rounded-xl border border-green-500/20 hover:border-green-500/40 transition-all duration-300">
+      <div className="mb-4">{icon}</div>
+      <h3 className="text-xl font-semibold mb-2 text-green-400">{title}</h3>
+      <p className="text-green-300/80">{description}</p>
+    </div>
   );
 };
