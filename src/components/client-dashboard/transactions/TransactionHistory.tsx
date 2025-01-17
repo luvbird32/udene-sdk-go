@@ -33,8 +33,25 @@ export const TransactionHistory = () => {
         transaction_type,
         transaction_type_encrypted,
         transaction_type_iv,
+        customer_id,
+        timestamp,
+        location,
+        device_id,
+        ip_address,
+        card_present,
+        recurring,
+        risk_score,
+        is_fraudulent,
         created_at,
-        is_fraudulent
+        updated_at,
+        risk_factors,
+        feature_importance,
+        feedback_status,
+        feedback_notes,
+        appeal_timestamp,
+        message_velocity,
+        profile_changes,
+        interaction_patterns
       `)
       .order('created_at', { ascending: false })
       .limit(10);
