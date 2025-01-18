@@ -5,8 +5,11 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "rec
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import type { DatabaseTransaction, InteractionPatterns, RiskFactors } from "@/types/risk";
+import { useToast } from "@/hooks/use-toast";
 
 export const CustomerBehavior = () => {
+  const { toast } = useToast();
+
   const { data: behaviorMetrics } = useQuery({
     queryKey: ["customer-behavior"],
     queryFn: async () => {
@@ -31,8 +34,27 @@ export const CustomerBehavior = () => {
           };
         }
 
+        // Decrypt amount if available
+        let decryptedAmount = 0;
+        if (transaction.amount_encrypted && transaction.amount_iv) {
+          try {
+            const { data } = await supabase.rpc('decrypt_sensitive_data', {
+              encrypted_data: transaction.amount_encrypted,
+              iv: transaction.amount_iv
+            });
+            decryptedAmount = Number(data);
+          } catch (error) {
+            console.error("Error decrypting amount:", error);
+            toast({
+              title: "Error",
+              description: "Could not decrypt transaction amount",
+              variant: "destructive",
+            });
+          }
+        }
+
         acc[customerId].transactions.push({
-          amount: transaction.amount,
+          amount: decryptedAmount,
           timestamp: transaction.timestamp,
           deviceId: transaction.device_id,
           location: transaction.location
@@ -40,7 +62,7 @@ export const CustomerBehavior = () => {
 
         acc[customerId].devices.add(transaction.device_id);
         acc[customerId].locations.add(transaction.location);
-        acc[customerId].totalAmount += Number(transaction.amount);
+        acc[customerId].totalAmount += decryptedAmount;
 
         return acc;
       }, {});
