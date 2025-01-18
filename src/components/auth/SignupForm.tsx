@@ -8,6 +8,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Eye, EyeOff, AlertCircle } from "lucide-react";
 
 export const SignupForm = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -28,6 +29,11 @@ export const SignupForm = () => {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (!name.trim()) {
+      setError("Please enter your name");
+      return;
+    }
 
     // Validate email
     if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
@@ -53,6 +59,9 @@ export const SignupForm = () => {
         email,
         password,
         options: {
+          data: {
+            full_name: name.trim()
+          },
           emailRedirectTo: `${window.location.origin}/auth/callback`
         }
       });
@@ -91,6 +100,23 @@ export const SignupForm = () => {
         </Alert>
       )}
       
+      <div>
+        <label htmlFor="signup-name" className="block text-sm font-medium text-green-400/80">
+          Name
+        </label>
+        <Input
+          id="signup-name"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          placeholder="Enter your name"
+          className="mt-1 glass-input text-green-400 placeholder:text-green-500/50"
+          disabled={isLoading}
+          autoComplete="name"
+        />
+      </div>
+
       <div>
         <label htmlFor="signup-email" className="block text-sm font-medium text-green-400/80">
           Email
