@@ -1,9 +1,9 @@
-import { memo } from "react";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { DatabaseTransaction } from "@/types/transactions";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect, memo } from "react";
 
 interface TransactionItemProps {
   transaction: DatabaseTransaction;
@@ -11,28 +11,36 @@ interface TransactionItemProps {
 
 export const TransactionItem = memo(function TransactionItem({ transaction }: TransactionItemProps) {
   const { toast } = useToast();
+  const [amount, setAmount] = useState<string>("Loading...");
   
-  // Decrypt amount for display
-  const decryptAmount = async (encrypted: string | null, iv: string | null) => {
-    if (!encrypted || !iv) return "N/A";
-    try {
-      const { data, error } = await supabase.rpc('decrypt_sensitive_data', {
-        encrypted_data: encrypted,
-        iv: iv
-      });
-      
-      if (error) throw error;
-      return Number(data).toLocaleString();
-    } catch (error) {
-      console.error("Error decrypting amount:", error);
-      toast({
-        title: "Error",
-        description: "Could not decrypt transaction amount",
-        variant: "destructive",
-      });
-      return "Error";
-    }
-  };
+  useEffect(() => {
+    const decryptAmount = async () => {
+      if (!transaction.amount_encrypted || !transaction.amount_iv) {
+        setAmount("N/A");
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase.rpc('decrypt_sensitive_data', {
+          encrypted_data: transaction.amount_encrypted,
+          iv: transaction.amount_iv
+        });
+        
+        if (error) throw error;
+        setAmount(Number(data).toLocaleString());
+      } catch (error) {
+        console.error("Error decrypting amount:", error);
+        toast({
+          title: "Error",
+          description: "Could not decrypt transaction amount",
+          variant: "destructive",
+        });
+        setAmount("Error");
+      }
+    };
+
+    decryptAmount();
+  }, [transaction.amount_encrypted, transaction.amount_iv, toast]);
 
   return (
     <div
@@ -40,20 +48,16 @@ export const TransactionItem = memo(function TransactionItem({ transaction }: Tr
       className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
     >
       <div>
-        <p className="font-medium">
-          ${transaction.amount_encrypted ? decryptAmount(transaction.amount_encrypted, transaction.amount_iv) : "N/A"}
-        </p>
+        <p className="font-medium">${amount}</p>
         <p className="text-sm text-muted-foreground">
           {transaction.created_at 
             ? format(new Date(transaction.created_at), 'MMM d, yyyy HH:mm') 
             : 'Unknown date'}
         </p>
       </div>
-      <Badge 
-        variant={transaction.is_fraudulent ? "destructive" : "secondary"}
-      >
-        {transaction.is_fraudulent ? "Flagged" : "Clear"}
-      </Badge>
+      {transaction.is_fraudulent && (
+        <Badge variant="destructive">Fraudulent</Badge>
+      )}
     </div>
   );
 }, (prevProps, nextProps) => {

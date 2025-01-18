@@ -23,25 +23,34 @@ export const CustomerBehavior = () => {
       if (error) throw error;
 
       // Process transactions for behavior analysis
-      const customerPatterns = (transactions as DatabaseTransaction[])?.reduce((acc: any, transaction: DatabaseTransaction) => {
+      const customerPatterns: Record<string, any> = {};
+      
+      // First pass: Initialize customer data
+      for (const transaction of (transactions as DatabaseTransaction[])) {
         const customerId = transaction.customer_id;
-        if (!acc[customerId]) {
-          acc[customerId] = {
+        if (!customerPatterns[customerId]) {
+          customerPatterns[customerId] = {
             transactions: [],
             devices: new Set(),
             locations: new Set(),
             totalAmount: 0
           };
         }
+      }
 
+      // Second pass: Process transactions with decryption
+      for (const transaction of (transactions as DatabaseTransaction[])) {
+        const customerId = transaction.customer_id;
+        
         // Decrypt amount if available
         let decryptedAmount = 0;
         if (transaction.amount_encrypted && transaction.amount_iv) {
           try {
-            const { data } = await supabase.rpc('decrypt_sensitive_data', {
+            const { data, error } = await supabase.rpc('decrypt_sensitive_data', {
               encrypted_data: transaction.amount_encrypted,
               iv: transaction.amount_iv
             });
+            if (error) throw error;
             decryptedAmount = Number(data);
           } catch (error) {
             console.error("Error decrypting amount:", error);
@@ -53,22 +62,20 @@ export const CustomerBehavior = () => {
           }
         }
 
-        acc[customerId].transactions.push({
+        customerPatterns[customerId].transactions.push({
           amount: decryptedAmount,
           timestamp: transaction.timestamp,
           deviceId: transaction.device_id,
           location: transaction.location
         });
 
-        acc[customerId].devices.add(transaction.device_id);
-        acc[customerId].locations.add(transaction.location);
-        acc[customerId].totalAmount += decryptedAmount;
-
-        return acc;
-      }, {});
+        customerPatterns[customerId].devices.add(transaction.device_id);
+        customerPatterns[customerId].locations.add(transaction.location);
+        customerPatterns[customerId].totalAmount += decryptedAmount;
+      }
 
       // Calculate velocity and pattern changes
-      const patterns = Object.entries(customerPatterns || {}).map(([customerId, data]: [string, any]) => {
+      const patterns = Object.entries(customerPatterns).map(([customerId, data]: [string, any]) => {
         const transactions = data.transactions;
         const deviceCount = data.devices.size;
         const locationCount = data.locations.size;
