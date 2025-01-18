@@ -25,10 +25,10 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: '#00ff00', // Neon green
+          DEFAULT: '#4ade80', // Green-400 from Tailwind
           foreground: '#ffffff',
-          dark: '#00cc00',   // Darker neon green
-          light: '#66ff66',  // Lighter neon green
+          dark: '#22c55e',   // Green-500 from Tailwind
+          light: '#86efac',  // Green-300 from Tailwind
         },
         secondary: {
           DEFAULT: '#1a1a1a', // Dark gray for contrast
@@ -49,7 +49,7 @@ export default {
           foreground: "hsl(var(--destructive-foreground))",
         },
         accent: {
-          DEFAULT: '#00ff66', // Slightly different neon green for accent
+          DEFAULT: '#34d399', // Green-400 emerald variant
           foreground: '#ffffff',
         },
         popover: {
