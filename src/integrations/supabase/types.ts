@@ -893,6 +893,10 @@ export type Database = {
           document_number_encrypted: string | null
           document_type: string | null
           encryption_iv: string | null
+          face_match_alerts: Json | null
+          face_match_history: Json | null
+          face_matching_score: number | null
+          face_template: Json | null
           id: string
           rejection_reason: string | null
           risk_flags: Json | null
@@ -914,6 +918,10 @@ export type Database = {
           document_number_encrypted?: string | null
           document_type?: string | null
           encryption_iv?: string | null
+          face_match_alerts?: Json | null
+          face_match_history?: Json | null
+          face_matching_score?: number | null
+          face_template?: Json | null
           id?: string
           rejection_reason?: string | null
           risk_flags?: Json | null
@@ -935,6 +943,10 @@ export type Database = {
           document_number_encrypted?: string | null
           document_type?: string | null
           encryption_iv?: string | null
+          face_match_alerts?: Json | null
+          face_match_history?: Json | null
+          face_matching_score?: number | null
+          face_template?: Json | null
           id?: string
           rejection_reason?: string | null
           risk_flags?: Json | null
