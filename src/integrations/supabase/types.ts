@@ -263,8 +263,13 @@ export type Database = {
           attempt_timestamp: string | null
           confidence_score: number | null
           created_at: string | null
+          deepfake_detection_score: number | null
           device_fingerprint: string | null
+          environmental_factors: Json | null
+          facial_movements: Json | null
           id: string
+          liveness_checks: Json | null
+          liveness_score: number | null
           metadata: Json | null
           risk_indicators: Json | null
           success: boolean | null
@@ -277,8 +282,13 @@ export type Database = {
           attempt_timestamp?: string | null
           confidence_score?: number | null
           created_at?: string | null
+          deepfake_detection_score?: number | null
           device_fingerprint?: string | null
+          environmental_factors?: Json | null
+          facial_movements?: Json | null
           id?: string
+          liveness_checks?: Json | null
+          liveness_score?: number | null
           metadata?: Json | null
           risk_indicators?: Json | null
           success?: boolean | null
@@ -291,8 +301,13 @@ export type Database = {
           attempt_timestamp?: string | null
           confidence_score?: number | null
           created_at?: string | null
+          deepfake_detection_score?: number | null
           device_fingerprint?: string | null
+          environmental_factors?: Json | null
+          facial_movements?: Json | null
           id?: string
+          liveness_checks?: Json | null
+          liveness_score?: number | null
           metadata?: Json | null
           risk_indicators?: Json | null
           success?: boolean | null
