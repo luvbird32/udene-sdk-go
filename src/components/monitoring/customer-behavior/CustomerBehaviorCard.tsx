@@ -4,7 +4,7 @@ import { CustomerPatternList } from "./CustomerPatternList";
 import { useCustomerBehaviorData } from "./useCustomerBehaviorData";
 
 export const CustomerBehaviorCard = () => {
-  const { behaviorMetrics } = useCustomerBehaviorData();
+  const { data: behaviorMetrics } = useCustomerBehaviorData();
 
   return (
     <Card className="p-4">

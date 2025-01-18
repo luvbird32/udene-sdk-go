@@ -1,3 +1,5 @@
+import type { CustomerPattern } from "./types";
+
 interface CustomerMetricsProps {
   customer: CustomerPattern;
 }
