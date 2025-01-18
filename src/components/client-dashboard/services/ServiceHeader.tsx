@@ -19,22 +19,22 @@ export const ServiceHeader = ({ title, description, serviceType, isActive }: Ser
         <AlertDescription className="text-sm text-muted-foreground">
           <span className="font-medium text-blue-900">How this helps you: </span>
           {serviceType === 'bot_prevention' && (
-            "Protect your platform from automated attacks and bot traffic. This service uses advanced detection to identify and block malicious automated activities while ensuring legitimate users aren't affected."
+            "Our advanced bot detection system uses machine learning to identify and block automated threats in real-time. It analyzes behavioral patterns, request signatures, and network characteristics to distinguish between legitimate users and malicious bots, protecting your platform from scraping, credential stuffing, and DDoS attacks while maintaining a smooth experience for real users."
           )}
           {serviceType === 'shadow_ai_prevention' && (
-            "Detect and prevent unauthorized AI system usage that could compromise your platform's security. This service monitors for suspicious AI patterns and helps maintain the integrity of your user interactions."
+            "This service employs sophisticated detection algorithms to identify unauthorized AI system usage on your platform. It monitors request patterns, content generation signatures, and API usage to detect potential AI-powered automation tools, ensuring fair usage and preventing abuse of your resources. The system adapts to new AI patterns while minimizing false positives."
           )}
           {serviceType === 'payment_protection' && (
-            "Safeguard your transactions with real-time fraud detection. This service analyzes payment patterns and user behavior to prevent fraudulent transactions before they occur."
+            "Our comprehensive payment fraud prevention system analyzes multiple risk factors in real-time, including transaction patterns, user behavior, and device fingerprints. It uses advanced machine learning models to detect suspicious patterns, validate payment information, and prevent chargebacks while ensuring legitimate transactions are processed smoothly."
           )}
           {serviceType === 'account_protection' && (
-            "Prevent account takeovers and unauthorized access attempts. This service monitors login patterns and suspicious activities to keep your users' accounts secure."
+            "This multi-layered security system protects user accounts from unauthorized access and takeover attempts. It combines behavioral biometrics, device fingerprinting, and risk-based authentication to detect suspicious login attempts, credential stuffing attacks, and account manipulation in real-time. The service also monitors for unusual account activity patterns and provides immediate alerts."
           )}
           {serviceType === 'email_protection' && (
-            "Guard against email-based fraud and phishing attempts. This service verifies email authenticity and protects your users from malicious email campaigns."
+            "Our email security service uses advanced algorithms to detect and prevent various forms of email-based fraud. It validates email authenticity, checks for domain spoofing, analyzes sender reputation, and identifies phishing attempts. The system also monitors for business email compromise (BEC) attacks and provides detailed threat intelligence."
           )}
           {serviceType === 'reward_program_protection' && (
-            "Prevent abuse and fraud in your loyalty and rewards programs. This service monitors for suspicious point accumulation and redemption patterns."
+            "This specialized service safeguards your loyalty and rewards programs from abuse and fraud. It monitors point accumulation patterns, redemption behaviors, and account linking to detect multiple account abuse, point farming, and fraudulent redemptions. The system uses advanced analytics to identify coordinated fraud attempts while ensuring legitimate program participants enjoy their benefits."
           )}
         </AlertDescription>
       </Alert>
