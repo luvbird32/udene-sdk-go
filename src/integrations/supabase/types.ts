@@ -258,6 +258,66 @@ export type Database = {
         }
         Relationships: []
       }
+      biometric_verifications: {
+        Row: {
+          attempt_timestamp: string | null
+          confidence_score: number | null
+          created_at: string | null
+          device_fingerprint: string | null
+          id: string
+          metadata: Json | null
+          risk_indicators: Json | null
+          success: boolean | null
+          updated_at: string | null
+          user_id: string | null
+          verification_id: string | null
+          verification_type: string
+        }
+        Insert: {
+          attempt_timestamp?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          device_fingerprint?: string | null
+          id?: string
+          metadata?: Json | null
+          risk_indicators?: Json | null
+          success?: boolean | null
+          updated_at?: string | null
+          user_id?: string | null
+          verification_id?: string | null
+          verification_type: string
+        }
+        Update: {
+          attempt_timestamp?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          device_fingerprint?: string | null
+          id?: string
+          metadata?: Json | null
+          risk_indicators?: Json | null
+          success?: boolean | null
+          updated_at?: string | null
+          user_id?: string | null
+          verification_id?: string | null
+          verification_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "biometric_verifications_device_fingerprint_fkey"
+            columns: ["device_fingerprint"]
+            isOneToOne: false
+            referencedRelation: "device_fingerprints"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "biometric_verifications_verification_id_fkey"
+            columns: ["verification_id"]
+            isOneToOne: false
+            referencedRelation: "identity_verifications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       client_api_keys: {
         Row: {
           created_at: string | null
