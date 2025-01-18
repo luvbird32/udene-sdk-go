@@ -26,7 +26,7 @@ const Dashboard = () => {
         .select('*')
         .order('timestamp', { ascending: false })
         .limit(1)
-        .maybeSingle();  // Changed from single() to maybeSingle()
+        .maybeSingle(); // Changed from single() to maybeSingle()
 
       if (metricsError) {
         console.error("Error fetching metrics:", metricsError);
