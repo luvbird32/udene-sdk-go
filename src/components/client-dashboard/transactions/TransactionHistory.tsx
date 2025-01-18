@@ -24,15 +24,6 @@ export const TransactionHistory = () => {
       .from('transactions')
       .select(`
         id,
-        amount,
-        amount_encrypted,
-        amount_iv,
-        merchant_id,
-        merchant_id_encrypted,
-        merchant_id_iv,
-        transaction_type,
-        transaction_type_encrypted,
-        transaction_type_iv,
         customer_id,
         timestamp,
         location,
@@ -51,7 +42,13 @@ export const TransactionHistory = () => {
         appeal_timestamp,
         message_velocity,
         profile_changes,
-        interaction_patterns
+        interaction_patterns,
+        amount_encrypted,
+        amount_iv,
+        merchant_id_encrypted,
+        merchant_id_iv,
+        transaction_type_encrypted,
+        transaction_type_iv
       `)
       .order('created_at', { ascending: false })
       .limit(10);
@@ -61,13 +58,14 @@ export const TransactionHistory = () => {
       throw error;
     }
 
-    // For now, we'll use the unencrypted values if available, falling back to encrypted
+    // For now, we'll use the encrypted values directly
+    // In a production environment, you'd want to decrypt these values
     const processedData = data?.map(transaction => ({
       ...transaction,
-      // Keep using unencrypted values for now, encrypted values are being populated
-      amount: transaction.amount,
-      merchant_id: transaction.merchant_id,
-      transaction_type: transaction.transaction_type
+      // Keep using encrypted values for now
+      amount_encrypted: transaction.amount_encrypted,
+      merchant_id_encrypted: transaction.merchant_id_encrypted,
+      transaction_type_encrypted: transaction.transaction_type_encrypted
     }));
 
     console.log("Transactions fetched:", processedData);

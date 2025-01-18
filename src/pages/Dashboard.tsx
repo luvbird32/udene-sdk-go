@@ -25,20 +25,22 @@ const Dashboard = () => {
         .from('metrics')
         .select('*')
         .order('timestamp', { ascending: false })
-        .limit(1);
+        .limit(1)
+        .maybeSingle();  // Changed from single() to maybeSingle()
 
       if (metricsError) {
         console.error("Error fetching metrics:", metricsError);
         throw metricsError;
       }
 
+      // Return default values if no metrics found
       return {
-        riskScore: metricsData?.[0]?.metric_value ?? 0,
-        totalTransactions: metricsData?.[0]?.metric_value ?? 0,
-        flaggedTransactions: metricsData?.[0]?.metric_value ?? 0,
-        activeUsers: metricsData?.[0]?.metric_value ?? 0,
-        avgProcessingTime: 35,
-        concurrentCalls: metricsData?.[0]?.metric_value ?? 0
+        riskScore: metricsData?.metric_value ?? 0,
+        totalTransactions: metricsData?.metric_value ?? 0,
+        flaggedTransactions: metricsData?.metric_value ?? 0,
+        activeUsers: metricsData?.active_users ?? 0,
+        avgProcessingTime: metricsData?.avg_processing_time ?? 35,
+        concurrentCalls: metricsData?.concurrent_calls ?? 0
       };
     },
     refetchInterval: 3000,
