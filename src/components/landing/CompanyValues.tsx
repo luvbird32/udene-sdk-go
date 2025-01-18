@@ -2,7 +2,7 @@ import { Target, Heart, Lightbulb } from "lucide-react";
 
 const CompanyValues = () => {
   return (
-    <section className="py-24 bg-gradient-to-b from-black/40 to-black/60">
+    <section className="py-24 bg-black/40">
       <div className="container mx-auto px-4 space-y-32">
         {/* Why Section */}
         <div className="max-w-5xl mx-auto">
