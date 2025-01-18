@@ -19,20 +19,21 @@ export const useMetricsData = () => {
         .select('*')
         .order('timestamp', { ascending: false })
         .limit(1)
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error("Error fetching metrics:", error);
         throw error;
       }
 
+      // Return default values if no metrics found
       return {
-        riskScore: data?.metric_value,
-        totalTransactions: data?.total_transactions,
-        flaggedTransactions: data?.flagged_transactions,
-        avgProcessingTime: data?.avg_processing_time,
-        concurrentCalls: data?.concurrent_calls,
-        activeUsers: data?.active_users
+        riskScore: data?.metric_value ?? 0,
+        totalTransactions: data?.total_transactions ?? 0,
+        flaggedTransactions: data?.flagged_transactions ?? 0,
+        avgProcessingTime: data?.avg_processing_time ?? 35,
+        concurrentCalls: data?.concurrent_calls ?? 0,
+        activeUsers: data?.active_users ?? 0
       };
     },
     refetchInterval: 30000,
