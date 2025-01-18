@@ -11,10 +11,10 @@ export const WhyMissionObjective = () => {
             Our Why
           </h2>
           <div className="max-w-4xl">
-            <p className="text-xl leading-relaxed mb-6 text-primary">
+            <p className="text-xl leading-relaxed mb-6 text-primary-light">
               In today's digital landscape, businesses face unprecedented challenges from sophisticated fraud schemes and consumer exploitation tactics. We witnessed countless organizations struggling to protect their revenue and maintain trust with their customers.
             </p>
-            <p className="text-xl leading-relaxed text-primary">
+            <p className="text-xl leading-relaxed text-primary-light">
               This reality drove us to create a solution that not only detects and prevents fraudulent activities but also ensures legitimate customers have a seamless experience. We believe that every business deserves access to enterprise-grade fraud prevention technology.
             </p>
           </div>
