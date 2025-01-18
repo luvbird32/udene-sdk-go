@@ -26,14 +26,13 @@ const Dashboard = () => {
         .select('*')
         .order('timestamp', { ascending: false })
         .limit(1)
-        .maybeSingle(); // Changed from single() to maybeSingle()
+        .maybeSingle();
 
       if (metricsError) {
         console.error("Error fetching metrics:", metricsError);
         throw metricsError;
       }
 
-      // Return default values if no metrics found
       return {
         riskScore: metricsData?.metric_value ?? 0,
         totalTransactions: metricsData?.metric_value ?? 0,
@@ -58,7 +57,7 @@ const Dashboard = () => {
   });
 
   return (
-    <div className="min-h-screen bg-black text-green-400 p-6 relative overflow-hidden" role="main">
+    <div className="min-h-screen text-green-400 p-6 relative overflow-hidden" role="main">
       <MatrixBackground />
       <div className="relative z-10">
         <TooltipProvider>
