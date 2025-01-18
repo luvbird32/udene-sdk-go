@@ -1,8 +1,7 @@
-import { ApiCreditsDisplay } from "@/components/client-dashboard/ApiCreditsDisplay";
-import { ClientMetrics } from "@/components/client-dashboard/ClientMetrics";
-import ErrorBoundary from "@/components/ErrorBoundary";
-import { ConnectionStatus } from "@/components/dashboard/ConnectionStatus";
-import { AnalyticsGrid } from "@/components/dashboard/AnalyticsGrid";
+import { ConnectionSection } from "@/components/dashboard/sections/ConnectionSection";
+import { ApiSection } from "@/components/dashboard/sections/ApiSection";
+import { MetricsSection } from "@/components/dashboard/sections/MetricsSection";
+import { AnalyticsSection } from "@/components/dashboard/sections/AnalyticsSection";
 
 interface DashboardContentProps {
   metrics?: {
@@ -21,21 +20,14 @@ export const DashboardContent = ({
 }: DashboardContentProps) => {
   return (
     <div className="space-y-8">
-      <ConnectionStatus />
-      
-      <ErrorBoundary>
-        <ApiCreditsDisplay />
-      </ErrorBoundary>
-      
-      <ErrorBoundary>
-        <ClientMetrics 
-          metrics={metrics}
-          isLoading={metricsLoading}
-          error={metricsError}
-        />
-      </ErrorBoundary>
-      
-      <AnalyticsGrid />
+      <ConnectionSection />
+      <ApiSection />
+      <MetricsSection 
+        metrics={metrics}
+        metricsLoading={metricsLoading}
+        metricsError={metricsError}
+      />
+      <AnalyticsSection />
     </div>
   );
 };
