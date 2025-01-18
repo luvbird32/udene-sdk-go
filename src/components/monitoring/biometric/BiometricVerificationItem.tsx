@@ -43,15 +43,9 @@ export const BiometricVerificationItem = ({ verification }: BiometricVerificatio
             <p>{verification.deepfake_detection_score.toFixed(1)}%</p>
           </div>
         )}
-        {verification.device_fingerprints?.risk_score && (
-          <div>
-            <p className="text-muted-foreground">Device Risk Score</p>
-            <p>{verification.device_fingerprints.risk_score}</p>
-          </div>
-        )}
       </div>
 
-      {verification.liveness_checks && verification.liveness_checks.length > 0 && (
+      {Array.isArray(verification.liveness_checks) && verification.liveness_checks.length > 0 && (
         <div className="mt-2">
           <p className="text-sm font-medium">Liveness Checks:</p>
           <div className="flex gap-1 mt-1 flex-wrap">
@@ -64,7 +58,7 @@ export const BiometricVerificationItem = ({ verification }: BiometricVerificatio
         </div>
       )}
 
-      {verification.risk_indicators && verification.risk_indicators.length > 0 && (
+      {Array.isArray(verification.risk_indicators) && verification.risk_indicators.length > 0 && (
         <div className="mt-2">
           <p className="text-sm font-medium text-destructive">Risk Indicators:</p>
           <div className="flex gap-1 mt-1 flex-wrap">
@@ -77,7 +71,7 @@ export const BiometricVerificationItem = ({ verification }: BiometricVerificatio
         </div>
       )}
 
-      {verification.facial_movements && verification.facial_movements.length > 0 && (
+      {Array.isArray(verification.facial_movements) && verification.facial_movements.length > 0 && (
         <div className="mt-2">
           <p className="text-sm font-medium">Facial Movements Detected:</p>
           <div className="flex gap-1 mt-1 flex-wrap">
