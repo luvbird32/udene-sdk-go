@@ -1,6 +1,6 @@
 import { ServiceIcon } from "./components/ServiceIcon";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { InfoCircle } from "lucide-react";
+import { Info } from "lucide-react";
 import type { ServiceHeaderProps } from "./types";
 
 export const ServiceHeader = ({ title, description, serviceType, isActive }: ServiceHeaderProps) => {
@@ -14,8 +14,8 @@ export const ServiceHeader = ({ title, description, serviceType, isActive }: Ser
         </div>
       </div>
       
-      <Alert variant="info" className="bg-blue-50/50 border-blue-200">
-        <InfoCircle className="h-4 w-4 text-blue-500" />
+      <Alert variant="default" className="bg-blue-50/50 border-blue-200">
+        <Info className="h-4 w-4 text-blue-500" />
         <AlertDescription className="text-sm text-muted-foreground">
           <span className="font-medium text-blue-900">How this helps you: </span>
           {serviceType === 'bot_prevention' && (
