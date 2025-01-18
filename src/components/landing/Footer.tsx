@@ -29,30 +29,12 @@ export const Footer = () => {
       { name: "Compliance", href: "#compliance" },
       { name: "Security", href: "/security" },
     ],
-    faq: [
-      { 
-        question: "How does Udene detect fraud?",
-        answer: "Udene uses advanced AI algorithms and real-time monitoring to analyze patterns, behaviors, and transactions for potential fraud indicators."
-      },
-      { 
-        question: "What types of fraud can Udene prevent?",
-        answer: "We protect against account takeover, payment fraud, promo code abuse, trial exploitation, and more."
-      },
-      { 
-        question: "Is Udene compliant with regulations?",
-        answer: "Yes, Udene maintains compliance with major security standards and data protection regulations."
-      },
-      { 
-        question: "How quickly can I integrate Udene?",
-        answer: "Integration can be completed in minutes using our SDKs and comprehensive API documentation."
-      }
-    ]
   };
 
   return (
     <footer className="relative z-10 border-t border-green-500/20">
       <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-8 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-8">
           <div className="col-span-2">
             <Link to="/" className="flex items-center mb-4">
               <Shield className="w-8 h-8 text-green-400 mr-2" />
@@ -63,7 +45,7 @@ export const Footer = () => {
             </p>
           </div>
           
-          {Object.entries(links).slice(0, 4).map(([category, items]) => (
+          {Object.entries(links).map(([category, items]) => (
             <div key={category}>
               <h3 className="text-green-400 font-semibold mb-3 capitalize">
                 {category}
@@ -82,19 +64,6 @@ export const Footer = () => {
               </ul>
             </div>
           ))}
-        </div>
-
-        {/* FAQ Section */}
-        <div className="border-t border-green-500/20 pt-8 mb-8">
-          <h3 className="text-green-400 font-semibold mb-6 text-xl">Frequently Asked Questions</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {links.faq.map((faq, index) => (
-              <div key={index} className="space-y-2">
-                <h4 className="text-green-300 font-medium">{faq.question}</h4>
-                <p className="text-green-300/80 text-sm">{faq.answer}</p>
-              </div>
-            ))}
-          </div>
         </div>
         
         <div className="border-t border-green-500/20 pt-8 mt-8 text-center md:flex md:justify-between md:text-left">

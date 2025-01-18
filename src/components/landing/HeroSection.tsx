@@ -30,7 +30,7 @@ export const HeroSection = () => {
         </div>
         
         <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
-          Say Bye to Consumers System Exploitation and Fraudulent Behaviors
+          Stop System Exploitation & Fraudulent Activities
         </h1>
         
         <p className="text-xl text-green-300/90 mb-8 max-w-2xl mx-auto leading-relaxed">
