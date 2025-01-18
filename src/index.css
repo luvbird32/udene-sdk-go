@@ -11,15 +11,15 @@
 
 @layer base {
   :root {
-    --background: 0 0% 3%;
+    --background: 222 47% 11%;
     --foreground: 142 72% 29%;
-    --card: 0 0% 3%;
+    --card: 222 47% 11%;
     --card-foreground: 142 72% 29%;
-    --popover: 0 0% 3%;
+    --popover: 222 47% 11%;
     --popover-foreground: 142 72% 29%;
     --primary: 142 72% 29%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 10%;
+    --secondary: 222 47% 11%;
     --secondary-foreground: 142 72% 29%;
     --accent: 142 72% 29%;
     --accent-foreground: 0 0% 100%;
@@ -34,15 +34,15 @@
 
 @layer utilities {
   .dark {
-    --background: 0 0% 3%;
+    --background: 222 47% 11%;
     --foreground: 142 72% 29%;
-    --card: 0 0% 3%;
+    --card: 222 47% 11%;
     --card-foreground: 142 72% 29%;
-    --popover: 0 0% 3%;
+    --popover: 222 47% 11%;
     --popover-foreground: 142 72% 29%;
     --primary: 142 72% 29%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 10%;
+    --secondary: 222 47% 11%;
     --secondary-foreground: 142 72% 29%;
     --accent: 142 72% 29%;
     --accent-foreground: 0 0% 100%;

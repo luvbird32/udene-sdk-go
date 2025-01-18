@@ -11,12 +11,12 @@
 @layer components {
   .glass-card {
     @apply backdrop-blur-xl border shadow-xl transition-all duration-300;
-    @apply bg-black/30 border-white/10 hover:bg-black/40;
+    @apply bg-secondary-dark/30 border-white/10 hover:bg-secondary-dark/40;
   }
 
   .glass-nav {
     @apply fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-b transition-all duration-300;
-    @apply bg-black/20 border-primary/10;
+    @apply bg-secondary-dark/20 border-primary/10;
   }
 
   .dashboard-card {
