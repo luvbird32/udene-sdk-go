@@ -29,7 +29,7 @@ export const HeroSection = () => {
           <Shield className="w-10 h-10 text-green-400" />
         </div>
         
-        <h1 className="text-7xl font-bold mb-8 bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text leading-tight">
+        <h1 className="text-5xl font-bold mb-8 bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text leading-tight">
           Protect Your Revenue From Consumers Exploitation and Fraudulent Behaviors
         </h1>
         
