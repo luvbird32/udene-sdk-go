@@ -10,7 +10,7 @@ export const WhyMissionObjective = () => {
           <h2 className="text-5xl font-bold mb-8 bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent">
             Our Why
           </h2>
-          <div className="max-w-4xl">
+          <div className="max-w-4xl glass-card p-8 rounded-xl">
             <p className="text-xl leading-relaxed mb-6 text-primary-light">
               In today's digital landscape, businesses face unprecedented challenges from sophisticated fraud schemes and consumer exploitation tactics. We witnessed countless organizations struggling to protect their revenue and maintain trust with their customers.
             </p>
