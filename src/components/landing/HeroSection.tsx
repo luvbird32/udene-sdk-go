@@ -48,15 +48,15 @@ export const HeroSection = () => {
 
         <div className="pt-16 border-t border-green-500/20 grid grid-cols-1 sm:grid-cols-3 gap-12">
           <div className="flex flex-col items-center">
-            <div className="text-5xl font-bold text-green-400 mb-3">97%</div>
+            <div className="text-5xl font-bold text-green-400 mb-3">99.9%</div>
             <div className="text-green-300/80 text-lg">Fraud Prevention Rate</div>
           </div>
           <div className="flex flex-col items-center">
-            <div className="text-5xl font-bold text-green-400 mb-3">$1M+</div>
+            <div className="text-5xl font-bold text-green-400 mb-3">$10M+</div>
             <div className="text-green-300/80 text-lg">Customer Savings</div>
           </div>
           <div className="flex flex-col items-center">
-            <div className="text-5xl font-bold text-green-400 mb-3">500ms</div>
+            <div className="text-5xl font-bold text-green-400 mb-3">35ms</div>
             <div className="text-green-300/80 text-lg">Real-time Detection</div>
           </div>
         </div>
