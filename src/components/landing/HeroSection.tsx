@@ -30,7 +30,7 @@ export const HeroSection = () => {
         </div>
         
         <h1 className="text-7xl font-bold mb-8 bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text leading-tight">
-          Project Your Revenue From Consumers Exploitation and Fraudulent Behaviors
+          Protect Your Revenue From Consumers Exploitation and Fraudulent Behaviors
         </h1>
         
         <p className="text-xl text-green-300/90 mb-12 max-w-3xl mx-auto leading-relaxed">
