@@ -1,31 +1,38 @@
-import { TransactionTrends } from "./TransactionTrends";
-import { GeographicalDistribution } from "./GeographicalDistribution";
-import { FraudPatterns } from "./FraudPatterns";
-import { ErrorLog } from "@/components/monitoring/ErrorLog";
-import { PerformanceMetrics } from "@/components/monitoring/PerformanceMetrics";
+import { TrendAnalysis } from "@/components/client-dashboard/analytics/TrendAnalysis";
+import { GeographicDistribution } from "@/components/client-dashboard/analytics/GeographicDistribution";
+import { AffiliateMonitoring } from "@/components/client-dashboard/analytics/AffiliateMonitoring";
+import { RewardProgramMonitoring } from "@/components/client-dashboard/analytics/RewardProgramMonitoring";
+import { PeakTransactionTimes } from "@/components/client-dashboard/analytics/PeakTransactionTimes";
+import { RiskDistribution } from "@/components/client-dashboard/analytics/RiskDistribution";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 export const AnalyticsSection = () => {
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ErrorBoundary>
-          <TransactionTrends />
+          <TrendAnalysis />
         </ErrorBoundary>
         <ErrorBoundary>
-          <GeographicalDistribution />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <FraudPatterns />
+          <GeographicDistribution />
         </ErrorBoundary>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ErrorBoundary>
-          <ErrorLog />
+          <AffiliateMonitoring />
         </ErrorBoundary>
         <ErrorBoundary>
-          <PerformanceMetrics />
+          <RewardProgramMonitoring />
+        </ErrorBoundary>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <ErrorBoundary>
+          <PeakTransactionTimes />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <RiskDistribution />
         </ErrorBoundary>
       </div>
     </div>

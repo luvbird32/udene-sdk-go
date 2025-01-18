@@ -13,63 +13,24 @@ import { PeakTransactionTimes } from "@/components/client-dashboard/analytics/Pe
 import { RiskDistribution } from "@/components/client-dashboard/analytics/RiskDistribution";
 import { TransactionHistory } from "@/components/client-dashboard/transactions/TransactionHistory";
 import { RiskOverview } from "@/components/client-dashboard/RiskOverview";
+import { AnalyticsSection } from "./AnalyticsSection";
+import { SecuritySection } from "./SecuritySection";
+import { MonitoringSection } from "./MonitoringSection";
 
 export const AnalyticsGrid = () => {
   return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <TrendAnalysis />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <GeographicDistribution />
-        </ErrorBoundary>
-      </div>
+    <div className="space-y-8">
+      <ErrorBoundary>
+        <AnalyticsSection />
+      </ErrorBoundary>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <BiometricVerificationMonitoring />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <FlaggedDevices />
-        </ErrorBoundary>
-      </div>
+      <ErrorBoundary>
+        <SecuritySection />
+      </ErrorBoundary>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <AffiliateMonitoring />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <RewardProgramMonitoring />
-        </ErrorBoundary>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <TrialAbuseMonitoring />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <DeviceFingerprintMonitoring />
-        </ErrorBoundary>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <IdentityVerificationMonitoring />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <UserActivityMonitoring />
-        </ErrorBoundary>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ErrorBoundary>
-          <PeakTransactionTimes />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <RiskDistribution />
-        </ErrorBoundary>
-      </div>
+      <ErrorBoundary>
+        <MonitoringSection />
+      </ErrorBoundary>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ErrorBoundary>
@@ -79,6 +40,6 @@ export const AnalyticsGrid = () => {
           <RiskOverview />
         </ErrorBoundary>
       </div>
-    </>
+    </div>
   );
 };
