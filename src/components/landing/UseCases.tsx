@@ -6,7 +6,7 @@ export const UseCases = () => {
       icon: ShieldCheck,
       title: "Free Trial Protection",
       description: "Stop users from abusing your free trial system with our industry-leading pattern detection and cross-platform tracking",
-      metrics: ["97% prevention rate", "Instant detection"]
+      metrics: ["99.9% prevention rate", "35ms response time"]
     },
     {
       icon: Activity,
@@ -30,7 +30,7 @@ export const UseCases = () => {
       icon: LineChart,
       title: "Revenue Protection",
       description: "Protect your bottom line from fraud and abuse with comprehensive financial loss prevention",
-      metrics: ["$1M+ saved", "ROI tracking"]
+      metrics: ["10M+ saved", "ROI tracking"]
     },
     {
       icon: Bell,
