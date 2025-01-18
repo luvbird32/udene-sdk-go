@@ -11,7 +11,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 0%;
+    --background: 0 0% 3%;
     --foreground: 142 72% 29%;
     --card: 0 0% 3%;
     --card-foreground: 142 72% 29%;
@@ -34,7 +34,7 @@
 
 @layer utilities {
   .dark {
-    --background: 0 0% 0%;
+    --background: 0 0% 3%;
     --foreground: 142 72% 29%;
     --card: 0 0% 3%;
     --card-foreground: 142 72% 29%;
