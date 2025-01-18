@@ -11,6 +11,7 @@ import { Compliance } from "@/components/landing/Compliance";
 import { Terms } from "@/components/landing/Terms";
 import { Testimonials } from "@/components/landing/Testimonials";
 import { HowItWorks } from "@/components/landing/HowItWorks";
+import { WhyMissionObjective } from "@/components/landing/WhyMissionObjective";
 import { useEffect } from "react";
 
 const Landing = () => {
@@ -28,6 +29,9 @@ const Landing = () => {
         <HeroSection />
       </MatrixBackground>
       
+      <div id="why-mission-objective">
+        <WhyMissionObjective />
+      </div>
       <div id="features">
         <Features />
       </div>
