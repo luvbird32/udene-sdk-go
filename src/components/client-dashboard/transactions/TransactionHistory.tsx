@@ -9,6 +9,7 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { LoadingState } from "./components/LoadingState";
 import { ErrorState } from "./components/ErrorState";
 import { EmptyState } from "./components/EmptyState";
+import { DatabaseTransaction } from "@/types/transactions";
 
 export const TransactionHistory = () => {
   const { toast } = useToast();
@@ -58,18 +59,9 @@ export const TransactionHistory = () => {
       throw error;
     }
 
-    // For now, we'll use the encrypted values directly
-    // In a production environment, you'd want to decrypt these values
-    const processedData = data?.map(transaction => ({
-      ...transaction,
-      // Keep using encrypted values for now
-      amount_encrypted: transaction.amount_encrypted,
-      merchant_id_encrypted: transaction.merchant_id_encrypted,
-      transaction_type_encrypted: transaction.transaction_type_encrypted
-    }));
-
-    console.log("Transactions fetched:", processedData);
-    return processedData;
+    // Return the data directly since it matches our DatabaseTransaction type
+    console.log("Transactions fetched:", data);
+    return data as DatabaseTransaction[];
   }, [user]);
 
   const { data: transactions, isLoading, error } = useQuery({

@@ -2,14 +2,17 @@ import { Json } from "@/integrations/supabase/types";
 
 export interface DatabaseTransaction {
   id: string;
-  amount: number;
-  merchant_id: string;
+  amount_encrypted: string | null;
+  amount_iv: string | null;
+  merchant_id_encrypted: string | null;
+  merchant_id_iv: string | null;
+  transaction_type_encrypted: string | null;
+  transaction_type_iv: string | null;
   customer_id: string;
   timestamp: string;
   location: string;
   device_id: string;
   ip_address: string;
-  transaction_type: string;
   card_present: boolean;
   recurring: boolean;
   risk_score: number | null;
@@ -24,25 +27,18 @@ export interface DatabaseTransaction {
   message_velocity: number | null;
   profile_changes: Json | null;
   interaction_patterns: Json | null;
-  // New encrypted fields
-  amount_encrypted?: Uint8Array;
-  amount_iv?: Uint8Array;
-  merchant_id_encrypted?: Uint8Array;
-  merchant_id_iv?: Uint8Array;
-  transaction_type_encrypted?: Uint8Array;
-  transaction_type_iv?: Uint8Array;
 }
 
 export interface TransactionWithPatterns {
   id: string;
-  amount: number;
-  merchant_id: string;
+  amount_encrypted: string | null;
+  merchant_id_encrypted: string | null;
+  transaction_type_encrypted: string | null;
   customer_id: string;
   timestamp: string;
   location: string;
   device_id: string;
   ip_address: string;
-  transaction_type: string;
   card_present: boolean;
   recurring: boolean;
   risk_score: number | null;
