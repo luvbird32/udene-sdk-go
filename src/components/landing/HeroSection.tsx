@@ -34,7 +34,7 @@ export const HeroSection = () => {
         </h1>
         
         <p className="text-xl text-green-300/90 mb-12 max-w-3xl mx-auto leading-relaxed">
-          Industry-leading solution that prevents users from exploiting your systems and engaging in fraudulent behavior. Protect your revenue with advanced behavioral analysis and cross-platform tracking that catches what others miss.
+          Safeguard your business with our enterprise-grade fraud prevention platform. We combine advanced behavioral analysis, machine learning, and real-time monitoring to protect against account takeover, payment fraud, and system exploitation. Our cross-platform solution helps e-commerce, fintech, and SaaS companies save millions by stopping fraudsters before they impact your bottom line. Join industry leaders who trust us to protect their revenue, maintain customer trust, and ensure sustainable growth.
         </p>
         
         <div className="flex flex-col sm:flex-row justify-center gap-6 items-center mb-16">
