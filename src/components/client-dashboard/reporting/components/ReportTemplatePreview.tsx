@@ -26,12 +26,12 @@ export const ReportTemplatePreview = ({
         
         <div className="space-y-2 text-sm">
           <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">Report Type:</span>
+            <span className="text-white/60">Report Type:</span>
             <span className="font-medium">{reportType}</span>
           </div>
           
           <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">Date Range:</span>
+            <span className="text-white/60">Date Range:</span>
             <span className="font-medium">
               {dateRange?.from && dateRange?.to ? (
                 <>
@@ -46,14 +46,14 @@ export const ReportTemplatePreview = ({
           
           {scheduleName && (
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Schedule Name:</span>
+              <span className="text-white/60">Schedule Name:</span>
               <span className="font-medium">{scheduleName}</span>
             </div>
           )}
           
           {scheduleFrequency && (
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Frequency:</span>
+              <span className="text-white/60">Frequency:</span>
               <span className="font-medium capitalize">{scheduleFrequency}</span>
             </div>
           )}

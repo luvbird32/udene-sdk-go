@@ -8,7 +8,7 @@ interface ReportTypeSelectorProps {
 export const ReportTypeSelector = ({ reportType, onReportTypeChange }: ReportTypeSelectorProps) => {
   return (
     <div>
-      <label className="block text-sm font-medium mb-2">Report Type</label>
+      <label className="block text-sm text-white/60 mb-2">Report Type</label>
       <Select value={reportType} onValueChange={onReportTypeChange}>
         <SelectTrigger>
           <SelectValue placeholder="Select report type" />

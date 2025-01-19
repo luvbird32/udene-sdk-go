@@ -13,7 +13,7 @@ interface DateRangeSelectorProps {
 export const DateRangeSelector = ({ dateRange, onDateRangeChange }: DateRangeSelectorProps) => {
   return (
     <div>
-      <label className="block text-sm font-medium mb-2">Date Range</label>
+      <label className="block text-sm text-white/60 mb-2">Date Range</label>
       <Popover>
         <PopoverTrigger asChild>
           <Button variant="outline" className="w-full justify-start text-left">

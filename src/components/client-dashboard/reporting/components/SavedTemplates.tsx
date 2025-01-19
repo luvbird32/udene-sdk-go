@@ -19,7 +19,7 @@ export const SavedTemplates = () => {
 
   return (
     <div>
-      <label className="block text-sm font-medium mb-2">Saved Templates</label>
+      <label className="block text-sm text-white/60 mb-2">Saved Templates</label>
       <Select>
         <SelectTrigger>
           <SelectValue placeholder={savedTemplates?.length ? "Load template" : "No templates saved"} />
