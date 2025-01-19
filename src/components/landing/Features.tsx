@@ -5,14 +5,14 @@ export const Features = () => {
   return (
     <section className="relative z-10 py-24 bg-[hsl(222,47%,11%)]">
       <div className="container mx-auto px-4">
-        <div className="glass-card p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center backdrop-blur-lg border border-white/5 mb-16">
-          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary/10 p-4 rounded-full border border-primary/20">
+        <div className="glass-card p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center backdrop-blur-lg border border-white/5 mb-16 transform transition-all duration-500 hover:border-primary/20">
+          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110 hover:bg-primary/20">
             <Shield className="w-10 h-10 text-primary animate-pulse" />
           </div>
           
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-white leading-tight">
             Advanced Protection Features That{" "}
-            <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">
+            <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text animate-gradient">
               Others Don't Offer
             </span>
           </h2>
@@ -73,19 +73,19 @@ interface FeatureCardProps {
 
 const FeatureCard = ({ icon, title, description }: FeatureCardProps) => {
   return (
-    <Card className="group relative overflow-hidden p-6 bg-black/40 backdrop-blur-sm border border-white/5 hover:border-primary/20 transition-all duration-300 hover:scale-[1.02]">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+    <Card className="group relative overflow-hidden p-6 bg-black/40 backdrop-blur-sm border border-white/5 hover:border-primary/20 transition-all duration-500 hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/5">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out" />
       
       <div className="relative space-y-4">
-        <div className="inline-flex p-3 rounded-lg bg-primary/10 text-primary group-hover:scale-110 transition-transform duration-300">
+        <div className="inline-flex p-3 rounded-lg bg-primary/10 text-primary group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-500 ease-in-out">
           {icon}
         </div>
         
-        <h3 className="text-xl font-semibold text-white group-hover:text-primary/90 transition-colors">
+        <h3 className="text-xl font-semibold text-white group-hover:text-primary/90 transition-all duration-300">
           {title}
         </h3>
         
-        <p className="text-gray-300 leading-relaxed">
+        <p className="text-gray-300 leading-relaxed group-hover:text-gray-200 transition-all duration-300">
           {description}
         </p>
       </div>
