@@ -44,10 +44,13 @@ export const UseCases = () => {
     <section className="relative z-10 py-24">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-green-400 mb-4">
-            Real Solutions for Real Threats
+          <h2 className="text-4xl font-bold mb-4">
+            Real Solutions for{" "}
+            <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">
+              Real Threats
+            </span>
           </h2>
-          <p className="text-xl text-green-300/80 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-300/80 max-w-3xl mx-auto">
             Protect your business from sophisticated fraud attempts and system exploitation
           </p>
         </div>
@@ -56,19 +59,19 @@ export const UseCases = () => {
           {useCases.map((useCase, index) => (
             <div
               key={index}
-              className="glass-card p-8 rounded-xl transition-all duration-300 hover:scale-105 hover:bg-green-900/20"
+              className="glass-card p-8 rounded-xl transition-all duration-300 hover:scale-105 hover:border-primary/30 backdrop-blur-lg border border-primary/20"
             >
-              <useCase.icon className="w-12 h-12 text-green-400 mb-6" />
-              <h3 className="text-2xl font-semibold text-green-300 mb-4">
+              <useCase.icon className="w-12 h-12 text-primary mb-6" />
+              <h3 className="text-2xl font-semibold text-white mb-4">
                 {useCase.title}
               </h3>
-              <p className="text-green-300/80 mb-6 leading-relaxed">
+              <p className="text-gray-300 mb-6 leading-relaxed">
                 {useCase.description}
               </p>
-              <div className="border-t border-green-500/20 pt-4">
+              <div className="border-t border-primary/20 pt-4">
                 <div className="grid grid-cols-1 gap-2">
                   {useCase.metrics.map((metric, idx) => (
-                    <div key={idx} className="text-green-400 text-sm font-medium">
+                    <div key={idx} className="text-primary text-sm font-medium">
                       ✓ {metric}
                     </div>
                   ))}
