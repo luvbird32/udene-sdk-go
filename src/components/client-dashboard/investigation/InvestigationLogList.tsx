@@ -26,7 +26,7 @@ export const InvestigationLogList = ({ logs }: InvestigationLogListProps) => {
     <div className="space-y-4">
       <div className="flex gap-4 mb-6">
         <div className="relative flex-1">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-white/60" />
           <Input
             placeholder="Search investigations..."
             value={searchTerm}
@@ -52,7 +52,7 @@ export const InvestigationLogList = ({ logs }: InvestigationLogListProps) => {
       ))}
 
       {logs.length === 0 && (
-        <div className="text-center py-8 text-muted-foreground bg-muted/50 rounded-lg">
+        <div className="text-center py-8 text-white/60 bg-muted/50 rounded-lg">
           <AlertCircle className="h-8 w-8 mx-auto mb-2" />
           <p className="font-medium">No investigation logs found</p>
           <p className="text-sm mt-1">
@@ -62,7 +62,7 @@ export const InvestigationLogList = ({ logs }: InvestigationLogListProps) => {
       )}
 
       {logs.length > 0 && filteredLogs.length === 0 && (
-        <div className="text-center py-8 text-muted-foreground bg-muted/50 rounded-lg">
+        <div className="text-center py-8 text-white/60 bg-muted/50 rounded-lg">
           <Search className="h-8 w-8 mx-auto mb-2" />
           <p className="font-medium">No matching investigations</p>
           <p className="text-sm mt-1">

@@ -53,8 +53,8 @@ export const NewInvestigationDialog = ({ open, onOpenChange }: NewInvestigationD
           />
 
           <div className="bg-muted/50 p-4 rounded-lg">
-            <h4 className="text-sm font-medium mb-2">Investigation Preview</h4>
-            <div className="text-sm text-muted-foreground space-y-2">
+            <h4 className="text-sm font-medium mb-2 text-white/60">Investigation Preview</h4>
+            <div className="text-sm text-white/60 space-y-2">
               <p><strong>Type:</strong> {type || "Not selected"}</p>
               <p><strong>Initial Status:</strong> Pending</p>
               <p><strong>Notes Length:</strong> {notes.length}/500 characters</p>
