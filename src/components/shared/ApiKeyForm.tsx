@@ -28,24 +28,24 @@ export const ApiKeyForm = ({ onSubmit, isGenerating }: ApiKeyFormProps) => {
           placeholder="Project Name"
           value={projectName}
           onChange={(e) => setProjectName(e.target.value)}
-          className="mb-2"
+          className="mb-2 text-white/60"
         />
         <Input
           placeholder="Project Description (optional)"
           value={projectDescription}
           onChange={(e) => setProjectDescription(e.target.value)}
-          className="mb-2"
+          className="mb-2 text-white/60"
         />
         <Select
           value={keyType}
           onValueChange={(value: 'testing' | 'production') => setKeyType(value)}
         >
-          <SelectTrigger>
+          <SelectTrigger className="text-white/60">
             <SelectValue placeholder="Select key type" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="testing">Test Key</SelectItem>
-            <SelectItem value="production">Production Key</SelectItem>
+            <SelectItem value="testing" className="text-white/60">Test Key</SelectItem>
+            <SelectItem value="production" className="text-white/60">Production Key</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -57,10 +57,10 @@ export const ApiKeyForm = ({ onSubmit, isGenerating }: ApiKeyFormProps) => {
         {isGenerating ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Generating...
+            <span className="text-white/60">Generating...</span>
           </>
         ) : (
-          'Generate API Key'
+          <span className="text-white/60">Generate API Key</span>
         )}
       </Button>
     </div>

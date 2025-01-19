@@ -9,7 +9,7 @@ interface ApiKeyFormSectionProps {
 export const ApiKeyFormSection = ({ onGenerateKey, isGenerating }: ApiKeyFormSectionProps) => {
   return (
     <Card className="p-6">
-      <h3 className="text-lg font-semibold mb-4">Generate New API Key</h3>
+      <h3 className="text-lg font-semibold mb-4 text-white/60">Generate New API Key</h3>
       <ApiKeyForm 
         onSubmit={onGenerateKey}
         isGenerating={isGenerating}
