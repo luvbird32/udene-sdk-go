@@ -12,7 +12,7 @@ export const UseCases = () => {
       icon: Activity,
       title: "Account Protection",
       description: "Prevent account takeovers and unauthorized access with real-time behavioral monitoring and risk assessment",
-      metrics: ["500ms response time", "99.9% accuracy"]
+      metrics: ["35ms response time", "99.9% accuracy"]
     },
     {
       icon: UserCheck,
