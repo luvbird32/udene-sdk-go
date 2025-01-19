@@ -89,8 +89,8 @@ export const FeedbackManagement = () => {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>False Positive Management</CardTitle>
-          <CardDescription>Loading flagged transactions...</CardDescription>
+          <CardTitle className="text-white">False Positive Management</CardTitle>
+          <CardDescription className="text-white/60">Loading flagged transactions...</CardDescription>
         </CardHeader>
       </Card>
     );
@@ -99,13 +99,13 @@ export const FeedbackManagement = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>False Positive Management</CardTitle>
-        <CardDescription>Review and manage flagged transactions</CardDescription>
+        <CardTitle className="text-white">False Positive Management</CardTitle>
+        <CardDescription className="text-white/60">Review and manage flagged transactions</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           {flaggedTransactions?.length === 0 ? (
-            <p className="text-muted-foreground">No flagged transactions to review.</p>
+            <p className="text-white/60">No flagged transactions to review.</p>
           ) : (
             flaggedTransactions?.map((transaction: any) => (
               <div
@@ -113,13 +113,13 @@ export const FeedbackManagement = () => {
                 className="flex items-center justify-between p-4 border rounded-lg"
               >
                 <div>
-                  <p className="font-medium">
+                  <p className="font-medium text-white">
                     Transaction ID: {transaction.id.slice(0, 8)}...
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-white/60">
                     Amount: ${transaction.amount}
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-white/60">
                     Status: {transaction.feedback_status || "Pending Review"}
                   </p>
                 </div>

@@ -70,7 +70,7 @@ export const RiskFactorAnalysis = () => {
     return (
       <Card className="p-4">
         <Alert>
-          <AlertDescription>
+          <AlertDescription className="text-white">
             No transactions available. New transactions will appear here automatically.
           </AlertDescription>
         </Alert>
@@ -81,9 +81,10 @@ export const RiskFactorAnalysis = () => {
   return (
     <Card className="p-4">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold">Risk Factor Analysis</h3>
+        <h3 className="font-semibold text-white">Risk Factor Analysis</h3>
         <Badge 
           variant={latestTransaction.risk_score && latestTransaction.risk_score >= 70 ? "destructive" : "secondary"}
+          className="text-white"
         >
           Risk Score: {latestTransaction.risk_score?.toFixed(1)}%
         </Badge>
@@ -91,7 +92,7 @@ export const RiskFactorAnalysis = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div>
-          <h4 className="text-sm font-medium mb-2">Feature Importance</h4>
+          <h4 className="text-sm font-medium mb-2 text-white">Feature Importance</h4>
           <RiskChart 
             title="Feature Importance"
             data={chartData}
@@ -99,7 +100,7 @@ export const RiskFactorAnalysis = () => {
         </div>
 
         <div>
-          <h4 className="text-sm font-medium mb-2">Risk Explanations</h4>
+          <h4 className="text-sm font-medium mb-2 text-white">Risk Explanations</h4>
           <RiskIndicators 
             indicators={datingRiskIndicators}
             additionalFactors={additionalFactors}

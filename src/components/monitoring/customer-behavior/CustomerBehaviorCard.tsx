@@ -8,7 +8,7 @@ export const CustomerBehaviorCard = () => {
 
   return (
     <Card className="p-4">
-      <h3 className="font-semibold mb-4">Customer Behavior Analysis</h3>
+      <h3 className="font-semibold mb-4 text-white">Customer Behavior Analysis</h3>
       <ScrollArea className="h-[300px] pr-4">
         <div className="space-y-6">
           {behaviorMetrics?.map((customer) => (
