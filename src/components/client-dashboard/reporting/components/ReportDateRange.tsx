@@ -11,7 +11,7 @@ interface ReportDateRangeProps {
 export const ReportDateRange = ({ dateRange, onDateRangeChange }: ReportDateRangeProps) => {
   return (
     <Card className="p-4">
-      <Label className="block mb-2">Select Date Range</Label>
+      <Label className="block mb-2 text-white/60">Select Date Range</Label>
       <Calendar
         mode="range"
         selected={dateRange}
