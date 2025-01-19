@@ -39,16 +39,16 @@ export const DependencyMonitor = () => {
     <Card className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Shield className="h-5 w-5 text-primary" />
-          <h3 className="text-lg font-semibold">Dependency Security Monitor</h3>
+          <Shield className="h-5 w-5 text-white/60" />
+          <h3 className="text-lg font-semibold text-white/60">Dependency Security Monitor</h3>
         </div>
       </div>
 
       {(criticalCount > 0 || highCount > 0) && (
         <Alert variant="destructive">
           <AlertTriangle className="h-4 w-4" />
-          <AlertTitle>Security Vulnerabilities Detected</AlertTitle>
-          <AlertDescription>
+          <AlertTitle className="text-white/60">Security Vulnerabilities Detected</AlertTitle>
+          <AlertDescription className="text-white/60">
             Found {criticalCount} critical and {highCount} high severity vulnerabilities.
           </AlertDescription>
         </Alert>

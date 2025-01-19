@@ -20,18 +20,18 @@ export const ScanHistory = () => {
 
   return (
     <div className="space-y-4">
-      <h4 className="font-medium">Recent Scans</h4>
+      <h4 className="font-medium text-white/60">Recent Scans</h4>
       <div className="space-y-2">
         {scans?.map((scan) => (
           <Card key={scan.id} className="p-3">
             <div className="flex items-center justify-between text-sm">
               <div>
-                <span className="font-medium">
+                <span className="font-medium text-white/60">
                   {scan.vulnerabilities_found} vulnerabilities
                 </span>
-                <span className="text-muted-foreground"> in {scan.total_dependencies} dependencies</span>
+                <span className="text-white/60"> in {scan.total_dependencies} dependencies</span>
               </div>
-              <span className="text-muted-foreground">
+              <span className="text-white/60">
                 {format(new Date(scan.scan_date), 'PPp')}
               </span>
             </div>
