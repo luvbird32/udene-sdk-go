@@ -11,37 +11,37 @@ export const ProfileDisplay = ({ profile }: ProfileDisplayProps) => {
     <div className="space-y-4">
       <div className="flex items-center gap-2">
         <User className="h-4 w-4 text-muted-foreground" />
-        <span className="text-sm text-muted-foreground">Username:</span>
+        <span className="text-sm text-white/60">Username:</span>
         <span className="font-medium">{profile.username || "Not set"}</span>
       </div>
 
       <div className="flex items-center gap-2">
         <Building2 className="h-4 w-4 text-muted-foreground" />
-        <span className="text-sm text-muted-foreground">Organization:</span>
+        <span className="text-sm text-white/60">Organization:</span>
         <span className="font-medium">{profile.organization_name || "Not set"}</span>
       </div>
 
       <div className="flex items-center gap-2">
         <BadgeCheck className="h-4 w-4 text-muted-foreground" />
-        <span className="text-sm text-muted-foreground">Role:</span>
+        <span className="text-sm text-white/60">Role:</span>
         <span className="font-medium">{profile.organization_role || "Not set"}</span>
       </div>
 
       <div className="flex items-center gap-2">
         <Phone className="h-4 w-4 text-muted-foreground" />
-        <span className="text-sm text-muted-foreground">Phone:</span>
+        <span className="text-sm text-white/60">Phone:</span>
         <span className="font-medium">{profile.phone_number || "Not set"}</span>
       </div>
 
       <div className="flex items-center gap-2">
         <Globe className="h-4 w-4 text-muted-foreground" />
-        <span className="text-sm text-muted-foreground">Timezone:</span>
+        <span className="text-sm text-white/60">Timezone:</span>
         <span className="font-medium">{profile.timezone || "UTC"}</span>
       </div>
 
       <div className="flex items-center gap-2">
         <Bell className="h-4 w-4 text-muted-foreground" />
-        <span className="text-sm text-muted-foreground">Notifications:</span>
+        <span className="text-sm text-white/60">Notifications:</span>
         <span className="font-medium">
           {profile.preferences?.notifications?.email ? "Email" : ""}{" "}
           {profile.preferences?.notifications?.sms ? "SMS" : ""}
