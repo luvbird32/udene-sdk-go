@@ -22,8 +22,8 @@ export const BiometricVerificationMonitoring = () => {
     return (
       <Card className="p-4">
         <Alert>
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription>
+          <AlertCircle className="h-4 w-4 text-white" />
+          <AlertDescription className="text-white/60">
             No biometric verification data available
           </AlertDescription>
         </Alert>

@@ -21,7 +21,6 @@ export const FlaggedDevices = () => {
 
       if (error) throw error;
       
-      // The encrypted data is handled by the database, we just use the regular fields
       return data as DeviceFingerprint[];
     },
   });
@@ -29,9 +28,9 @@ export const FlaggedDevices = () => {
   if (isLoading) {
     return (
       <Card className="p-4">
-        <h3 className="font-semibold mb-4">Flagged Devices</h3>
+        <h3 className="font-semibold text-white mb-4">Flagged Devices</h3>
         <div className="h-[300px] flex items-center justify-center">
-          <p className="text-muted-foreground">Loading flagged devices...</p>
+          <p className="text-white/60">Loading flagged devices...</p>
         </div>
       </Card>
     );
@@ -41,7 +40,7 @@ export const FlaggedDevices = () => {
     <Card className="p-4">
       <div className="flex items-center gap-2 mb-4">
         <AlertTriangle className="h-5 w-5 text-destructive" />
-        <h3 className="font-semibold">Flagged Devices</h3>
+        <h3 className="font-semibold text-white">Flagged Devices</h3>
       </div>
 
       <ScrollArea className="h-[400px] pr-4">
@@ -51,7 +50,7 @@ export const FlaggedDevices = () => {
           ))}
 
           {(!flaggedDevices || flaggedDevices.length === 0) && (
-            <div className="text-center text-muted-foreground py-8">
+            <div className="text-center text-white/60 py-8">
               No flagged devices found
             </div>
           )}
