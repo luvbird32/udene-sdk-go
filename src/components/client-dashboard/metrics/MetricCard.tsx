@@ -31,11 +31,11 @@ export const MetricCard = ({
   return (
     <Card className="p-4">
       <div className="flex items-center space-x-2">
-        <Icon className="h-8 w-8 text-muted-foreground" />
+        <Icon className="h-8 w-8 text-white/60" />
         <div>
-          <h3 className="font-medium text-sm">{title}</h3>
-          <p className="text-2xl font-bold">{value}</p>
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <h3 className="font-medium text-sm text-white/60">{title}</h3>
+          <p className="text-2xl font-bold text-white">{value}</p>
+          <p className="text-sm text-white/60">{description}</p>
         </div>
       </div>
     </Card>
