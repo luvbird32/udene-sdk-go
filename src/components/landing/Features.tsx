@@ -5,8 +5,12 @@ export const Features = () => {
   return (
     <section className="relative z-10 py-24 bg-black/40">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 space-y-4">
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-primary/50 bg-clip-text text-transparent">
+        <div className="glass-card p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center backdrop-blur-lg border border-white/5 mb-16">
+          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary/10 p-4 rounded-full border border-primary/20">
+            <Shield className="w-10 h-10 text-primary animate-pulse" />
+          </div>
+          
+          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-primary/50 bg-clip-text text-transparent mb-6">
             Advanced Protection Features
           </h2>
           <p className="text-primary/80 text-lg md:text-xl max-w-2xl mx-auto">
