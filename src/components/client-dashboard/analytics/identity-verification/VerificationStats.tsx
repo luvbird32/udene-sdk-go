@@ -9,8 +9,8 @@ export const VerificationStats = ({ totalVerifications }: VerificationStatsProps
   return (
     <div className="flex items-center justify-between mb-4">
       <div className="flex items-center gap-2">
-        <Shield className="h-5 w-5 text-muted-foreground" />
-        <h3 className="font-semibold">Identity Verification Status</h3>
+        <Shield className="h-5 w-5 text-white/60" />
+        <h3 className="font-semibold text-white">Identity Verification Status</h3>
       </div>
       <Badge variant="outline">
         {totalVerifications} Total
