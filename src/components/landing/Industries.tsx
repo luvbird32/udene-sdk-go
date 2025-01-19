@@ -1,4 +1,4 @@
-import { Shield, Building2, Bank, ShoppingCart, Briefcase, Plane, Car, Gamepad } from "lucide-react";
+import { Shield, Building2, Building2Bank, ShoppingCart, Briefcase, Plane, Car, Gamepad } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 export const Industries = () => {
@@ -25,7 +25,7 @@ export const Industries = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <IndustryCard
-            icon={<Bank className="w-8 h-8" />}
+            icon={<Building2Bank className="w-8 h-8" />}
             title="Financial Services"
             description="Protect financial transactions and prevent account takeover with our advanced fraud detection."
           />
