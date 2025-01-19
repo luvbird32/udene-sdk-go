@@ -22,18 +22,18 @@ export const WebhookListItem = ({ webhook, onDelete, onToggle }: WebhookListItem
     <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
       <div className="space-y-1">
         <div className="flex items-center gap-2">
-          <Server className="h-4 w-4" />
-          <span className="font-medium">{webhook.url}</span>
+          <Server className="h-4 w-4 text-white/60" />
+          <span className="font-medium text-white/60">{webhook.url}</span>
         </div>
         {webhook.description && (
-          <p className="text-sm text-muted-foreground">{webhook.description}</p>
+          <p className="text-sm text-white/60">{webhook.description}</p>
         )}
         <div className="flex gap-2 flex-wrap">
           {webhook.events.map((event) => (
             <Badge
               key={event}
               variant="secondary"
-              className="text-xs"
+              className="text-xs text-white/60"
             >
               {event.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
             </Badge>

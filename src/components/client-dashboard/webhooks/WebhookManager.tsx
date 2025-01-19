@@ -32,10 +32,10 @@ export const WebhookManager = () => {
           <Webhook className="h-5 w-5 text-primary" />
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-lg font-semibold">Webhook Configuration</h3>
+              <h3 className="text-lg font-semibold text-white/60">Webhook Configuration</h3>
               <Badge variant="outline">Beta</Badge>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-white/60">
               Receive real-time notifications for important events
             </p>
           </div>
@@ -43,8 +43,8 @@ export const WebhookManager = () => {
 
         <Alert className="mb-6">
           <Info className="h-4 w-4" />
-          <AlertTitle>Getting Started with Webhooks</AlertTitle>
-          <AlertDescription>
+          <AlertTitle className="text-white/60">Getting Started with Webhooks</AlertTitle>
+          <AlertDescription className="text-white/60">
             Add a webhook URL below to start receiving event notifications. You can configure multiple webhooks and select which events to subscribe to for each endpoint.
           </AlertDescription>
         </Alert>
