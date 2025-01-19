@@ -1,86 +1,81 @@
+import { Facebook, Github, Instagram, Linkedin, Twitter } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Shield } from "lucide-react";
 
 export const Footer = () => {
-  const currentYear = new Date().getFullYear();
+  const footerLinks = [
+    {
+      title: "Product",
+      links: ["Features", "Security", "Team", "Enterprise", "Customer Stories", "Pricing", "Resources"],
+    },
+    {
+      title: "Platform",
+      links: ["Developer API", "Partners", "Atom", "Electron", "GitHub Desktop"],
+    },
+    {
+      title: "Support",
+      links: ["Help", "Community Forum", "Professional Services", "Skills", "Status", "Contact GitHub"],
+    },
+    {
+      title: "Company",
+      links: ["About", "Blog", "Careers", "Press", "Inclusion", "Social Impact", "Shop"],
+    },
+  ];
 
-  const links = {
-    product: [
-      { name: "Features", href: "#features" },
-      { name: "Security", href: "#security" },
-      { name: "Enterprise", href: "#enterprise" },
-      { name: "Pricing", href: "#pricing" },
-    ],
-    developers: [
-      { name: "Documentation", href: "/docs" },
-      { name: "API Reference", href: "/docs/api" },
-      { name: "Status", href: "/status" },
-      { name: "SDKs", href: "/docs/sdks" },
-    ],
-    company: [
-      { name: "About", href: "/about" },
-      { name: "Blog", href: "/blog" },
-      { name: "Careers", href: "/careers" },
-      { name: "Contact", href: "/contact" },
-    ],
-    legal: [
-      { name: "Terms", href: "#terms" },
-      { name: "Privacy", href: "/privacy" },
-      { name: "Compliance", href: "#compliance" },
-      { name: "Security", href: "/security" },
-    ],
-  };
+  const socialLinks = [
+    { icon: Github, href: "#" },
+    { icon: Twitter, href: "#" },
+    { icon: Linkedin, href: "#" },
+    { icon: Facebook, href: "#" },
+    { icon: Instagram, href: "#" },
+  ];
 
   return (
-    <footer className="relative z-10 border-t border-green-500/20">
-      <div className="max-w-7xl mx-auto px-4 py-12">
+    <footer className="py-12 relative z-10 bg-black/40">
+      <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-8">
-          <div className="col-span-2">
-            <Link to="/" className="flex items-center mb-4">
-              <Shield className="w-8 h-8 text-green-400 mr-2" />
-              <span className="text-xl font-bold text-green-300">Udene</span>
-            </Link>
-            <p className="text-green-300/80 mb-4 max-w-sm">
-              Enterprise-grade fraud detection powered by advanced AI algorithms and real-time monitoring
-            </p>
-          </div>
-          
-          {Object.entries(links).map(([category, items]) => (
-            <div key={category}>
-              <h3 className="text-green-400 font-semibold mb-3 capitalize">
-                {category}
+          {footerLinks.map((section, idx) => (
+            <div key={idx}>
+              <h3 className="text-lg font-semibold mb-4 bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">
+                {section.title}
               </h3>
               <ul className="space-y-2">
-                {items.map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      to={item.href}
-                      className="text-green-300/80 hover:text-green-300 transition-colors"
+                {section.links.map((link, linkIdx) => (
+                  <li key={linkIdx}>
+                    <Link 
+                      to="#" 
+                      className="text-gray-300 hover:text-white transition-colors duration-200"
                     >
-                      {item.name}
+                      {link}
                     </Link>
                   </li>
                 ))}
               </ul>
             </div>
           ))}
-        </div>
-        
-        <div className="border-t border-green-500/20 pt-8 mt-8 text-center md:flex md:justify-between md:text-left">
-          <p className="text-green-300/80 mb-4 md:mb-0">
-            © {currentYear} Udene. All rights reserved.
-          </p>
-          <div className="space-x-6">
-            <a href="https://twitter.com/udene" className="text-green-300/80 hover:text-green-300 transition-colors">
-              Twitter
-            </a>
-            <a href="https://linkedin.com/company/udene" className="text-green-300/80 hover:text-green-300 transition-colors">
-              LinkedIn
-            </a>
-            <a href="https://github.com/udene" className="text-green-300/80 hover:text-green-300 transition-colors">
-              GitHub
-            </a>
+          <div>
+            <h3 className="text-lg font-semibold mb-4 bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">
+              Connect
+            </h3>
+            <div className="flex space-x-4">
+              {socialLinks.map((social, idx) => {
+                const Icon = social.icon;
+                return (
+                  <a
+                    key={idx}
+                    href={social.href}
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    <Icon className="w-5 h-5" />
+                  </a>
+                );
+              })}
+            </div>
           </div>
+        </div>
+        <div className="border-t border-primary/20 pt-8">
+          <p className="text-center text-gray-300">
+            © {new Date().getFullYear()} Your Company. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
