@@ -57,7 +57,7 @@ export const SecurityProgramList = () => {
       <DependencyMonitor />
       
       <div className="space-y-6">
-        <h2 className="text-2xl font-semibold">Security Programs</h2>
+        <h2 className="text-2xl font-semibold text-white">Security Programs</h2>
         <div className="grid gap-6">
           {programs?.map((program) => (
             <SecurityProgramCard key={program.id} program={program} />
