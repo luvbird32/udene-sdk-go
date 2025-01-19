@@ -28,8 +28,8 @@ export const ReportScheduleStatus = () => {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Clock className="h-4 w-4 text-muted-foreground" />
-            <h4 className="font-medium">Scheduled Reports</h4>
+            <Clock className="h-4 w-4 text-white/60" />
+            <h4 className="font-medium text-white/60">Scheduled Reports</h4>
           </div>
           <Badge variant="outline">
             {scheduledReports?.length || 0} Active
@@ -44,15 +44,15 @@ export const ReportScheduleStatus = () => {
                 className="flex items-center justify-between p-2 rounded-lg border"
               >
                 <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span className="font-medium">{report.report_type}</span>
+                  <Calendar className="h-4 w-4 text-white/60" />
+                  <span className="font-medium text-white/60">{report.report_type}</span>
                 </div>
                 <Badge>{report.status}</Badge>
               </div>
             ))}
           </div>
         ) : (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2 text-white/60">
             <AlertCircle className="h-4 w-4" />
             <span>No scheduled reports</span>
           </div>
