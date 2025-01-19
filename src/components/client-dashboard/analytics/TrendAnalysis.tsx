@@ -34,7 +34,7 @@ export const TrendAnalysis = () => {
       <Card className="p-4">
         <TransactionTrendHeader title="Transaction Trends" />
         <div className="h-[300px] flex items-center justify-center">
-          <p className="text-white/60">Loading trends...</p>
+          <p className="text-white">Loading trends...</p>
         </div>
       </Card>
     );
