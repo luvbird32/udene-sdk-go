@@ -33,7 +33,7 @@ export const ApiCreditsCard = () => {
   return (
     <Card className="p-6 space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">API Credits</h3>
+        <h3 className="text-lg font-semibold text-white">API Credits</h3>
         {credits.is_trial && <TrialStatus trialEndDate={credits.trial_end_date} />}
       </div>
 
