@@ -33,7 +33,7 @@ export const CreditUsageProgress = ({ usedCredits, totalCredits }: CreditUsagePr
 
   return (
     <div className="space-y-2">
-      <div className="flex justify-between text-sm">
+      <div className="flex justify-between text-sm text-white/60">
         <span>Used: {usedCredits}</span>
         <span>Total: {totalCredits}</span>
       </div>
