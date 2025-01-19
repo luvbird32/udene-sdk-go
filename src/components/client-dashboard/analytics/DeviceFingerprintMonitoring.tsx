@@ -57,7 +57,7 @@ export const DeviceFingerprintMonitoring = () => {
       <Card className="p-4">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertDescription>
+          <AlertDescription className="text-white">
             Failed to load device fingerprint data. Please try again later.
           </AlertDescription>
         </Alert>
@@ -70,8 +70,8 @@ export const DeviceFingerprintMonitoring = () => {
       <Card className="p-4">
         <DeviceHeader deviceCount={0} />
         <div className="text-center py-8">
-          <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
-          <p className="text-muted-foreground">No device data available</p>
+          <AlertCircle className="h-12 w-12 text-white/60 mx-auto mb-2" />
+          <p className="text-white/60">No device data available</p>
         </div>
       </Card>
     );

@@ -17,13 +17,13 @@ export const IdentityVerificationMonitoring = () => {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Loader2 className="h-5 w-5 animate-spin text-primary" />
-            <h3 className="font-semibold">Identity Verification Status</h3>
+            <h3 className="font-semibold text-white">Identity Verification Status</h3>
           </div>
         </div>
         <div className="h-[200px] flex items-center justify-center">
           <div className="flex flex-col items-center gap-2">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            <p className="text-sm text-muted-foreground">Loading verification data...</p>
+            <p className="text-sm text-white/60">Loading verification data...</p>
           </div>
         </div>
       </Card>
@@ -36,7 +36,7 @@ export const IdentityVerificationMonitoring = () => {
         <VerificationStats totalVerifications={0} />
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertDescription>
+          <AlertDescription className="text-white">
             Failed to load verification data. Please try again later.
           </AlertDescription>
         </Alert>
@@ -50,9 +50,9 @@ export const IdentityVerificationMonitoring = () => {
         <VerificationStats totalVerifications={0} />
         <div className="h-[200px] flex items-center justify-center">
           <div className="text-center">
-            <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
-            <p className="text-muted-foreground">No verification data available</p>
-            <p className="text-sm text-muted-foreground mt-1">
+            <AlertCircle className="h-12 w-12 text-white/60 mx-auto mb-2" />
+            <p className="text-white/60">No verification data available</p>
+            <p className="text-sm text-white/60 mt-1">
               Verification statistics will appear here once users complete identity verification.
             </p>
           </div>
