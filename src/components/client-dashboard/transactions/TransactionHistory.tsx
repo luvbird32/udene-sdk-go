@@ -92,7 +92,7 @@ export const TransactionHistory = () => {
   return (
     <ErrorBoundary>
       <Card className="p-6">
-        <h3 className="font-semibold mb-4">Recent Transactions</h3>
+        <h3 className="font-semibold mb-4 text-white">Recent Transactions</h3>
         
         {isLoading && <LoadingState message="Loading transactions..." />}
         {error && <ErrorState message="Failed to load transactions. Please try again later." />}

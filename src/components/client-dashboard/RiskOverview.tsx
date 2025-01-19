@@ -12,7 +12,7 @@ export const RiskOverview = () => {
   return (
     <ErrorBoundary>
       <Card className="p-6">
-        <h3 className="font-semibold mb-4">Risk Score Trend</h3>
+        <h3 className="font-semibold mb-4 text-white">Risk Score Trend</h3>
         
         {isLoading && <LoadingState message="Loading risk data..." />}
         {error && <ErrorState error={error} />}
