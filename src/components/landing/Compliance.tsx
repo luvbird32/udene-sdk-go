@@ -52,8 +52,8 @@ export const Compliance = () => {
               key={index}
               className="glass-card p-6 rounded-xl transition-all duration-300 hover:scale-105 border border-primary/20 hover:border-primary/30"
             >
-              <div className="bg-gradient-to-r from-primary to-primary-light p-2 rounded-full w-fit mb-4">
-                <item.icon className="w-10 h-10 text-white" />
+              <div className="bg-primary/10 p-2 rounded-full w-fit mb-4">
+                <item.icon className="w-10 h-10 text-primary" />
               </div>
               <h3 className="text-xl font-semibold text-white mb-2">
                 {item.title}
