@@ -43,7 +43,7 @@ export const GeographicDistribution = () => {
       <Card className="p-4">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertDescription>
+          <AlertDescription className="text-white">
             Failed to load geographic distribution data. Please try again later.
           </AlertDescription>
         </Alert>
@@ -56,8 +56,8 @@ export const GeographicDistribution = () => {
       <Card className="p-4">
         <div className="h-[300px] flex items-center justify-center">
           <div className="text-center">
-            <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
-            <p className="text-muted-foreground">No geographic data available</p>
+            <AlertCircle className="h-12 w-12 text-white/60 mx-auto mb-2" />
+            <p className="text-white/60">No geographic data available</p>
           </div>
         </div>
       </Card>
@@ -66,7 +66,7 @@ export const GeographicDistribution = () => {
 
   return (
     <Card className="p-4">
-      <h3 className="font-semibold mb-4">Geographic Distribution</h3>
+      <h3 className="font-semibold mb-4 text-white">Geographic Distribution</h3>
       <div className="h-[300px]">
         <DistributionChart distribution={distribution} />
       </div>
