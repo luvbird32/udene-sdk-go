@@ -1,34 +1,35 @@
-import { Info } from "lucide-react";
-import { CodeBlock } from "../code-block/CodeBlock";
+import React from 'react';
+import { CodeBlock } from '../code-block/CodeBlock';
 
-const quickStartCode = `# Set your API key as an environment variable
-export UDENE_API_KEY=your_api_key_here
+const quickStartCode = `
+// Install the SDK
+npm install @udene/fraud-detection
 
-# Make your first API request
-curl -X GET "https://udene.net/v1/metrics" \\
-  -H "Authorization: Bearer $UDENE_API_KEY"`;
+// Initialize the client
+import { UdeneClient } from '@udene/fraud-detection';
+
+const client = new UdeneClient({
+  apiKey: 'your-api-key'
+});
+
+// Start detecting fraud
+const result = await client.detectFraud({
+  transaction: {
+    amount: 1000,
+    currency: 'USD',
+    userId: 'user-123'
+  }
+});
+`;
 
 export const QuickStartSection = () => {
   return (
     <div className="space-y-4">
-      <h3 className="text-xl font-semibold">Quick Start Guide</h3>
-      <p className="text-muted-foreground">
-        Get started with Udene's Fraud Detection API in minutes. First, set up your API key:
+      <h2 className="text-2xl font-semibold text-white/60">Quick Start</h2>
+      <p className="text-white/60">
+        Get started with Udene's fraud detection in minutes. Follow these simple steps to integrate our SDK into your application.
       </p>
-      
-      <CodeBlock code={quickStartCode} />
-      
-      <div className="mt-6 space-y-4">
-        <h4 className="text-lg font-semibold">Technology Stack</h4>
-        <ul className="list-disc pl-6 space-y-2">
-          <li>API Framework: Python (FastAPI)</li>
-          <li>Machine Learning: TensorFlow, PyTorch</li>
-          <li>Database: Supabase (PostgreSQL)</li>
-          <li>Caching: Redis</li>
-          <li>Message Queue: Apache Kafka</li>
-          <li>Monitoring: Prometheus, Grafana</li>
-        </ul>
-      </div>
+      <CodeBlock code={quickStartCode} language="typescript" />
     </div>
   );
 };
