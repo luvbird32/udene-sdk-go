@@ -16,13 +16,13 @@ export const IdentityVerificationMonitoring = () => {
       <Card className="p-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Loader2 className="h-5 w-5 animate-spin text-primary" />
+            <Loader2 className="h-5 w-5 animate-spin text-white" />
             <h3 className="font-semibold text-white">Identity Verification Status</h3>
           </div>
         </div>
         <div className="h-[200px] flex items-center justify-center">
           <div className="flex flex-col items-center gap-2">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <Loader2 className="h-8 w-8 animate-spin text-white" />
             <p className="text-sm text-white/60">Loading verification data...</p>
           </div>
         </div>
@@ -35,7 +35,7 @@ export const IdentityVerificationMonitoring = () => {
       <Card className="p-4">
         <VerificationStats totalVerifications={0} />
         <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
+          <AlertCircle className="h-4 w-4 text-white" />
           <AlertDescription className="text-white">
             Failed to load verification data. Please try again later.
           </AlertDescription>

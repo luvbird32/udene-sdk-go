@@ -56,7 +56,7 @@ export const DeviceFingerprintMonitoring = () => {
     return (
       <Card className="p-4">
         <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
+          <AlertCircle className="h-4 w-4 text-white" />
           <AlertDescription className="text-white">
             Failed to load device fingerprint data. Please try again later.
           </AlertDescription>
