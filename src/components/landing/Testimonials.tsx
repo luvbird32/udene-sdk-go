@@ -61,10 +61,8 @@ export const Testimonials = () => {
               key={index} 
               className="glass-card p-8 rounded-xl backdrop-blur-lg border border-primary/20 hover:border-primary/30 transition-all duration-300"
             >
-              <div className="absolute -top-4 left-8">
-                <div className="bg-gradient-to-r from-primary to-primary-light p-2 rounded-full">
-                  <Quote className="w-4 h-4 text-white" />
-                </div>
+              <div className="absolute -top-4 left-8 bg-primary/10 p-2 rounded-full border border-primary/20">
+                <Quote className="w-4 h-4 text-primary" />
               </div>
               
               <blockquote className="text-gray-300 mb-6">
@@ -72,9 +70,7 @@ export const Testimonials = () => {
               </blockquote>
               
               <div className="mt-4">
-                <p className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text font-semibold">
-                  {testimonial.author}
-                </p>
+                <p className="font-semibold text-primary">{testimonial.author}</p>
                 <p className="text-gray-400 text-sm">{testimonial.role}</p>
                 <p className="text-gray-500 text-sm">{testimonial.company}</p>
               </div>
