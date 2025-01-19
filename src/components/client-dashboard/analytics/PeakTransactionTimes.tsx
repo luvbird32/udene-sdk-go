@@ -64,7 +64,7 @@ export const PeakTransactionTimes = () => {
   return (
     <ErrorBoundary>
       <Card className="p-4">
-        <h3 className="font-semibold mb-4">Peak Transaction Times</h3>
+        <h3 className="font-semibold mb-4 text-white">Peak Transaction Times</h3>
         
         {isLoading && <LoadingState />}
         {error && <ErrorState />}

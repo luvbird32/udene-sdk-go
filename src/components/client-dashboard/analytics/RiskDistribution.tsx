@@ -67,20 +67,20 @@ export const RiskDistribution = () => {
   return (
     <ErrorBoundary>
       <Card className="p-4">
-        <h3 className="font-semibold mb-4">Risk Score Distribution</h3>
+        <h3 className="font-semibold mb-4 text-white">Risk Score Distribution</h3>
         
         {isLoading && (
           <div className="h-[300px] flex items-center justify-center">
             <div className="flex flex-col items-center gap-2">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              <p className="text-sm text-muted-foreground">Loading risk distribution...</p>
+              <p className="text-sm text-white/60">Loading risk distribution...</p>
             </div>
           </div>
         )}
 
         {error && (
           <Alert variant="destructive">
-            <AlertDescription>
+            <AlertDescription className="text-white">
               Failed to load risk distribution: {error.message}
             </AlertDescription>
           </Alert>
@@ -88,7 +88,7 @@ export const RiskDistribution = () => {
 
         {!isLoading && !error && (!riskDistribution || riskDistribution.length === 0) && (
           <div className="h-[300px] flex items-center justify-center">
-            <p className="text-muted-foreground">No risk distribution data available</p>
+            <p className="text-white/60">No risk distribution data available</p>
           </div>
         )}
 

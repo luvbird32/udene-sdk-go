@@ -14,7 +14,7 @@ export const RewardProgramMonitoring = () => {
       <Card className="p-4">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertDescription>
+          <AlertDescription className="text-white">
             Failed to load reward program data. Please try again later.
           </AlertDescription>
         </Alert>
@@ -25,7 +25,7 @@ export const RewardProgramMonitoring = () => {
   if (isLoading) {
     return (
       <Card className="p-4">
-        <h3 className="font-semibold mb-4">Reward Program Protection</h3>
+        <h3 className="font-semibold mb-4 text-white">Reward Program Protection</h3>
         <div className="h-[200px] animate-pulse bg-gray-100 rounded-lg"></div>
       </Card>
     );

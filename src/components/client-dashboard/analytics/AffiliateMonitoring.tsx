@@ -23,12 +23,12 @@ export const AffiliateMonitoring = () => {
     return (
       <Card className="p-4">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="font-semibold">Affiliate Activity Monitoring</h3>
+          <h3 className="font-semibold text-white">Affiliate Activity Monitoring</h3>
           <Badge variant="outline">Risk Trends</Badge>
         </div>
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertDescription>
+          <AlertDescription className="text-white">
             Failed to load affiliate activity data. Please try again later.
           </AlertDescription>
         </Alert>
@@ -48,7 +48,7 @@ export const AffiliateMonitoring = () => {
     <ErrorBoundary>
       <Card className="p-4">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="font-semibold">Affiliate Activity Monitoring</h3>
+          <h3 className="font-semibold text-white">Affiliate Activity Monitoring</h3>
           <Badge variant="outline">Risk Trends</Badge>
         </div>
         <AffiliateChart data={affiliateStats} />
