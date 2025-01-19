@@ -19,7 +19,7 @@ export const DashboardContent = ({
   metricsError 
 }: DashboardContentProps) => {
   return (
-    <div className="space-y-8 text-white">
+    <div className="space-y-8">
       <ConnectionSection />
       <ApiSection />
       <MetricsSection 
