@@ -46,10 +46,10 @@ export const PricingPlans = () => {
     <section className="py-24 relative z-10 bg-black/40">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-primary mb-4">
+          <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">
             Simple, Transparent Pricing
           </h2>
-          <p className="text-xl text-primary/80 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             Only pay for what you use, with no hidden fees
           </p>
         </div>
@@ -70,14 +70,14 @@ export const PricingPlans = () => {
                   </Badge>
                 </div>
               )}
-              <h3 className="text-2xl font-semibold text-primary mb-2">
+              <h3 className="text-2xl font-semibold text-white mb-2">
                 {plan.name}
               </h3>
               <div className="mb-4">
-                <span className="text-4xl font-bold text-primary">{plan.price}</span>
-                <span className="text-primary/80 ml-2">{plan.period}</span>
+                <span className="text-4xl font-bold text-white">{plan.price}</span>
+                <span className="text-gray-300 ml-2">{plan.period}</span>
               </div>
-              <p className="text-primary/80 mb-4">
+              <p className="text-gray-300 mb-4">
                 {plan.description}
               </p>
               {plan.isPromo && (
@@ -90,7 +90,7 @@ export const PricingPlans = () => {
               )}
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature, idx) => (
-                  <li key={idx} className="flex items-center text-primary">
+                  <li key={idx} className="flex items-center text-gray-300">
                     <Check className="w-5 h-5 text-primary mr-2" />
                     {feature}
                   </li>
