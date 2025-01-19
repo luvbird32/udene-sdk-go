@@ -18,7 +18,7 @@ export const ServiceDescription = ({ title, description, serviceType, isActive }
         <h3 className="text-lg font-semibold">{title}</h3>
         <Tooltip>
           <TooltipTrigger asChild>
-            <p className="text-sm text-muted-foreground mt-1 cursor-help">{description}</p>
+            <p className="text-sm text-white/60 mt-1 cursor-help">{description}</p>
           </TooltipTrigger>
           <TooltipContent>
             <p>Click for more details about this service</p>
