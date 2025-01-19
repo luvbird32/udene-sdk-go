@@ -19,7 +19,7 @@ export const ActionButton = ({
   return (
     <Button 
       variant={variant}
-      className="flex items-center gap-2"
+      className="flex items-center gap-2 text-white/60"
       onClick={onClick}
       disabled={disabled}
     >
