@@ -15,7 +15,7 @@ export const ReportGuide = () => {
     <Alert className="mb-6">
       <Info className="h-4 w-4" />
       <AlertTitle>Getting Started</AlertTitle>
-      <AlertDescription>
+      <AlertDescription className="text-white/60">
         Select a date range and report type to begin. You can save report templates for future use or schedule regular report generation.
       </AlertDescription>
     </Alert>
