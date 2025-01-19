@@ -14,7 +14,7 @@ import { Card } from "@/components/ui/card";
 
 export const EmptyProgramState = () => {
   return (
-    <Card className="p-6 text-center text-muted-foreground">
+    <Card className="p-6 text-center text-white/60">
       No security programs found.
     </Card>
   );
