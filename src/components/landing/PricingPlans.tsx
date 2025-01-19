@@ -2,7 +2,6 @@ import { Check, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-import { useEffect } from "react";
 
 export const PricingPlans = () => {
   const plans = [
@@ -44,13 +43,13 @@ export const PricingPlans = () => {
   ];
 
   return (
-    <section className="py-24 relative z-10">
+    <section className="py-24 relative z-10 bg-black/40">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-green-400 mb-4">
+          <h2 className="text-4xl font-bold text-primary mb-4">
             Simple, Transparent Pricing
           </h2>
-          <p className="text-xl text-green-300/80 max-w-3xl mx-auto">
+          <p className="text-xl text-primary/80 max-w-3xl mx-auto">
             Only pay for what you use, with no hidden fees
           </p>
         </div>
@@ -60,30 +59,30 @@ export const PricingPlans = () => {
             <div
               key={index}
               className={`glass-card p-8 rounded-xl transition-all duration-300 hover:scale-105 ${
-                plan.highlighted ? "border-2 border-green-400" : "border border-green-500/20"
+                plan.highlighted ? "border-2 border-primary" : "border border-primary/20"
               }`}
             >
               {plan.isPromo && (
                 <div className="space-y-2 mb-4">
-                  <Badge variant="secondary" className="bg-green-500/20 text-green-300">
+                  <Badge variant="secondary" className="bg-primary/20 text-primary">
                     <Sparkles className="w-4 h-4 mr-1" />
                     Special Offer
                   </Badge>
                 </div>
               )}
-              <h3 className="text-2xl font-semibold text-green-300 mb-2">
+              <h3 className="text-2xl font-semibold text-primary mb-2">
                 {plan.name}
               </h3>
               <div className="mb-4">
-                <span className="text-4xl font-bold text-green-400">{plan.price}</span>
-                <span className="text-green-300/80 ml-2">{plan.period}</span>
+                <span className="text-4xl font-bold text-primary">{plan.price}</span>
+                <span className="text-primary/80 ml-2">{plan.period}</span>
               </div>
-              <p className="text-green-300/80 mb-4">
+              <p className="text-primary/80 mb-4">
                 {plan.description}
               </p>
               {plan.isPromo && (
-                <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-3 mb-6">
-                  <p className="text-sm text-green-300">
+                <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 mb-6">
+                  <p className="text-sm text-primary">
                     <Sparkles className="w-4 h-4 inline-block mr-1" />
                     {plan.promotion}
                   </p>
@@ -91,8 +90,8 @@ export const PricingPlans = () => {
               )}
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature, idx) => (
-                  <li key={idx} className="flex items-center text-green-300">
-                    <Check className="w-5 h-5 text-green-400 mr-2" />
+                  <li key={idx} className="flex items-center text-primary">
+                    <Check className="w-5 h-5 text-primary mr-2" />
                     {feature}
                   </li>
                 ))}
@@ -101,8 +100,8 @@ export const PricingPlans = () => {
                 <Button 
                   className={`w-full py-6 text-lg ${
                     plan.highlighted 
-                      ? "bg-green-600 hover:bg-green-700 text-white" 
-                      : "border-green-500 text-green-400 hover:bg-green-900/20"
+                      ? "bg-primary hover:bg-primary-dark text-white" 
+                      : "border-primary text-primary hover:bg-primary/20"
                   }`}
                   variant={plan.highlighted ? "default" : "outline"}
                 >

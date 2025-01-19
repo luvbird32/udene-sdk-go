@@ -7,21 +7,21 @@ export const Terms = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <section className="relative z-10 py-24">
+    <section className="relative z-10 py-24 bg-black/40">
       <div className="max-w-4xl mx-auto px-4">
         <Collapsible
           open={isOpen}
           onOpenChange={setIsOpen}
-          className="glass-card p-8 rounded-xl"
+          className="glass-card p-8 rounded-xl border border-primary/20"
         >
           <CollapsibleTrigger className="flex items-center justify-between w-full">
-            <h2 className="text-3xl font-bold text-green-400">Terms and Conditions</h2>
-            <ChevronDown className={`h-6 w-6 text-green-400 transition-transform duration-200 ${isOpen ? 'transform rotate-180' : ''}`} />
+            <h2 className="text-3xl font-bold text-primary">Terms and Conditions</h2>
+            <ChevronDown className={`h-6 w-6 text-primary transition-transform duration-200 ${isOpen ? 'transform rotate-180' : ''}`} />
           </CollapsibleTrigger>
           
           <CollapsibleContent className="mt-6">
             <ScrollArea className="h-[600px] pr-4">
-              <div className="space-y-6 text-green-300/90">
+              <div className="space-y-6 text-primary/90">
                 <section>
                   <h3 className="text-xl font-semibold text-green-400 mb-3">1. Service Terms</h3>
                   <p className="mb-4">

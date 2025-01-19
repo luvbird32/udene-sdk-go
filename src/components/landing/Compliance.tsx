@@ -38,10 +38,10 @@ export const Compliance = () => {
     <section className="relative z-10 py-24 bg-black/40">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-green-400 mb-4">
+          <h2 className="text-4xl font-bold text-primary mb-4">
             Enterprise-Grade Compliance
           </h2>
-          <p className="text-xl text-green-300/80 max-w-3xl mx-auto">
+          <p className="text-xl text-primary/80 max-w-3xl mx-auto">
             Meeting the highest security and regulatory standards to protect your business
           </p>
         </div>
@@ -50,13 +50,13 @@ export const Compliance = () => {
           {complianceItems.map((item, index) => (
             <div
               key={index}
-              className="glass-card p-6 rounded-xl transition-all duration-300 hover:scale-105 hover:bg-green-900/20"
+              className="glass-card p-6 rounded-xl transition-all duration-300 hover:scale-105"
             >
-              <item.icon className="w-10 h-10 text-green-400 mb-4" />
-              <h3 className="text-xl font-semibold text-green-300 mb-2">
+              <item.icon className="w-10 h-10 text-primary mb-4" />
+              <h3 className="text-xl font-semibold text-primary mb-2">
                 {item.title}
               </h3>
-              <p className="text-green-300/80 text-sm leading-relaxed">
+              <p className="text-primary/80 text-sm leading-relaxed">
                 {item.description}
               </p>
             </div>
