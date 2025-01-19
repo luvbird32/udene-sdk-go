@@ -5,12 +5,21 @@ export const Features = () => {
   return (
     <section className="relative z-10 py-24 bg-black/40">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 space-y-4">
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-primary/50 bg-clip-text text-transparent">
-            Advanced Protection Features
+        <div className="glass-card p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center backdrop-blur-lg border border-white/5 mb-16">
+          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary/10 p-4 rounded-full border border-primary/20">
+            <Shield className="w-10 h-10 text-primary animate-pulse" />
+          </div>
+          
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-white leading-tight">
+            Advanced Protection Features That{" "}
+            <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">
+              Others Don't Offer
+            </span>
           </h2>
-          <p className="text-primary/80 text-lg md:text-xl max-w-2xl mx-auto">
-            Industry-leading security features that set us apart from the competition
+          
+          <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+            Industry-leading security features that set us apart from the competition,
+            designed to protect your business at every level.
           </p>
         </div>
         
@@ -68,7 +77,7 @@ const FeatureCard = ({ icon, title, description }: FeatureCardProps) => {
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       
       <div className="relative space-y-4">
-        <div className="inline-flex p-2 rounded-lg bg-primary/10 text-primary group-hover:scale-110 transition-transform duration-300">
+        <div className="inline-flex p-3 rounded-lg bg-primary/10 text-primary group-hover:scale-110 transition-transform duration-300">
           {icon}
         </div>
         
