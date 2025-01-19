@@ -18,7 +18,7 @@ export const TrialAbuseMonitoring = () => {
         <TrialAbuseHeader />
         <Alert variant="destructive" className="mt-4">
           <AlertCircle className="h-4 w-4" />
-          <AlertDescription>
+          <AlertDescription className="text-white">
             Failed to load trial abuse data. Please try again later.
           </AlertDescription>
         </Alert>
