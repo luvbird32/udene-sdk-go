@@ -44,10 +44,13 @@ export const Testimonials = () => {
     <section className="py-24 bg-black/40">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-primary mb-4">
-            Real Results from Real Customers
+          <h2 className="text-4xl font-bold mb-4">
+            Real Results from{" "}
+            <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">
+              Real Customers
+            </span>
           </h2>
-          <p className="text-xl text-primary/80 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             See how businesses like yours prevented system exploitation and protected their revenue
           </p>
         </div>
@@ -56,20 +59,20 @@ export const Testimonials = () => {
           {testimonials.map((testimonial, index) => (
             <div 
               key={index} 
-              className="glass-card p-8 rounded-xl backdrop-blur-lg border border-primary/20 relative hover:scale-105 transition-all duration-300"
+              className="glass-card p-8 rounded-xl backdrop-blur-lg border border-primary/20 hover:border-primary/30 transition-all duration-300"
             >
               <div className="absolute -top-4 left-8 bg-primary/10 p-2 rounded-full border border-primary/20">
                 <Quote className="w-4 h-4 text-primary" />
               </div>
               
-              <blockquote className="text-primary/90 mb-6">
+              <blockquote className="text-gray-300 mb-6">
                 "{testimonial.quote}"
               </blockquote>
               
               <div className="mt-4">
                 <p className="font-semibold text-primary">{testimonial.author}</p>
-                <p className="text-primary/70 text-sm">{testimonial.role}</p>
-                <p className="text-primary/50 text-sm">{testimonial.company}</p>
+                <p className="text-gray-400 text-sm">{testimonial.role}</p>
+                <p className="text-gray-500 text-sm">{testimonial.company}</p>
               </div>
             </div>
           ))}
