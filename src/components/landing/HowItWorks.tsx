@@ -38,35 +38,38 @@ export const HowItWorks = () => {
   ];
 
   return (
-    <section className="py-24 relative">
+    <section className="py-24 relative bg-gradient-to-br from-secondary-dark via-primary-dark to-secondary-dark">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-green-400 mb-4">
+        <div className="text-center mb-16 glass-card p-8 rounded-xl backdrop-blur-lg border border-primary/20">
+          <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">
             How Udene Works
           </h2>
-          <p className="text-xl text-green-300/80 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-300/90 max-w-3xl mx-auto">
             Simple to understand, powerful to protect
           </p>
         </div>
 
         {/* Non-Technical Explanation */}
         <div className="mb-20">
-          <h3 className="text-2xl font-semibold text-green-400 mb-8 text-center">
+          <h3 className="text-2xl font-semibold text-primary mb-8 text-center">
             For Business Users
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {nonTechnicalSteps.map((step, index) => (
-              <div key={index} className="glass-card p-8 rounded-xl text-center relative">
+              <div 
+                key={index} 
+                className="glass-card p-8 rounded-xl text-center relative backdrop-blur-lg border border-primary/20 hover:border-primary/30 transition-all duration-300 hover:transform hover:scale-105"
+              >
                 {index < nonTechnicalSteps.length - 1 && (
                   <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
-                    <ArrowRight className="w-6 h-6 text-green-400" />
+                    <ArrowRight className="w-6 h-6 text-primary animate-pulse" />
                   </div>
                 )}
-                <div className="bg-green-500/10 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <step.icon className="w-8 h-8 text-green-400" />
+                <div className="bg-primary/10 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                  <step.icon className="w-8 h-8 text-primary" />
                 </div>
-                <h4 className="text-xl font-semibold text-green-400 mb-2">{step.title}</h4>
-                <p className="text-green-300/80">{step.description}</p>
+                <h4 className="text-xl font-semibold text-primary mb-2">{step.title}</h4>
+                <p className="text-gray-300/80">{step.description}</p>
               </div>
             ))}
           </div>
@@ -74,17 +77,20 @@ export const HowItWorks = () => {
 
         {/* Technical Explanation */}
         <div>
-          <h3 className="text-2xl font-semibold text-green-400 mb-8 text-center">
+          <h3 className="text-2xl font-semibold text-primary mb-8 text-center">
             For Technical Teams
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {technicalSteps.map((step, index) => (
-              <div key={index} className="glass-card p-8 rounded-xl border border-green-500/20">
-                <div className="bg-green-500/10 p-4 rounded-full w-16 h-16 mb-4 flex items-center justify-center">
-                  <step.icon className="w-8 h-8 text-green-400" />
+              <div 
+                key={index} 
+                className="glass-card p-8 rounded-xl backdrop-blur-lg border border-primary/20 hover:border-primary/30 transition-all duration-300 hover:transform hover:scale-105"
+              >
+                <div className="bg-primary/10 p-4 rounded-full w-16 h-16 mb-4 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                  <step.icon className="w-8 h-8 text-primary" />
                 </div>
-                <h4 className="text-xl font-semibold text-green-400 mb-2">{step.title}</h4>
-                <p className="text-green-300/80">{step.description}</p>
+                <h4 className="text-xl font-semibold text-primary mb-2">{step.title}</h4>
+                <p className="text-gray-300/80">{step.description}</p>
               </div>
             ))}
           </div>
