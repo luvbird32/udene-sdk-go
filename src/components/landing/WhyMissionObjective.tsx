@@ -5,8 +5,10 @@ export const WhyMissionObjective = () => {
     <div className="w-full bg-[hsl(222,47%,11%)] py-24">
       {/* Our Why Section */}
       <div className="container mx-auto px-4 mb-32">
-        <div className="flex flex-col items-center text-center mb-16">
-          <Shield className="w-16 h-16 mb-6 text-primary animate-pulse" />
+        <div className="bg-black/40 backdrop-blur-sm p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center border border-white/5 mb-16 transform transition-all duration-500 hover:border-primary/20">
+          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
+            <Shield className="w-16 h-16 text-primary animate-pulse" />
+          </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-8 text-white">
             Our <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">Why</span>
           </h2>
@@ -41,8 +43,10 @@ export const WhyMissionObjective = () => {
 
       {/* Our Mission Section */}
       <div className="container mx-auto px-4 mb-32">
-        <div className="flex flex-col items-center text-center mb-16">
-          <Target className="w-16 h-16 mb-6 text-primary animate-pulse" />
+        <div className="bg-black/40 backdrop-blur-sm p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center border border-white/5 mb-16 transform transition-all duration-500 hover:border-primary/20">
+          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
+            <Target className="w-16 h-16 text-primary animate-pulse" />
+          </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-8 text-white">
             Our <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">Mission</span>
           </h2>
@@ -72,8 +76,10 @@ export const WhyMissionObjective = () => {
 
       {/* Our Objectives Section */}
       <div className="container mx-auto px-4">
-        <div className="flex flex-col items-center text-center mb-16">
-          <Target className="w-16 h-16 mb-6 text-primary animate-pulse" />
+        <div className="bg-black/40 backdrop-blur-sm p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center border border-white/5 mb-16 transform transition-all duration-500 hover:border-primary/20">
+          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
+            <Target className="w-16 h-16 text-primary animate-pulse" />
+          </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-8 text-white">
             Our <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">Objectives</span>
           </h2>
