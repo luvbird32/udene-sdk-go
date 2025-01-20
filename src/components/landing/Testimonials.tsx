@@ -48,7 +48,7 @@ export const Testimonials = () => {
             <Quote className="w-10 h-10 text-primary animate-pulse" />
           </div>
           
-          <h2 className="text-4xl font-bold mb-4">
+          <h2 className="text-4xl font-bold mb-4 text-white">
             Real Results from{" "}
             <span className="text-primary">Real Customers</span>
           </h2>
@@ -67,14 +67,14 @@ export const Testimonials = () => {
                 <Quote className="w-4 h-4 text-primary" />
               </div>
               
-              <blockquote className="text-gray-300 mb-6">
+              <blockquote className="text-white leading-relaxed text-lg font-light italic mb-8">
                 "{testimonial.quote}"
               </blockquote>
               
-              <div className="mt-4">
-                <p className="font-semibold text-primary">{testimonial.author}</p>
-                <p className="text-gray-400 text-sm">{testimonial.role}</p>
-                <p className="text-gray-500 text-sm">{testimonial.company}</p>
+              <div className="mt-6 border-t border-white/10 pt-6">
+                <p className="font-semibold text-primary text-lg">{testimonial.author}</p>
+                <p className="text-white/80 text-sm mt-1">{testimonial.role}</p>
+                <p className="text-white/60 text-sm">{testimonial.company}</p>
               </div>
             </div>
           ))}
