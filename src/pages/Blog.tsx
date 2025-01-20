@@ -4,6 +4,8 @@ import { Card } from "@/components/ui/card";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { ErrorState } from "@/components/ui/states/ErrorState";
+import { Home } from "lucide-react";
+import { Button } from "@/components/shared/ui/Button";
 
 interface BlogPost {
   id: string;
@@ -58,7 +60,15 @@ export default function Blog() {
 
   return (
     <div className="container mx-auto py-12">
-      <h1 className="text-4xl font-bold mb-8">Blog</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-4xl font-bold">Blog</h1>
+        <Link to="/">
+          <Button variant="outline" size="sm" className="flex items-center gap-2">
+            <Home className="w-4 h-4" />
+            Return Home
+          </Button>
+        </Link>
+      </div>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {posts?.map((post) => (
           <Link to={`/blog/${post.slug}`} key={post.id}>
