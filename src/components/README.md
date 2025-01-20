@@ -21,9 +21,28 @@ components/
 4. Follow the project's naming conventions
 5. Keep components focused and maintainable
 
-## Common Patterns
+## Implementation Details
 
-### Component Structure
+### Neural Network Integration
+- Components integrate with our neural network-based fraud detection
+- Real-time risk scoring display
+- Pattern visualization components
+
+### Security Features
+- Device fingerprinting components
+- IP monitoring visualizations
+- Email change tracking UI
+- Activity monitoring dashboards
+
+### Analytics Components
+- Risk score visualization
+- Geographic distribution maps
+- Transaction pattern charts
+- Compliance reporting tools
+
+### Common Patterns
+
+#### Component Structure
 ```typescript
 /**
  * @component
@@ -41,14 +60,14 @@ export const ExampleComponent = ({ title }: ExampleProps) => {
 };
 ```
 
-### Error Handling
+#### Error Handling
 ```typescript
 if (error) {
   return <ErrorComponent message={error.message} />;
 }
 ```
 
-### Loading States
+#### Loading States
 ```typescript
 if (isLoading) {
   return <Skeleton />;
