@@ -1714,6 +1714,120 @@ export type Database = {
           },
         ]
       }
+      stream_monitoring: {
+        Row: {
+          automated_flags: Json | null
+          created_at: string | null
+          id: string
+          manual_reports_count: number | null
+          risk_score: number | null
+          status: string | null
+          stream_id: string
+          streamer_id: string | null
+          updated_at: string | null
+          viewer_count: number | null
+        }
+        Insert: {
+          automated_flags?: Json | null
+          created_at?: string | null
+          id?: string
+          manual_reports_count?: number | null
+          risk_score?: number | null
+          status?: string | null
+          stream_id: string
+          streamer_id?: string | null
+          updated_at?: string | null
+          viewer_count?: number | null
+        }
+        Update: {
+          automated_flags?: Json | null
+          created_at?: string | null
+          id?: string
+          manual_reports_count?: number | null
+          risk_score?: number | null
+          status?: string | null
+          stream_id?: string
+          streamer_id?: string | null
+          updated_at?: string | null
+          viewer_count?: number | null
+        }
+        Relationships: []
+      }
+      stream_reports: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          evidence: Json | null
+          id: string
+          report_type: string
+          reporter_id: string | null
+          status: string | null
+          stream_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          evidence?: Json | null
+          id?: string
+          report_type: string
+          reporter_id?: string | null
+          status?: string | null
+          stream_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          evidence?: Json | null
+          id?: string
+          report_type?: string
+          reporter_id?: string | null
+          status?: string | null
+          stream_id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      streamer_trust_scores: {
+        Row: {
+          account_age: string | null
+          created_at: string | null
+          id: string
+          last_violation: string | null
+          total_reports: number | null
+          total_stream_time: number | null
+          trust_score: number | null
+          updated_at: string | null
+          user_id: string | null
+          verified_status: boolean | null
+        }
+        Insert: {
+          account_age?: string | null
+          created_at?: string | null
+          id?: string
+          last_violation?: string | null
+          total_reports?: number | null
+          total_stream_time?: number | null
+          trust_score?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          verified_status?: boolean | null
+        }
+        Update: {
+          account_age?: string | null
+          created_at?: string | null
+          id?: string
+          last_violation?: string | null
+          total_reports?: number | null
+          total_stream_time?: number | null
+          trust_score?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          verified_status?: boolean | null
+        }
+        Relationships: []
+      }
       table_info: {
         Row: {
           id: string

@@ -3,6 +3,17 @@
 ## Overview
 A comprehensive fraud detection and security platform with real-time monitoring, AI-powered threat detection, and advanced analytics.
 
+## Core Features
+- Neural Network-Based Detection
+- Security Monitoring
+- Fraud Prevention
+- Stream Protection & Content Moderation
+  - Trust Score System for Content Creators
+  - Real-time Stream Monitoring
+  - Community-driven Reporting System
+  - Automated Content Moderation
+  - Fake Account Prevention
+
 ## Documentation Structure
 - [Core Features](docs/features/README.md)
 - [Technical Implementation](docs/technical/README.md)
