@@ -25,10 +25,10 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: '#4ade80', // Green-400 from Tailwind
+          DEFAULT: '#2e9d5c', // More muted green
           foreground: '#ffffff',
-          dark: '#22c55e',   // Green-500 from Tailwind
-          light: '#86efac',  // Green-300 from Tailwind
+          dark: '#1c7d45',    // Darker muted green
+          light: '#4ab577',   // Lighter muted green
         },
         secondary: {
           DEFAULT: '#1a1a1a', // Dark gray for contrast
