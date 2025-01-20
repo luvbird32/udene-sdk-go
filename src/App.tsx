@@ -6,6 +6,8 @@ import Signup from '@/pages/Signup'
 import Dashboard from '@/pages/Dashboard'
 import Settings from '@/pages/Settings'
 import Users from '@/pages/Users'
+import Blog from '@/pages/Blog'
+import BlogPost from '@/pages/BlogPost'
 import ClientSettings from '@/pages/ClientSettings'
 import { AuthProvider } from '@/components/auth/AuthProvider'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
@@ -60,6 +62,10 @@ const AppRoutes = () => {
           )
         } 
       />
+      
+      {/* Blog routes */}
+      <Route path="/blog" element={<Blog />} />
+      <Route path="/blog/:slug" element={<BlogPost />} />
       
       {/* Protected routes */}
       <Route 

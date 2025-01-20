@@ -5,19 +5,48 @@ export const Footer = () => {
   const footerLinks = [
     {
       title: "Product",
-      links: ["Features", "Security", "Team", "Enterprise", "Customer Stories", "Pricing", "Resources"],
+      links: [
+        { text: "Features", path: "#" },
+        { text: "Security", path: "#" },
+        { text: "Team", path: "#" },
+        { text: "Enterprise", path: "#" },
+        { text: "Customer Stories", path: "#" },
+        { text: "Pricing", path: "#" },
+        { text: "Resources", path: "#" }
+      ],
     },
     {
       title: "Platform",
-      links: ["Developer API", "Partners", "Atom", "Electron", "GitHub Desktop"],
+      links: [
+        { text: "Developer API", path: "#" },
+        { text: "Partners", path: "#" },
+        { text: "Atom", path: "#" },
+        { text: "Electron", path: "#" },
+        { text: "GitHub Desktop", path: "#" }
+      ],
     },
     {
       title: "Support",
-      links: ["Help", "Community Forum", "Professional Services", "Skills", "Status", "Contact GitHub"],
+      links: [
+        { text: "Help", path: "#" },
+        { text: "Community Forum", path: "#" },
+        { text: "Professional Services", path: "#" },
+        { text: "Skills", path: "#" },
+        { text: "Status", path: "#" },
+        { text: "Contact GitHub", path: "#" }
+      ],
     },
     {
       title: "Company",
-      links: ["About", "Blog", "Careers", "Press", "Inclusion", "Social Impact", "Shop"],
+      links: [
+        { text: "About", path: "#" },
+        { text: "Blog", path: "/blog" },
+        { text: "Careers", path: "#" },
+        { text: "Press", path: "#" },
+        { text: "Inclusion", path: "#" },
+        { text: "Social Impact", path: "#" },
+        { text: "Shop", path: "#" }
+      ],
     },
   ];
 
@@ -42,10 +71,10 @@ export const Footer = () => {
                 {section.links.map((link, linkIdx) => (
                   <li key={linkIdx}>
                     <Link 
-                      to="#" 
+                      to={link.path} 
                       className="text-gray-300 hover:text-white transition-colors duration-200"
                     >
-                      {link}
+                      {link.text}
                     </Link>
                   </li>
                 ))}
