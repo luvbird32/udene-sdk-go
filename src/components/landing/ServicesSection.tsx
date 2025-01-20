@@ -8,11 +8,11 @@ export const ServicesSection = () => {
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4">
             Comprehensive{" "}
-            <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">
+            <span className="bg-gradient-to-r from-[#22c55e] to-[#16a34a] text-transparent bg-clip-text">
               Protection Services
             </span>
           </h2>
-          <p className="text-xl text-gray-300/80 max-w-3xl mx-auto">
+          <p className="text-xl text-white max-w-3xl mx-auto">
             Our suite of advanced protection services ensures complete coverage against various types of fraud and abuse
           </p>
         </div>
