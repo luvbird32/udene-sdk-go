@@ -746,6 +746,47 @@ export type Database = {
         }
         Relationships: []
       }
+      documentation_sections: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          order_index: number
+          parent_section: string | null
+          section_type: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          order_index: number
+          parent_section?: string | null
+          section_type: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          order_index?: number
+          parent_section?: string | null
+          section_type?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documentation_sections_parent_section_fkey"
+            columns: ["parent_section"]
+            isOneToOne: false
+            referencedRelation: "documentation_sections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_reputation: {
         Row: {
           email: string
