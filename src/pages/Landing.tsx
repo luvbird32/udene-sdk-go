@@ -12,6 +12,7 @@ import { Terms } from "@/components/landing/Terms";
 import { Testimonials } from "@/components/landing/Testimonials";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { WhyMissionObjective } from "@/components/landing/WhyMissionObjective";
+import { ServicesSection } from "@/components/landing/ServicesSection";
 import { useEffect } from "react";
 
 const Landing = () => {
@@ -31,6 +32,9 @@ const Landing = () => {
       
       <div id="why-mission-objective">
         <WhyMissionObjective />
+      </div>
+      <div id="services">
+        <ServicesSection />
       </div>
       <div id="features">
         <Features />
