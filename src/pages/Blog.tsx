@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import { ErrorState } from "@/components/ui/states/ErrorState";
 
 interface BlogPost {
   id: string;
@@ -15,19 +16,30 @@ interface BlogPost {
 }
 
 export default function Blog() {
-  const { data: posts, isLoading } = useQuery({
+  const { data: posts, isLoading, error } = useQuery({
     queryKey: ["blog-posts"],
     queryFn: async () => {
+      console.log("Fetching blog posts...");
       const { data, error } = await supabase
         .from('blog_posts')
         .select('*')
         .eq('status', 'published')
         .order('published_at', { ascending: false });
       
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching blog posts:", error);
+        throw error;
+      }
+      
+      console.log("Fetched blog posts:", data);
       return data as BlogPost[];
-    }
+    },
+    retry: 1
   });
+
+  if (error) {
+    return <ErrorState error={error as Error} />;
+  }
 
   if (isLoading) {
     return (
