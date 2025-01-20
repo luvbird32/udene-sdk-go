@@ -30,7 +30,7 @@ export const UseCases = () => {
       icon: LineChart,
       title: "Revenue Protection",
       description: "Protect your bottom line from fraud and abuse with comprehensive financial loss prevention",
-      metrics: ["10M+ saved", "ROI tracking"]
+      metrics: ["$10M+ saved", "ROI tracking"]
     },
     {
       icon: Bell,
