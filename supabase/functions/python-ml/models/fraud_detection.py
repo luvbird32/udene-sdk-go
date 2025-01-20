@@ -1,8 +1,17 @@
 from datetime import datetime, timedelta
 from typing import Dict, Any, List
 from .base_model import BaseModel
+from .neural_network import FraudNeuralNetwork
 
 class FraudDetectionModel(BaseModel):
+    def __init__(self):
+        super().__init__()
+        self.neural_network = FraudNeuralNetwork()
+        self.historical_weights = {
+            'neural_network': 0.3,
+            'traditional_models': 0.7
+        }
+    
     def update_weights(self, transaction: Dict, is_fraud: bool):
         hour = datetime.fromisoformat(transaction['timestamp']).hour
         amount_bucket = self._get_amount_bucket(transaction['amount'])
@@ -226,3 +235,81 @@ class FraudDetectionModel(BaseModel):
                 total_weight += weight
         
         return weighted_score / max(total_weight, 1)
+
+    def get_neural_network_prediction(self, transaction: Dict, recent_txs: List[Dict]) -> float:
+        """Get fraud probability from neural network"""
+        # Prepare features for neural network
+        features = self.neural_network.prepare_features([{
+            'amount': transaction.get('amount', 0),
+            'message_velocity': transaction.get('message_velocity', 0),
+            'device_count': len(transaction.get('device_fingerprints', [])),
+            'location_risk': self._calculate_location_risk(transaction),
+            'time_risk': self._calculate_time_risk(transaction),
+            'ip_risk': self._calculate_ip_risk(transaction),
+            'profile_age_days': self._calculate_profile_age(transaction),
+            'avg_transaction_amount': self._calculate_avg_amount(recent_txs),
+            'daily_transaction_count': self._calculate_daily_tx_count(recent_txs),
+            'hour_of_day': datetime.fromisoformat(transaction['timestamp']).hour,
+            'day_of_week': datetime.fromisoformat(transaction['timestamp']).weekday(),
+            'device_age_days': self._calculate_device_age(transaction),
+            'browser_risk': self._calculate_browser_risk(transaction),
+            'network_risk': self._calculate_network_risk(transaction),
+            'hardware_risk': self._calculate_hardware_risk(transaction),
+            'behavior_risk': self._calculate_behavior_risk(transaction),
+            'pattern_match_score': self._calculate_pattern_match(transaction),
+            'velocity_score': self._calculate_velocity_score(recent_txs),
+            'geographical_variance': self._calculate_geo_variance(recent_txs),
+            'historical_risk': self._calculate_historical_risk(recent_txs)
+        }])
+        
+        # Get neural network prediction
+        prediction = self.neural_network.predict(features)[0][0]
+        return float(prediction)
+
+    def _calculate_location_risk(self, transaction: Dict) -> float:
+        return 0.5  # Placeholder - implement actual logic
+
+    def _calculate_time_risk(self, transaction: Dict) -> float:
+        return 0.5  # Placeholder - implement actual logic
+
+    def _calculate_ip_risk(self, transaction: Dict) -> float:
+        return 0.5  # Placeholder - implement actual logic
+
+    def _calculate_profile_age(self, transaction: Dict) -> float:
+        return 30.0  # Placeholder - implement actual logic
+
+    def _calculate_avg_amount(self, recent_txs: List[Dict]) -> float:
+        if not recent_txs:
+            return 0.0
+        amounts = [tx.get('amount', 0) for tx in recent_txs]
+        return sum(amounts) / len(amounts)
+
+    def _calculate_daily_tx_count(self, recent_txs: List[Dict]) -> float:
+        return len(recent_txs)  # Simplified - implement actual daily count
+
+    def _calculate_device_age(self, transaction: Dict) -> float:
+        return 30.0  # Placeholder - implement actual logic
+
+    def _calculate_browser_risk(self, transaction: Dict) -> float:
+        return 0.5  # Placeholder - implement actual logic
+
+    def _calculate_network_risk(self, transaction: Dict) -> float:
+        return 0.5  # Placeholder - implement actual logic
+
+    def _calculate_hardware_risk(self, transaction: Dict) -> float:
+        return 0.5  # Placeholder - implement actual logic
+
+    def _calculate_behavior_risk(self, transaction: Dict) -> float:
+        return 0.5  # Placeholder - implement actual logic
+
+    def _calculate_pattern_match(self, transaction: Dict) -> float:
+        return 0.5  # Placeholder - implement actual logic
+
+    def _calculate_velocity_score(self, recent_txs: List[Dict]) -> float:
+        return 0.5  # Placeholder - implement actual logic
+
+    def _calculate_geo_variance(self, recent_txs: List[Dict]) -> float:
+        return 0.5  # Placeholder - implement actual logic
+
+    def _calculate_historical_risk(self, recent_txs: List[Dict]) -> float:
+        return 0.5  # Placeholder - implement actual logic
