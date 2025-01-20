@@ -35,6 +35,13 @@ const detailedExplanation = {
     "Contextual Risk Analysis",
     "Automated Decision Making",
     "Predictive Fraud Prevention"
+  ],
+  streamProtection: [
+    "Trust Score System: Dynamic creator reputation tracking",
+    "Real-time Content Analysis: Automated moderation using AI",
+    "Community Reporting: Crowd-sourced content flagging",
+    "Device Fingerprinting: Cross-platform account verification",
+    "Appeal Management: Fair dispute resolution process"
   ]
 };
 
