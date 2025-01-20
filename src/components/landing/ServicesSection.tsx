@@ -1,4 +1,4 @@
-import { Shield, Activity, Brain, Lock, ChartBar, Users } from "lucide-react";
+import { Shield, Activity, Brain, Lock, ChartBar, Users, Bot, FileCheck, Mail, CreditCard, Gift, UserCheck } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 const services = [
@@ -18,30 +18,46 @@ const services = [
     ]
   },
   {
-    icon: Brain,
-    title: "Neural Network Detection",
-    description: "Advanced deep learning models for comprehensive fraud pattern recognition and risk assessment.",
+    icon: Bot,
+    title: "Bot & AI Protection",
+    description: "Advanced detection and prevention of automated threats and shadow AI usage.",
     features: [
-      "Multi-layer Neural Network Analysis",
-      "20-Parameter Feature Engineering",
-      "Real-time Risk Scoring",
-      "Adaptive Learning System",
-      "Pattern Recognition",
+      "Bot Detection",
+      "Shadow AI Detection",
       "Behavioral Analysis",
-      "Anomaly Detection"
+      "Pattern Recognition",
+      "Real-time Monitoring",
+      "AI Pattern Detection",
+      "LLM Usage Monitoring",
+      "Prompt Injection Prevention"
+    ]
+  },
+  {
+    icon: UserCheck,
+    title: "Identity Verification",
+    description: "Multi-factor identity verification system with advanced biometric authentication.",
+    features: [
+      "Document Verification",
+      "Biometric Authentication",
+      "Identity Scoring",
+      "Fraud Prevention",
+      "Real-time Verification",
+      "Face Matching Technology",
+      "Document Authenticity Check"
     ]
   },
   {
     icon: Lock,
-    title: "Security Monitoring",
-    description: "Robust security monitoring system with automated vulnerability scanning and comprehensive threat detection.",
+    title: "Security & API Protection",
+    description: "Robust security monitoring system with API protection and comprehensive threat detection.",
     features: [
-      "Automated Security Assessments",
+      "API Security & Rate Limiting",
       "Device Fingerprinting",
       "IP Address Monitoring",
       "Email Change Verification",
       "Dependency Checks",
-      "Real-time Alerts"
+      "Real-time Alerts",
+      "Access Control"
     ]
   },
   {
@@ -55,6 +71,45 @@ const services = [
       "Affiliate Fraud Protection",
       "Trial Abuse Prevention",
       "Promo Code Protection"
+    ]
+  },
+  {
+    icon: Mail,
+    title: "Email Security",
+    description: "Advanced email security and phishing protection system.",
+    features: [
+      "Email Authentication",
+      "Phishing Detection",
+      "Domain Monitoring",
+      "DMARC Enforcement",
+      "Spoofing Prevention",
+      "Email Pattern Analysis"
+    ]
+  },
+  {
+    icon: Gift,
+    title: "Reward Program Protection",
+    description: "Prevent fraud and abuse in your loyalty and rewards programs.",
+    features: [
+      "Real-time monitoring of reward transactions",
+      "Detection of suspicious point accumulation",
+      "Prevention of reward program abuse",
+      "Automated risk scoring",
+      "Velocity checks",
+      "Pattern analysis"
+    ]
+  },
+  {
+    icon: CreditCard,
+    title: "Payment Protection",
+    description: "Detect and prevent fraudulent payment transactions with real-time monitoring.",
+    features: [
+      "Real-time transaction monitoring",
+      "Risk scoring and analysis",
+      "Automated fraud detection",
+      "Payment pattern analysis",
+      "Behavioral analysis",
+      "Velocity checks"
     ]
   }
 ];
@@ -75,7 +130,7 @@ export const ServicesSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <Card 
               key={index}
