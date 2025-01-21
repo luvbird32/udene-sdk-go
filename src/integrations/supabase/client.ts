@@ -17,7 +17,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   },
   global: {
     headers: {
-      'X-Client-Info': 'supabase-js-web',
+      'X-Client-Info': 'supabase-js-web'
     }
   }
 });
