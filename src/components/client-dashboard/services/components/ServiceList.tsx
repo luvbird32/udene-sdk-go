@@ -24,8 +24,12 @@ export const ServiceList = ({ activeServices, handleToggle }: ServiceListProps) 
       {activeServices.map((service) => (
         <ServiceCard
           key={service.id}
-          service={service}
-          onToggle={handleToggle}
+          service={{
+            type: service.service_type,
+            isActive: service.is_active || false,
+            features: service.settings?.features || []
+          }}
+          onToggle={async (isActive) => await handleToggle(service.service_type, isActive)}
         />
       ))}
     </div>

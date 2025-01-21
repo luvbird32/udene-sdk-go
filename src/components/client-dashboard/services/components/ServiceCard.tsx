@@ -10,7 +10,7 @@ interface ServiceCardProps {
     isActive: boolean;
     features: string[];
   };
-  onToggle: (isActive: boolean) => void;
+  onToggle: (isActive: boolean) => Promise<void>;
 }
 
 export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
@@ -18,7 +18,7 @@ export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
     <Card className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <ServiceIcon serviceType={service.type} />
+          <ServiceIcon serviceType={service.type} isActive={service.isActive} />
           <div>
             <h3 className="text-lg font-semibold text-white">{service.type}</h3>
           </div>
