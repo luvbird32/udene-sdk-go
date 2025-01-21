@@ -1,7 +1,7 @@
 import { Shield, BotOff } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 
-export interface ServiceIconProps {
+interface ServiceIconProps {
   serviceType: string;
   isActive: boolean;
 }
