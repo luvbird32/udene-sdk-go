@@ -5,7 +5,6 @@ import { FRAUD_DETECTION_SERVICES } from "../config";
 import { useProject } from "@/contexts/ProjectContext";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { Json } from '@/types/supabase';
 
 interface ServiceListProps {
   activeServices: any[];
@@ -57,16 +56,6 @@ export const ServiceList = ({ activeServices, handleToggle }: ServiceListProps) 
           (s) => s.service_type === serviceConfig.type
         );
 
-        // Type guard to check if settings is an object with features array
-        const settings = activeService?.settings;
-        const features = settings && 
-                        typeof settings === 'object' && 
-                        !Array.isArray(settings) && 
-                        'features' in settings && 
-                        Array.isArray(settings.features)
-                          ? (settings.features as string[]) 
-                          : [];
-
         const defaultPreferences = {
           action_type: 'manual' as const,
           automatic_actions: {
@@ -83,20 +72,15 @@ export const ServiceList = ({ activeServices, handleToggle }: ServiceListProps) 
           }
         };
 
-        const service = {
-          service_type: serviceConfig.type,
-          description: serviceConfig.description,
-          features: serviceConfig.features,
-          is_active: activeService ? activeService.is_active : false,
-          settings: activeService?.settings || {},
-          action_preferences: activeService?.action_preferences || defaultPreferences
-        };
-
         return (
           <ServiceCard
-            key={service.service_type}
-            service={service}
-            onToggle={handleServiceToggle}
+            key={serviceConfig.type}
+            service={{
+              type: serviceConfig.type,
+              isActive: activeService ? activeService.is_active : false,
+              features: serviceConfig.features
+            }}
+            onToggle={(isActive) => handleServiceToggle(serviceConfig.type, isActive)}
           />
         );
       })}
