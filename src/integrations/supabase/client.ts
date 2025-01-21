@@ -19,6 +19,18 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     headers: {
       'X-Client-Info': 'supabase-js-web'
     }
+  },
+  realtime: {
+    params: {
+      eventsPerSecond: 10
+    },
+    transport: {
+      wsUrl: supabaseUrl.replace('http', 'wss').replace('https', 'wss') + '/realtime/v1',
+      mode: 'realtime',
+      headers: {
+        apikey: supabaseAnonKey
+      }
+    }
   }
 });
 
