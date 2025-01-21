@@ -9,7 +9,10 @@ export const API_CONFIG = {
   },
   getUrl: (endpoint: keyof typeof API_CONFIG.ENDPOINTS) => {
     const path = API_CONFIG.ENDPOINTS[endpoint];
-    return `${API_CONFIG.BASE_URL}${path}`;
+    // Remove any trailing slashes and ensure proper URL formatting
+    const baseUrl = API_CONFIG.BASE_URL.replace(/\/+$/, '');
+    const cleanPath = path.replace(/^\/+/, '');
+    return `${baseUrl}/${cleanPath}`;
   }
 } as const;
 
