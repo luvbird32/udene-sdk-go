@@ -56,22 +56,6 @@ export const ServiceList = ({ activeServices, handleToggle }: ServiceListProps) 
           (s) => s.service_type === serviceConfig.type
         );
 
-        const defaultPreferences = {
-          action_type: 'manual' as const,
-          automatic_actions: {
-            block_ip: false,
-            block_device: false,
-            block_user: false,
-            block_email: false,
-            restrict_access: false,
-            notify_admin: false
-          },
-          notification_settings: {
-            email: true,
-            dashboard: true
-          }
-        };
-
         return (
           <ServiceCard
             key={serviceConfig.type}
