@@ -45,6 +45,36 @@ export const ServiceDescription = ({ title, description, serviceType, isActive }
           {serviceType === 'reward_program_protection' && (
             "This specialized service safeguards your loyalty and rewards programs from abuse and fraud. It monitors point accumulation patterns, redemption behaviors, and account linking to detect multiple account abuse, point farming, and fraudulent redemptions. The system uses advanced analytics to identify coordinated fraud attempts while ensuring legitimate program participants enjoy their benefits."
           )}
+          {serviceType === 'trial_abuse_prevention' && (
+            "Our trial abuse prevention system uses advanced analytics and machine learning to detect and prevent misuse of free trials. It monitors user behavior, device fingerprints, and network patterns to identify duplicate accounts, VPN usage, and suspicious activity patterns. This helps maintain fair access to your trial offerings while preventing abuse that could impact your business."
+          )}
+          {serviceType === 'account_takeover_protection' && (
+            "This comprehensive security service protects against unauthorized account access attempts. It uses multi-factor risk analysis, including device recognition, behavioral patterns, and location-based verification to prevent credential stuffing and brute force attacks. The system provides real-time monitoring and automated responses to suspicious login attempts."
+          )}
+          {serviceType === 'affiliate_abuse_prevention' && (
+            "Our affiliate fraud detection system protects your affiliate program from various forms of abuse. It monitors click patterns, conversion rates, and traffic sources to identify fake referrals, cookie stuffing, and other fraudulent activities. The system helps maintain program integrity while ensuring legitimate affiliates receive their earned commissions."
+          )}
+          {serviceType === 'promo_code_protection' && (
+            "This service prevents abuse of promotional codes through sophisticated pattern detection. It analyzes usage patterns, user behavior, and transaction characteristics to identify code sharing, bulk redemptions, and automated abuse attempts. The system helps maintain the effectiveness of your promotional campaigns while preventing unauthorized usage."
+          )}
+          {serviceType === 'romance_scam_detection' && (
+            "Our specialized detection system identifies potential romance scams by analyzing communication patterns, behavioral indicators, and profile characteristics. It helps protect users from fraudulent relationships by monitoring for red flags such as unusual financial requests, identity inconsistencies, and suspicious interaction patterns."
+          )}
+          {serviceType === 'payment_fraud_detection' && (
+            "This advanced fraud detection service analyzes payment transactions in real-time to identify and prevent fraudulent activities. It uses machine learning to evaluate multiple risk factors including user behavior, transaction patterns, and device characteristics. The system helps protect both your business and customers from unauthorized charges and financial fraud."
+          )}
+          {serviceType === 'api_security' && (
+            "Our API security service provides comprehensive protection for your APIs against unauthorized access and abuse. It implements rate limiting, IP whitelisting, and sophisticated request validation to prevent API abuse, data scraping, and DDoS attacks. The system ensures your APIs remain secure and performant while serving legitimate requests."
+          )}
+          {serviceType === 'device_fingerprinting' && (
+            "This advanced device identification service creates unique fingerprints for devices accessing your platform. It analyzes multiple device characteristics and behavioral patterns to detect suspicious activities, prevent account sharing, and identify potential fraud attempts. The system helps maintain security while providing a seamless experience for legitimate users."
+          )}
+          {serviceType === 'identity_verification' && (
+            "Our identity verification service provides robust user authentication through multiple verification methods. It combines document verification, biometric matching, and risk assessment to ensure user authenticity. The system helps prevent identity fraud while maintaining a smooth onboarding process for legitimate users."
+          )}
+          {serviceType === 'stream_protection' && (
+            "This comprehensive content moderation system protects your streaming platform from inappropriate content and abuse. It combines automated content analysis, user behavior monitoring, and community reporting to maintain platform safety. The system helps create a secure environment for content creators and viewers while preventing misuse."
+          )}
         </AlertDescription>
       </Alert>
     </div>
