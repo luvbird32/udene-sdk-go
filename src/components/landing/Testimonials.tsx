@@ -48,7 +48,7 @@ export const Testimonials = () => {
             <Quote className="w-10 h-10 text-primary animate-pulse" />
           </div>
           
-          <h2 className="text-4xl font-bold mb-4 text-white">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-white">
             Real Results from{" "}
             <span className="text-primary">Real Customers</span>
           </h2>

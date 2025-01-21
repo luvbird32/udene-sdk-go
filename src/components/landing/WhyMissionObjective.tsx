@@ -9,7 +9,7 @@ export const WhyMissionObjective = () => {
           <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
             <Shield className="w-16 h-16 text-primary animate-pulse" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-8 text-white">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 text-white">
             Our <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">Why</span>
           </h2>
           <div className="max-w-4xl bg-black/40 backdrop-blur-sm p-8 rounded-xl border border-white/5">
@@ -21,7 +21,6 @@ export const WhyMissionObjective = () => {
             </p>
           </div>
         </div>
-        
         <div className="grid md:grid-cols-3 gap-8 mt-12">
           <div className="bg-black/40 backdrop-blur-sm p-8 rounded-xl border border-white/5 hover:bg-black/50 transition-all duration-300">
             <Brain className="w-12 h-12 mb-4 text-primary" />
@@ -47,7 +46,7 @@ export const WhyMissionObjective = () => {
           <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
             <Target className="w-16 h-16 text-primary animate-pulse" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-8 text-white">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 text-white">
             Our <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">Mission</span>
           </h2>
           <div className="max-w-4xl bg-black/40 backdrop-blur-sm p-8 rounded-xl border border-white/5">
@@ -59,7 +58,6 @@ export const WhyMissionObjective = () => {
             </p>
           </div>
         </div>
-
         <div className="grid md:grid-cols-2 gap-8 mt-12">
           <div className="bg-black/40 backdrop-blur-sm p-8 rounded-xl border border-white/5 hover:bg-black/50 transition-all duration-300">
             <Globe className="w-12 h-12 mb-4 text-primary" />
@@ -80,7 +78,7 @@ export const WhyMissionObjective = () => {
           <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
             <Target className="w-16 h-16 text-primary animate-pulse" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-8 text-white">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 text-white">
             Our <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">Objectives</span>
           </h2>
           <div className="max-w-4xl">
@@ -89,7 +87,6 @@ export const WhyMissionObjective = () => {
             </p>
           </div>
         </div>
-
         <div className="grid md:grid-cols-3 gap-8 mt-12">
           <div className="bg-black/40 backdrop-blur-sm p-8 rounded-xl border border-white/5 hover:bg-black/50 transition-all duration-300">
             <h3 className="text-2xl font-semibold mb-4 text-white">Revenue Protection</h3>

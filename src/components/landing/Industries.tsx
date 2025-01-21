@@ -10,7 +10,7 @@ export const Industries = () => {
             <Shield className="w-8 h-8 text-primary animate-pulse" />
           </div>
           
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white leading-tight">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-white leading-tight">
             Trusted Across{" "}
             <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text animate-gradient">
               Multiple Industries

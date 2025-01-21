@@ -44,7 +44,7 @@ export const UseCases = () => {
     <section className="relative z-10 py-24">
       <div className="max-w-7xl mx-auto px-4">
         <div className="bg-black/40 backdrop-blur-sm p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center border border-white/5 mb-16 transform transition-all duration-500 hover:border-primary/20">
-          <h2 className="text-4xl font-bold mb-4">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
             <span className="text-white">Real Solutions for </span>
             <span className="text-[#22c55e]">Real Threats</span>
           </h2>
