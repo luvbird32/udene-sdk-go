@@ -20,7 +20,7 @@ export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
       setIsActive(newActiveState);
     } catch (error) {
       console.error('Error toggling service:', error);
-      throw error; // Let ServiceStatus handle the error
+      throw error;
     }
   }, [onToggle]);
 
@@ -29,8 +29,6 @@ export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
       <Card className="p-6 space-y-4">
         <div className="flex items-start justify-between">
           <ServiceDescription
-            title={service.service_type}
-            description={service.description}
             serviceType={service.service_type}
             isActive={isActive}
           />

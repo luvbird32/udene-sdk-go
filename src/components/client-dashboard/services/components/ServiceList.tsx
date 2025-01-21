@@ -1,7 +1,6 @@
-import { ServiceCard } from './ServiceCard';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { LoadingSpinner } from '@/components/ui/states/LoadingSpinner';
-import type { ClientService } from '@/integrations/supabase/types/client-services';
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ServiceCard } from "./ServiceCard";
+import type { ClientService } from "@/integrations/supabase/types/client-services";
 
 interface ServiceListProps {
   activeServices?: ClientService[] | null;
@@ -27,7 +26,7 @@ export const ServiceList = ({ activeServices, handleToggle }: ServiceListProps) 
           service={{
             type: service.service_type,
             isActive: service.is_active || false,
-            features: service.settings?.features || []
+            features: Array.isArray(service.settings?.features) ? service.settings.features : []
           }}
           onToggle={async (isActive) => await handleToggle(service.service_type, isActive)}
         />
