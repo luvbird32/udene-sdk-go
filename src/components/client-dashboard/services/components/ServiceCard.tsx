@@ -1,94 +1,37 @@
-import { Card } from '@/components/ui/card';
-import { ServiceDetailsDialog } from '../ServiceDetailsDialog';
-import { ServiceDescription } from './ServiceDescription';
-import { ServiceFeatureList } from './ServiceFeatureList';
-import { ServiceControls } from './ServiceControls';
-import { ServiceStatus } from './ServiceStatus';
-import { ServiceActionPreferences } from './ServiceActionPreferences';
-import { useServicePreferences } from '../hooks/useServicePreferences';
-import { useState } from 'react';
-import type { ClientService } from '@/integrations/supabase/types/client-services';
-import type { ServiceSettings, ServiceActionPreferences as ServiceActionPreferencesType } from '../types';
+import { Card } from "@/components/ui/card";
+import { ServiceDescription } from "./ServiceDescription";
+import { ServiceFeatureList } from "./ServiceFeatureList";
+import { ServiceToggle } from "./ServiceToggle";
+import { ServiceIcon } from "./ServiceIcon";
 
 interface ServiceCardProps {
-  service: ClientService;
-  onToggle: (serviceType: string, isActive: boolean) => Promise<void>;
+  service: {
+    type: string;
+    isActive: boolean;
+    features: string[];
+  };
+  onToggle: (isActive: boolean) => void;
 }
 
 export const ServiceCard = ({ service, onToggle }: ServiceCardProps) => {
-  const [showDetails, setShowDetails] = useState(false);
-  const { isUpdatingPreferences, handlePreferencesChange } = useServicePreferences(service.service_type);
-  
-  const settings = service.settings as ServiceSettings;
-  const actionPreferences = service.action_preferences as unknown as ServiceActionPreferencesType;
-
-  const defaultPreferences: ServiceActionPreferencesType = {
-    action_type: 'manual',
-    automatic_actions: {
-      block_ip: true,
-      block_device: true,
-      block_user: true,
-      block_email: false,
-      restrict_access: false,
-      notify_admin: false
-    },
-    notification_settings: {
-      email: true,
-      dashboard: true
-    }
-  };
-
-  // Validate and ensure actionPreferences matches the expected type
-  const validatedPreferences: ServiceActionPreferencesType = 
-    actionPreferences && 
-    typeof actionPreferences === 'object' && 
-    'action_type' in actionPreferences ? 
-    actionPreferences : defaultPreferences;
-
   return (
-    <>
-      <Card className="p-6 space-y-4">
-        <div className="flex items-start justify-between">
-          <ServiceDescription
-            title={service.service_type}
-            description={settings?.description || ''}
-            serviceType={service.service_type}
-            isActive={service.is_active}
-          />
-          <ServiceStatus 
-            title={service.service_type}
-            serviceType={service.service_type}
-            isActive={service.is_active}
-            onToggle={onToggle}
-          />
+    <Card className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <ServiceIcon serviceType={service.type} />
+          <div>
+            <h3 className="text-lg font-semibold text-white">{service.type}</h3>
+          </div>
         </div>
-        
-        {service.is_active && (
-          <ServiceActionPreferences
-            preferences={validatedPreferences}
-            onPreferencesChange={handlePreferencesChange}
-            isUpdating={isUpdatingPreferences}
-          />
-        )}
+        <ServiceToggle isActive={service.isActive} onToggle={onToggle} />
+      </div>
 
-        <ServiceFeatureList features={settings?.features || []} />
-        <ServiceControls
-          isActive={service.is_active}
-          serviceType={service.service_type}
-          onShowDetails={() => setShowDetails(true)}
-        />
-      </Card>
-
-      <ServiceDetailsDialog
-        open={showDetails}
-        onOpenChange={setShowDetails}
-        service={{
-          title: service.service_type,
-          description: settings?.description || '',
-          features: settings?.features || [],
-          type: service.service_type,
-        }}
+      <ServiceDescription 
+        serviceType={service.type}
+        isActive={service.isActive}
       />
-    </>
+
+      <ServiceFeatureList features={service.features} />
+    </Card>
   );
 };
