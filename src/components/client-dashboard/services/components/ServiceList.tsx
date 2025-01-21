@@ -21,11 +21,14 @@ export const ServiceList = ({ activeServices, handleToggle }: ServiceListProps) 
   return (
     <div className="grid gap-6">
       {activeServices.map((service) => {
-        // Safely extract features from settings
-        const features = typeof service.settings === 'object' && 
-                        service.settings !== null && 
-                        Array.isArray(service.settings.features) 
-                          ? service.settings.features 
+        // Type guard to check if settings is an object with features array
+        const settings = service.settings;
+        const features = settings && 
+                        typeof settings === 'object' && 
+                        !Array.isArray(settings) && 
+                        'features' in settings && 
+                        Array.isArray(settings.features)
+                          ? settings.features 
                           : [];
 
         return (
