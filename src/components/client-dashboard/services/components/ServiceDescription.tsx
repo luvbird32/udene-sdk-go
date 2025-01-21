@@ -1,82 +1,66 @@
-import { ServiceIcon } from "./ServiceIcon";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Info } from "lucide-react";
-import type { ServiceHeaderProps } from "../types";
+import { formatServiceType } from '@/utils';
 
-const formatServiceName = (serviceType: string): string => {
-  return serviceType
-    .split('_')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-};
+interface ServiceDescriptionProps {
+  title: string;
+  description: string;
+  serviceType: string;
+  isActive: boolean;
+}
 
-export const ServiceDescription = ({ title, description, serviceType, isActive }: ServiceHeaderProps) => {
-  const formattedTitle = formatServiceName(serviceType);
-  
+export const ServiceDescription = ({ 
+  title,
+  description,
+  serviceType,
+  isActive 
+}: ServiceDescriptionProps) => {
+  const getHowThisHelpsYou = (type: string) => {
+    switch (type) {
+      case 'trial_abuse_prevention':
+        return "Our trial abuse prevention system uses advanced detection methods to identify and prevent multiple trial account creation, helping protect your business from users attempting to exploit free trial periods. It analyzes patterns in user behavior, device fingerprints, and network signals to maintain the integrity of your trial program while ensuring legitimate users can easily access your services.";
+      case 'account_takeover_protection':
+        return "This multi-layered security system protects user accounts from unauthorized access and takeover attempts. It combines behavioral biometrics, device fingerprinting, and risk-based authentication to detect suspicious login attempts, credential stuffing attacks, and account manipulation in real-time. The service also monitors for unusual account activity patterns and provides immediate alerts.";
+      case 'email_security':
+        return "Our email security service provides comprehensive protection against various email-based threats. It includes advanced filtering for phishing attempts, spam detection, domain spoofing prevention, and business email compromise (BEC) detection. The system uses machine learning to analyze email patterns, validate sender authenticity, and identify suspicious communication behaviors, while maintaining delivery of legitimate emails. It also monitors for unauthorized email account access and provides real-time alerts for potential security breaches.";
+      case 'reward_program_protection':
+        return "This specialized service safeguards your loyalty and rewards programs from abuse and fraud. It monitors point accumulation patterns, redemption behaviors, and account linking to detect multiple account abuse, point farming, and fraudulent redemptions. The system uses advanced analytics to identify coordinated fraud attempts while ensuring legitimate program participants enjoy their benefits.";
+      case 'affiliate_abuse_prevention':
+        return "Protect your affiliate program from fraudulent activities with our comprehensive monitoring system. It detects click fraud, fake referrals, and self-referrals while analyzing traffic patterns and conversion rates to identify suspicious behavior. The service helps maintain a healthy affiliate program by ensuring only legitimate referrals are rewarded.";
+      case 'promo_code_protection':
+        return "Our promo code protection service prevents abuse of your promotional campaigns. It monitors for multiple account creation, code sharing, and automated redemption attempts. The system uses advanced algorithms to detect patterns of abuse while ensuring legitimate customers can easily redeem their promotional offers.";
+      case 'romance_scam_detection':
+        return "This specialized detection system identifies potential romance scams by analyzing communication patterns, behavioral indicators, and financial transaction requests. It helps protect your users from fraudulent romantic connections while maintaining a safe and trustworthy platform for genuine interactions.";
+      case 'payment_fraud_detection':
+        return "Our comprehensive payment fraud detection system analyzes transactions in real-time to identify and prevent fraudulent activities. It uses machine learning to detect unusual patterns, suspicious behaviors, and known fraud indicators while ensuring legitimate transactions proceed smoothly.";
+      case 'api_security':
+        return "Protect your APIs from abuse and attacks with our comprehensive security solution. It monitors for unusual traffic patterns, rate limiting violations, and potential security threats while ensuring legitimate API usage remains unaffected. The service includes real-time monitoring and automated response capabilities.";
+      case 'device_fingerprinting':
+        return "Our advanced device fingerprinting service creates unique identifiers for devices accessing your system. It helps track and identify suspicious devices, prevent account sharing, and detect potential fraud attempts while maintaining user privacy and ensuring a smooth experience for legitimate users.";
+      case 'identity_verification':
+        return "This robust identity verification service helps ensure your users are who they claim to be. It combines multiple verification methods including document verification, biometric matching, and liveness detection to provide comprehensive identity assurance while maintaining a user-friendly verification process.";
+      case 'stream_protection':
+        return "Our stream protection service safeguards your streaming content from unauthorized access and abuse. It monitors for suspicious viewing patterns, account sharing, and potential content piracy while ensuring legitimate viewers enjoy uninterrupted access to your content.";
+      default:
+        return description;
+    }
+  };
+
   return (
-    <div className="space-y-4">
-      <div className="flex items-start gap-3">
-        <ServiceIcon serviceType={serviceType} isActive={isActive} />
-        <div>
-          <h3 className="text-lg font-semibold">{formattedTitle}</h3>
-          <p className="text-sm text-muted-foreground mt-1">{description}</p>
-        </div>
+    <div className="space-y-2">
+      <h3 className="text-lg font-semibold">
+        {formatServiceType(title)}
+        {isActive && (
+          <span className="ml-2 inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+            Active
+          </span>
+        )}
+      </h3>
+      <p className="text-sm text-muted-foreground">{description}</p>
+      <div className="mt-4">
+        <h4 className="text-sm font-medium mb-2">How this helps you:</h4>
+        <p className="text-sm text-muted-foreground">
+          {getHowThisHelpsYou(serviceType)}
+        </p>
       </div>
-      
-      <Alert variant="default" className="bg-blue-50/50 border-blue-200">
-        <Info className="h-4 w-4 text-blue-500" />
-        <AlertDescription className="text-sm text-muted-foreground">
-          <span className="font-medium text-blue-900">How this helps you: </span>
-          {serviceType === 'bot_prevention' && (
-            "Our advanced bot detection system uses machine learning to identify and block automated threats in real-time. It analyzes behavioral patterns, request signatures, and network characteristics to distinguish between legitimate users and malicious bots, protecting your platform from scraping, credential stuffing, and DDoS attacks while maintaining a smooth experience for real users."
-          )}
-          {serviceType === 'shadow_ai_prevention' && (
-            "This service employs sophisticated detection algorithms to identify unauthorized AI system usage on your platform. It monitors request patterns, content generation signatures, and API usage to detect potential AI-powered automation tools, ensuring fair usage and preventing abuse of your resources. The system adapts to new AI patterns while minimizing false positives."
-          )}
-          {serviceType === 'payment_protection' && (
-            "Our comprehensive payment fraud prevention system analyzes multiple risk factors in real-time, including transaction patterns, user behavior, and device fingerprints. It uses advanced machine learning models to detect suspicious patterns, validate payment information, and prevent chargebacks while ensuring legitimate transactions are processed smoothly."
-          )}
-          {serviceType === 'account_protection' && (
-            "This multi-layered security system protects user accounts from unauthorized access and takeover attempts. It combines behavioral biometrics, device fingerprinting, and risk-based authentication to detect suspicious login attempts, credential stuffing attacks, and account manipulation in real-time. The service also monitors for unusual account activity patterns and provides immediate alerts."
-          )}
-          {serviceType === 'email_protection' && (
-            "Our email security service provides comprehensive protection against various email-based threats. It includes advanced filtering for phishing attempts, spam detection, domain spoofing prevention, and business email compromise (BEC) detection. The system uses machine learning to analyze email patterns, validate sender authenticity, and identify suspicious communication behaviors, while maintaining delivery of legitimate emails. It also monitors for unauthorized email account access and provides real-time alerts for potential security breaches."
-          )}
-          {serviceType === 'reward_program_protection' && (
-            "This specialized service safeguards your loyalty and rewards programs from abuse and fraud. It monitors point accumulation patterns, redemption behaviors, and account linking to detect multiple account abuse, point farming, and fraudulent redemptions. The system uses advanced analytics to identify coordinated fraud attempts while ensuring legitimate program participants enjoy their benefits."
-          )}
-          {serviceType === 'trial_abuse_prevention' && (
-            "Our trial abuse prevention system uses advanced analytics and machine learning to detect and prevent misuse of free trials. It monitors user behavior, device fingerprints, and network patterns to identify duplicate accounts, VPN usage, and suspicious activity patterns. This helps maintain fair access to your trial offerings while preventing abuse that could impact your business."
-          )}
-          {serviceType === 'account_takeover_protection' && (
-            "This comprehensive security service protects against unauthorized account access attempts. It uses multi-factor risk analysis, including device recognition, behavioral patterns, and location-based verification to prevent credential stuffing and brute force attacks. The system provides real-time monitoring and automated responses to suspicious login attempts."
-          )}
-          {serviceType === 'affiliate_abuse_prevention' && (
-            "Our affiliate fraud detection system protects your affiliate program from various forms of abuse. It monitors click patterns, conversion rates, and traffic sources to identify fake referrals, cookie stuffing, and other fraudulent activities. The system helps maintain program integrity while ensuring legitimate affiliates receive their earned commissions."
-          )}
-          {serviceType === 'promo_code_protection' && (
-            "This service prevents abuse of promotional codes through sophisticated pattern detection. It analyzes usage patterns, user behavior, and transaction characteristics to identify code sharing, bulk redemptions, and automated abuse attempts. The system helps maintain the effectiveness of your promotional campaigns while preventing unauthorized usage."
-          )}
-          {serviceType === 'romance_scam_detection' && (
-            "Our specialized detection system identifies potential romance scams by analyzing communication patterns, behavioral indicators, and profile characteristics. It helps protect users from fraudulent relationships by monitoring for red flags such as unusual financial requests, identity inconsistencies, and suspicious interaction patterns."
-          )}
-          {serviceType === 'payment_fraud_detection' && (
-            "This advanced fraud detection service analyzes payment transactions in real-time to identify and prevent fraudulent activities. It uses machine learning to evaluate multiple risk factors including user behavior, transaction patterns, and device characteristics. The system helps protect both your business and customers from unauthorized charges and financial fraud."
-          )}
-          {serviceType === 'api_security' && (
-            "Our API security service provides comprehensive protection for your APIs against unauthorized access and abuse. It implements rate limiting, IP whitelisting, and sophisticated request validation to prevent API abuse, data scraping, and DDoS attacks. The system ensures your APIs remain secure and performant while serving legitimate requests."
-          )}
-          {serviceType === 'device_fingerprinting' && (
-            "This advanced device identification service creates unique fingerprints for devices accessing your platform. It analyzes multiple device characteristics and behavioral patterns to detect suspicious activities, prevent account sharing, and identify potential fraud attempts. The system helps maintain security while providing a seamless experience for legitimate users."
-          )}
-          {serviceType === 'identity_verification' && (
-            "Our identity verification service provides robust user authentication through multiple verification methods. It combines document verification, biometric matching, and risk assessment to ensure user authenticity. The system helps prevent identity fraud while maintaining a smooth onboarding process for legitimate users."
-          )}
-          {serviceType === 'stream_protection' && (
-            "This comprehensive content moderation system protects your streaming platform from inappropriate content and abuse. It combines automated content analysis, user behavior monitoring, and community reporting to maintain platform safety. The system helps create a secure environment for content creators and viewers while preventing misuse."
-          )}
-        </AlertDescription>
-      </Alert>
     </div>
   );
 };
