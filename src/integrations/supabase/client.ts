@@ -23,8 +23,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   realtime: {
     params: {
       eventsPerSecond: 10
-    },
-    transport: 'websocket'
+    }
   }
 });
 
