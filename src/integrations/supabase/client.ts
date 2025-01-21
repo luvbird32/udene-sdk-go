@@ -8,10 +8,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables');
 }
 
-// Ensure HTTPS for WebSocket connections
-const secureSupabaseUrl = supabaseUrl.replace('http:', 'https:');
-
-export const supabase = createClient(secureSupabaseUrl, supabaseAnonKey, {
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
@@ -20,26 +17,20 @@ export const supabase = createClient(secureSupabaseUrl, supabaseAnonKey, {
   },
   global: {
     headers: {
-      'x-application-name': 'fraud-detection-dashboard'
-    }
-  },
-  realtime: {
-    params: {
-      eventsPerSecond: 10
+      'X-Client-Info': 'supabase-js-web',
     }
   }
 });
 
 // Add error handling for auth state changes
 supabase.auth.onAuthStateChange((event, session) => {
+  console.log('Auth state changed:', event);
   if (event === 'SIGNED_IN') {
     console.log('User signed in:', session?.user?.id);
   } else if (event === 'SIGNED_OUT') {
     console.log('User signed out');
   } else if (event === 'TOKEN_REFRESHED') {
     console.log('Token refreshed');
-  } else if (event === 'USER_UPDATED') {
-    console.log('User updated:', session?.user?.id);
   }
 });
 
@@ -55,21 +46,5 @@ export const checkSupabaseHealth = async () => {
   } catch (error) {
     console.error('Supabase health check failed:', error);
     return false;
-  }
-};
-
-// Add session refresh helper
-export const refreshSession = async () => {
-  try {
-    const { data: { session }, error } = await supabase.auth.getSession();
-    if (error) throw error;
-    if (!session) {
-      const { error: refreshError } = await supabase.auth.refreshSession();
-      if (refreshError) throw refreshError;
-    }
-    return session;
-  } catch (error) {
-    console.error('Failed to refresh session:', error);
-    throw error;
   }
 };
