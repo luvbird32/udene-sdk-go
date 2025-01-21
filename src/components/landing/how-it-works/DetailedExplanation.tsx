@@ -13,7 +13,7 @@ const detailedExplanation = {
     "2. Real-time Analysis: Our ML models process the data through multiple fraud detection layers",
     "3. Risk Assessment: Each activity receives a risk score based on multiple parameters",
     "4. Automated Response: High-risk activities trigger immediate protective actions",
-    "5. Continuous Learning: Our system adapts to new fraud patterns through regular model updates"
+    "5. Continuous Learning: Our system adapts to new fraud patterns through regular ML model updates"
   ],
   parameters: [
     "Device Fingerprint Matching (Browser, Hardware, Network)",
