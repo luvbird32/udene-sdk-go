@@ -13,7 +13,7 @@ export const BusinessIntelligence = () => {
     return (
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription className="text-white">
+        <AlertDescription className="text-foreground">
           Failed to load business intelligence metrics. Please try again later.
         </AlertDescription>
       </Alert>
@@ -24,10 +24,10 @@ export const BusinessIntelligence = () => {
     return (
       <Card className="p-4">
         <div className="animate-pulse space-y-4">
-          <div className="h-4 bg-white/10 rounded w-1/4"></div>
+          <div className="h-4 bg-primary/10 rounded w-1/4"></div>
           <div className="space-y-2">
-            <div className="h-4 bg-white/10 rounded"></div>
-            <div className="h-4 bg-white/10 rounded"></div>
+            <div className="h-4 bg-primary/10 rounded"></div>
+            <div className="h-4 bg-primary/10 rounded"></div>
           </div>
         </div>
       </Card>
@@ -36,7 +36,7 @@ export const BusinessIntelligence = () => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-white">Business Intelligence</h2>
+      <h2 className="text-xl font-semibold text-primary">Business Intelligence</h2>
       
       <MetricsOverview metrics={metrics} />
 

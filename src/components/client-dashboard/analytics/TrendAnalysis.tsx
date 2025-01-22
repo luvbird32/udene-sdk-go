@@ -34,7 +34,7 @@ export const TrendAnalysis = () => {
       <Card className="p-4">
         <TransactionTrendHeader title="Transaction Trends" />
         <div className="h-[300px] flex items-center justify-center">
-          <p className="text-white">Loading trends...</p>
+          <p className="text-primary">Loading trends...</p>
         </div>
       </Card>
     );
@@ -45,7 +45,7 @@ export const TrendAnalysis = () => {
       <Card className="p-4">
         <TransactionTrendHeader title="Transaction Trends" />
         <div className="h-[300px] flex items-center justify-center">
-          <p className="text-red-500">Failed to load trends. Please try again later.</p>
+          <p className="text-destructive">Failed to load trends. Please try again later.</p>
         </div>
       </Card>
     );

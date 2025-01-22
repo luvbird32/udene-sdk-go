@@ -16,13 +16,13 @@ export const RomanceScamMonitoring = () => {
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-2">
             <HeartCrack className="h-5 w-5 text-destructive" />
-            <h3 className="font-semibold text-white">Romance Scam Analysis</h3>
+            <h3 className="font-semibold text-primary">Romance Scam Analysis</h3>
           </div>
           <Badge variant="outline">Last 100 Interactions</Badge>
         </div>
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertDescription className="text-white">
+          <AlertDescription className="text-foreground">
             Failed to load romance scam data: {error.message}
           </AlertDescription>
         </Alert>
@@ -44,7 +44,7 @@ export const RomanceScamMonitoring = () => {
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-2">
           <HeartCrack className="h-5 w-5 text-destructive" />
-          <h3 className="font-semibold text-white">Romance Scam Analysis</h3>
+          <h3 className="font-semibold text-primary">Romance Scam Analysis</h3>
         </div>
         <Badge variant="outline">Last 100 Interactions</Badge>
       </div>

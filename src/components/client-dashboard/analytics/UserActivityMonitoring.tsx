@@ -28,8 +28,8 @@ export const UserActivityMonitoring = () => {
     return (
       <Card className="p-4">
         <div className="text-center py-8">
-          <Shield className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
-          <p className="text-muted-foreground">No activity data available</p>
+          <Shield className="h-12 w-12 text-primary mx-auto mb-2" />
+          <p className="text-primary">No activity data available</p>
         </div>
       </Card>
     );
@@ -42,7 +42,7 @@ export const UserActivityMonitoring = () => {
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-2">
           <Shield className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold text-foreground">Security Monitoring</h3>
+          <h3 className="font-semibold text-primary">Security Monitoring</h3>
         </div>
       </div>
       <ActivityChart 
