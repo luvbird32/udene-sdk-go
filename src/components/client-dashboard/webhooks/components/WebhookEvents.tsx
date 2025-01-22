@@ -22,7 +22,7 @@ interface WebhookEventsProps {
 export const WebhookEvents = ({ selectedEvents, onEventsChange }: WebhookEventsProps) => {
   return (
     <div className="space-y-2">
-      <Label className="text-white/60">Events to Subscribe</Label>
+      <Label className="text-primary font-medium">Events to Subscribe</Label>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-4 border rounded-lg">
         {AVAILABLE_EVENTS.map((event) => (
           <div key={event} className="flex items-center space-x-2">
@@ -39,7 +39,7 @@ export const WebhookEvents = ({ selectedEvents, onEventsChange }: WebhookEventsP
             />
             <Label 
               htmlFor={event} 
-              className="text-sm cursor-pointer text-white/60"
+              className="text-sm cursor-pointer text-primary"
             >
               {event.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
             </Label>
