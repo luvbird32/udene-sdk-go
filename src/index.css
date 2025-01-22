@@ -12,22 +12,22 @@
 @layer base {
   :root {
     --background: 222 47% 11%;
-    --foreground: 0 0% 0%;
+    --foreground: 0 0% 98%;
     --card: 222 47% 11%;
-    --card-foreground: 0 0% 0%;
+    --card-foreground: 0 0% 98%;
     --popover: 222 47% 11%;
-    --popover-foreground: 0 0% 0%;
-    --primary: 0 0% 0%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 222 47% 11%;
-    --secondary-foreground: 0 0% 0%;
-    --accent: 0 0% 0%;
-    --accent-foreground: 0 0% 100%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 0%;
-    --border: 0 0% 0%;
-    --input: 0 0% 0%;
-    --ring: 0 0% 0%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
     --radius: 0.5rem;
   }
 }
@@ -35,22 +35,22 @@
 @layer utilities {
   .dark {
     --background: 222 47% 11%;
-    --foreground: 142 72% 29%;
+    --foreground: 0 0% 98%;
     --card: 222 47% 11%;
-    --card-foreground: 142 72% 29%;
+    --card-foreground: 0 0% 98%;
     --popover: 222 47% 11%;
-    --popover-foreground: 142 72% 29%;
-    --primary: 142 72% 29%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 222 47% 11%;
-    --secondary-foreground: 142 72% 29%;
-    --accent: 142 72% 29%;
-    --accent-foreground: 0 0% 100%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 142 72% 29%;
-    --border: 142 72% 29%;
-    --input: 142 72% 29%;
-    --ring: 142 72% 29%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
   }
 
   /* Dashboard-specific light theme */
