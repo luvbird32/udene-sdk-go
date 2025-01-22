@@ -1,3 +1,16 @@
+/**
+ * Dashboard Component
+ * 
+ * Main dashboard page component that displays various analytics, metrics, and monitoring sections.
+ * Includes real-time data updates and user-specific information.
+ * 
+ * Features:
+ * - Real-time metrics display
+ * - Project selection
+ * - Multiple dashboard tabs
+ * - Session timeout handling
+ * - Realtime subscriptions
+ */
 import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,9 +27,11 @@ import { ProjectSelector } from "@/components/dashboard/ProjectSelector";
 const Dashboard = () => {
   const { toast } = useToast();
   
+  // Initialize session timeout and realtime subscription handlers
   useSessionTimeout();
   useRealtimeSubscriptions();
 
+  // Fetch metrics data with automatic refetching every 3 seconds
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
     queryKey: ["metrics"],
     queryFn: async () => {
@@ -33,6 +48,7 @@ const Dashboard = () => {
         throw metricsError;
       }
 
+      // Transform and return metrics data with default values
       return {
         riskScore: metricsData?.metric_value ?? 0,
         totalTransactions: metricsData?.metric_value ?? 0,
@@ -42,7 +58,7 @@ const Dashboard = () => {
         concurrentCalls: metricsData?.concurrent_calls ?? 0
       };
     },
-    refetchInterval: 3000,
+    refetchInterval: 3000, // Refresh every 3 seconds
     retry: 1,
     meta: {
       errorHandler: (error: Error) => {
