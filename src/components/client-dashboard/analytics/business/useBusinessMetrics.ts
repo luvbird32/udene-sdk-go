@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { BusinessMetrics, TransactionMetrics } from "./types";
+import { BusinessMetrics } from "./types";
 
 export const useBusinessMetrics = () => {
   const { toast } = useToast();
@@ -18,7 +18,12 @@ export const useBusinessMetrics = () => {
 
       const { data: transactions, error } = await supabase
         .from('transactions')
-        .select('amount, risk_score, is_fraudulent')
+        .select(`
+          amount_encrypted,
+          amount_iv,
+          risk_score,
+          is_fraudulent
+        `)
         .order('created_at', { ascending: false })
         .limit(1000);
 
@@ -34,10 +39,34 @@ export const useBusinessMetrics = () => {
 
       console.log(`Processing ${transactions.length} transactions for metrics`);
 
-      const blockedTransactions = transactions.filter(t => t.risk_score >= 70);
+      // Process transactions with decrypted amounts
+      const processedTransactions = await Promise.all(
+        transactions.map(async (tx) => {
+          let amount = 0;
+          if (tx.amount_encrypted && tx.amount_iv) {
+            try {
+              const { data: decryptedAmount, error: decryptError } = await supabase.rpc(
+                'decrypt_sensitive_data',
+                {
+                  encrypted_data: tx.amount_encrypted,
+                  iv: tx.amount_iv
+                }
+              );
+              if (!decryptError) {
+                amount = Number(decryptedAmount);
+              }
+            } catch (err) {
+              console.error("Error decrypting amount:", err);
+            }
+          }
+          return { ...tx, amount };
+        })
+      );
+
+      const blockedTransactions = processedTransactions.filter(t => t.risk_score >= 70);
       const totalBlocked = blockedTransactions.reduce((sum, t) => sum + (t.amount || 0), 0);
       
-      const verifiedTransactions = transactions.filter(t => t.is_fraudulent !== null);
+      const verifiedTransactions = processedTransactions.filter(t => t.is_fraudulent !== null);
       const truePositives = verifiedTransactions.filter(t => t.risk_score >= 70 && t.is_fraudulent).length;
       const falsePositives = verifiedTransactions.filter(t => t.risk_score >= 70 && !t.is_fraudulent).length;
       const trueNegatives = verifiedTransactions.filter(t => t.risk_score < 70 && !t.is_fraudulent).length;
