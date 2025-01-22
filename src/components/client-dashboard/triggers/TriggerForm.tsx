@@ -23,8 +23,8 @@ export const TriggerForm = () => {
     <Card className="p-6">
       <div className="space-y-6">
         <div className="flex items-center gap-2">
-          <Settings className="h-5 w-5 text-primary" />
-          <h3 className="text-lg font-semibold text-primary">Add New Trigger</h3>
+          <Settings className="h-5 w-5 text-secondary" />
+          <h3 className="text-lg font-semibold text-secondary">Add New Trigger</h3>
         </div>
 
         <ExampleUseCases />

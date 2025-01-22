@@ -25,7 +25,7 @@ export const TriggerFormInputs = ({
   return (
     <div className="space-y-4">
       <div>
-        <Label htmlFor="name" className="text-primary">Trigger Name</Label>
+        <Label htmlFor="name" className="text-secondary">Trigger Name</Label>
         <Input
           id="name"
           placeholder="E.g., High Risk Transaction Alert"
@@ -36,7 +36,7 @@ export const TriggerFormInputs = ({
       </div>
 
       <div>
-        <Label htmlFor="description" className="text-primary">Description (optional)</Label>
+        <Label htmlFor="description" className="text-secondary">Description (optional)</Label>
         <Textarea
           id="description"
           placeholder="E.g., Alert me when high-risk transactions are detected"
@@ -47,7 +47,7 @@ export const TriggerFormInputs = ({
       </div>
 
       <div className="space-y-4">
-        <Label className="text-primary">Event Types</Label>
+        <Label className="text-secondary">Event Types</Label>
         <EventTypeSelector
           selectedEventTypes={selectedEventTypes}
           onEventTypesChange={onEventTypesChange}
