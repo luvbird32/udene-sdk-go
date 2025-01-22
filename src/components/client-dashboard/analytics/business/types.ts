@@ -6,15 +6,6 @@ export interface BusinessMetrics {
   customerImpactRate: number;
   totalTransactions: number;
   affectedCustomers: number;
-  blockedTransactions?: number;
-  totalAmountBlocked?: number;
-  accuracy?: number;
-  precision?: number;
-  recall?: number;
-  truePositives?: number;
-  falsePositives?: number;
-  trueNegatives?: number;
-  falseNegatives?: number;
 }
 
 export interface TransactionMetrics {

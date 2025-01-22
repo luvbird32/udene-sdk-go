@@ -25,8 +25,7 @@ export const useBusinessMetrics = () => {
             amount_encrypted,
             amount_iv,
             risk_score,
-            is_fraudulent,
-            id
+            is_fraudulent
           `)
           .order('created_at', { ascending: false })
           .limit(1000);
@@ -79,30 +78,32 @@ export const useBusinessMetrics = () => {
         const trueNegatives = verifiedTransactions.filter(t => t.risk_score < 70 && !t.is_fraudulent).length;
         const falseNegatives = verifiedTransactions.filter(t => t.risk_score < 70 && t.is_fraudulent).length;
 
-        // Calculate rates and metrics
-        const totalVerified = verifiedTransactions.length;
-        const falsePositiveRate = totalVerified > 0 ? (falsePositives / totalVerified) * 100 : 0;
-        const falseNegativeRate = totalVerified > 0 ? (falseNegatives / totalVerified) * 100 : 0;
-        const affectedCustomers = new Set(blockedTransactions.map(t => t.id)).size;
-        const customerImpactRate = (affectedCustomers / transactions.length) * 100;
+        // Calculate detection accuracy percentages
+        const accuracy = verifiedTransactions.length > 0
+          ? ((truePositives + trueNegatives) / verifiedTransactions.length) * 100
+          : 0;
 
-        // Calculate ROI and savings
-        const averageTransactionAmount = processedTransactions.reduce((sum, t) => sum + (t.amount || 0), 0) / processedTransactions.length;
-        const potentialFraudAmount = truePositives * averageTransactionAmount;
-        const savings = potentialFraudAmount;
-        const implementationCost = 10000; // Example fixed cost
-        const roi = ((savings - implementationCost) / implementationCost) * 100;
+        const precision = (truePositives + falsePositives) > 0
+          ? (truePositives / (truePositives + falsePositives)) * 100
+          : 0;
 
-        // Return metrics matching BusinessMetrics interface
+        const recall = (truePositives + falseNegatives) > 0
+          ? (truePositives / (truePositives + falseNegatives)) * 100
+          : 0;
+
+        // Return compiled business metrics
         return {
-          roi,
-          savings,
-          falsePositiveRate,
-          falseNegativeRate,
-          customerImpactRate,
           totalTransactions: transactions.length,
-          affectedCustomers
-        } as BusinessMetrics;
+          blockedTransactions: blockedTransactions.length,
+          totalAmountBlocked: totalBlocked,
+          accuracy,
+          precision,
+          recall,
+          truePositives,
+          falsePositives,
+          trueNegatives,
+          falseNegatives
+        };
       } catch (error) {
         console.error("Error calculating business metrics:", error);
         throw error;
