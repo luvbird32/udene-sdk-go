@@ -22,20 +22,32 @@ export const ApiDocs = () => {
       </div>
       
       <Tabs defaultValue="quickstart" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="quickstart">
+        <TabsList className="grid w-full grid-cols-4 bg-black/5 p-1 rounded-lg">
+          <TabsTrigger 
+            value="quickstart"
+            className="data-[state=active]:bg-white data-[state=active]:text-black"
+          >
             <Info className="h-4 w-4 mr-2" />
             Quick Start
           </TabsTrigger>
-          <TabsTrigger value="authentication">
+          <TabsTrigger 
+            value="authentication"
+            className="data-[state=active]:bg-white data-[state=active]:text-black"
+          >
             <Link className="h-4 w-4 mr-2" />
             Authentication
           </TabsTrigger>
-          <TabsTrigger value="endpoints">
+          <TabsTrigger 
+            value="endpoints"
+            className="data-[state=active]:bg-white data-[state=active]:text-black"
+          >
             <Code className="h-4 w-4 mr-2" />
             Endpoints
           </TabsTrigger>
-          <TabsTrigger value="sdks">
+          <TabsTrigger 
+            value="sdks"
+            className="data-[state=active]:bg-white data-[state=active]:text-black"
+          >
             <Smartphone className="h-4 w-4 mr-2" />
             SDKs
           </TabsTrigger>
