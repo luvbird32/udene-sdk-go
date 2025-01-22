@@ -25,7 +25,8 @@ export const useBusinessMetrics = () => {
             amount_encrypted,
             amount_iv,
             risk_score,
-            is_fraudulent
+            is_fraudulent,
+            id
           `)
           .order('created_at', { ascending: false })
           .limit(1000);
@@ -82,7 +83,7 @@ export const useBusinessMetrics = () => {
         const totalVerified = verifiedTransactions.length;
         const falsePositiveRate = totalVerified > 0 ? (falsePositives / totalVerified) * 100 : 0;
         const falseNegativeRate = totalVerified > 0 ? (falseNegatives / totalVerified) * 100 : 0;
-        const affectedCustomers = new Set(blockedTransactions.map(t => t.customer_id)).size;
+        const affectedCustomers = new Set(blockedTransactions.map(t => t.id)).size;
         const customerImpactRate = (affectedCustomers / transactions.length) * 100;
 
         // Calculate ROI and savings
