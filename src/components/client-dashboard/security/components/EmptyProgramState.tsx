@@ -1,9 +1,11 @@
 /**
- * @component EmptyProgramState
- * @description A component that displays a message when no security programs are found.
- * This is shown as a fallback state in the SecurityProgramList when there are no
- * active security programs to display.
- *
+ * EmptyProgramState Component
+ * 
+ * Displays a fallback message when no security programs are found.
+ * This component provides visual feedback to users when the security program list is empty,
+ * helping maintain a good user experience even in zero-state scenarios.
+ * 
+ * @component
  * @example
  * ```tsx
  * // Inside SecurityProgramList.tsx

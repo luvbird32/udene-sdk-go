@@ -2,7 +2,7 @@
  * LoadingProgram Component
  * 
  * A loading state component displayed while security program data is being fetched.
- * Shows a spinning loader animation within a card container.
+ * Shows a spinning loader animation within a card container to indicate ongoing data retrieval.
  * 
  * Features:
  * - Centered spinning loader animation

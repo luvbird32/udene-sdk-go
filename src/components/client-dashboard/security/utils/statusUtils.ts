@@ -1,3 +1,13 @@
+/**
+ * Utility functions for handling security status display and styling
+ */
+
+/**
+ * Get the appropriate color classes for a status badge based on the status value.
+ * 
+ * @param {string} status - Status value to determine color scheme
+ * @returns {string} Tailwind CSS classes for status styling
+ */
 export const getStatusColor = (status: string) => {
   switch (status.toLowerCase()) {
     case 'active':
@@ -11,6 +21,12 @@ export const getStatusColor = (status: string) => {
   }
 };
 
+/**
+ * Determine the appropriate badge variant based on priority level.
+ * 
+ * @param {string | undefined} level - Priority level of the item
+ * @returns {string | undefined} Badge variant name for styling
+ */
 export const getPriorityBadge = (level: string | undefined) => {
   switch (level?.toLowerCase()) {
     case 'high':
