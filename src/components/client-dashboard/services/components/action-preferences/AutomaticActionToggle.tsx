@@ -21,7 +21,10 @@ export const AutomaticActionToggle = ({
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-2">
+        {/* Label for the toggle switch */}
         <Label htmlFor={label.toLowerCase().replace(/\s+/g, '-')}>{label}</Label>
+        
+        {/* Optional tooltip for additional information */}
         {tooltip && (
           <Tooltip>
             <TooltipTrigger>
@@ -33,6 +36,8 @@ export const AutomaticActionToggle = ({
           </Tooltip>
         )}
       </div>
+      
+      {/* Toggle switch component */}
       <Switch
         id={label.toLowerCase().replace(/\s+/g, '-')}
         checked={checked}
