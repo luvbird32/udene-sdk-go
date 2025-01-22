@@ -14,23 +14,23 @@ export const AutomaticActionsSection = ({
   onPreferencesChange,
   isUpdating
 }: AutomaticActionsSectionProps) => {
-  const [localPreferences, setLocalPreferences] = useState(preferences);
+  const [localPreferences, setLocalPreferences] = useState<ServiceActionPreferences>(preferences);
 
   useEffect(() => {
     setLocalPreferences(preferences);
   }, [preferences]);
 
   const handleActionTypeChange = (checked: boolean) => {
-    const newPreferences = {
+    const newPreferences: ServiceActionPreferences = {
       ...localPreferences,
-      action_type: checked ? 'automatic' : 'manual'
+      action_type: checked ? 'automatic' as const : 'manual' as const
     };
     setLocalPreferences(newPreferences);
     onPreferencesChange(newPreferences);
   };
 
   const handleAutomaticActionChange = (key: keyof typeof preferences.automatic_actions) => {
-    const newPreferences = {
+    const newPreferences: ServiceActionPreferences = {
       ...localPreferences,
       automatic_actions: {
         ...localPreferences.automatic_actions,
