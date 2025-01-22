@@ -24,8 +24,8 @@ export const CodeBlock = ({ code, language = "bash" }: CodeBlockProps) => {
 
   return (
     <div className="relative">
-      <pre className="bg-muted p-4 rounded-md overflow-x-auto">
-        <code className="text-sm font-mono text-white/60">{code}</code>
+      <pre className="bg-black p-4 rounded-md overflow-x-auto border border-border/10">
+        <code className="text-sm font-mono text-primary">{code}</code>
       </pre>
       <Button
         variant="ghost"
