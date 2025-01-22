@@ -57,7 +57,7 @@ const Dashboard = () => {
   });
 
   return (
-    <div className="min-h-screen text-green-400 p-6 relative overflow-hidden" role="main">
+    <div className="min-h-screen text-foreground p-6 relative overflow-hidden" data-route="dashboard" role="main">
       <MatrixBackground />
       <div className="relative z-10">
         <TooltipProvider>
