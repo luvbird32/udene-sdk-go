@@ -8,10 +8,10 @@ interface ServiceFeatureListProps {
 export const ServiceFeatureList = ({ features }: ServiceFeatureListProps) => {
   return (
     <div className="space-y-2">
-      <p className="text-sm font-medium text-white/60">Features:</p>
+      <p className="text-sm font-medium text-foreground">Features:</p>
       <ul className="space-y-2">
         {features.slice(0, 3).map((feature, index) => (
-          <li key={index} className="flex items-center text-sm gap-2 text-white/60">
+          <li key={index} className="flex items-center text-sm gap-2 text-foreground">
             <Tooltip>
               <TooltipTrigger asChild>
                 <div className="flex items-center gap-2 cursor-help">
