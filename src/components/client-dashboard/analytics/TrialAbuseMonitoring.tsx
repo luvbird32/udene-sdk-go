@@ -6,6 +6,7 @@ import { TrialStatsChart } from "./trial-abuse/TrialStatsChart";
 import { EmptyState } from "./trial-abuse/EmptyState";
 import { useTrialStats } from "./trial-abuse/useTrialStats";
 import { useToast } from "@/hooks/use-toast";
+import { LoadingState } from "@/components/client-dashboard/analytics/shared/LoadingState";
 
 export const TrialAbuseMonitoring = () => {
   const { toast } = useToast();
@@ -26,7 +27,7 @@ export const TrialAbuseMonitoring = () => {
   }
 
   if (isLoading) {
-    return <LoadingState />;
+    return <LoadingState title="Loading trial abuse data..." />;
   }
 
   if (!trialStats || trialStats.length === 0) {
