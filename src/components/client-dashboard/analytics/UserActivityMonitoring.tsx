@@ -42,7 +42,7 @@ export const UserActivityMonitoring = () => {
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-2">
           <Shield className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold">Security Monitoring</h3>
+          <h3 className="font-semibold text-foreground">Security Monitoring</h3>
         </div>
       </div>
       <ActivityChart 

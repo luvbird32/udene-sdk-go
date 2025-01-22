@@ -10,7 +10,7 @@ export const InvestigationHeader = ({ onNewInvestigation }: InvestigationHeaderP
     <div className="flex justify-between items-center mb-6">
       <div className="flex items-center gap-2">
         <FileText className="h-5 w-5 text-primary" />
-        <h2 className="text-xl font-semibold">Investigation Logs</h2>
+        <h2 className="text-xl font-semibold text-foreground">Investigation Logs</h2>
       </div>
       <Button onClick={onNewInvestigation}>
         <Plus className="h-4 w-4 mr-2" />

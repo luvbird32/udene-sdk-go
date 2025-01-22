@@ -15,7 +15,7 @@ export const InvestigationNotes = ({
 }: InvestigationNotesProps) => {
   return (
     <div className="space-y-2">
-      <label className="text-sm font-medium text-white/60">Notes</label>
+      <label className="text-sm font-medium text-muted-foreground">Notes</label>
       <Textarea
         value={value}
         onChange={onChange}
@@ -24,7 +24,7 @@ export const InvestigationNotes = ({
         maxLength={maxLength}
       />
       {showCount && (
-        <div className="text-xs text-white/60 text-right">
+        <div className="text-xs text-muted-foreground text-right">
           {value.length}/{maxLength} characters
         </div>
       )}
