@@ -17,6 +17,7 @@ export const ServiceControls = ({ isActive, serviceType, onShowDetails }: Servic
           <TooltipTrigger>
             <Badge 
               variant={isActive ? "default" : "secondary"}
+              className="bg-transparent border hover:bg-primary/10"
             >
               {isActive ? "Active" : "Inactive"}
             </Badge>

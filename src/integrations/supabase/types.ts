@@ -2306,7 +2306,9 @@ export type Database = {
       }
       vulnerability_scans: {
         Row: {
+          account_correlation: Json | null
           created_at: string | null
+          dns_analysis: Json | null
           end_time: string | null
           findings: Json | null
           id: string
@@ -2316,6 +2318,7 @@ export type Database = {
           scan_engine: string | null
           scan_parameters: Json | null
           scan_type: string
+          service_scan_results: Json | null
           severity_breakdown: Json | null
           start_time: string | null
           status: string
@@ -2325,7 +2328,9 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          account_correlation?: Json | null
           created_at?: string | null
+          dns_analysis?: Json | null
           end_time?: string | null
           findings?: Json | null
           id?: string
@@ -2335,6 +2340,7 @@ export type Database = {
           scan_engine?: string | null
           scan_parameters?: Json | null
           scan_type: string
+          service_scan_results?: Json | null
           severity_breakdown?: Json | null
           start_time?: string | null
           status?: string
@@ -2344,7 +2350,9 @@ export type Database = {
           user_id: string
         }
         Update: {
+          account_correlation?: Json | null
           created_at?: string | null
+          dns_analysis?: Json | null
           end_time?: string | null
           findings?: Json | null
           id?: string
@@ -2354,6 +2362,7 @@ export type Database = {
           scan_engine?: string | null
           scan_parameters?: Json | null
           scan_type?: string
+          service_scan_results?: Json | null
           severity_breakdown?: Json | null
           start_time?: string | null
           status?: string
