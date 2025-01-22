@@ -12,7 +12,7 @@ export const AuthenticationSection = () => {
       
       <CodeBlock code={authCode} />
       
-      <div className="mt-6 space-y-4">
+      <div className="mt-6 space-y-4 bg-black rounded-lg p-6">
         <h4 className="text-lg font-semibold">Rate Limits</h4>
         <ul className="list-disc pl-6 space-y-2 text-white/60">
           <li>Standard Plan: 100 requests per minute</li>
@@ -20,7 +20,7 @@ export const AuthenticationSection = () => {
           <li>Burst Limit: 200 requests per 10 seconds</li>
         </ul>
         
-        <div className="bg-muted p-4 rounded-md mt-4">
+        <div className="bg-muted/10 p-4 rounded-md mt-4">
           <h5 className="font-semibold mb-2">Rate Limit Headers</h5>
           <pre className="text-sm text-white/60">
             {`X-RateLimit-Limit: 100
