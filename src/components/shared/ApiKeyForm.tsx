@@ -39,7 +39,7 @@ export const ApiKeyForm = ({ onSubmit, isGenerating }: ApiKeyFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 bg-black/40 p-6 rounded-lg border border-white/10">
+    <form onSubmit={handleSubmit} className="space-y-4 bg-black p-6 rounded-lg border border-white/10">
       <div className="space-y-2">
         <Input
           placeholder="Project Name"
@@ -48,7 +48,6 @@ export const ApiKeyForm = ({ onSubmit, isGenerating }: ApiKeyFormProps) => {
           disabled={isGenerating}
           required
           aria-label="Project Name"
-          className="bg-background text-foreground"
         />
         <Input
           placeholder="Project Description (optional)"
@@ -56,14 +55,13 @@ export const ApiKeyForm = ({ onSubmit, isGenerating }: ApiKeyFormProps) => {
           onChange={(e) => setProjectDescription(e.target.value)}
           disabled={isGenerating}
           aria-label="Project Description"
-          className="bg-background text-foreground"
         />
         <Select
           value={keyType}
           onValueChange={(value: 'testing' | 'production') => setKeyType(value)}
           disabled={isGenerating}
         >
-          <SelectTrigger className="w-full bg-background text-foreground">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Select key type" />
           </SelectTrigger>
           <SelectContent>
