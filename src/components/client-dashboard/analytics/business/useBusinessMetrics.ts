@@ -18,7 +18,7 @@ export const useBusinessMetrics = () => {
 
       const { data: transactions, error } = await supabase
         .from('transactions')
-        .select('amount, risk_score, is_fraudulent')
+        .select('amount_encrypted, amount_iv, risk_score, is_fraudulent')
         .order('created_at', { ascending: false })
         .limit(1000);
 
@@ -29,15 +29,47 @@ export const useBusinessMetrics = () => {
 
       if (!transactions) {
         console.log("No transactions found");
-        return null;
+        return {
+          roi: 0,
+          savings: 0,
+          falsePositiveRate: 0,
+          falseNegativeRate: 0,
+          customerImpactRate: 0,
+          totalTransactions: 0,
+          affectedCustomers: 0
+        };
       }
 
       console.log(`Processing ${transactions.length} transactions for metrics`);
 
-      const blockedTransactions = transactions.filter(t => t.risk_score >= 70);
+      // Process transactions with encrypted amounts
+      const processedTransactions = await Promise.all(
+        transactions.map(async (t) => {
+          let amount = 0;
+          if (t.amount_encrypted && t.amount_iv) {
+            try {
+              const { data: decryptedAmount, error: decryptError } = await supabase.rpc(
+                'decrypt_sensitive_data',
+                {
+                  encrypted_data: t.amount_encrypted,
+                  iv: t.amount_iv
+                }
+              );
+              if (!decryptError) {
+                amount = Number(decryptedAmount);
+              }
+            } catch (e) {
+              console.error("Error decrypting amount:", e);
+            }
+          }
+          return { ...t, amount };
+        })
+      );
+
+      const blockedTransactions = processedTransactions.filter(t => t.risk_score >= 70);
       const totalBlocked = blockedTransactions.reduce((sum, t) => sum + (t.amount || 0), 0);
       
-      const verifiedTransactions = transactions.filter(t => t.is_fraudulent !== null);
+      const verifiedTransactions = processedTransactions.filter(t => t.is_fraudulent !== null);
       const truePositives = verifiedTransactions.filter(t => t.risk_score >= 70 && t.is_fraudulent).length;
       const falsePositives = verifiedTransactions.filter(t => t.risk_score >= 70 && !t.is_fraudulent).length;
       const trueNegatives = verifiedTransactions.filter(t => t.risk_score < 70 && !t.is_fraudulent).length;
@@ -47,13 +79,14 @@ export const useBusinessMetrics = () => {
       const falsePositiveRate = totalVerified ? (falsePositives / totalVerified) * 100 : 0;
       const falseNegativeRate = totalVerified ? (falseNegatives / totalVerified) * 100 : 0;
       
+      const uniqueCustomers = new Set(processedTransactions.map(t => t.amount)).size;
       const affectedCustomers = new Set(blockedTransactions.map(t => t.amount)).size;
-      const customerImpactRate = transactions.length ? (affectedCustomers / transactions.length) * 100 : 0;
+      const customerImpactRate = uniqueCustomers ? (affectedCustomers / uniqueCustomers) * 100 : 0;
 
       console.log("Business intelligence metrics calculated successfully");
 
       return {
-        roi: totalBlocked * 0.15,
+        roi: totalBlocked * 0.15, // Assuming 15% ROI on prevented fraud
         savings: totalBlocked,
         falsePositiveRate,
         falseNegativeRate,
