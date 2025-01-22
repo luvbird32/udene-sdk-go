@@ -3,7 +3,7 @@ import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const DashboardTabs = () => {
   return (
-    <TabsList>
+    <TabsList className="grid w-full grid-cols-9 bg-black/5 p-1 rounded-lg">
       <TabsTrigger value="dashboard" className="text-foreground hover:text-primary data-[state=active]:text-primary">
         <Shield className="h-4 w-4 mr-2" />
         Dashboard
