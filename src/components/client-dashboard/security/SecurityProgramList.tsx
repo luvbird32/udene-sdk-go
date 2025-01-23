@@ -8,7 +8,6 @@ import { SecurityProgram } from "@/integrations/supabase/types/security";
 import { useToast } from "@/hooks/use-toast";
 import { LoadingProgram } from "./components/LoadingProgram";
 import { EmptyProgramState } from "./components/EmptyProgramState";
-import { SecurityGettingStarted } from "./components/SecurityGettingStarted";
 
 export const SecurityProgramList = () => {
   const { toast } = useToast();
@@ -50,9 +49,6 @@ export const SecurityProgramList = () => {
 
   return (
     <div className="space-y-8">
-      {/* Getting Started Section */}
-      <SecurityGettingStarted />
-
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <OpenSourceSecurity />
         <VulnerabilityScanning />
