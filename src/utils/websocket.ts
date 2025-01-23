@@ -5,37 +5,42 @@ class WebSocketClient {
   private callbacks: WebSocketCallback[] = [];
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
+  private secure: boolean;
 
-  constructor(private url: string) {
-    // Ensure we're using secure WebSocket for HTTPS sites
-    if (window.location.protocol === 'https:') {
-      this.url = this.url.replace('ws://', 'wss://');
-    }
+  constructor() {
+    // Determine if we need secure WebSocket based on the current protocol
+    this.secure = window.location.protocol === 'https:';
+    console.log(`Initializing WebSocket client (secure: ${this.secure})`);
   }
 
   connect() {
     try {
       if (this.ws) {
-        this.ws.close();
+        console.log('WebSocket connection already exists');
+        return;
       }
 
-      console.log('Attempting WebSocket connection to:', this.url);
-      this.ws = new WebSocket(this.url);
+      // Construct WebSocket URL using current host and protocol
+      const protocol = this.secure ? 'wss:' : 'ws:';
+      const wsUrl = `${protocol}//${window.location.host}`;
+      console.log(`Connecting to WebSocket at ${wsUrl}`);
+
+      this.ws = new WebSocket(wsUrl);
 
       this.ws.onopen = () => {
         console.log('WebSocket connection established');
-        this.reconnectAttempts = 0; // Reset attempts on successful connection
+        this.reconnectAttempts = 0;
       };
 
-      this.ws.onclose = () => {
-        console.log('WebSocket connection closed');
+      this.ws.onclose = (event) => {
+        console.log('WebSocket connection closed:', event.code, event.reason);
         if (this.reconnectAttempts < this.maxReconnectAttempts) {
           this.reconnectAttempts++;
           const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 30000);
           console.log(`Attempting to reconnect in ${delay}ms (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
           setTimeout(() => this.connect(), delay);
         } else {
-          console.log('Max reconnection attempts reached');
+          console.error('Max reconnection attempts reached');
         }
       };
 
@@ -45,22 +50,36 @@ class WebSocketClient {
 
       this.ws.onmessage = (event) => {
         try {
-          this.callbacks.forEach(callback => callback(event.data));
+          const data = JSON.parse(event.data);
+          this.callbacks.forEach(callback => callback(data));
         } catch (error) {
           console.error('Error processing WebSocket message:', error);
         }
       };
     } catch (error) {
       console.error('Error establishing WebSocket connection:', error);
+      // Attempt to reconnect if connection fails
+      if (this.reconnectAttempts < this.maxReconnectAttempts) {
+        const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 30000);
+        setTimeout(() => this.connect(), delay);
+      }
     }
   }
 
   subscribe(callback: WebSocketCallback) {
     this.callbacks.push(callback);
+    // Connect if this is the first subscriber
+    if (this.callbacks.length === 1) {
+      this.connect();
+    }
   }
 
   unsubscribe(callback: WebSocketCallback) {
     this.callbacks = this.callbacks.filter(cb => cb !== callback);
+    // Disconnect if there are no more subscribers
+    if (this.callbacks.length === 0) {
+      this.disconnect();
+    }
   }
 
   disconnect() {
@@ -73,5 +92,5 @@ class WebSocketClient {
   }
 }
 
-// Use secure WebSocket URL and the correct port for the environment
-export const wsClient = new WebSocketClient(`${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws`);
+// Create a single instance of the WebSocket client
+export const wsClient = new WebSocketClient();
