@@ -28,11 +28,8 @@ export const LoginForm = () => {
 
       if (error) {
         console.error('LoginForm: Login error:', error.message);
-        if (error.message.includes('Invalid login credentials')) {
-          setError('The email or password you entered is incorrect. Please try again.');
-        } else {
-          setError(error.message);
-        }
+        // Set a user-friendly error message
+        setError('The email or password you entered is incorrect. Please try again.');
         return;
       }
 
@@ -58,8 +55,8 @@ export const LoginForm = () => {
       </div>
 
       {error && (
-        <Alert variant="destructive" className="border-red-500">
-          <AlertDescription className="text-sm font-medium">
+        <Alert variant="destructive" className="border-red-500 bg-red-50">
+          <AlertDescription className="text-sm font-medium text-red-800">
             {error}
           </AlertDescription>
         </Alert>
