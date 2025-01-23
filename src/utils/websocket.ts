@@ -3,10 +3,14 @@ type WebSocketCallback = (data: any) => void;
 class WebSocketClient {
   private ws: WebSocket | null = null;
   private callbacks: WebSocketCallback[] = [];
+  private reconnectAttempts = 0;
+  private maxReconnectAttempts = 5;
 
   constructor(private url: string) {
-    // Convert ws:// to wss:// if we're on HTTPS
-    this.url = this.url.replace('ws://', 'wss://');
+    // Ensure we're using secure WebSocket for HTTPS sites
+    if (window.location.protocol === 'https:') {
+      this.url = this.url.replace('ws://', 'wss://');
+    }
   }
 
   connect() {
@@ -20,12 +24,19 @@ class WebSocketClient {
 
       this.ws.onopen = () => {
         console.log('WebSocket connection established');
+        this.reconnectAttempts = 0; // Reset attempts on successful connection
       };
 
       this.ws.onclose = () => {
         console.log('WebSocket connection closed');
-        // Attempt to reconnect after 5 seconds
-        setTimeout(() => this.connect(), 5000);
+        if (this.reconnectAttempts < this.maxReconnectAttempts) {
+          this.reconnectAttempts++;
+          const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 30000);
+          console.log(`Attempting to reconnect in ${delay}ms (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
+          setTimeout(() => this.connect(), delay);
+        } else {
+          console.log('Max reconnection attempts reached');
+        }
       };
 
       this.ws.onerror = (error) => {
@@ -33,7 +44,11 @@ class WebSocketClient {
       };
 
       this.ws.onmessage = (event) => {
-        this.callbacks.forEach(callback => callback(event.data));
+        try {
+          this.callbacks.forEach(callback => callback(event.data));
+        } catch (error) {
+          console.error('Error processing WebSocket message:', error);
+        }
       };
     } catch (error) {
       console.error('Error establishing WebSocket connection:', error);
@@ -54,8 +69,9 @@ class WebSocketClient {
       this.ws = null;
     }
     this.callbacks = [];
+    this.reconnectAttempts = 0;
   }
 }
 
-// Use secure WebSocket URL with wss:// protocol
-export const wsClient = new WebSocketClient(`wss://${window.location.hostname}:8000/ws`);
+// Use secure WebSocket URL and the correct port for the environment
+export const wsClient = new WebSocketClient(`${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws`);
