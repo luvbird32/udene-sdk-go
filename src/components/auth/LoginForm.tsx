@@ -21,18 +21,39 @@ export const LoginForm = () => {
   const { toast } = useToast();
 
   /**
+   * Validates form inputs before submission
+   */
+  const validateForm = () => {
+    if (!email || !email.includes('@')) {
+      setError('Please enter a valid email address');
+      return false;
+    }
+    if (!password || password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return false;
+    }
+    return true;
+  };
+
+  /**
    * Handles the login form submission
    * Attempts to authenticate the user with Supabase
    */
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    // Validate form inputs
+    if (!validateForm()) {
+      return;
+    }
+
     console.log('LoginForm: Attempting login with email:', email);
     
     try {
       setLoading(true);
       const { data, error: supabaseError } = await supabase.auth.signInWithPassword({
-        email,
+        email: email.trim(),
         password,
       });
 
