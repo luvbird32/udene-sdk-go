@@ -24,7 +24,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { toast } = useToast();
 
   useEffect(() => {
+    console.log("AuthProvider: Setting up auth listener");
+    
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("Auth state changed:", event, session ? "Session exists" : "No session");
+      
       if (event === 'SIGNED_OUT') {
         toast({
           title: "Signed out",
@@ -49,6 +53,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       subscription.unsubscribe();
     };
   }, [toast]);
+
+  console.log("AuthProvider state:", { user, loading });
 
   return (
     <AuthContext.Provider value={{ user, loading }}>
