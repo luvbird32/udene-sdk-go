@@ -21,15 +21,22 @@ export const LoginForm = () => {
     
     try {
       setLoading(true);
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { data, error: supabaseError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (error) {
-        console.error('LoginForm: Login error:', error.message);
-        // Set a user-friendly error message
-        setError('The email or password you entered is incorrect. Please try again.');
+      if (supabaseError) {
+        console.error('LoginForm: Login error:', supabaseError);
+        
+        // Handle specific error cases
+        if (supabaseError.message.includes('Invalid login credentials')) {
+          setError('The email or password you entered is incorrect. Please try again.');
+        } else if (supabaseError.message.includes('Email not confirmed')) {
+          setError('Please verify your email address before logging in.');
+        } else {
+          setError(supabaseError.message);
+        }
         return;
       }
 
