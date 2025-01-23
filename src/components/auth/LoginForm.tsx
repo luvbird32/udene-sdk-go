@@ -2,18 +2,28 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { LoginErrorAlert } from './components/LoginErrorAlert';
+import { LoginFormFields } from './components/LoginFormFields';
 
+/**
+ * Main login form component that handles user authentication
+ * Manages form state and authentication logic
+ */
 export const LoginForm = () => {
+  // Form state management
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  /**
+   * Handles the login form submission
+   * Attempts to authenticate the user with Supabase
+   */
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -56,45 +66,29 @@ export const LoginForm = () => {
 
   return (
     <div className="space-y-6 w-full max-w-sm">
+      {/* Header section */}
       <div className="text-center">
         <h1 className="text-2xl font-bold">Welcome Back</h1>
         <p className="text-sm text-gray-500">Enter your credentials to access your account</p>
       </div>
 
-      {error && (
-        <Alert variant="destructive" className="border-red-500 bg-red-50">
-          <AlertDescription className="text-sm font-medium text-red-800">
-            {error}
-          </AlertDescription>
-        </Alert>
-      )}
+      {/* Error alert */}
+      <LoginErrorAlert error={error} />
 
+      {/* Login form */}
       <form onSubmit={handleLogin} className="space-y-4">
-        <div className="space-y-2">
-          <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full"
-          />
-        </div>
-        <div className="space-y-2">
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full"
-          />
-        </div>
+        <LoginFormFields
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+        />
         <Button type="submit" className="w-full" disabled={loading}>
           {loading ? 'Logging in...' : 'Login'}
         </Button>
       </form>
 
+      {/* Sign up link */}
       <div className="text-center text-sm">
         <p className="text-gray-500">
           Don't have an account?{' '}
