@@ -1,4 +1,4 @@
-import { SystemHealth } from "@/components/client-dashboard/monitoring/SystemHealth";
+import { SystemHealth } from "@/components/client-dashboard/monitoring/system-health/SystemHealth";
 
 /**
  * ConnectionSection Component

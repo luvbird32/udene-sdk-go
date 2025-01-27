@@ -30,7 +30,7 @@ export const SystemHealth = () => {
           throw new Error(`Connection failed: ${dbError.message}`);
         }
 
-        const status = {
+        const status: SystemStatus = {
           status: count !== null ? "connected" : "disconnected",
           api: count !== null,
           database: count !== null,
