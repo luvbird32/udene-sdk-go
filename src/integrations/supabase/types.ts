@@ -470,6 +470,7 @@ export type Database = {
           automation_indicators: Json | null
           behavioral_anomalies: Json | null
           concurrent_sessions: number | null
+          created_at: string | null
           failed_login_attempts: number | null
           id: string
           metric_name: string
@@ -479,6 +480,7 @@ export type Database = {
           suspicious_ip_changes: number | null
           timestamp: string | null
           unusual_device_patterns: boolean | null
+          updated_at: string | null
           user_id: string
         }
         Insert: {
@@ -486,6 +488,7 @@ export type Database = {
           automation_indicators?: Json | null
           behavioral_anomalies?: Json | null
           concurrent_sessions?: number | null
+          created_at?: string | null
           failed_login_attempts?: number | null
           id?: string
           metric_name: string
@@ -495,6 +498,7 @@ export type Database = {
           suspicious_ip_changes?: number | null
           timestamp?: string | null
           unusual_device_patterns?: boolean | null
+          updated_at?: string | null
           user_id: string
         }
         Update: {
@@ -502,6 +506,7 @@ export type Database = {
           automation_indicators?: Json | null
           behavioral_anomalies?: Json | null
           concurrent_sessions?: number | null
+          created_at?: string | null
           failed_login_attempts?: number | null
           id?: string
           metric_name?: string
@@ -511,6 +516,7 @@ export type Database = {
           suspicious_ip_changes?: number | null
           timestamp?: string | null
           unusual_device_patterns?: boolean | null
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: [
