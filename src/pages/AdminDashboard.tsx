@@ -7,10 +7,14 @@ import { AutomatedResponse } from "@/components/monitoring/AutomatedResponse";
 import { AuditLogger } from "@/components/monitoring/AuditLogger";
 import { ClientAnalytics } from "@/components/dashboard/analytics/ClientAnalytics";
 import { UsageAnalytics } from "@/components/dashboard/analytics/UsageAnalytics";
-import { RiskIndicators } from "@/components/monitoring/RiskIndicators";
 import { ExploitationMetrics } from "@/components/monitoring/ExploitationMetrics";
+import { TransactionTrends } from "@/components/monitoring/TransactionTrends";
+import { FlaggedDevices } from "@/components/monitoring/FlaggedDevices";
+import { CustomerBehavior } from "@/components/monitoring/CustomerBehavior";
+import { FeedbackManagement } from "@/components/monitoring/FeedbackManagement";
+import { BusinessIntelligence } from "@/components/client-dashboard/analytics/BusinessIntelligence";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Users } from "lucide-react";
+import { Users } from "lucide-react";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -38,6 +42,14 @@ const AdminDashboard = () => {
         <ErrorLog />
       </div>
 
+      <div className="grid grid-cols-1 gap-6">
+        <TransactionTrends />
+        <FlaggedDevices />
+        <CustomerBehavior />
+        <FeedbackManagement />
+        <BusinessIntelligence />
+      </div>
+
       <Card className="p-6">
         <ClientAnalytics />
       </Card>
@@ -48,7 +60,6 @@ const AdminDashboard = () => {
 
       <MonitoringDashboard />
       
-      {/* Background monitoring components */}
       <AutomatedResponse />
       <AuditLogger />
     </div>
