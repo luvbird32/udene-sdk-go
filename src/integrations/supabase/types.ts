@@ -547,37 +547,57 @@ export type Database = {
         Row: {
           created_at: string | null
           download_url: string | null
+          findings: Json | null
           generated_by: string | null
           id: string
+          investigation_id: string | null
+          remediation_steps: Json | null
           report_data: Json | null
           report_period: unknown
           report_type: string
+          severity_level: string | null
           status: string
           updated_at: string | null
         }
         Insert: {
           created_at?: string | null
           download_url?: string | null
+          findings?: Json | null
           generated_by?: string | null
           id?: string
+          investigation_id?: string | null
+          remediation_steps?: Json | null
           report_data?: Json | null
           report_period: unknown
           report_type: string
+          severity_level?: string | null
           status?: string
           updated_at?: string | null
         }
         Update: {
           created_at?: string | null
           download_url?: string | null
+          findings?: Json | null
           generated_by?: string | null
           id?: string
+          investigation_id?: string | null
+          remediation_steps?: Json | null
           report_data?: Json | null
           report_period?: unknown
           report_type?: string
+          severity_level?: string | null
           status?: string
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "compliance_reports_investigation_id_fkey"
+            columns: ["investigation_id"]
+            isOneToOne: false
+            referencedRelation: "service_investigation_logs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       database_metrics: {
         Row: {
