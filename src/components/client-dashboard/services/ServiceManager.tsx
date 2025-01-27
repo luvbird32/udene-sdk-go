@@ -53,6 +53,7 @@ export const ServiceManager = () => {
     service => service.project_id === currentProject?.id
   ) || [];
 
+  // Get the first service or use default values
   const firstService = projectServices[0] || {
     service_type: 'Fraud Detection',
     is_active: false,
