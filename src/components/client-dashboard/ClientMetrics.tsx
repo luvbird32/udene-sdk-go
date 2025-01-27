@@ -3,6 +3,7 @@ import { MetricCard } from "./metrics/MetricCard";
 import { MetricsError } from "./metrics/MetricsError";
 import { EmptyMetrics } from "./metrics/EmptyMetrics";
 import { useMetricsData } from "./metrics/useMetricsData";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 interface ClientMetricsProps {
   metrics?: {
@@ -18,7 +19,14 @@ interface ClientMetricsProps {
 }
 
 export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps) => {
+  const { user } = useAuth();
   const { data: metricsData, isLoading: metricsLoading, error: metricsError } = useMetricsData();
+
+  // Check authentication first
+  if (!user) {
+    console.error("No authenticated user found");
+    return <MetricsError error={new Error("Please sign in to view metrics")} />;
+  }
 
   // Early return for error states
   if (error || metricsError) {

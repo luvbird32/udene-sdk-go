@@ -2307,6 +2307,10 @@ export type Database = {
       vulnerability_scans: {
         Row: {
           account_correlation: Json | null
+          client_dependencies: Json | null
+          client_platform: string | null
+          client_sdk_version: string | null
+          client_system_info: Json | null
           created_at: string | null
           dns_analysis: Json | null
           end_time: string | null
@@ -2329,6 +2333,10 @@ export type Database = {
         }
         Insert: {
           account_correlation?: Json | null
+          client_dependencies?: Json | null
+          client_platform?: string | null
+          client_sdk_version?: string | null
+          client_system_info?: Json | null
           created_at?: string | null
           dns_analysis?: Json | null
           end_time?: string | null
@@ -2351,6 +2359,10 @@ export type Database = {
         }
         Update: {
           account_correlation?: Json | null
+          client_dependencies?: Json | null
+          client_platform?: string | null
+          client_sdk_version?: string | null
+          client_system_info?: Json | null
           created_at?: string | null
           dns_analysis?: Json | null
           end_time?: string | null
