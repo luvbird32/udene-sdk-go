@@ -24,4 +24,5 @@ export interface VulnerabilityScan {
     low: number;
   };
   findings: VulnerabilityDetail[];
+  scan_duration?: string; // Added this field
 }
