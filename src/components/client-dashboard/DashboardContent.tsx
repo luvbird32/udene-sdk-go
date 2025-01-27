@@ -2,6 +2,7 @@ import { ConnectionSection } from "@/components/dashboard/sections/ConnectionSec
 import { ApiSection } from "@/components/dashboard/sections/ApiSection";
 import { MetricsSection } from "@/components/dashboard/sections/MetricsSection";
 import { AnalyticsSection } from "@/components/dashboard/sections/AnalyticsSection";
+import { BusinessIntelligence } from "./analytics/BusinessIntelligence";
 
 /**
  * Props interface for the DashboardContent component
@@ -26,6 +27,7 @@ interface DashboardContentProps {
  * - Connection status for system health monitoring
  * - API usage tracking and credit management
  * - Key performance metrics and risk analytics
+ * - Business intelligence metrics
  * - Detailed analytics visualizations
  * 
  * The component handles loading states and error conditions for metrics data,
@@ -41,7 +43,7 @@ export const DashboardContent = ({
 }: DashboardContentProps) => {
   return (
     <div className="space-y-8">
-      {/* Connection status section showing system health and connectivity */}
+      {/* Connection status section showing system health */}
       <ConnectionSection />
       
       {/* API usage section displaying credits and rate limits */}
@@ -53,6 +55,9 @@ export const DashboardContent = ({
         metricsLoading={metricsLoading}
         metricsError={metricsError}
       />
+
+      {/* Business Intelligence metrics and analysis */}
+      <BusinessIntelligence />
       
       {/* Analytics section with charts and data visualizations */}
       <AnalyticsSection />
