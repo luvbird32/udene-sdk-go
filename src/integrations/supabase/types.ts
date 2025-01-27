@@ -1297,6 +1297,7 @@ export type Database = {
           phone_number_encrypted: string | null
           phone_number_iv: string | null
           preferences: Json | null
+          role: string | null
           security_settings: Json | null
           session_timeout_minutes: number | null
           settings: Json | null
@@ -1324,6 +1325,7 @@ export type Database = {
           phone_number_encrypted?: string | null
           phone_number_iv?: string | null
           preferences?: Json | null
+          role?: string | null
           security_settings?: Json | null
           session_timeout_minutes?: number | null
           settings?: Json | null
@@ -1351,6 +1353,7 @@ export type Database = {
           phone_number_encrypted?: string | null
           phone_number_iv?: string | null
           preferences?: Json | null
+          role?: string | null
           security_settings?: Json | null
           session_timeout_minutes?: number | null
           settings?: Json | null
