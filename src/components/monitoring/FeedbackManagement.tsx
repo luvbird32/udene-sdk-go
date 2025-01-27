@@ -16,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Tables } from "@/integrations/supabase/types/database";
+import { Tables } from "@/integrations/supabase/types";
 
 export const FeedbackManagement = () => {
   const { toast } = useToast();
