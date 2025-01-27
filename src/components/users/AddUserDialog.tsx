@@ -19,10 +19,12 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { UserPlus } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const AddUserDialog = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
@@ -34,6 +36,7 @@ export const AddUserDialog = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
     try {
       console.log("Attempting to create user:", formData.email);
@@ -63,16 +66,8 @@ export const AddUserDialog = () => {
       console.log("Parsed response:", data);
 
       if (!response.ok) {
-        // If the response contains a stringified error message in the body
-        if (typeof data.body === 'string') {
-          try {
-            const parsedBody = JSON.parse(data.body);
-            if (parsedBody.code === "USER_EXISTS") {
-              throw new Error(parsedBody.error || "A user with this email already exists");
-            }
-          } catch (e) {
-            console.error("Error parsing body:", e);
-          }
+        if (data.code === "USER_EXISTS") {
+          throw new Error("A user with this email address has already been registered");
         }
         throw new Error(data.error || "Failed to create user");
       }
@@ -88,9 +83,10 @@ export const AddUserDialog = () => {
       setFormData({ email: "", password: "", role: "user" });
     } catch (error) {
       console.error("Error creating user:", error);
+      setError(error instanceof Error ? error.message : "Failed to create user");
       toast({
         title: "Error",
-        description: error.message || "Failed to create user",
+        description: error instanceof Error ? error.message : "Failed to create user",
         variant: "destructive",
       });
     } finally {
@@ -111,6 +107,12 @@ export const AddUserDialog = () => {
           <DialogTitle>Add New User</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
