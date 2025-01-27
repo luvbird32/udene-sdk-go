@@ -6,9 +6,25 @@ import { DetectionAccuracy } from "./components/DetectionAccuracy";
 import { CustomerImpact } from "./components/CustomerImpact";
 import { useBusinessMetrics } from "./business/useBusinessMetrics";
 
+/**
+ * BusinessIntelligence Component
+ * 
+ * Comprehensive business metrics dashboard showing:
+ * - Overall detection system performance
+ * - False positive/negative rates
+ * - Customer impact analysis
+ * - Real-time metric tracking
+ * 
+ * Handles data loading, error states, and provides
+ * visual feedback for system performance.
+ * 
+ * @returns {JSX.Element} Business intelligence dashboard
+ */
 export const BusinessIntelligence = () => {
+  // Fetch business metrics with real-time updates
   const { data: metrics, isLoading, error } = useBusinessMetrics();
 
+  // Handle error state with user feedback
   if (error) {
     return (
       <Alert variant="destructive">
@@ -20,6 +36,7 @@ export const BusinessIntelligence = () => {
     );
   }
 
+  // Display loading skeleton while fetching data
   if (isLoading || !metrics) {
     return (
       <Card className="p-4">
@@ -38,13 +55,16 @@ export const BusinessIntelligence = () => {
     <div className="space-y-6">
       <h2 className="text-xl font-semibold text-primary">Business Intelligence</h2>
       
+      {/* Overview of key business metrics */}
       <MetricsOverview metrics={metrics} />
 
+      {/* System accuracy metrics display */}
       <DetectionAccuracy
         falsePositiveRate={metrics.falsePositiveRate}
         falseNegativeRate={metrics.falseNegativeRate}
       />
 
+      {/* Customer impact analysis */}
       <CustomerImpact
         affectedCustomers={metrics.affectedCustomers}
         customerImpactRate={metrics.customerImpactRate}

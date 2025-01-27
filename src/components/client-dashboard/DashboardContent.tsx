@@ -22,14 +22,17 @@ interface DashboardContentProps {
 /**
  * DashboardContent Component
  * 
- * Renders the main content sections of the client dashboard including:
- * - Connection status
- * - API usage and credits
- * - Key metrics and statistics
- * - Analytics visualizations
+ * Main dashboard layout component that organizes and displays various monitoring sections:
+ * - Connection status for system health monitoring
+ * - API usage tracking and credit management
+ * - Key performance metrics and risk analytics
+ * - Detailed analytics visualizations
  * 
- * @param {DashboardContentProps} props - Component props
- * @returns {JSX.Element} The rendered dashboard content
+ * The component handles loading states and error conditions for metrics data,
+ * ensuring graceful degradation when data is unavailable.
+ * 
+ * @param {DashboardContentProps} props - Component properties including metrics data and loading state
+ * @returns {JSX.Element} Rendered dashboard content with all monitoring sections
  */
 export const DashboardContent = ({ 
   metrics, 
