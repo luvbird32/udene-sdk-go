@@ -11,7 +11,7 @@ export const TransactionTrends = () => {
       console.log("Fetching transaction trends...");
       const { data, error } = await supabase
         .from('transactions')
-        .select('amount, timestamp, risk_score')
+        .select('amount_encrypted, amount_iv, timestamp, risk_score')
         .order('timestamp', { ascending: true })
         .limit(100);
 
@@ -21,18 +21,15 @@ export const TransactionTrends = () => {
       const hourlyData = (data || []).reduce((acc: any[], transaction) => {
         const hour = new Date(transaction.timestamp).getHours();
         const existing = acc.find(item => item.hour === hour);
-        const amount = Number(transaction.amount) || 0;
         const riskScore = Number(transaction.risk_score) || 0;
         
         if (existing) {
           existing.count += 1;
-          existing.totalAmount += amount;
           existing.avgRiskScore = (existing.avgRiskScore * (existing.count - 1) + riskScore) / existing.count;
         } else {
           acc.push({
             hour,
             count: 1,
-            totalAmount: amount,
             avgRiskScore: riskScore
           });
         }

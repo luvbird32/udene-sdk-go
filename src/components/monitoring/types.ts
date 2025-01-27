@@ -2,6 +2,7 @@ import type { Json } from "@/integrations/supabase/types";
 
 export interface DeviceFingerprint {
   id: string;
+  user_id: string | null;
   risk_score: number | null;
   is_suspicious: boolean | null;
   last_seen: string | null;
