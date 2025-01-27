@@ -24,9 +24,10 @@ export const useProfileData = () => {
           organization_role_iv
         `)
         .eq("id", user.id)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error("No profile found");
 
       // Decrypt sensitive data using RPC function if encrypted values exist
       let decryptedPhoneNumber = null;
