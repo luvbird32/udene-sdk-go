@@ -15,6 +15,5 @@ export interface BusinessMetrics {
 
 export interface TransactionMetrics {
   amount: number;
-  risk_score: number;
-  is_fraudulent: boolean | null;
+  risk_score: number; null;
 }
