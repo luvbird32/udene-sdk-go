@@ -2,17 +2,34 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 export const ClientAnalytics = () => {
-  const { data: clientStats } = useQuery({
+  const { data: clientStats, error } = useQuery({
     queryKey: ["admin-client-analytics"],
     queryFn: async () => {
+      // First check if user has admin access
+      const { data: userProfile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', (await supabase.auth.getUser()).data.user?.id)
+        .single();
+
+      if (userProfile?.role !== 'admin') {
+        throw new Error('Unauthorized: Admin access required');
+      }
+
+      // Then fetch profiles data
       const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
         .select('created_at, account_type, status')
         .order('created_at', { ascending: true });
 
-      if (profilesError) throw profilesError;
+      if (profilesError) {
+        console.error('Error fetching profiles:', profilesError);
+        throw profilesError;
+      }
 
       // Group by date for growth chart
       const dailySignups = (profiles || []).reduce((acc: any, profile) => {
@@ -42,6 +59,17 @@ export const ClientAnalytics = () => {
     },
     refetchInterval: 30000,
   });
+
+  if (error) {
+    return (
+      <Alert variant="destructive">
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>
+          {error instanceof Error ? error.message : 'Failed to load analytics data'}
+        </AlertDescription>
+      </Alert>
+    );
+  }
 
   return (
     <div className="space-y-6">
