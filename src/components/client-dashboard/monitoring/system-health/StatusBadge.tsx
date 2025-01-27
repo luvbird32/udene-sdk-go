@@ -16,7 +16,7 @@ export const StatusBadge = ({ status }: StatusBadgeProps) => {
       ) : (
         <AlertTriangle className="h-4 w-4 mr-2" />
       )}
-      {status === "connected" ? "Connected to Lovable" : "Connection Issues"}
+      {status === "connected" ? "System Connected" : "Connection Issues"}
     </Badge>
   );
 };

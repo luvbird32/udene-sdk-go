@@ -19,7 +19,7 @@ export const SystemHealth = () => {
     queryKey: ["health"],
     queryFn: async () => {
       try {
-        console.log("Checking connection to Lovable services...");
+        console.log("Checking system connection status...");
         
         const { count, error: dbError } = await supabase
           .from('metrics')
@@ -59,27 +59,27 @@ export const SystemHealth = () => {
     <TooltipProvider>
       <Card className="p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold">Connection Status</h3>
+          <h3 className="text-lg font-semibold">System Status</h3>
           <StatusBadge status={health?.status || "disconnected"} />
         </div>
 
         <div className="space-y-4">
           <ServiceStatus 
-            label="Lovable API"
+            label="API Service"
             isConnected={health?.api || false}
-            tooltipContent="Connection status to Lovable's API services"
+            tooltipContent="Connection status to API services"
           />
           
           <ServiceStatus 
-            label="Lovable Database"
+            label="Database Service"
             isConnected={health?.database || false}
-            tooltipContent="Connection status to Lovable's database services"
+            tooltipContent="Connection status to database services"
           />
           
           <ServiceStatus 
-            label="Lovable Cache"
+            label="Cache Service"
             isConnected={health?.cache || false}
-            tooltipContent="Connection status to Lovable's caching services"
+            tooltipContent="Connection status to caching services"
           />
         </div>
       </Card>
