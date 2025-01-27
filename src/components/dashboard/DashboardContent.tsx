@@ -1,57 +1,15 @@
-import { ApiCreditsDisplay } from "@/components/client-dashboard/ApiCreditsDisplay";
-import { ClientMetrics } from "@/components/client-dashboard/ClientMetrics";
-import ErrorBoundary from "@/components/ErrorBoundary";
-import { ConnectionStatus } from "@/components/dashboard/ConnectionStatus";
+import { InvestigationSection } from "./InvestigationSection";
+import { SecuritySection } from "./SecuritySection";
 import { MetricsSection } from "./MetricsSection";
-import { AnalyticsSection } from "./AnalyticsSection";
 import { MonitoringSection } from "./MonitoringSection";
 
-interface DashboardContentProps {
-  metrics?: {
-    riskScore: number;
-    totalTransactions: number;
-    flaggedTransactions: number;
-  } | null;
-  metricsLoading?: boolean;
-  metricsError?: Error | null;
-}
-
-export const DashboardContent = ({ 
-  metrics, 
-  metricsLoading, 
-  metricsError 
-}: DashboardContentProps) => {
+export const DashboardContent = () => {
   return (
-    <div className="space-y-8">
-      <ConnectionStatus />
-      
-      <ErrorBoundary>
-        <ApiCreditsDisplay />
-      </ErrorBoundary>
-      
-      <ErrorBoundary>
-        <ClientMetrics 
-          metrics={metrics}
-          isLoading={metricsLoading}
-          error={metricsError}
-        />
-      </ErrorBoundary>
-
-      <ErrorBoundary>
-        <MetricsSection 
-          metrics={metrics}
-          metricsLoading={metricsLoading}
-          metricsError={metricsError}
-        />
-      </ErrorBoundary>
-      
-      <ErrorBoundary>
-        <AnalyticsSection />
-      </ErrorBoundary>
-
-      <ErrorBoundary>
-        <MonitoringSection />
-      </ErrorBoundary>
+    <div className="space-y-6 p-6">
+      <MetricsSection />
+      <SecuritySection />
+      <InvestigationSection />
+      <MonitoringSection />
     </div>
   );
 };

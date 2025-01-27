@@ -3,19 +3,6 @@
  * 
  * Displays a list of security investigation logs with filtering and sorting capabilities.
  * Shows investigation details, findings, and actions taken.
- * 
- * Features:
- * - Investigation type filtering
- * - Chronological sorting
- * - Status indicators
- * - Detailed findings view
- * - Action tracking
- * 
- * @component
- * @example
- * ```tsx
- * <InvestigationLogs />
- * ```
  */
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,23 +15,36 @@ import { InvestigationHeader } from "./components/InvestigationHeader";
 import { InvestigationInfo } from "./components/InvestigationInfo";
 import { InvestigationLog } from "@/integrations/supabase/types/investigation";
 
-export const InvestigationLogs = () => {
+interface InvestigationLogsProps {
+  filterStatus?: string;
+}
+
+export const InvestigationLogs = ({ filterStatus }: InvestigationLogsProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
 
   const { data: logs, isLoading, error } = useQuery<InvestigationLog[]>({
-    queryKey: ["investigation-logs"],
+    queryKey: ["investigation-logs", filterStatus],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
 
-      const { data, error } = await supabase
+      console.log("Fetching investigation logs with filter:", filterStatus);
+
+      let query = supabase
         .from('service_investigation_logs')
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
+      if (filterStatus) {
+        query = query.eq('status', filterStatus);
+      }
+
+      const { data, error } = await query;
+
       if (error) {
+        console.error("Error fetching logs:", error);
         toast({
           title: "Error loading logs",
           description: error.message,

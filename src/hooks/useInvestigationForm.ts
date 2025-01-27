@@ -33,12 +33,14 @@ export const useInvestigationForm = ({ onSuccess }: UseInvestigationFormProps) =
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
 
+      console.log("Creating new investigation:", { type, notes });
+
       const { data: services, error: servicesError } = await supabase
         .from('client_services')
         .select('id')
         .eq('user_id', user.id)
         .eq('is_active', true)
-        .single();
+        .maybeSingle();
 
       if (servicesError) throw servicesError;
       if (!services) throw new Error("No active service found");
@@ -60,6 +62,8 @@ export const useInvestigationForm = ({ onSuccess }: UseInvestigationFormProps) =
 
       if (error) throw error;
 
+      console.log("Investigation created successfully");
+
       toast({
         title: "Investigation Created",
         description: "New investigation log has been created successfully.",
@@ -71,6 +75,7 @@ export const useInvestigationForm = ({ onSuccess }: UseInvestigationFormProps) =
       setNotes("");
       setErrors(null);
     } catch (error) {
+      console.error("Error creating investigation:", error);
       const errorMessage = error instanceof Error ? error.message : "Failed to create investigation";
       setErrors(errorMessage);
       toast({
