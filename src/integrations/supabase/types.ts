@@ -2539,6 +2539,13 @@ export type Database = {
         }
         Returns: undefined
       }
+      validate_sdk_and_api_key: {
+        Args: {
+          user_id: string
+          project_id?: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
