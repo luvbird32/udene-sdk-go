@@ -5,6 +5,7 @@ import Signup from '@/pages/Signup'
 import Dashboard from '@/pages/Dashboard'
 import Settings from '@/pages/Settings'
 import Users from '@/pages/Users'
+import AdminDashboard from '@/pages/AdminDashboard'
 import Blog from '@/pages/Blog'
 import BlogPost from '@/pages/BlogPost'
 import ClientSettings from '@/pages/ClientSettings'
@@ -44,6 +45,14 @@ export const createRoutes = (user: any, loading: boolean) => [
         <ProjectProvider>
           <Dashboard />
         </ProjectProvider>
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/admin',
+    element: (
+      <ProtectedRoute>
+        <AdminDashboard />
       </ProtectedRoute>
     )
   },
