@@ -7,6 +7,7 @@ import { AutomatedResponse } from "@/components/monitoring/AutomatedResponse";
 import { AuditLogger } from "@/components/monitoring/AuditLogger";
 import { ClientAnalytics } from "@/components/dashboard/analytics/ClientAnalytics";
 import { UsageAnalytics } from "@/components/dashboard/analytics/UsageAnalytics";
+import { RiskIndicators } from "@/components/monitoring/RiskIndicators";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Users } from "lucide-react";
 
@@ -28,6 +29,8 @@ const AdminDashboard = () => {
           </Button>
         </div>
       </div>
+      
+      <RiskIndicators />
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <HealthStatus />

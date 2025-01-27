@@ -466,27 +466,51 @@ export type Database = {
       }
       client_metrics: {
         Row: {
+          api_request_velocity: number | null
+          automation_indicators: Json | null
+          behavioral_anomalies: Json | null
+          concurrent_sessions: number | null
+          failed_login_attempts: number | null
           id: string
           metric_name: string
           metric_value: number
           project_id: string | null
+          resource_usage_spikes: boolean | null
+          suspicious_ip_changes: number | null
           timestamp: string | null
+          unusual_device_patterns: boolean | null
           user_id: string
         }
         Insert: {
+          api_request_velocity?: number | null
+          automation_indicators?: Json | null
+          behavioral_anomalies?: Json | null
+          concurrent_sessions?: number | null
+          failed_login_attempts?: number | null
           id?: string
           metric_name: string
           metric_value: number
           project_id?: string | null
+          resource_usage_spikes?: boolean | null
+          suspicious_ip_changes?: number | null
           timestamp?: string | null
+          unusual_device_patterns?: boolean | null
           user_id: string
         }
         Update: {
+          api_request_velocity?: number | null
+          automation_indicators?: Json | null
+          behavioral_anomalies?: Json | null
+          concurrent_sessions?: number | null
+          failed_login_attempts?: number | null
           id?: string
           metric_name?: string
           metric_value?: number
           project_id?: string | null
+          resource_usage_spikes?: boolean | null
+          suspicious_ip_changes?: number | null
           timestamp?: string | null
+          unusual_device_patterns?: boolean | null
           user_id?: string
         }
         Relationships: [
@@ -2517,6 +2541,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      analyze_exploitation_patterns: {
+        Args: {
+          user_id_param: string
+        }
+        Returns: Json
+      }
       check_rate_limit: {
         Args: {
           p_ip_address: string
