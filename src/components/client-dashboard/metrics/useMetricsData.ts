@@ -14,6 +14,7 @@ export const useMetricsData = () => {
   return useQuery({
     queryKey: ["metrics"],
     queryFn: async () => {
+      console.log("Fetching metrics from Supabase...");
       const { data, error } = await supabase
         .from('metrics')
         .select('*')
@@ -36,6 +37,6 @@ export const useMetricsData = () => {
         activeUsers: data?.active_users ?? 0
       };
     },
-    refetchInterval: 30000,
+    refetchInterval: 30000, // Refresh every 30 seconds
   });
 };
