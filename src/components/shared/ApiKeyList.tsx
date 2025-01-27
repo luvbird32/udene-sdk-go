@@ -48,10 +48,10 @@ export const ApiKeyList = ({ apiKeys, isLoading, onDelete }: ApiKeyListProps) =>
           <div className="flex items-center justify-between">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <p className="font-medium text-white/60">{key.name}</p>
+                <p className="font-medium text-foreground">{key.name}</p>
                 <Badge 
                   variant={key.key_type === 'production' ? 'default' : 'secondary'}
-                  className="flex items-center gap-1"
+                  className="flex items-center gap-1 text-foreground"
                 >
                   {key.key_type === 'production' ? (
                     <ShieldCheck className="h-3 w-3" />
@@ -62,9 +62,9 @@ export const ApiKeyList = ({ apiKeys, isLoading, onDelete }: ApiKeyListProps) =>
                 </Badge>
               </div>
               {key.description && (
-                <p className="text-sm text-white/60">{key.description}</p>
+                <p className="text-sm text-muted-foreground">{key.description}</p>
               )}
-              <p className="text-sm text-white/60">
+              <p className="text-sm text-muted-foreground">
                 Created: {new Date(key.created_at).toLocaleDateString()}
               </p>
             </div>
@@ -91,13 +91,13 @@ export const ApiKeyList = ({ apiKeys, isLoading, onDelete }: ApiKeyListProps) =>
               </Button>
             </div>
           </div>
-          <div className="font-mono text-sm p-2 bg-muted rounded border border-border text-white/60">
+          <div className="font-mono text-sm p-2 bg-muted rounded border border-border text-foreground">
             {key.key_value}
           </div>
         </div>
       ))}
       {(!apiKeys || apiKeys.length === 0) && (
-        <p className="text-center text-white/60">
+        <p className="text-center text-muted-foreground">
           No API keys generated yet.
         </p>
       )}
