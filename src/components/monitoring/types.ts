@@ -1,3 +1,5 @@
+import { Json } from "@/integrations/supabase/types";
+
 export interface DeviceFingerprint {
   id: string;
   user_id: string | null;
@@ -20,4 +22,8 @@ export interface DeviceFingerprint {
   last_seen: string | null;
   created_at: string | null;
   updated_at: string | null;
+  device_fingerprint_history?: Array<{
+    id: string;
+    changes: Json;
+  }>;
 }
