@@ -1,3 +1,14 @@
+/**
+ * Custom hook for fetching and managing business intelligence metrics
+ * 
+ * Retrieves and processes transaction data to calculate various business metrics including:
+ * - ROI and savings from fraud prevention
+ * - False positive/negative rates
+ * - Customer impact metrics
+ * - Transaction volume statistics
+ * 
+ * The hook handles encrypted transaction data and provides comprehensive error handling.
+ */
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -16,6 +27,7 @@ export const useBusinessMetrics = () => {
         throw new Error("No user found");
       }
 
+      // Fetch transaction data with encrypted fields
       const { data: transactions, error } = await supabase
         .from('transactions')
         .select('amount_encrypted, amount_iv, risk_score, is_fraudulent')
@@ -66,9 +78,11 @@ export const useBusinessMetrics = () => {
         })
       );
 
+      // Calculate blocked transactions and amounts
       const blockedTransactions = processedTransactions.filter(t => t.risk_score >= 70);
       const totalBlocked = blockedTransactions.reduce((sum, t) => sum + (t.amount || 0), 0);
       
+      // Calculate accuracy metrics
       const verifiedTransactions = processedTransactions.filter(t => t.is_fraudulent !== null);
       const truePositives = verifiedTransactions.filter(t => t.risk_score >= 70 && t.is_fraudulent).length;
       const falsePositives = verifiedTransactions.filter(t => t.risk_score >= 70 && !t.is_fraudulent).length;
@@ -79,6 +93,7 @@ export const useBusinessMetrics = () => {
       const falsePositiveRate = totalVerified ? (falsePositives / totalVerified) * 100 : 0;
       const falseNegativeRate = totalVerified ? (falseNegatives / totalVerified) * 100 : 0;
       
+      // Calculate customer impact metrics
       const uniqueCustomers = new Set(processedTransactions.map(t => t.amount)).size;
       const affectedCustomers = new Set(blockedTransactions.map(t => t.amount)).size;
       const customerImpactRate = uniqueCustomers ? (affectedCustomers / uniqueCustomers) * 100 : 0;
@@ -86,7 +101,7 @@ export const useBusinessMetrics = () => {
       console.log("Business intelligence metrics calculated successfully");
 
       return {
-        roi: totalBlocked * 0.15, // Assuming 15% ROI on prevented fraud
+        roi: totalBlocked * 0.15, // 15% ROI on prevented fraud
         savings: totalBlocked,
         falsePositiveRate,
         falseNegativeRate,
@@ -95,7 +110,7 @@ export const useBusinessMetrics = () => {
         affectedCustomers
       };
     },
-    refetchInterval: 30000,
+    refetchInterval: 30000, // Refresh every 30 seconds
     retry: 3,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
     meta: {

@@ -2,12 +2,23 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 
+/**
+ * Interface defining the structure of affiliate statistics
+ */
 export interface AffiliateStats {
   date: string;
   riskScore: number;
   amount: number;
 }
 
+/**
+ * Custom hook for fetching and managing affiliate fraud statistics
+ * 
+ * Retrieves affiliate activity data, processes risk scores and transaction amounts,
+ * and handles error states with retry logic.
+ * 
+ * @returns {Object} Query result containing affiliate stats, loading state, and error state
+ */
 export const useAffiliateData = () => {
   const { toast } = useToast();
 
@@ -28,6 +39,7 @@ export const useAffiliateData = () => {
           throw new Error("No user found");
         }
 
+        // Fetch affiliate activities with risk scores and amounts
         const { data, error } = await supabase
           .from('affiliate_activities')
           .select('*')
@@ -40,6 +52,8 @@ export const useAffiliateData = () => {
         }
 
         console.log("Affiliate activities fetched:", data?.length || 0, "records");
+        
+        // Transform data into required format
         return data?.map(activity => ({
           date: new Date(activity.created_at).toLocaleDateString(),
           riskScore: activity.risk_score || 0,
@@ -50,7 +64,7 @@ export const useAffiliateData = () => {
         throw error;
       }
     },
-    refetchInterval: 30000,
+    refetchInterval: 30000, // Refresh data every 30 seconds
     retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
     meta: {
