@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 export const useWebhookForm = () => {
   const [url, setUrl] = useState("");
@@ -9,9 +10,12 @@ export const useWebhookForm = () => {
   const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const createWebhook = useMutation({
     mutationFn: async () => {
+      console.log("Creating webhook with:", { url, description, selectedEvents });
+      if (!user) throw new Error("User not authenticated");
       if (!url.trim() || selectedEvents.length === 0) {
         throw new Error("URL and at least one event are required");
       }
@@ -30,7 +34,10 @@ export const useWebhookForm = () => {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error creating webhook:", error);
+        throw error;
+      }
       return data;
     },
     onSuccess: () => {
@@ -44,6 +51,7 @@ export const useWebhookForm = () => {
       setSelectedEvents([]);
     },
     onError: (error) => {
+      console.error("Error in createWebhook:", error);
       toast({
         title: "Error",
         description: "Failed to create webhook: " + error.message,

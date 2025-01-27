@@ -1,30 +1,16 @@
-/**
- * WebhookManager Component
- * 
- * Manages webhook configurations for real-time event notifications.
- * Provides interface for creating, viewing, and managing webhooks.
- * 
- * Features:
- * - Webhook URL configuration
- * - Event type selection
- * - Real-time webhook status
- * - Webhook list management
- * - Beta feature indicator
- * 
- * @component
- * @example
- * ```tsx
- * <WebhookManager />
- * ```
- */
 import { WebhookForm } from "./WebhookForm";
 import { WebhookList } from "./WebhookList";
 import { Card } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Webhook, Info } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 export const WebhookManager = () => {
+  const { user } = useAuth();
+
+  console.log("WebhookManager rendering for user:", user?.id);
+
   return (
     <div className="space-y-6">
       <Card className="p-6">
