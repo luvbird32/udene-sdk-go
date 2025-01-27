@@ -1,62 +1,42 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { useProject } from "@/contexts/ProjectContext";
-import type { ClientService } from "@/types/services";
+import { useAuth } from "@/hooks/useAuth";
 
 export const useServices = () => {
   const { toast } = useToast();
-  const { currentProject } = useProject();
+  const { user } = useAuth();
 
   return useQuery({
-    queryKey: ["client-services", currentProject?.id],
+    queryKey: ["client-services", user?.id],
     queryFn: async () => {
-      try {
-        console.log('Fetching services - Starting query');
-        
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) {
-          console.error('No authenticated user found');
-          throw new Error("No authenticated user");
-        }
-        
-        console.log('Authenticated user:', user.id);
-        console.log('Current project:', currentProject?.id);
+      if (!user) {
+        throw new Error("User not authenticated");
+      }
 
-        // First try to get project-specific services
-        let query = supabase
-          .from('client_services')
-          .select('*')
-          .eq('user_id', user.id);
+      console.log("Fetching services for user:", user.id);
+      
+      // Remove .single() since we expect multiple services
+      const { data: services, error } = await supabase
+        .from('client_services')
+        .select('*')
+        .eq('user_id', user.id);
 
-        if (currentProject?.id) {
-          query = query.eq('project_id', currentProject.id);
-        }
-
-        const { data, error } = await query;
-
-        if (error) {
-          console.error('Error fetching services:', error);
-          toast({
-            title: "Error",
-            description: "Failed to load services. Please try again.",
-            variant: "destructive",
-          });
-          throw error;
-        }
-
-        console.log('Fetched services:', data);
-        return data as ClientService[];
-      } catch (error) {
-        console.error('Error in useServices:', error);
+      if (error) {
+        console.error('Error fetching services:', error);
         toast({
-          title: "Error",
-          description: "Failed to load services. Please try again.",
-          variant: "destructive",
+          title: "Error loading services",
+          description: error.message,
+          variant: "destructive"
         });
         throw error;
       }
+
+      console.log("Fetched services:", services);
+      return services || []; // Return empty array if no services found
     },
-    enabled: true,
+    enabled: !!user,
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 };
