@@ -4,7 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { LoadingState } from "@/components/ui/states/LoadingState";
 import { ErrorState } from "@/components/ui/states/ErrorState";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, AlertTriangle, XCircle } from "lucide-react";
+import { CheckCircle, AlertTriangle, XCircle, Info } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface SystemStatus {
   status: string;
@@ -29,12 +30,12 @@ export const SystemHealth = () => {
           throw new Error(`Database connection failed: ${dbError.message}`);
         }
 
-        // Since we're using Supabase, if we can query the database, the API is working
+        // Since we're using Supabase client, we can only verify client-side connectivity
         const status = {
           status: count !== null ? "healthy" : "unhealthy",
-          api: true,
+          api: true, // This is from client perspective
           database: count !== null,
-          cache: count !== null // Using same check for cache since we're using Supabase
+          cache: count !== null
         };
 
         console.log("Health check result:", status);
@@ -64,47 +65,89 @@ export const SystemHealth = () => {
   };
 
   return (
-    <Card className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold">System Health</h3>
-        <Badge 
-          variant="outline" 
-          className={health?.status === "healthy" ? "bg-green-500/10 text-green-500" : "bg-red-500/10 text-red-500"}
-        >
-          {health?.status === "healthy" ? (
-            <CheckCircle className="h-4 w-4 mr-2" />
-          ) : (
-            <AlertTriangle className="h-4 w-4 mr-2" />
-          )}
-          {health?.status === "healthy" ? "All Systems Operational" : "System Issues Detected"}
-        </Badge>
-      </div>
-
-      <div className="space-y-4">
-        <div className="flex justify-between items-center">
-          <span className="text-muted-foreground">API Status</span>
-          <Badge variant="outline" className={getStatusColor(health?.api || false)}>
-            {getStatusIcon(health?.api || false)}
-            <span className="ml-2">{health?.api ? "Online" : "Offline"}</span>
+    <TooltipProvider>
+      <Card className="p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-2">
+            <h3 className="text-lg font-semibold">System Health</h3>
+            <Tooltip>
+              <TooltipTrigger>
+                <Info className="h-4 w-4 text-muted-foreground" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="max-w-xs">This health status reflects client-side connectivity to our services. For real-time system status, please check our status page.</p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+          <Badge 
+            variant="outline" 
+            className={health?.status === "healthy" ? "bg-green-500/10 text-green-500" : "bg-red-500/10 text-red-500"}
+          >
+            {health?.status === "healthy" ? (
+              <CheckCircle className="h-4 w-4 mr-2" />
+            ) : (
+              <AlertTriangle className="h-4 w-4 mr-2" />
+            )}
+            {health?.status === "healthy" ? "Client Connection Active" : "Connection Issues Detected"}
           </Badge>
         </div>
 
-        <div className="flex justify-between items-center">
-          <span className="text-muted-foreground">Database</span>
-          <Badge variant="outline" className={getStatusColor(health?.database || false)}>
-            {getStatusIcon(health?.database || false)}
-            <span className="ml-2">{health?.database ? "Connected" : "Disconnected"}</span>
-          </Badge>
-        </div>
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <span className="text-muted-foreground">API Status</span>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Info className="h-4 w-4 text-muted-foreground" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Indicates if your client can reach our API endpoints</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+            <Badge variant="outline" className={getStatusColor(health?.api || false)}>
+              {getStatusIcon(health?.api || false)}
+              <span className="ml-2">{health?.api ? "Connected" : "Disconnected"}</span>
+            </Badge>
+          </div>
 
-        <div className="flex justify-between items-center">
-          <span className="text-muted-foreground">Cache</span>
-          <Badge variant="outline" className={getStatusColor(health?.cache || false)}>
-            {getStatusIcon(health?.cache || false)}
-            <span className="ml-2">{health?.cache ? "Available" : "Unavailable"}</span>
-          </Badge>
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <span className="text-muted-foreground">Database</span>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Info className="h-4 w-4 text-muted-foreground" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Shows if your client can query the database</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+            <Badge variant="outline" className={getStatusColor(health?.database || false)}>
+              {getStatusIcon(health?.database || false)}
+              <span className="ml-2">{health?.database ? "Connected" : "Disconnected"}</span>
+            </Badge>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <span className="text-muted-foreground">Cache</span>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Info className="h-4 w-4 text-muted-foreground" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Indicates if client-side caching is functioning</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+            <Badge variant="outline" className={getStatusColor(health?.cache || false)}>
+              {getStatusIcon(health?.cache || false)}
+              <span className="ml-2">{health?.cache ? "Connected" : "Disconnected"}</span>
+            </Badge>
+          </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </TooltipProvider>
   );
 };
