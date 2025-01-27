@@ -47,13 +47,18 @@ export const UserManagement = () => {
         session_timeout_minutes: profile.session_timeout_minutes || 30
       })) || [];
     },
+    refetchInterval: 30000, // Refresh every 30 seconds
   });
 
   if (isLoading) {
     return (
       <Card className="p-4">
         <h3 className="font-semibold mb-4">User Management</h3>
-        <div>Loading users...</div>
+        <div className="animate-pulse space-y-4">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-12 bg-gray-200 rounded"></div>
+          ))}
+        </div>
       </Card>
     );
   }
@@ -72,12 +77,18 @@ export const UserManagement = () => {
       <h3 className="font-semibold mb-4">User Management</h3>
       <div className="space-y-4">
         {users?.map((user) => (
-          <div key={user.id} className="flex justify-between items-center">
-            <span>{user.username}</span>
+          <div key={user.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+            <div className="flex flex-col">
+              <span className="font-medium">{user.username}</span>
+              <span className="text-sm text-gray-500">Role: {user.role}</span>
+            </div>
             <UserActions 
               user={user}
               onStatusToggle={async (userId, newStatus) => {
-                await supabase.from('profiles').update({ status: newStatus }).eq('id', userId);
+                await supabase
+                  .from('profiles')
+                  .update({ status: newStatus })
+                  .eq('id', userId);
               }}
             />
           </div>

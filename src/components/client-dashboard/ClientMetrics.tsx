@@ -38,8 +38,26 @@ export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps)
   const displayMetrics = metrics || metricsData;
   const isLoadingState = isLoading || metricsLoading;
 
+  // Show loading state while data is being fetched
+  if (isLoadingState) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        {[...Array(5)].map((_, i) => (
+          <MetricCard
+            key={i}
+            title="Loading..."
+            value="..."
+            icon={Shield}
+            description="Loading metric data"
+            isLoading={true}
+          />
+        ))}
+      </div>
+    );
+  }
+
   // Early return for empty state
-  if (!isLoadingState && !displayMetrics) {
+  if (!displayMetrics) {
     console.log("No metrics data available");
     return <EmptyMetrics />;
   }
