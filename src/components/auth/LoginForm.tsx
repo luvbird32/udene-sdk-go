@@ -52,6 +52,10 @@ export const LoginForm = () => {
     
     try {
       setLoading(true);
+
+      // Clear any existing sessions first
+      await supabase.auth.signOut();
+      
       const { data, error: supabaseError } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
@@ -71,12 +75,20 @@ export const LoginForm = () => {
         return;
       }
 
-      console.log('LoginForm: Login successful, user:', data.user?.id);
-      toast({
-        title: "Login Successful",
-        description: "Welcome back!",
+      // Set up auth state change listener
+      supabase.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_IN') {
+          console.log('LoginForm: Auth state changed to SIGNED_IN');
+          toast({
+            title: "Login Successful",
+            description: "Welcome back!",
+          });
+          navigate('/dashboard');
+        }
       });
-      navigate('/dashboard');
+
+      console.log('LoginForm: Login successful, user:', data.user?.id);
+      
     } catch (error) {
       console.error('LoginForm: Unexpected error:', error);
       setError('An unexpected error occurred. Please try again.');
@@ -90,7 +102,7 @@ export const LoginForm = () => {
       {/* Header section */}
       <div className="text-center">
         <h1 className="text-2xl font-bold">Welcome Back</h1>
-        <p className="text-sm text-gray-500">Enter your credentials to access your account</p>
+        <p className="text-sm text-muted-foreground">Enter your credentials to access your account</p>
       </div>
 
       {/* Error alert */}
@@ -111,7 +123,7 @@ export const LoginForm = () => {
 
       {/* Sign up link */}
       <div className="text-center text-sm">
-        <p className="text-gray-500">
+        <p className="text-muted-foreground">
           Don't have an account?{' '}
           <Link to="/signup" className="text-primary hover:underline">
             Sign up
