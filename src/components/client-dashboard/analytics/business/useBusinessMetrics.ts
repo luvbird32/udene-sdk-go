@@ -6,8 +6,7 @@
  * - False positive/negative rates
  * - Customer impact metrics
  * - Transaction volume statistics
- * 
- * The hook handles encrypted transaction data and provides comprehensive error handling.
+ * - Growth and retention metrics
  */
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,7 +16,7 @@ import { BusinessMetrics, TransactionMetrics } from "./types";
 export const useBusinessMetrics = () => {
   const { toast } = useToast();
 
-  return useQuery<BusinessMetrics>({
+  return useQuery({
     queryKey: ["business-intelligence"],
     queryFn: async () => {
       console.log("Fetching business intelligence metrics...");
@@ -30,7 +29,7 @@ export const useBusinessMetrics = () => {
       // Fetch transaction data with encrypted fields
       const { data: transactions, error } = await supabase
         .from('transactions')
-        .select('amount_encrypted, amount_iv, risk_score, is_fraudulent')
+        .select('amount_encrypted, amount_iv, risk_score, is_fraudulent, created_at')
         .order('created_at', { ascending: false })
         .limit(1000);
 
@@ -48,7 +47,12 @@ export const useBusinessMetrics = () => {
           falseNegativeRate: 0,
           customerImpactRate: 0,
           totalTransactions: 0,
-          affectedCustomers: 0
+          affectedCustomers: 0,
+          averageTransactionValue: 0,
+          monthlyGrowthRate: 0,
+          retentionRate: 0,
+          fraudPreventionRate: 0,
+          averageResponseTime: 0
         };
       }
 
@@ -92,11 +96,37 @@ export const useBusinessMetrics = () => {
       const totalVerified = verifiedTransactions.length;
       const falsePositiveRate = totalVerified ? (falsePositives / totalVerified) * 100 : 0;
       const falseNegativeRate = totalVerified ? (falseNegatives / totalVerified) * 100 : 0;
-      
+
       // Calculate customer impact metrics
       const uniqueCustomers = new Set(processedTransactions.map(t => t.amount)).size;
       const affectedCustomers = new Set(blockedTransactions.map(t => t.amount)).size;
       const customerImpactRate = uniqueCustomers ? (affectedCustomers / uniqueCustomers) * 100 : 0;
+
+      // Calculate average transaction value
+      const totalValue = processedTransactions.reduce((sum, t) => sum + (t.amount || 0), 0);
+      const averageTransactionValue = processedTransactions.length ? totalValue / processedTransactions.length : 0;
+
+      // Calculate monthly growth rate
+      const lastMonthTransactions = processedTransactions.filter(t => 
+        new Date(t.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+      ).length;
+      const previousMonthTransactions = processedTransactions.filter(t =>
+        new Date(t.created_at) > new Date(Date.now() - 60 * 24 * 60 * 60 * 1000) &&
+        new Date(t.created_at) <= new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+      ).length;
+      const monthlyGrowthRate = previousMonthTransactions ? 
+        ((lastMonthTransactions - previousMonthTransactions) / previousMonthTransactions) * 100 : 0;
+
+      // Calculate retention rate (customers who continue after a fraud incident)
+      const retainedCustomers = verifiedTransactions.filter(t => !t.is_fraudulent).length;
+      const retentionRate = totalVerified ? (retainedCustomers / totalVerified) * 100 : 0;
+
+      // Calculate fraud prevention rate
+      const fraudPreventionRate = totalVerified ? 
+        (truePositives / (truePositives + falseNegatives)) * 100 : 0;
+
+      // Calculate average response time (mock data - replace with actual timing data)
+      const averageResponseTime = 150; // milliseconds
 
       console.log("Business intelligence metrics calculated successfully");
 
@@ -107,7 +137,12 @@ export const useBusinessMetrics = () => {
         falseNegativeRate,
         customerImpactRate,
         totalTransactions: transactions.length,
-        affectedCustomers
+        affectedCustomers,
+        averageTransactionValue,
+        monthlyGrowthRate,
+        retentionRate,
+        fraudPreventionRate,
+        averageResponseTime
       };
     },
     refetchInterval: 30000, // Refresh every 30 seconds

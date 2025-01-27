@@ -6,6 +6,11 @@ export interface BusinessMetrics {
   customerImpactRate: number;
   totalTransactions: number;
   affectedCustomers: number;
+  averageTransactionValue: number;
+  monthlyGrowthRate: number;
+  retentionRate: number;
+  fraudPreventionRate: number;
+  averageResponseTime: number;
 }
 
 export interface TransactionMetrics {
