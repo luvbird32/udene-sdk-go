@@ -29,28 +29,47 @@ const Dashboard = () => {
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
     queryKey: ["metrics"],
     queryFn: async () => {
-      console.log("Fetching metrics from Supabase...");
-      const { data: metricsData, error: metricsError } = await supabase
-        .from('metrics')
-        .select('*')
-        .order('timestamp', { ascending: false })
-        .limit(1)
-        .maybeSingle();
+      try {
+        console.log("Checking auth state...");
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError) {
+          console.error("Session error:", sessionError);
+          throw new Error("Authentication error - please sign in again");
+        }
 
-      if (metricsError) {
-        console.error("Error fetching metrics:", metricsError);
-        throw metricsError;
+        if (!session) {
+          console.error("No active session");
+          throw new Error("No active session - please sign in");
+        }
+
+        console.log("Fetching metrics from Supabase...");
+        const { data: metricsData, error: metricsError } = await supabase
+          .from('metrics')
+          .select('*')
+          .order('timestamp', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (metricsError) {
+          console.error("Error fetching metrics:", metricsError);
+          throw metricsError;
+        }
+
+        // Transform and return metrics with default values if data is missing
+        return {
+          riskScore: metricsData?.metric_value ?? 0,
+          totalTransactions: metricsData?.metric_value ?? 0,
+          flaggedTransactions: metricsData?.metric_value ?? 0,
+          activeUsers: metricsData?.active_users ?? 0,
+          avgProcessingTime: metricsData?.avg_processing_time ?? 35,
+          concurrentCalls: metricsData?.concurrent_calls ?? 0
+        };
+      } catch (error) {
+        console.error("Error in metrics query:", error);
+        // Re-throw the error to be handled by the error boundary
+        throw error;
       }
-
-      // Transform and return metrics with default values if data is missing
-      return {
-        riskScore: metricsData?.metric_value ?? 0,
-        totalTransactions: metricsData?.metric_value ?? 0,
-        flaggedTransactions: metricsData?.metric_value ?? 0,
-        activeUsers: metricsData?.active_users ?? 0,
-        avgProcessingTime: metricsData?.avg_processing_time ?? 35,
-        concurrentCalls: metricsData?.concurrent_calls ?? 0
-      };
     },
     refetchInterval: 3000,
     retry: 1,
@@ -59,7 +78,7 @@ const Dashboard = () => {
         console.error("Metrics fetch error:", error);
         toast({
           title: "Error",
-          description: "Failed to load metrics data",
+          description: error.message || "Failed to load metrics data",
           variant: "destructive",
         });
       },
