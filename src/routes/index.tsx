@@ -12,6 +12,7 @@ import BlogPost from '@/pages/BlogPost';
 import ClientSettings from '@/pages/ClientSettings';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { ProjectProvider } from '@/contexts/ProjectContext';
+import { InvestigationSection } from '@/components/admin-dashboard/investigation/InvestigationSection';
 
 export const createRoutes = (user: any, loading: boolean) => [
   // Public routes
@@ -54,6 +55,14 @@ export const createRoutes = (user: any, loading: boolean) => [
     element: (
       <ProtectedRoute>
         <AdminDashboard />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/investigations',
+    element: (
+      <ProtectedRoute>
+        <InvestigationSection />
       </ProtectedRoute>
     )
   },
