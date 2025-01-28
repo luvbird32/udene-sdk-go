@@ -2544,7 +2544,17 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      user_creation_patterns: {
+        Row: {
+          first_creation: string | null
+          ip_address: string | null
+          last_creation: string | null
+          user_count: number | null
+          user_details: Json | null
+          user_ids: string[] | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       analyze_exploitation_patterns: {
