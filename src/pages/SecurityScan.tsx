@@ -9,12 +9,16 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const SecurityScan = () => {
   const { data: scans, isLoading, refetch } = useVulnerabilityScans();
   const [isScanning, setIsScanning] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const totalVulnerabilities = scans?.reduce((sum, scan) => sum + scan.total_vulnerabilities, 0) || 0;
   const severityBreakdown = scans?.[0]?.severity_breakdown || {
@@ -86,8 +90,18 @@ const SecurityScan = () => {
   return (
     <TooltipProvider>
       <div className="container mx-auto p-6 space-y-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Security Scanning</h1>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              onClick={() => navigate('/admin')}
+              className="flex items-center gap-2"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Back to Admin Dashboard
+            </Button>
+            <h1 className="text-2xl font-bold">Security Scanning</h1>
+          </div>
           <ScanQuickActions 
             onStartScan={handleStartScan}
             isScanning={isScanning}
