@@ -16,7 +16,7 @@ import { BusinessIntelligence } from "@/components/client-dashboard/analytics/Bu
 import { UserMetrics } from "@/components/dashboard/metrics/UserMetrics";
 import { InvestigationSection } from "@/components/admin-dashboard/investigation/InvestigationSection";
 import { useNavigate } from "react-router-dom";
-import { Users } from "lucide-react";
+import { Users, ScanSearch } from "lucide-react";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -27,6 +27,14 @@ const AdminDashboard = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Admin Dashboard</h1>
         <div className="flex gap-4">
+          <Button 
+            variant="outline"
+            onClick={() => navigate('/security-scan')}
+            className="flex items-center gap-2"
+          >
+            <ScanSearch className="h-4 w-4" />
+            Security Scan
+          </Button>
           <Button 
             variant="outline"
             onClick={() => navigate('/users')}
