@@ -2,13 +2,13 @@ import { User } from "@/types/users";
 import { useUsersList } from "./useUsersList";
 import { useUserMutations } from "./useUserMutations";
 import { useCurrentUser } from "./useCurrentUser";
+import { useLoadingStates } from "./useLoadingStates";
 
 export const useUsers = () => {
-  const { data: users = [], isLoading: isLoadingUsers, error } = useUsersList();
-  const { data: currentUser, isLoading: isLoadingCurrentUser } = useCurrentUser();
+  const { data: users = [], error } = useUsersList();
+  const { data: currentUser } = useCurrentUser();
   const { updateUser } = useUserMutations();
-
-  const isLoading = isLoadingUsers || isLoadingCurrentUser;
+  const { isLoading } = useLoadingStates();
 
   return {
     users,
