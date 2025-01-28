@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/shared/ui/Button";
 import { UserTable } from "@/components/users/UserTable";
-import { useUsers } from "@/hooks/useUsers";
+import { useAdminUsers } from "@/hooks/admin/useAdminUsers";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,7 @@ import { ArrowLeft } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/states/LoadingSpinner";
 
 const Users = () => {
-  const { users, isLoading, error, updateUser } = useUsers();
+  const { users, isLoading, error, updateUser } = useAdminUsers();
   const { toast } = useToast();
   const navigate = useNavigate();
 
