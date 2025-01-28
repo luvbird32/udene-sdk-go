@@ -13,6 +13,7 @@ import { FlaggedDevices } from "@/components/monitoring/device/FlaggedDevices";
 import { CustomerBehavior } from "@/components/monitoring/CustomerBehavior";
 import { FeedbackManagement } from "@/components/monitoring/feedback/FeedbackManagement";
 import { BusinessIntelligence } from "@/components/client-dashboard/analytics/BusinessIntelligence";
+import { UserMetrics } from "@/components/dashboard/metrics/UserMetrics";
 import { useNavigate } from "react-router-dom";
 import { Users } from "lucide-react";
 
@@ -34,6 +35,8 @@ const AdminDashboard = () => {
           </Button>
         </div>
       </div>
+
+      <UserMetrics />
       
       <ExploitationMetrics />
       
