@@ -1,17 +1,7 @@
-/**
- * Custom hook for fetching and managing business intelligence metrics
- * 
- * Retrieves and processes transaction data to calculate various business metrics including:
- * - ROI and savings from fraud prevention
- * - False positive/negative rates
- * - Customer impact metrics
- * - Transaction volume statistics
- * - Growth and retention metrics
- */
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { BusinessMetrics, TransactionMetrics } from "./types";
+import { BusinessMetrics } from "./types";
 
 export const useBusinessMetrics = () => {
   const { toast } = useToast();
@@ -26,7 +16,6 @@ export const useBusinessMetrics = () => {
         throw new Error("No user found");
       }
 
-      // Fetch transaction data with encrypted fields
       const { data: transactions, error } = await supabase
         .from('transactions')
         .select('amount_encrypted, amount_iv, risk_score, is_fraudulent, created_at')
@@ -52,7 +41,10 @@ export const useBusinessMetrics = () => {
           monthlyGrowthRate: 0,
           retentionRate: 0,
           fraudPreventionRate: 0,
-          averageResponseTime: 0
+          averageResponseTime: 0,
+          riskScoreDistribution: 0,
+          highRiskPercentage: 0,
+          blockedTransactionRate: 0
         };
       }
 
@@ -82,9 +74,14 @@ export const useBusinessMetrics = () => {
         })
       );
 
+      // Calculate risk assessment metrics
+      const totalTransactions = processedTransactions.length;
+      const highRiskTransactions = processedTransactions.filter(t => t.risk_score >= 70).length;
+      const blockedTransactions = processedTransactions.filter(t => t.risk_score >= 80).length;
+      const avgRiskScore = processedTransactions.reduce((sum, t) => sum + (t.risk_score || 0), 0) / totalTransactions;
+
       // Calculate blocked transactions and amounts
-      const blockedTransactions = processedTransactions.filter(t => t.risk_score >= 70);
-      const totalBlocked = blockedTransactions.reduce((sum, t) => sum + (t.amount || 0), 0);
+      const totalBlocked = blockedTransactions;
       
       // Calculate accuracy metrics
       const verifiedTransactions = processedTransactions.filter(t => t.is_fraudulent !== null);
@@ -99,7 +96,7 @@ export const useBusinessMetrics = () => {
 
       // Calculate customer impact metrics
       const uniqueCustomers = new Set(processedTransactions.map(t => t.amount)).size;
-      const affectedCustomers = new Set(blockedTransactions.map(t => t.amount)).size;
+      const affectedCustomers = new Set(processedTransactions.filter(t => t.risk_score >= 70).map(t => t.amount)).size;
       const customerImpactRate = uniqueCustomers ? (affectedCustomers / uniqueCustomers) * 100 : 0;
 
       // Calculate average transaction value
@@ -117,7 +114,7 @@ export const useBusinessMetrics = () => {
       const monthlyGrowthRate = previousMonthTransactions ? 
         ((lastMonthTransactions - previousMonthTransactions) / previousMonthTransactions) * 100 : 0;
 
-      // Calculate retention rate (customers who continue after a fraud incident)
+      // Calculate retention rate
       const retainedCustomers = verifiedTransactions.filter(t => !t.is_fraudulent).length;
       const retentionRate = totalVerified ? (retainedCustomers / totalVerified) * 100 : 0;
 
@@ -136,16 +133,19 @@ export const useBusinessMetrics = () => {
         falsePositiveRate,
         falseNegativeRate,
         customerImpactRate,
-        totalTransactions: transactions.length,
+        totalTransactions,
         affectedCustomers,
         averageTransactionValue,
         monthlyGrowthRate,
         retentionRate,
         fraudPreventionRate,
-        averageResponseTime
+        averageResponseTime,
+        riskScoreDistribution: avgRiskScore,
+        highRiskPercentage: (highRiskTransactions / totalTransactions) * 100,
+        blockedTransactionRate: (blockedTransactions / totalTransactions) * 100
       };
     },
-    refetchInterval: 30000, // Refresh every 30 seconds
+    refetchInterval: 30000,
     retry: 3,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
     meta: {

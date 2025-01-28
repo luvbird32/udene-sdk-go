@@ -1,4 +1,4 @@
-import { DollarSign, ShieldCheck, TrendingUp, Clock, Users, LineChart } from "lucide-react";
+import { DollarSign, ShieldCheck, TrendingUp, Clock, Users, LineChart, AlertTriangle, Ban, BarChart } from "lucide-react";
 import { MetricCard } from "../components/MetricCard";
 import { BusinessMetrics } from "./types";
 
@@ -26,6 +26,24 @@ export const MetricsOverview = ({ metrics }: MetricsOverviewProps) => {
         value={`${metrics.monthlyGrowthRate.toFixed(1)}%`}
         icon={TrendingUp}
         description="Month-over-month transaction volume growth"
+      />
+      <MetricCard
+        title="Risk Score Distribution"
+        value={`${metrics.riskScoreDistribution.toFixed(1)}%`}
+        icon={BarChart}
+        description="Average risk score across all transactions"
+      />
+      <MetricCard
+        title="High Risk Transactions"
+        value={`${metrics.highRiskPercentage.toFixed(1)}%`}
+        icon={AlertTriangle}
+        description="Percentage of transactions marked as high risk"
+      />
+      <MetricCard
+        title="Blocked Transaction Rate"
+        value={`${metrics.blockedTransactionRate.toFixed(1)}%`}
+        icon={Ban}
+        description="Percentage of transactions blocked due to risk"
       />
       <MetricCard
         title="Avg Response Time"
