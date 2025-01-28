@@ -1,6 +1,13 @@
+/**
+ * UserMetrics Component
+ * 
+ * Displays key performance metrics in a grid layout. Shows different metrics
+ * based on user role (admin sees additional metrics). Handles loading states
+ * and responsive layout.
+ */
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { MetricCard } from "@/components/client-dashboard/metrics/MetricCard";
+import { MetricCard } from "@/components/ui/metrics/MetricCard";
 import { Users, UserPlus, UserCheck, Clock } from "lucide-react";
 
 interface UserMetricsData {
@@ -35,7 +42,6 @@ export const UserMetrics = () => {
         .gte('created_at', thirtyDaysAgo.toISOString());
 
       // Calculate average session duration from metrics table
-      // Updated to use 'timestamp' instead of 'created_at'
       const { data: sessionData } = await supabase
         .from('metrics')
         .select('metric_value')
