@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Card } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import { StyledCard } from "@/components/ui/custom/StyledCard";
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
@@ -45,9 +45,9 @@ export const UsageAnalytics = () => {
   });
 
   return (
-    <div className="space-y-8"> {/* Increased top-level spacing */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8"> {/* Increased gap between cards */}
-        <Card className="p-6 shadow-lg border-2 border-border/50 hover:border-border/80 transition-colors">
+    <div className="space-y-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <StyledCard>
           <h3 className="font-semibold mb-6 text-lg">Service Usage Distribution</h3>
           <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -70,11 +70,11 @@ export const UsageAnalytics = () => {
               </PieChart>
             </ResponsiveContainer>
           </div>
-        </Card>
+        </StyledCard>
 
-        <Card className="p-6 shadow-lg border-2 border-border/50 hover:border-border/80 transition-colors">
+        <StyledCard>
           <h3 className="font-semibold text-lg">API Usage Overview</h3>
-          <div className="mt-6 space-y-6"> {/* Increased vertical spacing */}
+          <div className="mt-6 space-y-6">
             <div>
               <p className="text-sm text-muted-foreground mb-2">Total API Calls</p>
               <p className="text-3xl font-bold">{usageStats?.apiUsage.toLocaleString()}</p>
@@ -88,7 +88,7 @@ export const UsageAnalytics = () => {
               <p className="text-3xl font-bold">{usageStats?.activeServices}</p>
             </div>
           </div>
-        </Card>
+        </StyledCard>
       </div>
     </div>
   );
