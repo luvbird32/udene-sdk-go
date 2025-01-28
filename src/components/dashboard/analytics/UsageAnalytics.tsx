@@ -45,10 +45,10 @@ export const UsageAnalytics = () => {
   });
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="p-4">
-          <h3 className="font-semibold mb-4">Service Usage Distribution</h3>
+    <div className="space-y-8"> {/* Increased top-level spacing */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8"> {/* Increased gap between cards */}
+        <Card className="p-6 shadow-lg border-2 border-border/50 hover:border-border/80 transition-colors">
+          <h3 className="font-semibold mb-6 text-lg">Service Usage Distribution</h3>
           <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -72,19 +72,19 @@ export const UsageAnalytics = () => {
           </div>
         </Card>
 
-        <Card className="p-4">
-          <h3 className="font-semibold">API Usage Overview</h3>
-          <div className="mt-4 space-y-4">
+        <Card className="p-6 shadow-lg border-2 border-border/50 hover:border-border/80 transition-colors">
+          <h3 className="font-semibold text-lg">API Usage Overview</h3>
+          <div className="mt-6 space-y-6"> {/* Increased vertical spacing */}
             <div>
-              <p className="text-sm text-muted-foreground">Total API Calls</p>
+              <p className="text-sm text-muted-foreground mb-2">Total API Calls</p>
               <p className="text-3xl font-bold">{usageStats?.apiUsage.toLocaleString()}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Total Credits Allocated</p>
+              <p className="text-sm text-muted-foreground mb-2">Total Credits Allocated</p>
               <p className="text-3xl font-bold">{usageStats?.totalCredits.toLocaleString()}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Active Services</p>
+              <p className="text-sm text-muted-foreground mb-2">Active Services</p>
               <p className="text-3xl font-bold">{usageStats?.activeServices}</p>
             </div>
           </div>
