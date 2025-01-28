@@ -14,6 +14,7 @@ import { CustomerBehavior } from "@/components/monitoring/CustomerBehavior";
 import { FeedbackManagement } from "@/components/monitoring/feedback/FeedbackManagement";
 import { BusinessIntelligence } from "@/components/client-dashboard/analytics/BusinessIntelligence";
 import { UserMetrics } from "@/components/dashboard/metrics/UserMetrics";
+import { InvestigationSection } from "@/components/dashboard/InvestigationSection";
 import { useNavigate } from "react-router-dom";
 import { Users } from "lucide-react";
 
@@ -44,6 +45,8 @@ const AdminDashboard = () => {
         <HealthStatus />
         <ErrorLog />
       </div>
+
+      <InvestigationSection />
 
       <div className="grid grid-cols-1 gap-6">
         <TransactionTrends />
