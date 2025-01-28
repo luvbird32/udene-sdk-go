@@ -21,34 +21,55 @@ export const UserMetrics = () => {
   const { data: metrics, isLoading } = useQuery({
     queryKey: ["user-metrics"],
     queryFn: async (): Promise<UserMetricsData> => {
+      console.log("Fetching user metrics...");
       const now = new Date();
       const thirtyDaysAgo = new Date(now.setDate(now.getDate() - 30));
 
       // Get total users
-      const { count: totalUsers } = await supabase
+      const { count: totalUsers, error: totalError } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true });
 
+      if (totalError) {
+        console.error("Error fetching total users:", totalError);
+        throw totalError;
+      }
+
       // Get active users (logged in within last 30 days)
-      const { count: activeUsers } = await supabase
+      const { count: activeUsers, error: activeError } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true })
         .gte('last_login', thirtyDaysAgo.toISOString());
 
+      if (activeError) {
+        console.error("Error fetching active users:", activeError);
+        throw activeError;
+      }
+
       // Get new users in last 30 days
-      const { count: newUsers } = await supabase
+      const { count: newUsers, error: newError } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true })
         .gte('created_at', thirtyDaysAgo.toISOString());
 
+      if (newError) {
+        console.error("Error fetching new users:", newError);
+        throw newError;
+      }
+
       // Calculate average session duration from metrics table
-      const { data: sessionData } = await supabase
+      const { data: sessionData, error: sessionError } = await supabase
         .from('metrics')
         .select('metric_value')
         .eq('metric_name', 'avg_session_duration')
         .order('timestamp', { ascending: false })
         .limit(1)
         .maybeSingle();
+
+      if (sessionError) {
+        console.error("Error fetching session duration:", sessionError);
+        throw sessionError;
+      }
 
       return {
         totalUsers: totalUsers || 0,
