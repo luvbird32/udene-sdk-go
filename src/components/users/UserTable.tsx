@@ -15,6 +15,14 @@ interface UserTableProps {
 }
 
 export const UserTable = ({ users, onRoleChange, onStatusToggle }: UserTableProps) => {
+  if (users.length === 0) {
+    return (
+      <div className="text-center py-8 text-muted-foreground">
+        No users found
+      </div>
+    );
+  }
+
   return (
     <div className="rounded-md border border-green-500/20 overflow-hidden">
       <Table>

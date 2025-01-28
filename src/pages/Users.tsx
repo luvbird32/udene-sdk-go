@@ -6,9 +6,10 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { LoadingSpinner } from "@/components/ui/states/LoadingSpinner";
 
 const Users = () => {
-  const { users, isLoading, updateUser } = useUsers();
+  const { users, isLoading, error, updateUser } = useUsers();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -54,6 +55,16 @@ const Users = () => {
     }
   };
 
+  if (error) {
+    return (
+      <div className="container mx-auto p-6">
+        <Card className="p-6">
+          <div className="text-red-500">Error loading users: {error.message}</div>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto p-6">
       <div className="flex items-center justify-between mb-6">
@@ -70,11 +81,17 @@ const Users = () => {
         </div>
       </div>
       <Card className="p-6">
-        <UserTable 
-          users={users || []}
-          onRoleChange={handleRoleChange}
-          onStatusToggle={handleStatusToggle}
-        />
+        {isLoading ? (
+          <div className="flex justify-center items-center h-48">
+            <LoadingSpinner />
+          </div>
+        ) : (
+          <UserTable 
+            users={users || []}
+            onRoleChange={handleRoleChange}
+            onStatusToggle={handleStatusToggle}
+          />
+        )}
       </Card>
     </div>
   );
