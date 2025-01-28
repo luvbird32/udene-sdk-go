@@ -14,7 +14,7 @@ import { CustomerBehavior } from "@/components/monitoring/CustomerBehavior";
 import { FeedbackManagement } from "@/components/monitoring/feedback/FeedbackManagement";
 import { BusinessIntelligence } from "@/components/client-dashboard/analytics/BusinessIntelligence";
 import { UserMetrics } from "@/components/dashboard/metrics/UserMetrics";
-import { InvestigationSection } from "@/components/dashboard/InvestigationSection";
+import { InvestigationLogs } from "@/components/client-dashboard/investigation/InvestigationLogs";
 import { useNavigate } from "react-router-dom";
 import { Users } from "lucide-react";
 
@@ -46,7 +46,14 @@ const AdminDashboard = () => {
         <ErrorLog />
       </div>
 
-      <InvestigationSection />
+      <Card className="p-6">
+        <div className="space-y-4">
+          <h2 className="text-2xl font-semibold">Security Investigations</h2>
+          <div className="bg-muted/50 rounded-lg">
+            <InvestigationLogs />
+          </div>
+        </div>
+      </Card>
 
       <div className="grid grid-cols-1 gap-6">
         <TransactionTrends />
