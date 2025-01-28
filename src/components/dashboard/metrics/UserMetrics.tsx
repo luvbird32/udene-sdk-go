@@ -35,11 +35,12 @@ export const UserMetrics = () => {
         .gte('created_at', thirtyDaysAgo.toISOString());
 
       // Calculate average session duration from metrics table
+      // Updated to use 'timestamp' instead of 'created_at'
       const { data: sessionData } = await supabase
         .from('metrics')
         .select('metric_value')
         .eq('metric_name', 'avg_session_duration')
-        .order('created_at', { ascending: false })
+        .order('timestamp', { ascending: false })
         .limit(1)
         .single();
 
