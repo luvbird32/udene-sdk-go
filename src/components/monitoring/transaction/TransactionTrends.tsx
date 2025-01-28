@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { LoadingSpinner } from "@/components/ui/states/LoadingState";
+import { LoadingState } from "@/components/ui/states/LoadingState";
 import { ErrorState } from "@/components/ui/states/ErrorState";
 import { EmptyState } from "@/components/ui/states/EmptyState";
 
@@ -49,7 +49,7 @@ export const TransactionTrends = () => {
   if (isLoading) {
     return (
       <Card className="p-6">
-        <LoadingSpinner />
+        <LoadingState message="Loading transaction trends..." />
       </Card>
     );
   }
@@ -57,10 +57,7 @@ export const TransactionTrends = () => {
   if (error) {
     return (
       <Card className="p-6">
-        <ErrorState 
-          title="Failed to load transaction trends" 
-          message="There was an error loading the transaction data. Please try again later."
-        />
+        <ErrorState error={error} />
       </Card>
     );
   }
