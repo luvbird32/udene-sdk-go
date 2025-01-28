@@ -30,7 +30,7 @@ export const TransactionTrends = () => {
       <Card className="p-6">
         <EmptyState 
           title="No transaction data"
-          description="There are no transactions to display at this time."
+          message="There are no transactions to display at this time."
         />
       </Card>
     );
