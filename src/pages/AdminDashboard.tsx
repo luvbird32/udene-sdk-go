@@ -16,10 +16,67 @@ import { BusinessIntelligence } from "@/components/client-dashboard/analytics/Bu
 import { UserMetrics } from "@/components/dashboard/metrics/UserMetrics";
 import { InvestigationLogs } from "@/components/client-dashboard/investigation/InvestigationLogs";
 import { useNavigate } from "react-router-dom";
-import { Users } from "lucide-react";
+import { Users, ChevronLeft, ChevronRight } from "lucide-react";
+import { useState } from "react";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const [currentSection, setCurrentSection] = useState(0);
+
+  const sections = [
+    { title: "User Metrics", component: <UserMetrics /> },
+    { title: "Exploitation Metrics", component: <ExploitationMetrics /> },
+    { title: "System Health", component: (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <HealthStatus />
+        <ErrorLog />
+      </div>
+    )},
+    { title: "Security Investigations", component: (
+      <Card className="p-6">
+        <div className="space-y-4">
+          <h2 className="text-2xl font-semibold">Security Investigations</h2>
+          <div className="bg-muted/50 rounded-lg">
+            <InvestigationLogs />
+          </div>
+        </div>
+      </Card>
+    )},
+    { title: "Analytics", component: (
+      <div className="grid grid-cols-1 gap-6">
+        <TransactionTrends />
+        <FlaggedDevices />
+        <CustomerBehavior />
+        <FeedbackManagement />
+        <BusinessIntelligence />
+      </div>
+    )},
+    { title: "Client Analytics", component: (
+      <Card className="p-6">
+        <ClientAnalytics />
+      </Card>
+    )},
+    { title: "Usage Analytics", component: (
+      <Card className="p-6">
+        <UsageAnalytics />
+      </Card>
+    )},
+    { title: "Monitoring", component: <MonitoringDashboard /> },
+    { title: "Response & Logging", component: (
+      <>
+        <AutomatedResponse />
+        <AuditLogger />
+      </>
+    )}
+  ];
+
+  const navigateSection = (direction: 'prev' | 'next') => {
+    if (direction === 'prev') {
+      setCurrentSection(prev => prev > 0 ? prev - 1 : sections.length - 1);
+    } else {
+      setCurrentSection(prev => prev < sections.length - 1 ? prev + 1 : 0);
+    }
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -37,44 +94,27 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      <UserMetrics />
-      
-      <ExploitationMetrics />
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <HealthStatus />
-        <ErrorLog />
+      <div className="flex justify-between items-center mb-4">
+        <Button
+          variant="ghost"
+          onClick={() => navigateSection('prev')}
+          className="p-2"
+        >
+          <ChevronLeft className="h-6 w-6" />
+        </Button>
+        <h2 className="text-xl font-semibold">
+          {sections[currentSection].title}
+        </h2>
+        <Button
+          variant="ghost"
+          onClick={() => navigateSection('next')}
+          className="p-2"
+        >
+          <ChevronRight className="h-6 w-6" />
+        </Button>
       </div>
 
-      <Card className="p-6">
-        <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">Security Investigations</h2>
-          <div className="bg-muted/50 rounded-lg">
-            <InvestigationLogs />
-          </div>
-        </div>
-      </Card>
-
-      <div className="grid grid-cols-1 gap-6">
-        <TransactionTrends />
-        <FlaggedDevices />
-        <CustomerBehavior />
-        <FeedbackManagement />
-        <BusinessIntelligence />
-      </div>
-
-      <Card className="p-6">
-        <ClientAnalytics />
-      </Card>
-
-      <Card className="p-6">
-        <UsageAnalytics />
-      </Card>
-
-      <MonitoringDashboard />
-      
-      <AutomatedResponse />
-      <AuditLogger />
+      {sections[currentSection].component}
     </div>
   );
 };
