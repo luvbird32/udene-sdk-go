@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { MetricCard } from "./MetricCard";
+import { MetricCard } from "@/components/client-dashboard/metrics/MetricCard";
 import { Users, UserPlus, UserCheck, Clock } from "lucide-react";
 
 interface UserMetricsData {
