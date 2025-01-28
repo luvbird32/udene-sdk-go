@@ -48,7 +48,7 @@ export const UserMetrics = () => {
         .eq('metric_name', 'avg_session_duration')
         .order('timestamp', { ascending: false })
         .limit(1)
-        .single();
+        .maybeSingle();
 
       return {
         totalUsers: totalUsers || 0,
