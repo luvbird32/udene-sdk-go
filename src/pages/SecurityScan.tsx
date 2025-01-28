@@ -8,6 +8,7 @@ import { DependencyMonitor } from "@/components/client-dashboard/security/compon
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const SecurityScan = () => {
   const { data: scans, isLoading, refetch } = useVulnerabilityScans();
@@ -83,34 +84,36 @@ const SecurityScan = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Security Scanning</h1>
-        <ScanQuickActions 
-          onStartScan={handleStartScan}
-          isScanning={isScanning}
-        />
-      </div>
+    <TooltipProvider>
+      <div className="container mx-auto p-6 space-y-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">Security Scanning</h1>
+          <ScanQuickActions 
+            onStartScan={handleStartScan}
+            isScanning={isScanning}
+          />
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <Card className="p-6">
+            <h2 className="text-lg font-semibold mb-4">Vulnerability Overview</h2>
+            <SeverityBreakdown 
+              breakdown={severityBreakdown}
+              total={totalVulnerabilities}
+            />
+          </Card>
+          <DependencyMonitor />
+        </div>
+
         <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4">Vulnerability Overview</h2>
-          <SeverityBreakdown 
-            breakdown={severityBreakdown}
-            total={totalVulnerabilities}
+          <h2 className="text-lg font-semibold mb-4">Recent Scans</h2>
+          <VulnerabilityScanList 
+            scans={scans} 
+            isLoading={isLoading}
           />
         </Card>
-        <DependencyMonitor />
       </div>
-
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4">Recent Scans</h2>
-        <VulnerabilityScanList 
-          scans={scans} 
-          isLoading={isLoading}
-        />
-      </Card>
-    </div>
+    </TooltipProvider>
   );
 };
 
