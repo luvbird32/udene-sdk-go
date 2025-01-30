@@ -6,21 +6,29 @@ export const WhyMissionObjective = () => {
       {/* Our Why Section */}
       <div className="container mx-auto px-4 mb-32">
         <div className="bg-black/40 backdrop-blur-sm p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center border border-white/5 mb-16 transform transition-all duration-500 hover:border-primary/20">
-          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
-            <Shield className="w-16 h-16 text-primary animate-pulse" />
+          {/* Adjusted positioning for mobile - increased negative top margin and added padding */}
+          <div className="relative">
+            <div className="absolute left-1/2 -translate-x-1/2 -top-16 md:-top-8 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
+              <Shield className="w-12 h-12 md:w-16 md:h-16 text-primary animate-pulse" />
+            </div>
           </div>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 text-white">
-            Our <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">Why</span>
-          </h2>
-          <div className="max-w-4xl bg-black/40 backdrop-blur-sm p-8 rounded-xl border border-white/5">
-            <p className="text-lg md:text-xl leading-relaxed mb-6 text-gray-300">
-              In today's digital landscape, businesses face unprecedented challenges from sophisticated fraud schemes and consumer exploitation tactics. We witnessed countless organizations struggling to protect their revenue and maintain trust with their customers.
-            </p>
-            <p className="text-lg md:text-xl leading-relaxed text-gray-300">
-              This reality drove us to create a solution that not only detects and prevents fraudulent activities but also ensures legitimate customers have a seamless experience. We believe that every business deserves access to enterprise-grade fraud prevention technology.
-            </p>
+          
+          {/* Added more top padding on mobile to prevent overlap */}
+          <div className="pt-12 md:pt-4">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 text-white">
+              Our <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">Why</span>
+            </h2>
+            <div className="max-w-4xl bg-black/40 backdrop-blur-sm p-8 rounded-xl border border-white/5">
+              <p className="text-lg md:text-xl leading-relaxed mb-6 text-gray-300">
+                In today's digital landscape, businesses face unprecedented challenges from sophisticated fraud schemes and consumer exploitation tactics. We witnessed countless organizations struggling to protect their revenue and maintain trust with their customers.
+              </p>
+              <p className="text-lg md:text-xl leading-relaxed text-gray-300">
+                This reality drove us to create a solution that not only detects and prevents fraudulent activities but also ensures legitimate customers have a seamless experience. We believe that every business deserves access to enterprise-grade fraud prevention technology.
+              </p>
+            </div>
           </div>
         </div>
+
         <div className="grid md:grid-cols-3 gap-8 mt-12">
           <div className="bg-black/40 backdrop-blur-sm p-8 rounded-xl border border-white/5 hover:bg-black/50 transition-all duration-300">
             <Brain className="w-12 h-12 mb-4 text-primary" />
@@ -43,21 +51,29 @@ export const WhyMissionObjective = () => {
       {/* Our Mission Section */}
       <div className="container mx-auto px-4 mb-32">
         <div className="bg-black/40 backdrop-blur-sm p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center border border-white/5 mb-16 transform transition-all duration-500 hover:border-primary/20">
-          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
-            <Target className="w-16 h-16 text-primary animate-pulse" />
+          {/* Adjusted positioning for mobile */}
+          <div className="relative">
+            <div className="absolute left-1/2 -translate-x-1/2 -top-16 md:-top-8 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
+              <Target className="w-12 h-12 md:w-16 md:h-16 text-primary animate-pulse" />
+            </div>
           </div>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 text-white">
-            Our <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">Mission</span>
-          </h2>
-          <div className="max-w-4xl bg-black/40 backdrop-blur-sm p-8 rounded-xl border border-white/5">
-            <p className="text-lg md:text-xl leading-relaxed mb-6 text-gray-300">
-              To empower businesses with intelligent fraud prevention solutions that protect revenue, preserve customer relationships, and promote sustainable growth in the digital economy.
-            </p>
-            <p className="text-lg md:text-xl leading-relaxed text-gray-300">
-              We're committed to democratizing access to advanced fraud prevention technology, making enterprise-grade protection accessible to businesses of all sizes.
-            </p>
+          
+          {/* Added more top padding on mobile */}
+          <div className="pt-12 md:pt-4">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 text-white">
+              Our <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">Mission</span>
+            </h2>
+            <div className="max-w-4xl bg-black/40 backdrop-blur-sm p-8 rounded-xl border border-white/5">
+              <p className="text-lg md:text-xl leading-relaxed mb-6 text-gray-300">
+                To empower businesses with intelligent fraud prevention solutions that protect revenue, preserve customer relationships, and promote sustainable growth in the digital economy.
+              </p>
+              <p className="text-lg md:text-xl leading-relaxed text-gray-300">
+                We're committed to democratizing access to advanced fraud prevention technology, making enterprise-grade protection accessible to businesses of all sizes.
+              </p>
+            </div>
           </div>
         </div>
+
         <div className="grid md:grid-cols-2 gap-8 mt-12">
           <div className="bg-black/40 backdrop-blur-sm p-8 rounded-xl border border-white/5 hover:bg-black/50 transition-all duration-300">
             <Globe className="w-12 h-12 mb-4 text-primary" />
@@ -75,18 +91,26 @@ export const WhyMissionObjective = () => {
       {/* Our Objectives Section */}
       <div className="container mx-auto px-4">
         <div className="bg-black/40 backdrop-blur-sm p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center border border-white/5 mb-16 transform transition-all duration-500 hover:border-primary/20">
-          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
-            <Target className="w-16 h-16 text-primary animate-pulse" />
+          {/* Adjusted positioning for mobile */}
+          <div className="relative">
+            <div className="absolute left-1/2 -translate-x-1/2 -top-16 md:-top-8 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
+              <Target className="w-12 h-12 md:w-16 md:h-16 text-primary animate-pulse" />
+            </div>
           </div>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 text-white">
-            Our <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">Objectives</span>
-          </h2>
-          <div className="max-w-4xl">
-            <p className="text-lg md:text-xl leading-relaxed mb-6 text-gray-300">
-              We've set ambitious goals to revolutionize fraud prevention and create lasting positive impact in the digital commerce landscape.
-            </p>
+          
+          {/* Added more top padding on mobile */}
+          <div className="pt-12 md:pt-4">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 text-white">
+              Our <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">Objectives</span>
+            </h2>
+            <div className="max-w-4xl">
+              <p className="text-lg md:text-xl leading-relaxed mb-6 text-gray-300">
+                We've set ambitious goals to revolutionize fraud prevention and create lasting positive impact in the digital commerce landscape.
+              </p>
+            </div>
           </div>
         </div>
+
         <div className="grid md:grid-cols-3 gap-8 mt-12">
           <div className="bg-black/40 backdrop-blur-sm p-8 rounded-xl border border-white/5 hover:bg-black/50 transition-all duration-300">
             <h3 className="text-2xl font-semibold mb-4 text-white">Revenue Protection</h3>
