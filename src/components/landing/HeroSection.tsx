@@ -47,56 +47,56 @@ export const HeroSection = () => {
           <Shield className="w-8 h-8 text-primary animate-pulse" />
         </div>
         
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-white leading-tight">
-          Protect Your Revenue From{" "}
+        <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-bold mb-6 text-white leading-tight">
+          Unleash the Power of{" "}
           <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">
-            Consumer Exploitation and Fraud
+            Intelligent Fraud Prevention
           </span>
         </h1>
         
-        <p className="text-base sm:text-lg text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-          Safeguard your business with our enterprise-grade fraud prevention platform. 
-          We combine advanced behavioral analysis, machine learning, and real-time monitoring 
-          to protect against account takeover, payment fraud, and system exploitation.
+        <p className="text-lg sm:text-xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+          Experience next-generation fraud protection that safeguards your business 
+          with advanced AI, real-time monitoring, and unmatched precision. 
+          Stay ahead of threats while maintaining seamless user experiences.
         </p>
 
         {/* USP Features */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           {uspFeatures.map((feature, index) => (
             <div 
               key={index}
-              className="bg-black/40 backdrop-blur-sm p-4 rounded-lg border border-white/5 hover:border-primary/20 transition-all duration-300"
+              className="bg-black/40 backdrop-blur-sm p-6 rounded-lg border border-white/5 hover:border-primary/20 transition-all duration-300 transform hover:scale-105"
             >
-              <div className="flex items-center justify-center mb-3">
-                <feature.icon className="w-6 h-6 text-primary" />
+              <div className="flex items-center justify-center mb-4">
+                <feature.icon className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-white font-semibold mb-2">{feature.title}</h3>
-              <p className="text-sm text-gray-300">{feature.description}</p>
+              <h3 className="text-white text-xl font-semibold mb-3">{feature.title}</h3>
+              <p className="text-gray-300">{feature.description}</p>
             </div>
           ))}
         </div>
         
-        <div className="flex flex-col sm:flex-row justify-center gap-4 items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-center gap-4 items-center mb-12">
           <Button 
-            className="w-full sm:w-auto bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-lg flex items-center justify-center gap-2 text-base transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-primary/20"
+            className="w-full sm:w-auto bg-primary hover:bg-primary-dark text-white px-8 py-6 rounded-lg flex items-center justify-center gap-3 text-lg transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-primary/20"
             onClick={handleStartTrial}
           >
-            Start Free Trial <ArrowRight className="w-5 h-5" />
+            Start Free Trial <ArrowRight className="w-6 h-6" />
           </Button>
         </div>
 
-        <div className="pt-6 border-t border-white/5 grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="flex flex-col items-center p-4 rounded-lg bg-black/40 backdrop-blur-sm">
-            <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-primary mb-1">99.9%</div>
-            <div className="text-gray-300 text-sm">Fraud Prevention Rate</div>
+        <div className="pt-8 border-t border-white/5 grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="flex flex-col items-center p-6 rounded-lg bg-black/40 backdrop-blur-sm transform hover:scale-105 transition-duration-300">
+            <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary mb-2">99.9%</div>
+            <div className="text-gray-300">Fraud Prevention Rate</div>
           </div>
-          <div className="flex flex-col items-center p-4 rounded-lg bg-black/40 backdrop-blur-sm">
-            <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-primary mb-1">$10M+</div>
-            <div className="text-gray-300 text-sm">Customer Savings</div>
+          <div className="flex flex-col items-center p-6 rounded-lg bg-black/40 backdrop-blur-sm transform hover:scale-105 transition-duration-300">
+            <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary mb-2">$10M+</div>
+            <div className="text-gray-300">Customer Savings</div>
           </div>
-          <div className="flex flex-col items-center p-4 rounded-lg bg-black/40 backdrop-blur-sm">
-            <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-primary mb-1">35ms</div>
-            <div className="text-gray-300 text-sm">Real-time Detection</div>
+          <div className="flex flex-col items-center p-6 rounded-lg bg-black/40 backdrop-blur-sm transform hover:scale-105 transition-duration-300">
+            <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary mb-2">35ms</div>
+            <div className="text-gray-300">Real-time Detection</div>
           </div>
         </div>
       </div>
