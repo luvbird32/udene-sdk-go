@@ -33,21 +33,6 @@
 }
 
 @layer utilities {
-  /* Focus styles for better keyboard navigation */
-  .focus-visible:focus-visible {
-    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
-  }
-
-  /* High contrast hover states */
-  .hover-high-contrast:hover {
-    @apply bg-primary/90 text-primary-foreground;
-  }
-
-  /* Screen reader only text */
-  .sr-only {
-    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
-  }
-
   .dark {
     --background: 222 47% 11%;
     --foreground: 0 0% 98%;
@@ -67,72 +52,43 @@
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
   }
+
+  /* Dashboard-specific light theme with higher specificity */
+  [data-route="dashboard"] {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 10% 3.9%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 10% 3.9%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 10% 3.9%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5% 64.9%;
+    color-scheme: light;
+  }
 }
 
-/* Ensure sufficient color contrast */
-[data-route="dashboard"] {
-  --background: 0 0% 100%;
-  --foreground: 240 10% 3.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 240 10% 3.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 240 10% 3.9%;
-  --primary: 240 5.9% 10%;
-  --primary-foreground: 0 0% 98%;
-  --secondary: 240 4.8% 95.9%;
-  --secondary-foreground: 240 5.9% 10%;
-  --accent: 240 4.8% 95.9%;
-  --accent-foreground: 240 5.9% 10%;
-  --muted: 240 4.8% 95.9%;
-  --muted-foreground: 240 3.8% 46.1%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 240 5.9% 90%;
-  --input: 240 5.9% 90%;
-  --ring: 240 5% 64.9%;
-  color-scheme: light;
-}
-
-/* Improved focus styles for keyboard navigation */
-:focus-visible {
-  @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
-}
-
-/* Ensure interactive elements have proper focus states */
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
-}
-
-/* Enhanced color contrast for text */
-.text-muted {
-  @apply text-gray-600 dark:text-gray-400;
-}
-
-.text-primary {
-  @apply text-gray-900 dark:text-white;
-}
-
-/* Ensure proper contrast for links */
-a {
-  @apply text-blue-700 dark:text-blue-400 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary;
-}
-
-/* Base HTML element styles */
 html {
   @apply dark;
 }
 
-/* Apply dashboard theme with proper contrast */
+/* Apply dashboard theme with !important to ensure it takes precedence */
 [data-route="dashboard"] {
-  @apply bg-background text-foreground;
-  color: hsl(240 10% 3.9%);
+  @apply bg-background text-foreground !important;
+  color: hsl(240 10% 3.9%) !important;
 }
 
-/* Additional dashboard text color overrides for contrast */
+/* Additional dashboard-specific text color overrides */
 [data-route="dashboard"] h1,
 [data-route="dashboard"] h2,
 [data-route="dashboard"] h3,
@@ -149,9 +105,4 @@ html {
 [data-route="dashboard"] .card {
   background-color: hsl(0 0% 100%);
   color: hsl(240 10% 3.9%);
-}
-
-/* Skip to main content link for keyboard users */
-.skip-to-content {
-  @apply sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-background focus:text-foreground focus:rounded-md;
 }
