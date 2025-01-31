@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Toaster } from '@/components/ui/toaster'
 import { AuthProvider } from '@/components/auth/AuthProvider'
 import { lazyLoadWithRetry } from '@/utils/lazyLoad'
-import { LoadingSpinner } from '@/components/ui/states/LoadingSpinner'
+import { LoadingSpinner } from '@/components/ui/states/LoadingState'
 
 // Lazy load route components
 const Landing = lazyLoadWithRetry(() => import('@/pages/Landing'))

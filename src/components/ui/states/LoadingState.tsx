@@ -1,7 +1,8 @@
-import { Loader2 } from "lucide-react";
+import React from 'react';
+import { Loader2 } from 'lucide-react';
 
 interface LoadingStateProps {
-  message: string;
+  message?: string;
 }
 
 export const LoadingState = ({ message }: LoadingStateProps) => {
@@ -12,3 +13,5 @@ export const LoadingState = ({ message }: LoadingStateProps) => {
     </div>
   );
 };
+
+export { LoadingSpinner } from './LoadingSpinner';
