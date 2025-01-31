@@ -8,13 +8,13 @@ export const WhyMissionObjective = () => {
         <div className="bg-black/40 backdrop-blur-sm p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center border border-white/5 mb-16 transform transition-all duration-500 hover:border-primary/20">
           {/* Icon container with adjusted positioning */}
           <div className="relative">
-            <div className="absolute left-1/2 -translate-x-1/2 -top-24 md:-top-16 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
+            <div className="absolute left-1/2 -translate-x-1/2 -top-24 md:-top-28 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
               <Shield className="w-10 h-10 md:w-16 md:h-16 text-primary animate-pulse" />
             </div>
           </div>
           
-          {/* Content container with increased padding */}
-          <div className="pt-20 md:pt-16">
+          {/* Content container with increased padding for desktop */}
+          <div className="pt-20 md:pt-24">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 text-white">
               Our <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">Why</span>
             </h2>
@@ -27,12 +27,12 @@ export const WhyMissionObjective = () => {
         {/* Mission Section */}
         <div className="bg-black/40 backdrop-blur-sm p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center border border-white/5 mb-16 transform transition-all duration-500 hover:border-primary/20">
           <div className="relative">
-            <div className="absolute left-1/2 -translate-x-1/2 -top-24 md:-top-16 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
+            <div className="absolute left-1/2 -translate-x-1/2 -top-24 md:-top-28 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
               <Target className="w-10 h-10 md:w-16 md:h-16 text-primary animate-pulse" />
             </div>
           </div>
           
-          <div className="pt-20 md:pt-16">
+          <div className="pt-20 md:pt-24">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 text-white">
               Our <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">Mission</span>
             </h2>
@@ -45,12 +45,12 @@ export const WhyMissionObjective = () => {
         {/* Objectives Section */}
         <div className="bg-black/40 backdrop-blur-sm p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center border border-white/5 mb-16 transform transition-all duration-500 hover:border-primary/20">
           <div className="relative">
-            <div className="absolute left-1/2 -translate-x-1/2 -top-24 md:-top-16 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
+            <div className="absolute left-1/2 -translate-x-1/2 -top-24 md:-top-28 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
               <Target className="w-10 h-10 md:w-16 md:h-16 text-primary animate-pulse" />
             </div>
           </div>
           
-          <div className="pt-20 md:pt-16">
+          <div className="pt-20 md:pt-24">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 text-white">
               Our <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">Objectives</span>
             </h2>
