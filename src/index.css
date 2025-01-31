@@ -17,7 +17,7 @@
     --card-foreground: 0 0% 98%;
     --popover: 222 47% 11%;
     --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
+    --primary: 0 0% 100%;
     --primary-foreground: 240 5.9% 10%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
@@ -40,7 +40,7 @@
     --card-foreground: 0 0% 98%;
     --popover: 222 47% 11%;
     --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
+    --primary: 0 0% 100%;
     --primary-foreground: 240 5.9% 10%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
@@ -56,13 +56,13 @@
   /* Dashboard-specific theme with higher specificity */
   [data-route="dashboard"] {
     --background: 222 47% 11%;  /* Dark Purple background */
-    --foreground: 255 47% 74%;  /* Primary Purple text */
+    --foreground: 0 0% 100%;  /* White text */
     --card: 222 47% 11%;
-    --card-foreground: 255 47% 74%;
+    --card-foreground: 0 0% 100%;
     --popover: 222 47% 11%;
-    --popover-foreground: 255 47% 74%;
-    --primary: 255 47% 74%;  /* #9b87f5 Primary Purple */
-    --primary-foreground: 0 0% 100%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;  /* White as primary */
+    --primary-foreground: 222 47% 11%;
     --secondary: 262 28% 54%;  /* #7E69AB Secondary Purple */
     --secondary-foreground: 0 0% 100%;
     --accent: 262 28% 54%;
