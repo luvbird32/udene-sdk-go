@@ -20,7 +20,12 @@ export default defineConfig(({ mode }) => ({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
+      '@': path.resolve(__dirname, './src'),
+      '@components': path.resolve(__dirname, './src/components'),
+      '@admin': path.resolve(__dirname, './src/components/admin'),
+      '@client': path.resolve(__dirname, './src/components/client'),
+      '@shared': path.resolve(__dirname, './src/components/shared'),
+      '@monitoring': path.resolve(__dirname, './src/components/monitoring')
     }
   }
 }));

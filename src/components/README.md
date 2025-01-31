@@ -1,90 +1,40 @@
-# Components Directory
-
-This directory contains all React components used in the application. Components are organized by feature and functionality.
-
-## Directory Structure
+# Components Directory Structure
 
 ```
 components/
-├── ui/                # Shared UI components
-├── client-dashboard/  # Dashboard-specific components
-├── auth/             # Authentication components
-├── monitoring/       # Monitoring and analytics components
-└── shared/           # Shared business components
+├── admin/                  # Admin-specific components
+│   ├── dashboard/         # Admin dashboard components
+│   └── investigation/     # Admin investigation components
+├── client/                # Client-specific components
+│   ├── dashboard/        # Client dashboard components
+│   ├── analytics/        # Analytics components
+│   └── services/         # Service management components
+├── shared/                # Shared components used across the app
+│   ├── ui/              # UI components (buttons, cards, etc.)
+│   └── layout/          # Layout components
+└── monitoring/            # Monitoring and analytics components
 ```
 
 ## Component Guidelines
 
-1. Use TypeScript for all components
-2. Include JSDoc documentation
-3. Implement proper prop validation
-4. Follow the project's naming conventions
-5. Keep components focused and maintainable
+1. Each component should be in its own directory with:
+   - Main component file (index.tsx)
+   - Types file (types.ts)
+   - Styles file (if needed)
+   - Tests
+   - Sub-components
 
-## Implementation Details
+2. Follow naming conventions:
+   - PascalCase for component files
+   - camelCase for utility files
+   - kebab-case for directories
 
-### Neural Network Integration
-- Components integrate with our neural network-based fraud detection
-- Real-time risk scoring display
-- Pattern visualization components
+3. Keep components focused and maintainable:
+   - Split large components into smaller ones
+   - Use composition over inheritance
+   - Extract reusable logic into hooks
 
-### Security Features
-- Device fingerprinting components
-- IP monitoring visualizations
-- Email change tracking UI
-- Activity monitoring dashboards
-
-### Analytics Components
-- Risk score visualization
-- Geographic distribution maps
-- Transaction pattern charts
-- Compliance reporting tools
-
-### Common Patterns
-
-#### Component Structure
-```typescript
-/**
- * @component
- * @example
- * ```tsx
- * <ExampleComponent title="Hello" />
- * ```
- */
-interface ExampleProps {
-  title: string;
-}
-
-export const ExampleComponent = ({ title }: ExampleProps) => {
-  return <div>{title}</div>;
-};
-```
-
-#### Error Handling
-```typescript
-if (error) {
-  return <ErrorComponent message={error.message} />;
-}
-```
-
-#### Loading States
-```typescript
-if (isLoading) {
-  return <Skeleton />;
-}
-```
-
-## Testing
-
-1. Write unit tests for all components
-2. Test error and loading states
-3. Test user interactions
-4. Mock external dependencies
-
-## Adding New Components
-
-1. Create a new directory if it's a feature
-2. Add component file with TypeScript
-3. Include documentation
-4. Add tests
-5. Update index exports
+4. Documentation:
+   - Include JSDoc comments
+   - Document props using TypeScript interfaces
+   - Add usage examples in comments
