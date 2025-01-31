@@ -1,17 +1,35 @@
 import { Shield, Activity, AlertTriangle, Clock, Users } from "lucide-react";
 import { useMetricsData } from "./metrics/useMetricsData";
-import { MetricCard } from "@/components/ui/metrics/MetricCard";
+import { MetricCard } from "./metrics/MetricCard";
 import { EmptyMetrics } from "./metrics/EmptyMetrics";
 import { MetricsError } from "./metrics/MetricsError";
 
 interface ClientMetricsProps {
-  isLoadingState?: boolean;
+  metrics?: {
+    riskScore?: number;
+    totalTransactions?: number;
+    flaggedTransactions?: number;
+    avgProcessingTime?: number;
+    concurrentCalls?: number;
+    activeUsers?: number;
+  } | null;
+  isLoading?: boolean;
+  error?: Error | null;
 }
 
-export const ClientMetrics = ({ isLoadingState = false }: ClientMetricsProps) => {
-  const { data: displayMetrics, isLoading, error } = useMetricsData();
+export const ClientMetrics = ({ 
+  metrics: externalMetrics, 
+  isLoading: externalLoading = false, 
+  error: externalError = null 
+}: ClientMetricsProps) => {
+  const { data: metricsData, isLoading: metricsLoading, error: metricsError } = useMetricsData();
 
-  if (isLoading || isLoadingState) {
+  // Use provided metrics or fallback to fetched metrics
+  const displayMetrics = externalMetrics || metricsData;
+  const isLoading = externalLoading || metricsLoading;
+  const error = externalError || metricsError;
+
+  if (isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {[...Array(5)].map((_, i) => (
@@ -25,7 +43,7 @@ export const ClientMetrics = ({ isLoadingState = false }: ClientMetricsProps) =>
   }
 
   if (error) {
-    return <MetricsError />;
+    return <MetricsError error={error} />;
   }
 
   if (!displayMetrics) {
@@ -47,35 +65,35 @@ export const ClientMetrics = ({ isLoadingState = false }: ClientMetricsProps) =>
         value={formatValue(displayMetrics?.riskScore, '%')}
         icon={Shield}
         description="Current risk assessment score"
-        isLoading={isLoadingState}
+        isLoading={isLoading}
       />
       <MetricCard
         title="Total Transactions"
         value={formatValue(displayMetrics?.totalTransactions)}
         icon={Activity}
         description="Number of processed transactions"
-        isLoading={isLoadingState}
+        isLoading={isLoading}
       />
       <MetricCard
         title="Flagged Transactions"
         value={formatValue(displayMetrics?.flaggedTransactions)}
         icon={AlertTriangle}
         description="Transactions requiring attention"
-        isLoading={isLoadingState}
+        isLoading={isLoading}
       />
       <MetricCard
         title="Avg Processing Time"
         value={formatValue(displayMetrics?.avgProcessingTime, 'ms')}
         icon={Clock}
         description="Average transaction processing time"
-        isLoading={isLoadingState}
+        isLoading={isLoading}
       />
       <MetricCard
         title="Concurrent Calls"
         value={formatValue(displayMetrics?.concurrentCalls)}
         icon={Users}
         description="Current concurrent API calls"
-        isLoading={isLoadingState}
+        isLoading={isLoading}
       />
     </div>
   );
