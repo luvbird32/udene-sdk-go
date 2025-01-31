@@ -14,7 +14,8 @@ import { HowItWorks } from "@/components/landing/HowItWorks";
 import { WhyMissionObjective } from "@/components/landing/WhyMissionObjective";
 import { ServicesSection } from "@/components/landing/ServicesSection";
 import { ProjectStatusChecklist } from "@/components/landing/ProjectStatusChecklist";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
+import { LoadingSpinner } from "@/components/ui/states/LoadingState";
 
 const Landing = () => {
   useEffect(() => {
@@ -28,45 +29,49 @@ const Landing = () => {
     <div className="min-h-screen bg-background">
       <MatrixBackground>
         <Header />
-        <HeroSection />
+        <Suspense fallback={<LoadingSpinner />}>
+          <HeroSection />
+        </Suspense>
       </MatrixBackground>
       
-      <div id="why-mission-objective">
-        <WhyMissionObjective />
-      </div>
-      <div id="services">
-        <ServicesSection />
-      </div>
-      <div id="features">
-        <Features />
-      </div>
-      <div id="how-it-works">
-        <HowItWorks />
-      </div>
-      <div id="project-status">
-        <ProjectStatusChecklist />
-      </div>
-      <div id="industries">
-        <Industries />
-      </div>
-      <div id="testimonials">
-        <Testimonials />
-      </div>
-      <div id="use-cases">
-        <UseCases />
-      </div>
-      <div id="compliance">
-        <Compliance />
-      </div>
-      <div id="terms">
-        <Terms />
-      </div>
-      <div id="pricing">
-        <PricingPlans />
-      </div>
-      <div id="about">
-        <Footer />
-      </div>
+      <Suspense fallback={<LoadingSpinner />}>
+        <div id="why-mission-objective">
+          <WhyMissionObjective />
+        </div>
+        <div id="services">
+          <ServicesSection />
+        </div>
+        <div id="features">
+          <Features />
+        </div>
+        <div id="how-it-works">
+          <HowItWorks />
+        </div>
+        <div id="project-status">
+          <ProjectStatusChecklist />
+        </div>
+        <div id="industries">
+          <Industries />
+        </div>
+        <div id="testimonials">
+          <Testimonials />
+        </div>
+        <div id="use-cases">
+          <UseCases />
+        </div>
+        <div id="compliance">
+          <Compliance />
+        </div>
+        <div id="terms">
+          <Terms />
+        </div>
+        <div id="pricing">
+          <PricingPlans />
+        </div>
+        <div id="about">
+          <Footer />
+        </div>
+      </Suspense>
     </div>
   );
 };
