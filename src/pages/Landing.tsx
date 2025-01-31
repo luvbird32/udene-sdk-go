@@ -13,6 +13,7 @@ import { Testimonials } from "@/components/landing/Testimonials";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { WhyMissionObjective } from "@/components/landing/WhyMissionObjective";
 import { ServicesSection } from "@/components/landing/ServicesSection";
+import { ProjectStatusChecklist } from "@/components/landing/ProjectStatusChecklist";
 import { useEffect } from "react";
 
 const Landing = () => {
@@ -41,6 +42,9 @@ const Landing = () => {
       </div>
       <div id="how-it-works">
         <HowItWorks />
+      </div>
+      <div id="project-status">
+        <ProjectStatusChecklist />
       </div>
       <div id="industries">
         <Industries />
