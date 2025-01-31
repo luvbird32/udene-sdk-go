@@ -4,9 +4,9 @@ import { ServiceList } from './ServiceList';
 import { useServices } from './hooks/useServices';
 import { useServiceToggle } from './hooks/useServiceToggle';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { useAuth } from '@/hooks/useAuth';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, Loader2 } from "lucide-react";
+import { useAuth } from '@/hooks/useAuth';
 import { useProject } from '@/contexts/ProjectContext';
 
 export const ServiceManager = () => {
