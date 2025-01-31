@@ -1,8 +1,9 @@
 import { Shield, Activity, AlertTriangle, Clock, Users } from "lucide-react";
-import { useMetricsData } from "./metrics/useMetricsData";
 import { MetricCard } from "./metrics/MetricCard";
-import { EmptyMetrics } from "./metrics/EmptyMetrics";
 import { MetricsError } from "./metrics/MetricsError";
+import { EmptyMetrics } from "./metrics/EmptyMetrics";
+import { useMetricsData } from "./metrics/useMetricsData";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 interface ClientMetricsProps {
   metrics?: {
@@ -17,33 +18,37 @@ interface ClientMetricsProps {
   error?: Error | null;
 }
 
-const formatValue = (value?: number, suffix: string = '') => {
-  if (value === undefined || isNaN(value)) return `0${suffix}`;
-  return `${value}${suffix}`;
-};
-
-export const ClientMetrics = ({ 
-  metrics: externalMetrics, 
-  isLoading: externalLoading = false, 
-  error: externalError = null 
-}: ClientMetricsProps) => {
+export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps) => {
+  const { user } = useAuth();
   const { data: metricsData, isLoading: metricsLoading, error: metricsError } = useMetricsData();
 
-  // Use provided metrics or fallback to fetched metrics
-  const displayMetrics = externalMetrics || metricsData;
-  const isLoading = externalLoading || metricsLoading;
-  const error = externalError || metricsError;
+  // Check authentication first
+  if (!user) {
+    console.error("No authenticated user found");
+    return <MetricsError error={new Error("Please sign in to view metrics")} />;
+  }
 
-  if (isLoading) {
+  // Early return for error states
+  if (error || metricsError) {
+    console.error("Metrics error:", error || metricsError);
+    return <MetricsError error={error || metricsError} />;
+  }
+
+  // Use provided metrics or fallback to fetched metrics
+  const displayMetrics = metrics || metricsData;
+  const isLoadingState = isLoading || metricsLoading;
+
+  // Show loading state while data is being fetched
+  if (isLoadingState) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {[...Array(5)].map((_, i) => (
           <MetricCard
             key={i}
-            title=""
-            value=""
+            title="Loading..."
+            value="..."
             icon={Shield}
-            description=""
+            description="Loading metric data"
             isLoading={true}
           />
         ))}
@@ -51,11 +56,9 @@ export const ClientMetrics = ({
     );
   }
 
-  if (error) {
-    return <MetricsError error={error} />;
-  }
-
+  // Early return for empty state
   if (!displayMetrics) {
+    console.log("No metrics data available");
     return <EmptyMetrics />;
   }
 
@@ -63,38 +66,38 @@ export const ClientMetrics = ({
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
       <MetricCard
         title="Risk Score"
-        value={formatValue(displayMetrics?.riskScore, '%')}
+        value={`${displayMetrics?.riskScore ?? 0}%`}
         icon={Shield}
         description="Current risk assessment score"
-        isLoading={isLoading}
+        isLoading={isLoadingState}
       />
       <MetricCard
         title="Total Transactions"
-        value={formatValue(displayMetrics?.totalTransactions)}
+        value={displayMetrics?.totalTransactions ?? 0}
         icon={Activity}
         description="Number of processed transactions"
-        isLoading={isLoading}
+        isLoading={isLoadingState}
       />
       <MetricCard
         title="Flagged Transactions"
-        value={formatValue(displayMetrics?.flaggedTransactions)}
+        value={displayMetrics?.flaggedTransactions ?? 0}
         icon={AlertTriangle}
         description="Transactions requiring attention"
-        isLoading={isLoading}
+        isLoading={isLoadingState}
       />
       <MetricCard
         title="Avg Processing Time"
-        value={formatValue(displayMetrics?.avgProcessingTime, 'ms')}
+        value={`${displayMetrics?.avgProcessingTime ?? 0}ms`}
         icon={Clock}
         description="Average transaction processing time"
-        isLoading={isLoading}
+        isLoading={isLoadingState}
       />
       <MetricCard
         title="Concurrent Calls"
-        value={formatValue(displayMetrics?.concurrentCalls)}
+        value={displayMetrics?.concurrentCalls ?? 0}
         icon={Users}
         description="Current concurrent API calls"
-        isLoading={isLoading}
+        isLoading={isLoadingState}
       />
     </div>
   );
