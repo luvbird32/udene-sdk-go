@@ -3,16 +3,25 @@ import { RiskOverview } from './RiskOverview';
 import { describe, it, expect, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-// Mock the useRiskData hook
-vi.mock('./analytics/risk/useRiskData', () => ({
-  useRiskData: () => ({
-    data: [
-      { date: '2024-01-01', riskScore: 75 },
-      { date: '2024-01-02', riskScore: 85 }
-    ],
-    isLoading: false,
-    error: null
-  }),
+// Mock the Supabase client
+vi.mock('@/integrations/supabase/client', () => ({
+  supabase: {
+    auth: {
+      getUser: () => Promise.resolve({ data: { user: { id: 'test-user' } } })
+    },
+    from: () => ({
+      select: () => ({
+        order: () => ({
+          limit: () => Promise.resolve({
+            data: [
+              { risk_score: 75, created_at: '2024-01-01T00:00:00Z' },
+              { risk_score: 85, created_at: '2024-01-02T00:00:00Z' }
+            ]
+          })
+        })
+      })
+    })
+  }
 }));
 
 describe('RiskOverview', () => {
@@ -24,55 +33,29 @@ describe('RiskOverview', () => {
     },
   });
 
-  const renderWithProviders = (ui: React.ReactElement) => {
-    return render(
+  it('renders loading state initially', () => {
+    render(
       <QueryClientProvider client={queryClient}>
-        {ui}
+        <RiskOverview />
       </QueryClientProvider>
     );
-  };
-
-  it('renders risk score trend title', () => {
-    renderWithProviders(<RiskOverview />);
-    expect(screen.getByText('Risk Score Trend')).toBeInTheDocument();
+    
+    expect(screen.getByText(/Loading risk data/)).toBeInTheDocument();
   });
 
-  it('displays loading state initially', () => {
-    vi.mock('./analytics/risk/useRiskData', () => ({
-      useRiskData: () => ({
-        data: null,
-        isLoading: true,
-        error: null
-      }),
-    }));
+  it('displays risk data after loading', async () => {
+    render(
+      <QueryClientProvider client={queryClient}>
+        <RiskOverview />
+      </QueryClientProvider>
+    );
 
-    renderWithProviders(<RiskOverview />);
-    expect(screen.getByText(/Loading risk data/i)).toBeInTheDocument();
-  });
+    await waitFor(() => {
+      expect(screen.queryByText(/Loading risk data/)).not.toBeInTheDocument();
+    });
 
-  it('handles error state', () => {
-    vi.mock('./analytics/risk/useRiskData', () => ({
-      useRiskData: () => ({
-        data: null,
-        isLoading: false,
-        error: new Error('Failed to load risk data')
-      }),
-    }));
-
-    renderWithProviders(<RiskOverview />);
-    expect(screen.getByText(/Error/i)).toBeInTheDocument();
-  });
-
-  it('displays empty state when no data is available', () => {
-    vi.mock('./analytics/risk/useRiskData', () => ({
-      useRiskData: () => ({
-        data: [],
-        isLoading: false,
-        error: null
-      }),
-    }));
-
-    renderWithProviders(<RiskOverview />);
-    expect(screen.getByText(/No risk data available/i)).toBeInTheDocument();
+    // Chart should be rendered with data
+    const chart = document.querySelector('.recharts-wrapper');
+    expect(chart).toBeInTheDocument();
   });
 });

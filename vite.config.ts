@@ -1,39 +1,26 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import path from 'path'
-import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
+import { componentTagger } from "lovable-tagger";
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
-    ViteImageOptimizer({
-      jpg: {
-        quality: 80,
-      },
-      jpeg: {
-        quality: 80,
-      },
-      png: {
-        quality: 80,
-      },
-      webp: {
-        lossless: true,
-      },
-    }),
-  ],
+    mode === 'development' && componentTagger(),
+  ].filter(Boolean),
+  server: {
+    host: "localhost",
+    port: 8080,
+    cors: {
+      origin: '*',
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+      credentials: true
+    }
+  },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          ui: ['@/components/ui'],
-        },
-      },
-    },
-  },
-})
+      '@': path.resolve(__dirname, './src')
+    }
+  }
+}));
