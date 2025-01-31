@@ -1,10 +1,3 @@
-/**
- * Main Dashboard Component
- * 
- * Renders the primary dashboard interface with real-time metrics, analytics,
- * and monitoring sections. Handles data fetching and state management for
- * dashboard metrics.
- */
 import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,6 +10,7 @@ import { DashboardTabs } from "@/components/client-dashboard/tabs/DashboardTabs"
 import { DashboardTabContent } from "@/components/client-dashboard/tabs/DashboardTabContent";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ProjectSelector } from "@/components/dashboard/ProjectSelector";
+import { ProjectProvider } from "@/contexts/ProjectContext";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -56,7 +50,6 @@ const Dashboard = () => {
           throw metricsError;
         }
 
-        // Transform and return metrics with default values if data is missing
         return {
           riskScore: metricsData?.metric_value ?? 0,
           totalTransactions: metricsData?.metric_value ?? 0,
@@ -67,7 +60,6 @@ const Dashboard = () => {
         };
       } catch (error) {
         console.error("Error in metrics query:", error);
-        // Re-throw the error to be handled by the error boundary
         throw error;
       }
     },
@@ -86,23 +78,25 @@ const Dashboard = () => {
   });
 
   return (
-    <div className="min-h-screen text-foreground p-6 relative overflow-hidden" data-route="dashboard" role="main">
-      <MatrixBackground />
-      <div className="relative z-10">
-        <TooltipProvider>
-          <DashboardHeader />
-          <ProjectSelector />
-          <Tabs defaultValue="dashboard" className="space-y-6">
-            <DashboardTabs />
-            <DashboardTabContent 
-              metrics={metrics}
-              metricsLoading={metricsLoading}
-              metricsError={metricsError}
-            />
-          </Tabs>
-        </TooltipProvider>
+    <ProjectProvider>
+      <div className="min-h-screen text-foreground p-6 relative overflow-hidden" data-route="dashboard" role="main">
+        <MatrixBackground />
+        <div className="relative z-10">
+          <TooltipProvider>
+            <DashboardHeader />
+            <ProjectSelector />
+            <Tabs defaultValue="dashboard" className="space-y-6">
+              <DashboardTabs />
+              <DashboardTabContent 
+                metrics={metrics}
+                metricsLoading={metricsLoading}
+                metricsError={metricsError}
+              />
+            </Tabs>
+          </TooltipProvider>
+        </div>
       </div>
-    </div>
+    </ProjectProvider>
   );
 };
 
