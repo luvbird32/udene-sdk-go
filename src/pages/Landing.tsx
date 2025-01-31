@@ -15,7 +15,7 @@ import { WhyMissionObjective } from "@/components/landing/WhyMissionObjective";
 import { ServicesSection } from "@/components/landing/ServicesSection";
 import { ProjectStatusChecklist } from "@/components/landing/ProjectStatusChecklist";
 import { Suspense, useEffect } from "react";
-import { LoadingSpinner } from "@/components/ui/states/LoadingSpinner";
+import { LoadingSpinner } from "@/components/ui/states/LoadingState";
 
 const Landing = () => {
   useEffect(() => {

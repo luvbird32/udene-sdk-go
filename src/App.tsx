@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import { Toaster } from '@/components/ui/toaster'
 import { AuthProvider } from '@/components/auth/AuthProvider'
 import { lazyLoadWithRetry } from '@/utils/lazyLoad'
