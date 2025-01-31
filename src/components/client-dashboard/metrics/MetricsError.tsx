@@ -1,21 +1,18 @@
-import { Card } from "@/components/ui/card";
-import { AlertTriangle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 interface MetricsErrorProps {
-  error: Error | null;
+  error: Error;
 }
 
 export const MetricsError = ({ error }: MetricsErrorProps) => {
   return (
-    <Card className="p-6">
-      <Alert variant="destructive">
-        <AlertTriangle className="h-4 w-4" />
-        <AlertTitle>Error</AlertTitle>
-        <AlertDescription>
-          {error?.message || "Failed to load metrics data"}
-        </AlertDescription>
-      </Alert>
-    </Card>
+    <Alert variant="destructive">
+      <AlertCircle className="h-4 w-4" />
+      <AlertTitle>Error</AlertTitle>
+      <AlertDescription>
+        {error.message || "Failed to load metrics. Please try again later."}
+      </AlertDescription>
+    </Alert>
   );
 };

@@ -1,6 +1,6 @@
 import { Shield, Activity, AlertTriangle, Clock, Users } from "lucide-react";
 import { useMetricsData } from "./metrics/useMetricsData";
-import { MetricCard } from "./metrics/MetricCard";
+import { MetricCard } from "@/components/ui/metrics/MetricCard";
 import { EmptyMetrics } from "./metrics/EmptyMetrics";
 import { MetricsError } from "./metrics/MetricsError";
 
@@ -16,6 +16,11 @@ interface ClientMetricsProps {
   isLoading?: boolean;
   error?: Error | null;
 }
+
+const formatValue = (value?: number, suffix: string = '') => {
+  if (value === undefined || isNaN(value)) return `0${suffix}`;
+  return `${value}${suffix}`;
+};
 
 export const ClientMetrics = ({ 
   metrics: externalMetrics, 
@@ -33,9 +38,13 @@ export const ClientMetrics = ({
     return (
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {[...Array(5)].map((_, i) => (
-          <div
+          <MetricCard
             key={i}
-            className="h-32 bg-card rounded-lg animate-pulse"
+            title=""
+            value=""
+            icon={Shield}
+            description=""
+            isLoading={true}
           />
         ))}
       </div>
@@ -49,14 +58,6 @@ export const ClientMetrics = ({
   if (!displayMetrics) {
     return <EmptyMetrics />;
   }
-
-  // Helper function to format values and handle NaN/undefined
-  const formatValue = (value: number | undefined, suffix: string = ''): string => {
-    if (value === undefined || isNaN(value)) {
-      return `0${suffix}`;
-    }
-    return `${value}${suffix}`;
-  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
