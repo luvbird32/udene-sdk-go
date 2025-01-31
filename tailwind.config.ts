@@ -25,23 +25,23 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: '#2e9d5c', // More muted green
+          DEFAULT: '#2e9d5c', // Enhanced contrast green
           foreground: '#ffffff',
-          dark: '#1c7d45',    // Darker muted green
-          light: '#4ab577',   // Lighter muted green
+          dark: '#1c7d45',    // Darker green for better contrast
+          light: '#4ab577',   // Lighter green maintaining contrast
         },
         secondary: {
-          DEFAULT: '#1a1a1a', // Dark gray for contrast
+          DEFAULT: '#1a1a1a', // Dark gray for better contrast
           foreground: '#ffffff',
           dark: '#0d0d0d',    // Darker gray
-          light: '#333333',   // Lighter gray
+          light: '#333333',   // Lighter gray maintaining contrast
         },
         warning: {
-          DEFAULT: "#F97316",
+          DEFAULT: "#dc4e2c", // Enhanced contrast orange
           foreground: "#ffffff",
         },
         success: {
-          DEFAULT: "#4caf50",
+          DEFAULT: "#2e855e", // Enhanced contrast green
           foreground: "#ffffff",
         },
         destructive: {
@@ -49,7 +49,7 @@ export default {
           foreground: "hsl(var(--destructive-foreground))",
         },
         accent: {
-          DEFAULT: '#34d399', // Green-400 emerald variant
+          DEFAULT: '#34d399', // Enhanced contrast emerald
           foreground: '#ffffff',
         },
         popover: {
