@@ -25,16 +25,17 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: '#2e9d5c', // More muted green
+          DEFAULT: '#9b87f5', // Primary Purple
           foreground: '#ffffff',
-          dark: '#1c7d45',    // Darker muted green
-          light: '#4ab577',   // Lighter muted green
+          dark: '#7E69AB',    // Secondary Purple
+          light: '#D6BCFA',   // Light Purple
+          tertiary: '#6E59A5' // Tertiary Purple
         },
         secondary: {
-          DEFAULT: '#1a1a1a', // Dark gray for contrast
+          DEFAULT: '#1A1F2C', // Dark Purple
           foreground: '#ffffff',
-          dark: '#0d0d0d',    // Darker gray
-          light: '#333333',   // Lighter gray
+          dark: '#141822',    // Darker shade of Dark Purple
+          light: '#8E9196',   // Neutral Gray
         },
         warning: {
           DEFAULT: "#F97316",
@@ -49,8 +50,8 @@ export default {
           foreground: "hsl(var(--destructive-foreground))",
         },
         accent: {
-          DEFAULT: '#34d399', // Green-400 emerald variant
-          foreground: '#ffffff',
+          DEFAULT: '#D6BCFA', // Light Purple as accent
+          foreground: '#1A1F2C',
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
