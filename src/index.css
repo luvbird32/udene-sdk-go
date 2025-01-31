@@ -55,26 +55,26 @@
 
   /* Dashboard-specific theme with higher specificity */
   [data-route="dashboard"] {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
+    --background: 222 47% 11%;  /* Dark Purple background */
+    --foreground: 255 47% 74%;  /* Primary Purple text */
+    --card: 222 47% 11%;
+    --card-foreground: 255 47% 74%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 255 47% 74%;
     --primary: 255 47% 74%;  /* #9b87f5 Primary Purple */
     --primary-foreground: 0 0% 100%;
     --secondary: 262 28% 54%;  /* #7E69AB Secondary Purple */
     --secondary-foreground: 0 0% 100%;
-    --accent: 255 47% 74%;
-    --accent-foreground: 240 10% 3.9%;
+    --accent: 262 28% 54%;
+    --accent-foreground: 0 0% 100%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
+    --border: 262 28% 54%;
+    --input: 262 28% 54%;
     --ring: 262 28% 54%;
-    color-scheme: light;
+    color-scheme: dark;
   }
 }
 
@@ -97,11 +97,10 @@ html {
 [data-route="dashboard"] p,
 [data-route="dashboard"] span,
 [data-route="dashboard"] div {
-  color: hsl(240 10% 3.9%);
+  @apply text-primary;
 }
 
 /* Ensure proper contrast for card content in dashboard */
 [data-route="dashboard"] .card {
-  background-color: hsl(0 0% 100%);
-  color: hsl(240 10% 3.9%);
+  @apply bg-card text-card-foreground;
 }
