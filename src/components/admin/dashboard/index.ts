@@ -1,2 +1,2 @@
 // Export admin dashboard components
-export * from '../admin-dashboard/sections/PerformanceMetricsSection';
+export * from '../../../components/admin-dashboard/sections/PerformanceMetricsSection';
