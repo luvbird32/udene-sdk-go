@@ -1,4 +1,4 @@
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { useAuth } from '@/components/auth/AuthProvider'
 import { LoadingSpinner } from '@/components/ui/states/LoadingSpinner'
 import { createRoutes } from '@/routes'
