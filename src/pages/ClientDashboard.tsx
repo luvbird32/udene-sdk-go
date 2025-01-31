@@ -4,28 +4,25 @@ import { DashboardTabs } from "@/components/client-dashboard/tabs/DashboardTabs"
 import { DashboardTabContent } from "@/components/client-dashboard/tabs/DashboardTabContent";
 import { useClientMetrics } from "@/hooks/useClientMetrics";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { ProjectProvider } from "@/contexts/ProjectContext";
 
 const ClientDashboard = () => {
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useClientMetrics();
 
   return (
-    <ProjectProvider>
-      <div className="min-h-screen bg-background p-6">
-        <TooltipProvider>
-          <DashboardHeader />
+    <div className="min-h-screen bg-background p-6">
+      <TooltipProvider>
+        <DashboardHeader />
 
-          <Tabs defaultValue="dashboard" className="space-y-6">
-            <DashboardTabs />
-            <DashboardTabContent 
-              metrics={metrics}
-              metricsLoading={metricsLoading}
-              metricsError={metricsError}
-            />
-          </Tabs>
-        </TooltipProvider>
-      </div>
-    </ProjectProvider>
+        <Tabs defaultValue="dashboard" className="space-y-6">
+          <DashboardTabs />
+          <DashboardTabContent 
+            metrics={metrics}
+            metricsLoading={metricsLoading}
+            metricsError={metricsError}
+          />
+        </Tabs>
+      </TooltipProvider>
+    </div>
   );
 };
 

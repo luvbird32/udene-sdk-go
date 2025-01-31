@@ -25,31 +25,31 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: '#0f172a', // Dark slate blue for primary actions
+          DEFAULT: '#2e9d5c', // Enhanced contrast green
           foreground: '#ffffff',
-          dark: '#020617',    // Darker shade for hover states
-          light: '#1e293b',   // Lighter shade for active states
+          dark: '#1c7d45',    // Darker green for better contrast
+          light: '#4ab577',   // Lighter green maintaining contrast
         },
         secondary: {
-          DEFAULT: '#475569', // Slate gray for secondary elements
+          DEFAULT: '#1a1a1a', // Dark gray for better contrast
           foreground: '#ffffff',
-          dark: '#334155',    // Darker shade for hover states
-          light: '#64748b',   // Lighter shade for active states
+          dark: '#0d0d0d',    // Darker gray
+          light: '#333333',   // Lighter gray maintaining contrast
         },
         warning: {
-          DEFAULT: "#f59e0b", // Amber for warnings
-          foreground: "#000000",
+          DEFAULT: "#dc4e2c", // Enhanced contrast orange
+          foreground: "#ffffff",
         },
         success: {
-          DEFAULT: "#10b981", // Emerald for success states
+          DEFAULT: "#2e855e", // Enhanced contrast green
           foreground: "#ffffff",
         },
         destructive: {
-          DEFAULT: "#ef4444", // Red for destructive actions
-          foreground: "#ffffff",
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
         },
         accent: {
-          DEFAULT: '#3b82f6', // Blue for accents
+          DEFAULT: '#34d399', // Enhanced contrast emerald
           foreground: '#ffffff',
         },
         popover: {
