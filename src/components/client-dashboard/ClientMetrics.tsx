@@ -62,39 +62,47 @@ export const ClientMetrics = ({ metrics, isLoading, error }: ClientMetricsProps)
     return <EmptyMetrics />;
   }
 
+  // Helper function to format values and handle NaN/undefined
+  const formatValue = (value: number | undefined, suffix: string = ''): string => {
+    if (value === undefined || isNaN(value)) {
+      return `0${suffix}`;
+    }
+    return `${value}${suffix}`;
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
       <MetricCard
         title="Risk Score"
-        value={`${displayMetrics?.riskScore ?? 0}%`}
+        value={formatValue(displayMetrics?.riskScore, '%')}
         icon={Shield}
         description="Current risk assessment score"
         isLoading={isLoadingState}
       />
       <MetricCard
         title="Total Transactions"
-        value={displayMetrics?.totalTransactions ?? 0}
+        value={formatValue(displayMetrics?.totalTransactions)}
         icon={Activity}
         description="Number of processed transactions"
         isLoading={isLoadingState}
       />
       <MetricCard
         title="Flagged Transactions"
-        value={displayMetrics?.flaggedTransactions ?? 0}
+        value={formatValue(displayMetrics?.flaggedTransactions)}
         icon={AlertTriangle}
         description="Transactions requiring attention"
         isLoading={isLoadingState}
       />
       <MetricCard
         title="Avg Processing Time"
-        value={`${displayMetrics?.avgProcessingTime ?? 0}ms`}
+        value={formatValue(displayMetrics?.avgProcessingTime, 'ms')}
         icon={Clock}
         description="Average transaction processing time"
         isLoading={isLoadingState}
       />
       <MetricCard
         title="Concurrent Calls"
-        value={displayMetrics?.concurrentCalls ?? 0}
+        value={formatValue(displayMetrics?.concurrentCalls)}
         icon={Users}
         description="Current concurrent API calls"
         isLoading={isLoadingState}
