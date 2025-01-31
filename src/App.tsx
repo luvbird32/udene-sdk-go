@@ -1,9 +1,9 @@
 import React, { Suspense } from 'react'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Toaster } from '@/components/ui/toaster'
 import { AuthProvider } from '@/components/auth/AuthProvider'
 import { lazyLoadWithRetry } from '@/utils/lazyLoad'
-import { LoadingSpinner } from '@/components/ui/states/LoadingState'
+import { LoadingSpinner } from '@/components/ui/states/LoadingSpinner'
 
 // Lazy load route components
 const Landing = lazyLoadWithRetry(() => import('@/pages/Landing'))
