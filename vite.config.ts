@@ -22,5 +22,18 @@ export default defineConfig(({ mode }) => ({
     alias: {
       '@': path.resolve(__dirname, './src')
     }
+  },
+  build: {
+    target: ['es2015', 'edge88', 'firefox78', 'chrome87', 'safari13'],
+    polyfillModulePreload: true,
+    cssCodeSplit: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          ui: ['@radix-ui/react-dialog', '@radix-ui/react-popover']
+        }
+      }
+    }
   }
 }));
