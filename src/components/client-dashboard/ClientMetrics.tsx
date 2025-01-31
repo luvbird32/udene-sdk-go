@@ -1,6 +1,6 @@
 import { Shield, Activity, AlertTriangle, Clock, Users } from "lucide-react";
 import { useMetricsData } from "./metrics/useMetricsData";
-import { MetricCard } from "@/components/ui/metrics/MetricCard";
+import { MetricCard } from "./metrics/MetricCard";
 import { EmptyMetrics } from "./metrics/EmptyMetrics";
 import { MetricsError } from "./metrics/MetricsError";
 
