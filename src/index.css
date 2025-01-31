@@ -11,6 +11,7 @@
 
 @layer base {
   :root {
+    /* Enhanced contrast colors */
     --background: 222 47% 11%;
     --foreground: 0 0% 98%;
     --card: 222 47% 11%;
@@ -23,7 +24,7 @@
     --secondary-foreground: 0 0% 98%;
     --accent: 240 3.7% 15.9%;
     --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 84.2% 60.2%; /* Enhanced for better visibility */
     --destructive-foreground: 0 0% 98%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
@@ -31,9 +32,9 @@
     --radius: 0.5rem;
   }
 
-  /* Focus styles for keyboard navigation */
+  /* Enhanced focus styles for keyboard navigation */
   *:focus-visible {
-    outline: 2px solid #2e9d5c;
+    outline: 3px solid #2e9d5c;
     outline-offset: 2px;
     @apply ring-2 ring-primary ring-offset-2 ring-offset-background;
   }
@@ -45,7 +46,7 @@
            focus:rounded focus:outline-none focus:shadow-lg;
   }
 
-  /* Improved button focus states */
+  /* Enhanced button focus states */
   button:focus-visible {
     @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
   }
@@ -53,6 +54,13 @@
   /* Enhanced link focus states */
   a:focus-visible {
     @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background rounded-sm;
+  }
+
+  /* Improved form input focus states */
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
   }
 }
 
@@ -82,24 +90,13 @@
     white-space: normal;
   }
 
-  .dark {
-    --background: 222 47% 11%;
-    --foreground: 0 0% 98%;
-    --card: 222 47% 11%;
-    --card-foreground: 0 0% 98%;
-    --popover: 222 47% 11%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+  /* High contrast text utilities */
+  .high-contrast {
+    @apply text-foreground bg-background;
+  }
+
+  .high-contrast-inverse {
+    @apply text-background bg-foreground;
   }
 }
 
@@ -111,14 +108,12 @@
   --card-foreground: 240 10% 3.9%;
   --popover: 0 0% 100%;
   --popover-foreground: 240 10% 3.9%;
-  --primary: 240 10% 3.9%;
-  --primary-foreground: 0 0% 100%;
+  --primary: 240 5.9% 10%;
+  --primary-foreground: 0 0% 98%;
   --secondary: 240 4.8% 95.9%;
-  --secondary-foreground: 240 10% 3.9%;
+  --secondary-foreground: 240 5.9% 10%;
   --accent: 240 4.8% 95.9%;
-  --accent-foreground: 240 10% 3.9%;
-  --muted: 240 4.8% 95.9%;
-  --muted-foreground: 240 3.8% 46.1%;
+  --accent-foreground: 240 5.9% 10%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 0 0% 98%;
   --border: 240 5.9% 90%;
@@ -154,4 +149,28 @@ html {
 [data-route="dashboard"] .card {
   background-color: hsl(0 0% 100%);
   color: hsl(240 10% 3.9%);
+}
+
+/* ARIA role styles for better screen reader support */
+[role="alert"] {
+  @apply border-l-4 border-destructive p-4;
+}
+
+[role="status"] {
+  @apply border-l-4 border-primary p-4;
+}
+
+/* Interactive element enhancements for accessibility */
+[role="button"],
+[role="link"] {
+  @apply cursor-pointer;
+}
+
+[aria-disabled="true"] {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+/* Focus visible utility for custom components */
+.focus-visible\:ring {
+  @apply focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none;
 }
