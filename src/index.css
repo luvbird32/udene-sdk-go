@@ -53,7 +53,7 @@
     --ring: 240 4.9% 83.9%;
   }
 
-  /* Dashboard-specific light theme with higher specificity */
+  /* Dashboard-specific theme with higher specificity */
   [data-route="dashboard"] {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
@@ -61,11 +61,11 @@
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-    --primary: 240 10% 3.9%;
+    --primary: 255 47% 74%;  /* #9b87f5 Primary Purple */
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 10% 3.9%;
-    --accent: 240 4.8% 95.9%;
+    --secondary: 262 28% 54%;  /* #7E69AB Secondary Purple */
+    --secondary-foreground: 0 0% 100%;
+    --accent: 255 47% 74%;
     --accent-foreground: 240 10% 3.9%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
@@ -73,7 +73,7 @@
     --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
-    --ring: 240 5% 64.9%;
+    --ring: 262 28% 54%;
     color-scheme: light;
   }
 }
@@ -85,7 +85,6 @@ html {
 /* Apply dashboard theme with !important to ensure it takes precedence */
 [data-route="dashboard"] {
   @apply bg-background text-foreground !important;
-  color: hsl(240 10% 3.9%) !important;
 }
 
 /* Additional dashboard-specific text color overrides */
