@@ -1,5 +1,5 @@
 import { User, Building2, BadgeCheck, Phone, Globe, Bell } from "lucide-react";
-import { Profile } from "@/types/supabase";
+import { Profile } from "@/types/profile";
 import { ProfilePreferences } from "@/types/profile";
 
 interface ProfileDisplayProps {
