@@ -11,6 +11,12 @@ export const ProfileDisplay = ({ profile }: ProfileDisplayProps) => {
     <div className="space-y-4">
       <div className="flex items-center gap-2">
         <User className="h-4 w-4 text-muted-foreground" />
+        <span className="text-sm text-muted-foreground">Full Name:</span>
+        <span className="font-medium text-foreground">{profile.full_name || "Not set"}</span>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <User className="h-4 w-4 text-muted-foreground" />
         <span className="text-sm text-muted-foreground">Username:</span>
         <span className="font-medium text-foreground">{profile.username || "Not set"}</span>
       </div>

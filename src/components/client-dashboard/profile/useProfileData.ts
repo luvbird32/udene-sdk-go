@@ -55,12 +55,12 @@ export const useProfileData = () => {
         theme: "light"
       };
       
-      // Set form data with decrypted values
+      // Set form data with user metadata and decrypted values
       setFormData({
-        username: data.username || "",
+        username: data.username || user.email?.split('@')[0] || "",
         organization_name: data.organization_name || "",
-        organization_role: decryptedOrgRole || "",
-        phone_number: decryptedPhoneNumber || "",
+        organization_role: decryptedOrgRole || data.organization_role || "",
+        phone_number: decryptedPhoneNumber || data.phone_number || "",
         timezone: data.timezone || "UTC",
         preferences
       });
@@ -70,7 +70,8 @@ export const useProfileData = () => {
         ...data,
         phone_number: decryptedPhoneNumber,
         organization_role: decryptedOrgRole,
-        preferences
+        preferences,
+        full_name: data.full_name || user.user_metadata?.full_name
       };
     },
   });

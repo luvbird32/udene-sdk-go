@@ -1314,6 +1314,7 @@ export type Database = {
           backup_codes: Json | null
           created_at: string | null
           email_verified: boolean | null
+          full_name: string | null
           id: string
           last_login: string | null
           mfa_enabled: boolean | null
@@ -1342,6 +1343,7 @@ export type Database = {
           backup_codes?: Json | null
           created_at?: string | null
           email_verified?: boolean | null
+          full_name?: string | null
           id: string
           last_login?: string | null
           mfa_enabled?: boolean | null
@@ -1370,6 +1372,7 @@ export type Database = {
           backup_codes?: Json | null
           created_at?: string | null
           email_verified?: boolean | null
+          full_name?: string | null
           id?: string
           last_login?: string | null
           mfa_enabled?: boolean | null
