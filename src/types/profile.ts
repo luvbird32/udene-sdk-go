@@ -35,4 +35,5 @@ export interface Profile {
   last_login: string | null;
   preferences: ProfilePreferences;
   security_settings: any;
+  full_name: string | null; // Added this property
 }
