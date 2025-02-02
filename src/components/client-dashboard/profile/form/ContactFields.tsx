@@ -1,32 +1,15 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ProfileFormData } from "@/types/profile";
 
-/**
- * @component ContactFields
- * @description Form fields for user contact information including phone number and timezone selection.
- * 
- * @example
- * ```tsx
- * <ContactFields
- *   formData={profileData}
- *   setFormData={handleFormDataChange}
- * />
- * ```
- */
 interface ContactFieldsProps {
-  /** Current form data */
   formData: ProfileFormData;
-  /** Function to update form data */
   setFormData: (data: ProfileFormData) => void;
 }
 
 export const ContactFields = ({ formData, setFormData }: ContactFieldsProps) => {
-  const timezones = [
-    "UTC", "America/New_York", "America/Los_Angeles", "Europe/London", 
-    "Europe/Paris", "Asia/Tokyo", "Asia/Singapore", "Australia/Sydney"
-  ];
+  // Get user's current timezone
+  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   return (
     <>
@@ -37,27 +20,19 @@ export const ContactFields = ({ formData, setFormData }: ContactFieldsProps) => 
           value={formData.phone_number}
           onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
           placeholder="Enter your phone number"
-          type="tel"
+          type="text" // Changed from tel to text for unrestricted input
         />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="timezone">Timezone</Label>
-        <Select
-          value={formData.timezone}
-          onValueChange={(value) => setFormData({ ...formData, timezone: value })}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select timezone" />
-          </SelectTrigger>
-          <SelectContent>
-            {timezones.map((tz) => (
-              <SelectItem key={tz} value={tz}>
-                {tz.replace("_", " ")}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Input
+          id="timezone"
+          value={formData.timezone || userTimezone}
+          onChange={(e) => setFormData({ ...formData, timezone: e.target.value })}
+          placeholder="Enter timezone"
+          type="text"
+        />
       </div>
     </>
   );

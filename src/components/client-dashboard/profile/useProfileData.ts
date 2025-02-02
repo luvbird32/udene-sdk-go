@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "./ProfileContext";
-import { Profile } from "@/types/supabase";
+import { Profile } from "@/types/profile";
 import { ProfilePreferences } from "@/types/profile";
 
 export const useProfileData = () => {
@@ -54,6 +54,9 @@ export const useProfileData = () => {
         notifications: { email: true, sms: false },
         theme: "light"
       };
+
+      // Auto-detect timezone
+      const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       
       // Set form data with user metadata and decrypted values
       setFormData({
@@ -61,7 +64,7 @@ export const useProfileData = () => {
         organization_name: data.organization_name || "",
         organization_role: decryptedOrgRole || data.organization_role || "",
         phone_number: decryptedPhoneNumber || data.phone_number || "",
-        timezone: data.timezone || "UTC",
+        timezone: data.timezone || userTimezone, // Use detected timezone as fallback
         preferences
       });
       
