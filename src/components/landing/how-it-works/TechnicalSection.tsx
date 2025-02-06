@@ -1,3 +1,4 @@
+
 import { CircuitBoard, Database, Network } from "lucide-react";
 
 const technicalSteps = [
@@ -27,8 +28,8 @@ export const TechnicalSection = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {technicalSteps.map((step, index) => (
           <div key={index} className="glass-card p-8 rounded-xl border border-primary/20 hover:border-primary/30 transition-all duration-300">
-            <div className="bg-primary/10 p-4 rounded-full w-16 h-16 mb-4 flex items-center justify-center">
-              <step.icon className="w-8 h-8 text-primary" />
+            <div className="bg-secondary/10 p-4 rounded-full w-16 h-16 mb-4 flex items-center justify-center">
+              <step.icon className="w-8 h-8 text-secondary" />
             </div>
             <h4 className="text-xl font-semibold text-primary mb-2">{step.title}</h4>
             <p className="text-gray-300">{step.description}</p>
