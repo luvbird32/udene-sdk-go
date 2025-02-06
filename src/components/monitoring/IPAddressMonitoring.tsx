@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,13 +27,13 @@ export const IPAddressMonitoring = () => {
     queryFn: async () => {
       console.log("Fetching IP monitoring data...");
       const { data, error } = await supabase
-        .from('rate_limits')
+        .from('visitor_analytics')
         .select('*')
-        .order('request_count', { ascending: false })
+        .order('visit_count', { ascending: false })
         .limit(50);
 
       if (error) throw error;
-      return data as IPActivity[];
+      return data;
     },
     refetchInterval: 10000, // Refresh every 10 seconds
   });
@@ -69,7 +70,7 @@ export const IPAddressMonitoring = () => {
             <TableHeader>
               <TableRow>
                 <TableHead>IP Address</TableHead>
-                <TableHead>Request Count</TableHead>
+                <TableHead>Visit Count</TableHead>
                 <TableHead>Risk Level</TableHead>
                 <TableHead>First Seen</TableHead>
                 <TableHead>Last Seen</TableHead>
@@ -79,17 +80,17 @@ export const IPAddressMonitoring = () => {
               {ipActivities?.map((activity) => (
                 <TableRow key={activity.ip_address}>
                   <TableCell className="font-medium">{activity.ip_address}</TableCell>
-                  <TableCell>{activity.request_count}</TableCell>
+                  <TableCell>{activity.visit_count}</TableCell>
                   <TableCell>
-                    <Badge variant={getRiskColor(activity.request_count)}>
-                      {getRiskLevel(activity.request_count)}
+                    <Badge variant={getRiskColor(activity.visit_count)}>
+                      {getRiskLevel(activity.visit_count)}
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    {new Date(activity.first_request_time).toLocaleString()}
+                    {new Date(activity.first_visit_at).toLocaleString()}
                   </TableCell>
                   <TableCell>
-                    {new Date(activity.last_request_time).toLocaleString()}
+                    {new Date(activity.last_visit_at).toLocaleString()}
                   </TableCell>
                 </TableRow>
               ))}

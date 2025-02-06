@@ -2395,6 +2395,63 @@ export type Database = {
           },
         ]
       }
+      visitor_analytics: {
+        Row: {
+          browser: string | null
+          city: string | null
+          country: string | null
+          created_at: string | null
+          device_type: string | null
+          first_visit_at: string | null
+          id: string
+          ip_address: string
+          is_unique: boolean | null
+          last_visit_at: string | null
+          path: string | null
+          referrer: string | null
+          updated_at: string | null
+          user_agent: string | null
+          user_id: string | null
+          visit_count: number | null
+        }
+        Insert: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          device_type?: string | null
+          first_visit_at?: string | null
+          id?: string
+          ip_address: string
+          is_unique?: boolean | null
+          last_visit_at?: string | null
+          path?: string | null
+          referrer?: string | null
+          updated_at?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          visit_count?: number | null
+        }
+        Update: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          device_type?: string | null
+          first_visit_at?: string | null
+          id?: string
+          ip_address?: string
+          is_unique?: boolean | null
+          last_visit_at?: string | null
+          path?: string | null
+          referrer?: string | null
+          updated_at?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          visit_count?: number | null
+        }
+        Relationships: []
+      }
       vulnerability_scans: {
         Row: {
           account_correlation: Json | null
@@ -2631,6 +2688,33 @@ export type Database = {
           p_request?: Json
         }
         Returns: undefined
+      }
+      update_visitor_analytics: {
+        Args: {
+          p_user_id: string
+          p_ip_address: string
+          p_user_agent: string
+          p_path: string
+          p_referrer: string
+        }
+        Returns: {
+          browser: string | null
+          city: string | null
+          country: string | null
+          created_at: string | null
+          device_type: string | null
+          first_visit_at: string | null
+          id: string
+          ip_address: string
+          is_unique: boolean | null
+          last_visit_at: string | null
+          path: string | null
+          referrer: string | null
+          updated_at: string | null
+          user_agent: string | null
+          user_id: string | null
+          visit_count: number | null
+        }
       }
       validate_sdk_and_api_key: {
         Args: {
