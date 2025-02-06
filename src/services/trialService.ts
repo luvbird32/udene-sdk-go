@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 import { generateDeviceFingerprint } from "@/utils/deviceFingerprint";
@@ -25,6 +26,37 @@ export const createTrialUsage = async (userId: string, trialType: string) => {
       throw new Error("This device has already used a free trial and is not eligible for another one.");
     }
 
+    // Convert deviceData to a format compatible with Json type
+    const deviceFingerprint = {
+      fingerprint_hash: deviceData.fingerprint_hash,
+      browser_info: {
+        userAgent: deviceData.browser_info.userAgent,
+        platform: deviceData.browser_info.platform,
+        cookiesEnabled: deviceData.browser_info.cookiesEnabled,
+        doNotTrack: deviceData.browser_info.doNotTrack
+      },
+      os_info: {
+        platform: deviceData.os_info.platform,
+        oscpu: deviceData.os_info.oscpu,
+        language: deviceData.os_info.language
+      },
+      hardware_info: {
+        deviceMemory: deviceData.hardware_info.deviceMemory,
+        hardwareConcurrency: deviceData.hardware_info.hardwareConcurrency,
+        maxTouchPoints: deviceData.hardware_info.maxTouchPoints
+      },
+      network_info: {
+        connectionType: deviceData.network_info.connectionType,
+        effectiveType: deviceData.network_info.effectiveType,
+        downlink: deviceData.network_info.downlink,
+        rtt: deviceData.network_info.rtt
+      },
+      timezone_info: deviceData.timezone_info,
+      language_info: deviceData.language_info,
+      screen_resolution: deviceData.screen_resolution,
+      color_depth: deviceData.color_depth
+    };
+
     const trialData: TrialUsageInsert = {
       user_id: userId,
       trial_type: trialType,
@@ -33,7 +65,7 @@ export const createTrialUsage = async (userId: string, trialType: string) => {
       status: 'active',
       risk_score: 0,
       ip_addresses: [], 
-      device_fingerprints: [deviceData],
+      device_fingerprints: [deviceFingerprint],
       usage_patterns: {}
     };
 
