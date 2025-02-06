@@ -9,11 +9,8 @@ export const Footer = () => {
       links: [
         { text: "Features", path: "#" },
         { text: "Security", path: "#" },
-        { text: "Team", path: "#" },
         { text: "Enterprise", path: "#" },
-        { text: "Customer Stories", path: "#" },
-        { text: "Pricing", path: "#" },
-        { text: "Resources", path: "#" }
+        { text: "Pricing", path: "#" }
       ],
     },
     {
@@ -21,8 +18,6 @@ export const Footer = () => {
       links: [
         { text: "Developer API", path: "#" },
         { text: "Partners", path: "#" },
-        { text: "Atom", path: "#" },
-        { text: "Electron", path: "#" },
         { text: "GitHub Desktop", path: "#" }
       ],
     },
@@ -31,10 +26,7 @@ export const Footer = () => {
       links: [
         { text: "Help", path: "#" },
         { text: "Community Forum", path: "#" },
-        { text: "Professional Services", path: "#" },
-        { text: "Skills", path: "#" },
-        { text: "Status", path: "#" },
-        { text: "Contact GitHub", path: "#" }
+        { text: "Status", path: "#" }
       ],
     },
     {
@@ -42,11 +34,7 @@ export const Footer = () => {
       links: [
         { text: "About", path: "#" },
         { text: "Blog", path: "/blog" },
-        { text: "Careers", path: "#" },
-        { text: "Press", path: "#" },
-        { text: "Inclusion", path: "#" },
-        { text: "Social Impact", path: "#" },
-        { text: "Shop", path: "#" }
+        { text: "Careers", path: "#" }
       ],
     },
   ];
