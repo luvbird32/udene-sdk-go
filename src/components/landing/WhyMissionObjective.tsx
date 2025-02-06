@@ -1,3 +1,4 @@
+
 import { Shield, Target } from "lucide-react";
 
 export const WhyMissionObjective = () => {
@@ -8,8 +9,8 @@ export const WhyMissionObjective = () => {
         <div className="bg-black/40 backdrop-blur-sm p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center border border-white/5 mb-16 transform transition-all duration-500 hover:border-primary/20">
           {/* Icon container with adjusted positioning */}
           <div className="relative">
-            <div className="absolute left-1/2 -translate-x-1/2 -top-24 md:-top-28 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
-              <Shield className="w-10 h-10 md:w-16 md:h-16 text-primary animate-pulse" />
+            <div className="absolute left-1/2 -translate-x-1/2 -top-24 md:-top-28 bg-secondary/10 p-4 rounded-full border border-secondary/20 transform transition-all duration-500 hover:scale-110">
+              <Shield className="w-10 h-10 md:w-16 md:h-16 text-secondary animate-pulse" />
             </div>
           </div>
           
@@ -27,8 +28,8 @@ export const WhyMissionObjective = () => {
         {/* Mission Section */}
         <div className="bg-black/40 backdrop-blur-sm p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center border border-white/5 mb-16 transform transition-all duration-500 hover:border-primary/20">
           <div className="relative">
-            <div className="absolute left-1/2 -translate-x-1/2 -top-24 md:-top-28 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
-              <Target className="w-10 h-10 md:w-16 md:h-16 text-primary animate-pulse" />
+            <div className="absolute left-1/2 -translate-x-1/2 -top-24 md:-top-28 bg-secondary/10 p-4 rounded-full border border-secondary/20 transform transition-all duration-500 hover:scale-110">
+              <Target className="w-10 h-10 md:w-16 md:h-16 text-secondary animate-pulse" />
             </div>
           </div>
           
@@ -45,8 +46,8 @@ export const WhyMissionObjective = () => {
         {/* Objectives Section */}
         <div className="bg-black/40 backdrop-blur-sm p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center border border-white/5 mb-16 transform transition-all duration-500 hover:border-primary/20">
           <div className="relative">
-            <div className="absolute left-1/2 -translate-x-1/2 -top-24 md:-top-28 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110">
-              <Target className="w-10 h-10 md:w-16 md:h-16 text-primary animate-pulse" />
+            <div className="absolute left-1/2 -translate-x-1/2 -top-24 md:-top-28 bg-secondary/10 p-4 rounded-full border border-secondary/20 transform transition-all duration-500 hover:scale-110">
+              <Target className="w-10 h-10 md:w-16 md:h-16 text-secondary animate-pulse" />
             </div>
           </div>
           
