@@ -1,3 +1,4 @@
+
 import { Check, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -100,8 +101,8 @@ export const PricingPlans = () => {
                 <Button 
                   className={`w-full py-4 text-base ${
                     plan.highlighted 
-                      ? "bg-primary hover:bg-primary-dark text-white" 
-                      : "border-primary text-primary hover:bg-primary/20"
+                      ? "bg-secondary hover:bg-secondary-dark text-white" 
+                      : "border-secondary text-secondary hover:bg-secondary/20"
                   }`}
                   variant={plan.highlighted ? "default" : "outline"}
                 >
