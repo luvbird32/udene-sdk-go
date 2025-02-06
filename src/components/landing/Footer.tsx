@@ -1,3 +1,4 @@
+
 import { Facebook, Github, Instagram, Linkedin, Twitter } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -103,7 +104,7 @@ export const Footer = () => {
         </div>
         <div className="border-t border-primary/20 pt-8">
           <p className="text-center text-gray-300">
-            © {new Date().getFullYear()} Your Company. All rights reserved.
+            © {new Date().getFullYear()} Udene. All rights reserved.
           </p>
         </div>
       </div>
