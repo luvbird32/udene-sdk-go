@@ -33,10 +33,10 @@ export default {
           tertiary: '#f1f3f5' // Another white shade
         },
         secondary: {
-          DEFAULT: '#8B5CF6', // Vivid Purple
+          DEFAULT: '#22C55E', // Bright Green
           foreground: '#ffffff',
-          dark: '#7C3AED',    // Slightly darker purple
-          light: '#A78BFA',   // Lighter purple
+          dark: '#16A34A',    // Darker Green
+          light: '#4ADE80',   // Light Green
         },
         warning: {
           DEFAULT: "#F97316",
