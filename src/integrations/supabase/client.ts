@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://jbbfljgvjpkzqmoylyzc.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpiYmZsamd2anBrenFtb3lseXpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM0NDUwNjEsImV4cCI6MjA0OTAyMTA2MX0.ZP74tENMUR8qAYi63el1xYUyzqAewO_b5X0iQHj_pnk';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://jbbfljgvjpkzqmoylyzc.supabase.co';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpiYmZsamd2anBrenFtb3lseXpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzM0NDUwNjEsImV4cCI6MjA0OTAyMTA2MX0.ZP74tENMUR8qAYi63el1xYUyzqAewO_b5X0iQHj_pnk';
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.error('Missing Supabase environment variables');
@@ -19,14 +19,14 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   },
   global: {
     headers: {
-      'X-Client-Info': 'supabase-js-web'
-    }
+      'X-Client-Info': 'supabase-js-web',
+    },
   },
   realtime: {
     params: {
-      eventsPerSecond: 10
-    }
-  }
+      eventsPerSecond: 10,
+    },
+  },
 });
 
 // Add error handling for auth state changes
