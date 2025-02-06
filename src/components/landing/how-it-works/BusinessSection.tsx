@@ -30,11 +30,11 @@ export const BusinessSection = () => {
           <div key={index} className="glass-card p-8 rounded-xl text-center relative border border-primary/20 hover:border-primary/30 transition-all duration-300">
             {index < steps.length - 1 && (
               <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
-                <ArrowRight className="w-6 h-6 text-primary" />
+                <ArrowRight className="w-6 h-6 text-secondary" />
               </div>
             )}
-            <div className="bg-primary/10 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-              <step.icon className="w-8 h-8 text-primary" />
+            <div className="bg-secondary/10 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+              <step.icon className="w-8 h-8 text-secondary" />
             </div>
             <h4 className="text-xl font-semibold text-primary mb-2">{step.title}</h4>
             <p className="text-gray-300">{step.description}</p>

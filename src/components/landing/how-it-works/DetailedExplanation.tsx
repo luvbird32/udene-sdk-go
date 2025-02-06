@@ -63,7 +63,7 @@ export const DetailedExplanation = () => {
               className="flex items-center gap-2"
             >
               {isOpen ? "Show Less" : "Learn More"}
-              {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+              {isOpen ? <ChevronUp className="h-4 w-4 text-secondary" /> : <ChevronDown className="h-4 w-4 text-secondary" />}
             </Button>
           </CollapsibleTrigger>
         </div>
@@ -78,7 +78,7 @@ export const DetailedExplanation = () => {
                 {items.map((item, index) => (
                   <li key={index} className="flex items-start gap-2">
                     <div className="mt-1">
-                      <div className="w-2 h-2 rounded-full bg-primary"></div>
+                      <div className="w-2 h-2 rounded-full bg-secondary"></div>
                     </div>
                     <span>{item}</span>
                   </li>
