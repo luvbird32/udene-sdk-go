@@ -60,12 +60,12 @@ export const PricingPlans = () => {
             <div
               key={index}
               className={`glass-card p-6 rounded-xl transition-all duration-300 hover:scale-105 ${
-                plan.highlighted ? "border-2 border-primary" : "border border-primary/20"
+                plan.highlighted ? "border-2 border-secondary" : "border border-secondary/20"
               }`}
             >
               {plan.isPromo && (
                 <div className="mb-3">
-                  <Badge variant="secondary" className="bg-primary/20 text-primary">
+                  <Badge variant="secondary" className="bg-secondary/20 text-secondary">
                     <Sparkles className="w-3 h-3 mr-1" />
                     Special Offer
                   </Badge>
@@ -82,8 +82,8 @@ export const PricingPlans = () => {
                 {plan.description}
               </p>
               {plan.isPromo && (
-                <div className="bg-primary/10 border border-primary/20 rounded-lg p-2 mb-4">
-                  <p className="text-xs text-primary">
+                <div className="bg-secondary/10 border border-secondary/20 rounded-lg p-2 mb-4">
+                  <p className="text-xs text-secondary">
                     <Sparkles className="w-3 h-3 inline-block mr-1" />
                     {plan.promotion}
                   </p>
@@ -92,7 +92,7 @@ export const PricingPlans = () => {
               <ul className="space-y-2 mb-6">
                 {plan.features.map((feature, idx) => (
                   <li key={idx} className="flex items-center text-gray-300 text-sm">
-                    <Check className="w-4 h-4 text-primary mr-2" />
+                    <Check className="w-4 h-4 text-secondary mr-2" />
                     {feature}
                   </li>
                 ))}
