@@ -1,3 +1,4 @@
+
 import { Quote } from "lucide-react";
 
 export const Testimonials = () => {
@@ -43,14 +44,14 @@ export const Testimonials = () => {
   return (
     <section className="py-24 bg-black/40">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="bg-black/40 backdrop-blur-sm p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center border border-white/5 mb-16 transform transition-all duration-500 hover:border-primary/20">
-          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary/10 p-4 rounded-full border border-primary/20 transform transition-all duration-500 hover:scale-110 hover:bg-primary/20">
-            <Quote className="w-10 h-10 text-primary animate-pulse" />
+        <div className="bg-black/40 backdrop-blur-sm p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center border border-white/5 mb-16 transform transition-all duration-500 hover:border-[#22C55E]/20">
+          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#22C55E]/10 p-4 rounded-full border border-[#22C55E]/20 transform transition-all duration-500 hover:scale-110 hover:bg-[#22C55E]/20">
+            <Quote className="w-10 h-10 text-[#22C55E] animate-pulse" />
           </div>
           
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-white">
             Real Results from{" "}
-            <span className="text-primary">Real Customers</span>
+            <span className="text-[#22C55E]">Real Customers</span>
           </h2>
           <p className="text-xl text-white max-w-3xl mx-auto">
             See how businesses like yours prevented system exploitation and protected their revenue
@@ -61,10 +62,10 @@ export const Testimonials = () => {
           {testimonials.map((testimonial, index) => (
             <div 
               key={index} 
-              className="glass-card p-8 rounded-xl backdrop-blur-lg border border-primary/20 hover:border-primary/30 transition-all duration-300"
+              className="glass-card p-8 rounded-xl backdrop-blur-lg border border-[#22C55E]/20 hover:border-[#22C55E]/30 transition-all duration-300"
             >
-              <div className="absolute -top-4 left-8 bg-primary/10 p-2 rounded-full border border-primary/20">
-                <Quote className="w-4 h-4 text-primary" />
+              <div className="absolute -top-4 left-8 bg-[#22C55E]/10 p-2 rounded-full border border-[#22C55E]/20">
+                <Quote className="w-4 h-4 text-[#22C55E]" />
               </div>
               
               <blockquote className="text-white leading-relaxed text-lg font-light italic mb-8">
@@ -72,7 +73,7 @@ export const Testimonials = () => {
               </blockquote>
               
               <div className="mt-6 border-t border-white/10 pt-6">
-                <p className="font-semibold text-primary text-lg">{testimonial.author}</p>
+                <p className="font-semibold text-[#22C55E] text-lg">{testimonial.author}</p>
                 <p className="text-white/80 text-sm mt-1">{testimonial.role}</p>
                 <p className="text-white/60 text-sm">{testimonial.company}</p>
               </div>
