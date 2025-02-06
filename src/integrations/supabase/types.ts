@@ -333,6 +333,41 @@ export type Database = {
           },
         ]
       }
+      blocked_devices: {
+        Row: {
+          blocked_at: string | null
+          device_fingerprint: string
+          id: string
+          reason: string | null
+          trial_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          blocked_at?: string | null
+          device_fingerprint: string
+          id?: string
+          reason?: string | null
+          trial_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          blocked_at?: string | null
+          device_fingerprint?: string
+          id?: string
+          reason?: string | null
+          trial_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blocked_devices_trial_id_fkey"
+            columns: ["trial_id"]
+            isOneToOne: false
+            referencedRelation: "trial_usage"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blog_posts: {
         Row: {
           author_id: string | null
@@ -2581,6 +2616,12 @@ export type Database = {
           iv: string
         }
         Returns: string
+      }
+      is_device_blocked: {
+        Args: {
+          device_fp: string
+        }
+        Returns: boolean
       }
       log_detailed_error: {
         Args: {

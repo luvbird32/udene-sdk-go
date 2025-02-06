@@ -1,12 +1,15 @@
+
 import { Card } from "@/components/ui/card";
 import { CreditUsageProgress } from "./CreditUsageProgress";
 import { TrialStatus } from "./TrialStatus";
 import { CreditWarnings } from "./CreditWarnings";
 import { differenceInDays } from "date-fns";
 import { useApiCredits } from "./useApiCredits";
+import { useDeviceBlock } from "@/hooks/useDeviceBlock";
 
 export const ApiCreditsCard = () => {
   const { credits, isLoading, error } = useApiCredits();
+  const { data: isDeviceBlocked } = useDeviceBlock();
 
   if (isLoading) {
     return (
@@ -20,7 +23,7 @@ export const ApiCreditsCard = () => {
     );
   }
 
-  if (error || !credits) {
+  if (error || !credits || isDeviceBlocked) {
     return null;
   }
 
@@ -28,7 +31,7 @@ export const ApiCreditsCard = () => {
     differenceInDays(new Date(credits.trial_end_date), new Date()) : 0;
 
   const isLowCredits = (credits.total_credits - credits.used_credits) < (credits.total_credits * 0.1);
-  const isTrialExpiring = credits.is_trial && daysRemaining <= 5;
+  const isTrialExpiring = credits.is_trial && daysRemaining <= 2; // Warning when 2 days left
 
   return (
     <Card className="p-6 space-y-4">
