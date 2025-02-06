@@ -1,3 +1,4 @@
+
 import { ChartBar } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { ServiceCardProps } from "../types/services";
@@ -10,8 +11,8 @@ export const ServiceCard = ({ service }: ServiceCardProps) => {
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out" />
       
       <div className="relative space-y-6">
-        <div className="inline-flex p-3 rounded-lg bg-primary/10 text-primary group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-500 ease-in-out">
-          <service.icon className="w-8 h-8" />
+        <div className="inline-flex p-3 rounded-lg bg-secondary/10 text-secondary group-hover:scale-110 group-hover:bg-secondary/20 transition-all duration-500 ease-in-out">
+          <service.icon className="w-8 h-8 text-secondary" />
         </div>
         
         <h3 className="text-2xl font-semibold text-white group-hover:text-primary/90 transition-all duration-300">
@@ -30,7 +31,7 @@ export const ServiceCard = ({ service }: ServiceCardProps) => {
                 key={featureIndex}
                 className="flex items-center text-gray-300 group-hover:text-gray-200"
               >
-                <ChartBar className="w-4 h-4 mr-2 text-primary" />
+                <ChartBar className="w-4 h-4 mr-2 text-secondary" />
                 {feature}
               </li>
             ))}
