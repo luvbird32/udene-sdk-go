@@ -1,6 +1,5 @@
-
 import { Button } from "@/components/ui/button";
-import { ChevronRight, Book, Shield, Zap, Terminal, Code, Users, Bell, LayoutDashboard, Computer, Network, Database, ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronRight, Book, Shield, Zap, Terminal, Code, Users, Bell, LayoutDashboard, Computer, Network, Database, ChevronDown, ChevronUp, CreditCard } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -117,6 +116,28 @@ const Help = () => {
         "Optimize database queries and data access patterns",
         "Implement industry best practices for scaling",
         "Track and analyze performance metrics over time"
+      ]
+    },
+    {
+      title: "Pricing Plans",
+      icon: CreditCard,
+      content: [
+        "Pay As You Go Plan: Perfect for businesses with variable usage needs",
+        "- $0.001 per API call with first 1000 calls free for new users",
+        "- No minimum commitment required",
+        "- Access to basic reporting and standard API features",
+        "- Email support included",
+        "- Real-time fraud detection capabilities",
+        "Enterprise Plan: Tailored solutions for large organizations",
+        "- Custom pricing based on volume and specific needs",
+        "- Volume discounts available",
+        "- Custom ML models and multi-region deployment",
+        "- 24/7 dedicated support with SLA guarantee",
+        "- Advanced reporting and custom features",
+        "Additional Benefits: Both plans include",
+        "- Access to core fraud detection features",
+        "- Regular platform updates and improvements",
+        "- Integration with major payment processors"
       ]
     },
     {
@@ -243,4 +264,3 @@ const Help = () => {
 };
 
 export default Help;
-
