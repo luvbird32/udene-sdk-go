@@ -1,3 +1,28 @@
+
+/**
+ * DashboardContent Component
+ * 
+ * A comprehensive dashboard view that displays various client monitoring and analytics sections:
+ * - API credits and usage tracking
+ * - Client metrics and KPIs
+ * - Transaction trends and geographic analysis
+ * - Monitoring sections for different fraud detection aspects
+ * - Risk analysis and business intelligence
+ * 
+ * The component organizes multiple monitoring widgets in a responsive grid layout,
+ * handling loading states and error conditions for metrics data.
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <DashboardContent 
+ *   metrics={clientMetrics}
+ *   metricsLoading={false}
+ *   metricsError={null}
+ * />
+ * ```
+ */
+
 import { ApiCreditsDisplay } from "@/components/client-dashboard/ApiCreditsDisplay";
 import { ClientMetrics } from "@/components/client-dashboard/ClientMetrics";
 import { TransactionHistory } from "@/components/client-dashboard/transactions/TransactionHistory";
@@ -15,6 +40,12 @@ import { DeviceFingerprintMonitoring } from "@/components/client-dashboard/analy
 import { IdentityVerificationMonitoring } from "@/components/client-dashboard/analytics/IdentityVerificationMonitoring";
 import { UserActivityMonitoring } from "@/components/client-dashboard/analytics/UserActivityMonitoring";
 
+/**
+ * Props interface for the DashboardContent component
+ * @property {Object} metrics - Optional metrics data containing client risk scores and transaction counts
+ * @property {boolean} metricsLoading - Flag indicating if client metrics are being loaded
+ * @property {Error} metricsError - Error object if metrics fetching fails
+ */
 interface DashboardContentProps {
   metrics?: {
     riskScore: number;
