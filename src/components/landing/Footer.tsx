@@ -24,7 +24,7 @@ export const Footer = () => {
     {
       title: "Support",
       links: [
-        { text: "Help", path: "#" },
+        { text: "Help", path: "/help" },
         { text: "Community Forum", path: "#" },
         { text: "Status", path: "#" }
       ],
