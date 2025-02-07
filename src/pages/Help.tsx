@@ -11,112 +11,112 @@ const Help = () => {
       title: "Getting Started",
       icon: Book,
       content: [
-        "Create and set up your account with secure credentials",
-        "Complete your profile with required information",
-        "Set up two-factor authentication for enhanced security",
-        "Configure your notification preferences",
-        "Customize your dashboard layout",
-        "Learn about our security features",
-        "Understand account roles and permissions",
-        "Set up team collaboration settings"
+        "Create and configure your account with secure credentials and two-factor authentication",
+        "Set up your profile and customize notification preferences for optimal service updates",
+        "Review and understand our comprehensive security features and best practices",
+        "Learn about user roles and their specific permissions within the system",
+        "Configure team collaboration settings for multi-user environments",
+        "Implement recommended security policies for your organization",
+        "Set up default preferences for automated responses and alerts",
+        "Understand the dashboard layout and key performance indicators"
       ]
     },
     {
       title: "Security & Privacy",
       icon: Shield,
       content: [
-        "Enable fraud detection monitoring for transactions",
-        "Set up IP address filtering and whitelisting",
-        "Configure security alerts and notifications",
-        "Review security logs and audit reports",
-        "Manage device fingerprinting settings",
-        "Set up data encryption preferences",
-        "Configure session timeout settings",
-        "Review and manage authorized devices"
+        "Configure advanced fraud detection parameters for transaction monitoring",
+        "Set up IP address filtering and geographic access restrictions",
+        "Implement real-time security alerts and custom notification rules",
+        "Review detailed security logs and comprehensive audit reports",
+        "Configure device fingerprinting for enhanced authentication",
+        "Set up end-to-end data encryption for sensitive information",
+        "Manage session timeout and automatic logout settings",
+        "Monitor and manage authorized devices and access points"
       ]
     },
     {
       title: "API Integration",
       icon: Terminal,
       content: [
-        "Access comprehensive API documentation",
-        "Generate and manage API keys",
-        "View real-time API usage statistics",
-        "Test API endpoints in sandbox environment",
-        "Implement webhook integrations",
-        "Monitor API performance metrics",
-        "Set up rate limiting rules",
-        "Handle API error responses"
+        "Access our detailed API documentation with endpoint specifications",
+        "Generate and manage secure API keys with customizable permissions",
+        "Monitor real-time API usage and performance metrics",
+        "Test API endpoints in our secure sandbox environment",
+        "Implement webhook integrations for real-time event notifications",
+        "Analyze API performance and optimize request patterns",
+        "Configure rate limiting rules to prevent abuse",
+        "Handle API error responses and implement retry strategies"
       ]
     },
     {
       title: "Developer Tools",
       icon: Code,
       content: [
-        "Access SDK documentation and guides",
-        "Use our testing environment",
-        "Implement fraud detection algorithms",
-        "Debug API integration issues",
-        "Access code samples and examples",
-        "Use our CLI tools effectively",
-        "Understand versioning system",
-        "Access developer support channels"
+        "Access comprehensive SDK documentation and integration guides",
+        "Utilize our testing environment for safe implementation",
+        "Learn about our machine learning-based fraud detection algorithms",
+        "Debug API integration issues with detailed error logging",
+        "Access code samples and real-world implementation examples",
+        "Master our CLI tools for efficient system management",
+        "Understand our semantic versioning system for updates",
+        "Get direct access to developer support channels"
       ]
     },
     {
       title: "Account Management",
       icon: Users,
       content: [
-        "Manage team member access and roles",
-        "Update billing information and plans",
-        "View usage reports and analytics",
-        "Configure organizational settings",
-        "Set up SSO integration",
-        "Manage API access controls",
-        "Review account activity logs",
-        "Set up backup authentication methods"
+        "Manage team member roles and access permissions effectively",
+        "Review and update billing information and subscription plans",
+        "Access detailed usage analytics and system reports",
+        "Configure organization-wide security settings",
+        "Set up Single Sign-On (SSO) for enterprise accounts",
+        "Manage API access controls and rate limits",
+        "Review detailed account activity and audit logs",
+        "Configure backup authentication methods for security"
       ]
     },
     {
       title: "Monitoring & Alerts",
       icon: Bell,
       content: [
-        "Set up custom alert rules",
-        "Configure notification channels",
-        "Monitor system health metrics",
-        "Track suspicious activities",
-        "Set up automated responses",
-        "Configure alert thresholds",
-        "Manage incident response plans",
-        "Review historical alert data"
+        "Set up custom alert rules based on risk thresholds",
+        "Configure multiple notification channels including email and SMS",
+        "Monitor system health metrics in real-time",
+        "Track and investigate suspicious activities promptly",
+        "Set up automated responses to security incidents",
+        "Define and adjust alert thresholds based on risk levels",
+        "Create and manage incident response playbooks",
+        "Access historical alert data for pattern analysis"
       ]
     },
     {
       title: "Dashboard Features",
       icon: LayoutDashboard,
       content: [
-        "Customize dashboard widgets",
-        "Set up data visualization preferences",
-        "Configure real-time monitoring views",
-        "Create custom report templates",
-        "Set up automated reporting",
-        "Configure data export options",
-        "Manage dashboard sharing",
-        "Set up role-based dashboard views"
+        "Customize dashboard widgets for relevant metrics display",
+        "Configure data visualization preferences and charts",
+        "Set up real-time monitoring views for critical metrics",
+        "Create custom report templates for regular analysis",
+        "Schedule automated reporting for key stakeholders",
+        "Configure data export options in multiple formats",
+        "Set up role-based dashboard access controls",
+        "Implement custom dashboard views per team role"
       ]
     },
     {
       title: "Performance Optimization",
       icon: Zap,
       content: [
-        "Optimize API request patterns",
-        "Implement caching strategies",
-        "Manage rate limits effectively",
-        "Monitor system performance",
-        "Configure performance alerts",
-        "Optimize database queries",
-        "Implement best practices",
-        "Track performance metrics"
+        "Optimize API request patterns for better performance",
+        "Implement effective caching strategies",
+        "Configure and optimize rate limiting settings",
+        "Monitor and analyze system performance metrics",
+        "Set up performance alerts for resource utilization",
+        "Optimize database queries and data access patterns",
+        "Implement industry best practices for scaling",
+        "Track and analyze performance metrics over time"
       ]
     }
   ];
