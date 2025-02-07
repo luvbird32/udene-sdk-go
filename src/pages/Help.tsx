@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { ChevronRight, Book, Shield, Zap, Terminal, Code, Users, Bell, LayoutDashboard, Globe, Computer, Smartphone, Server, Database, Network, User } from "lucide-react";
+import { ChevronRight, Book, Shield, Zap, Terminal, Code, Users, Bell, LayoutDashboard, Globe, Computer, Smartphone, Server, Database, Network, User, ChevronDown, ChevronUp } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const Help = () => {
   const helpSections = [
@@ -174,6 +176,16 @@ const Help = () => {
     }
   ];
 
+  // Track expanded sections
+  const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({});
+
+  const toggleSection = (title: string) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [title]: !prev[title]
+    }));
+  };
+
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="max-w-4xl mx-auto">
@@ -181,23 +193,42 @@ const Help = () => {
           Help Center
         </h1>
         
-        <div className="space-y-12">
+        <div className="space-y-8">
           {helpSections.map((section, index) => {
             const IconComponent = section.icon;
+            const isExpanded = expandedSections[section.title] || false;
+
             return (
-              <article key={index} className="prose prose-invert max-w-none">
-                <div className="flex items-center gap-3 mb-6">
-                  <IconComponent className="w-8 h-8 text-primary" />
-                  <h2 className="text-2xl font-semibold m-0">{section.title}</h2>
-                </div>
-                <div className="pl-11">
-                  {section.content.map((item, itemIndex) => (
-                    <div key={itemIndex} className="mb-4">
-                      <p className="text-gray-300 leading-relaxed">{item}</p>
+              <Collapsible
+                key={index}
+                open={isExpanded}
+                onOpenChange={() => toggleSection(section.title)}
+                className="border border-primary/10 rounded-lg p-4 transition-all duration-200 hover:border-primary/20"
+              >
+                <CollapsibleTrigger className="w-full">
+                  <div className="flex items-center justify-between gap-3 cursor-pointer">
+                    <div className="flex items-center gap-3">
+                      <IconComponent className="w-8 h-8 text-primary" />
+                      <h2 className="text-2xl font-semibold m-0">{section.title}</h2>
                     </div>
-                  ))}
-                </div>
-              </article>
+                    {isExpanded ? (
+                      <ChevronUp className="w-6 h-6 text-primary" />
+                    ) : (
+                      <ChevronDown className="w-6 h-6 text-primary" />
+                    )}
+                  </div>
+                </CollapsibleTrigger>
+
+                <CollapsibleContent className="mt-4">
+                  <div className="pl-11 space-y-4">
+                    {section.content.map((item, itemIndex) => (
+                      <div key={itemIndex}>
+                        <p className="text-gray-300 leading-relaxed">{item}</p>
+                      </div>
+                    ))}
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
             );
           })}
         </div>
