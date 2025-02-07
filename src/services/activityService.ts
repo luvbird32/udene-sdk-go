@@ -1,4 +1,11 @@
 
+/**
+ * Activity Service Module
+ * 
+ * Handles fetching and caching of activity events from the system.
+ * Implements local caching using IndexedDB for improved performance
+ * and offline capabilities.
+ */
 import { getItem, setItem } from "@/utils/indexedDB";
 import { supabase } from "@/integrations/supabase/client";
 
