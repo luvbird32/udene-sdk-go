@@ -1,8 +1,6 @@
 
-import { Card } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, Book, Shield, Zap, Terminal, Code, Users, Bell, LayoutDashboard } from "lucide-react";
+import { ChevronRight, Book, Shield, Zap, Terminal, Code, Users, Bell, LayoutDashboard, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Help = () => {
@@ -106,6 +104,20 @@ const Help = () => {
       ]
     },
     {
+      title: "Hosting Guide",
+      icon: Globe,
+      content: [
+        "Purchase a domain name from Namecheap's domain registration service",
+        "Set up shared hosting or VPS hosting plan through Namecheap's hosting section",
+        "Access cPanel through Namecheap's hosting dashboard to manage your hosting",
+        "Upload your built project files to the public_html directory via FTP or File Manager",
+        "Configure DNS settings in Namecheap's domain management to point to your hosting",
+        "Set up SSL certificate through Namecheap's SSL section for HTTPS",
+        "Update any environment variables or configuration files for production",
+        "Test your website thoroughly after deployment to ensure everything works"
+      ]
+    },
+    {
       title: "Performance Optimization",
       icon: Zap,
       content: [
@@ -128,33 +140,30 @@ const Help = () => {
           Help Center
         </h1>
         
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="space-y-12">
           {helpSections.map((section, index) => {
             const IconComponent = section.icon;
             return (
-              <Card key={index} className="p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <IconComponent className="w-5 h-5 text-primary" />
-                  <h2 className="text-xl font-semibold">{section.title}</h2>
+              <article key={index} className="prose prose-invert max-w-none">
+                <div className="flex items-center gap-3 mb-6">
+                  <IconComponent className="w-8 h-8 text-primary" />
+                  <h2 className="text-2xl font-semibold m-0">{section.title}</h2>
                 </div>
-                <ScrollArea className="h-[250px]">
-                  <ul className="space-y-3">
-                    {section.content.map((item, itemIndex) => (
-                      <li key={itemIndex} className="flex items-center space-x-2">
-                        <span className="w-2 h-2 bg-secondary rounded-full" />
-                        <span className="text-gray-200">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </ScrollArea>
-              </Card>
+                <div className="pl-11">
+                  {section.content.map((item, itemIndex) => (
+                    <div key={itemIndex} className="mb-4">
+                      <p className="text-gray-300 leading-relaxed">{item}</p>
+                    </div>
+                  ))}
+                </div>
+              </article>
             );
           })}
         </div>
 
-        <Card className="mt-8 p-6">
-          <h2 className="text-xl font-semibold mb-4">Need Additional Support?</h2>
-          <p className="text-gray-200 mb-6">
+        <div className="mt-12 bg-black/20 rounded-lg p-8">
+          <h2 className="text-2xl font-semibold mb-4">Need Additional Support?</h2>
+          <p className="text-gray-300 mb-6">
             Our dedicated support team is available 24/7 to assist you with any questions or concerns.
             Connect with our community forum to share experiences and get insights from other users.
           </p>
@@ -168,7 +177,7 @@ const Help = () => {
               Join Community Forum <ChevronRight className="w-4 h-4" />
             </Button>
           </div>
-        </Card>
+        </div>
       </div>
     </div>
   );
