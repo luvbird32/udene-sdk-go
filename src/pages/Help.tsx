@@ -1,8 +1,7 @@
-
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, Book, Shield, Zap, Terminal, Code, Users, Bell, LayoutDashboard } from "lucide-react";
+import { ChevronRight, Book, Shield, Zap, Terminal, Code, Users, Bell, LayoutDashboard, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Help = () => {
@@ -103,6 +102,20 @@ const Help = () => {
         "Configure data export options in multiple formats",
         "Set up role-based dashboard access controls",
         "Implement custom dashboard views per team role"
+      ]
+    },
+    {
+      title: "Hosting Guide",
+      icon: Globe,
+      content: [
+        "Purchase a domain name from Namecheap's domain registration service",
+        "Set up shared hosting or VPS hosting plan through Namecheap's hosting section",
+        "Access cPanel through Namecheap's hosting dashboard to manage your hosting",
+        "Upload your built project files to the public_html directory via FTP or File Manager",
+        "Configure DNS settings in Namecheap's domain management to point to your hosting",
+        "Set up SSL certificate through Namecheap's SSL section for HTTPS",
+        "Update any environment variables or configuration files for production",
+        "Test your website thoroughly after deployment to ensure everything works"
       ]
     },
     {
