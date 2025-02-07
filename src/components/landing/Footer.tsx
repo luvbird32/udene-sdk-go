@@ -16,7 +16,7 @@ export const Footer = () => {
     {
       title: "Platform",
       links: [
-        { text: "Developer API", path: "#" },
+        { text: "Developer API", path: "/documentation" },
         { text: "Partners", path: "#" },
         { text: "Developer Portal", path: "/developer" }
       ],
