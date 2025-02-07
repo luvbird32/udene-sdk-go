@@ -1,6 +1,5 @@
-
 import { Button } from "@/components/ui/button";
-import { ChevronRight, Book, Shield, Zap, Terminal, Code, Users, Bell, LayoutDashboard, Globe } from "lucide-react";
+import { ChevronRight, Book, Shield, Zap, Terminal, Code, Users, Bell, LayoutDashboard, Globe, Computer, Smartphone, Server, Database, Network, User } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Help = () => {
@@ -129,6 +128,48 @@ const Help = () => {
         "Optimize database queries and data access patterns",
         "Implement industry best practices for scaling",
         "Track and analyze performance metrics over time"
+      ]
+    },
+    {
+      title: "Use Cases",
+      icon: Computer,
+      content: [
+        "E-commerce Fraud Prevention: Protect online stores from payment fraud, account takeovers, and promo code abuse",
+        "Banking & Financial Services: Secure transactions, detect suspicious patterns, and prevent unauthorized access",
+        "Social Media Platforms: Combat fake accounts, prevent spam, and protect user authenticity",
+        "SaaS Applications: Secure user accounts, prevent trial abuse, and protect API endpoints",
+        "Online Gaming: Prevent cheating, detect bot usage, and secure in-game transactions",
+        "Healthcare Platforms: Protect patient data, secure medical records, and prevent unauthorized access",
+        "Educational Platforms: Prevent academic fraud, secure student data, and protect online assessments",
+        "Real Estate Platforms: Prevent listing fraud, protect user information, and secure transactions"
+      ]
+    },
+    {
+      title: "Industry Solutions",
+      icon: Network,
+      content: [
+        "Retail & E-commerce: Advanced fraud detection for online transactions and account protection",
+        "Financial Technology: Comprehensive security suite for digital banking and payment processing",
+        "Healthcare Technology: HIPAA-compliant security measures for patient data protection",
+        "Enterprise Software: Scalable security solutions for large-scale business applications",
+        "Digital Entertainment: Real-time protection for streaming platforms and content delivery",
+        "Education Technology: Academic integrity protection and student data security",
+        "Travel & Hospitality: Booking fraud prevention and secure payment processing",
+        "Government Services: High-security implementations for public sector applications"
+      ]
+    },
+    {
+      title: "Implementation Examples",
+      icon: Database,
+      content: [
+        "API Integration: Step-by-step guide to implementing our fraud detection API",
+        "User Authentication: Examples of secure login implementation with multi-factor authentication",
+        "Transaction Monitoring: Real-world examples of transaction fraud detection",
+        "Bot Protection: Implementation guides for bot detection and prevention",
+        "Risk Scoring: Examples of implementing risk-based authentication",
+        "Webhook Integration: Guide to setting up real-time fraud alerts",
+        "Custom Rules: Examples of creating custom fraud detection rules",
+        "Analytics Integration: Implementation of fraud analytics and reporting"
       ]
     }
   ];
