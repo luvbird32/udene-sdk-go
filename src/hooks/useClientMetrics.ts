@@ -1,3 +1,19 @@
+
+/**
+ * Custom hook for fetching and managing client metrics data
+ * 
+ * Handles:
+ * - Authentication session validation
+ * - Transaction data fetching
+ * - Risk score calculation
+ * - Error handling and notifications
+ * - Retry logic for failed requests
+ * 
+ * @returns {Object} Query result object containing:
+ * - data: Processed metrics including risk score and transaction counts
+ * - isLoading: Loading state indicator
+ * - error: Error object if the fetch fails
+ */
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -9,6 +25,7 @@ export const useClientMetrics = () => {
     queryKey: ["client-metrics"],
     queryFn: async () => {
       try {
+        // Validate authentication session
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         
         if (sessionError) {
@@ -20,6 +37,7 @@ export const useClientMetrics = () => {
           throw new Error("No active session");
         }
 
+        // Fetch recent transactions
         const { data: recentTransactions, error: transactionsError } = await supabase
           .from('transactions')
           .select('risk_score, is_fraudulent')
@@ -31,6 +49,7 @@ export const useClientMetrics = () => {
           throw transactionsError;
         }
 
+        // Calculate metrics from transaction data
         const validTransactions = recentTransactions?.filter(t => t?.risk_score != null) ?? [];
         const avgRiskScore = validTransactions.length > 0
           ? validTransactions.reduce((acc, t) => acc + (t.risk_score ?? 0), 0) / validTransactions.length

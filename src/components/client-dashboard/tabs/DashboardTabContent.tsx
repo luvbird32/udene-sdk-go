@@ -1,3 +1,28 @@
+
+/**
+ * DashboardTabContent Component
+ * 
+ * Manages and renders different tab sections of the client dashboard including:
+ * - Main dashboard overview with metrics and monitoring
+ * - Services management for configuring client services
+ * - Security settings and program management 
+ * - Reports generation and management
+ * - API credentials and documentation
+ * - Webhook configuration
+ * - Trigger management
+ * - Client profile settings
+ * - Investigation logs and management
+ * - Project settings
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {Object} props.metrics - Dashboard metrics data
+ * @param {number} props.metrics.riskScore - Overall risk assessment score
+ * @param {number} props.metrics.totalTransactions - Total number of processed transactions
+ * @param {number} props.metrics.flaggedTransactions - Number of transactions flagged as suspicious
+ * @param {boolean} props.metricsLoading - Loading state for metrics data
+ * @param {Error} props.metricsError - Error object if metrics fetch fails
+ */
 import { TabsContent } from "@/components/ui/tabs";
 import { ServiceManager } from "@/components/client-dashboard/services/ServiceManager";
 import { SecurityProgramList } from "@/components/client-dashboard/security/SecurityProgramList";

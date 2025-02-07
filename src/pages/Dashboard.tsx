@@ -1,9 +1,20 @@
 /**
- * Main Dashboard Component
+ * Main Dashboard Page Component
  * 
- * Renders the primary dashboard interface with real-time metrics, analytics,
- * and monitoring sections. Handles data fetching and state management for
- * dashboard metrics.
+ * Primary dashboard interface that provides:
+ * - Real-time metrics and analytics visualization
+ * - Monitoring sections for security and performance
+ * - Session management and timeout handling
+ * - Realtime data subscriptions
+ * - Project selection and management
+ * 
+ * Features:
+ * - Automatic metrics refresh every 3 seconds
+ * - Error handling with toast notifications
+ * - Session validation and management
+ * - Responsive layout with matrix background effect
+ * 
+ * @component
  */
 import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
