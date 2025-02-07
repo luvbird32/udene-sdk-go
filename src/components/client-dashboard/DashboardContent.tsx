@@ -1,3 +1,21 @@
+
+/**
+ * DashboardContent Component
+ * 
+ * Main dashboard layout component that organizes and displays various monitoring sections:
+ * - Connection status for system health monitoring
+ * - API usage tracking and credit management
+ * - Key performance metrics and risk analytics
+ * - Business intelligence metrics
+ * - Detailed analytics visualizations
+ * 
+ * The component handles loading states and error conditions for metrics data,
+ * ensuring graceful degradation when data is unavailable.
+ * 
+ * @param {DashboardContentProps} props - Component properties including metrics data and loading state
+ * @returns {JSX.Element} Rendered dashboard content with all monitoring sections
+ */
+
 import { ConnectionSection } from "@/components/dashboard/sections/ConnectionSection";
 import { ApiSection } from "@/components/dashboard/sections/ApiSection";
 import { MetricsSection } from "@/components/dashboard/sections/MetricsSection";
@@ -20,22 +38,6 @@ interface DashboardContentProps {
   metricsError?: Error | null;
 }
 
-/**
- * DashboardContent Component
- * 
- * Main dashboard layout component that organizes and displays various monitoring sections:
- * - Connection status for system health monitoring
- * - API usage tracking and credit management
- * - Key performance metrics and risk analytics
- * - Business intelligence metrics
- * - Detailed analytics visualizations
- * 
- * The component handles loading states and error conditions for metrics data,
- * ensuring graceful degradation when data is unavailable.
- * 
- * @param {DashboardContentProps} props - Component properties including metrics data and loading state
- * @returns {JSX.Element} Rendered dashboard content with all monitoring sections
- */
 export const DashboardContent = ({ 
   metrics, 
   metricsLoading, 
