@@ -12,6 +12,13 @@
  * The component handles loading states and error conditions for metrics data,
  * ensuring graceful degradation when data is unavailable.
  * 
+ * Layout Organization:
+ * 1. Connection Section - System health and connectivity status
+ * 2. API Section - API usage monitoring and credit management
+ * 3. Metrics Section - Key performance indicators and risk metrics
+ * 4. Business Intelligence - Strategic insights and business analytics
+ * 5. Analytics Section - Detailed data visualizations and trend analysis
+ * 
  * @param {DashboardContentProps} props - Component properties including metrics data and loading state
  * @returns {JSX.Element} Rendered dashboard content with all monitoring sections
  */
@@ -66,3 +73,4 @@ export const DashboardContent = ({
     </div>
   );
 };
+
