@@ -1,3 +1,4 @@
+
 /**
  * TrendAnalysis Component
  * 
@@ -27,8 +28,10 @@ import { TransactionTrendChart } from "./trends/TransactionTrendChart";
 import { useTrendData } from "./trends/useTrendData";
 
 export const TrendAnalysis = () => {
+  // Fetch trend data using custom hook that handles data fetching and transformation
   const { data: trends, isLoading, error } = useTrendData();
 
+  // Handle loading state with placeholder content
   if (isLoading) {
     return (
       <Card className="p-4">
@@ -40,6 +43,7 @@ export const TrendAnalysis = () => {
     );
   }
 
+  // Handle error state with user feedback
   if (error) {
     return (
       <Card className="p-4">
