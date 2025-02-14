@@ -7,53 +7,54 @@ import { Badge } from "@/components/ui/badge";
 export const PricingPlans = () => {
   const plans = [
     {
-      name: "Developer",
+      name: "Pay As You Go",
       price: "$0.002",
       period: "per API call",
-      description: "Perfect for startups and small businesses",
+      description: "Perfect for getting started with full access to all features",
       promotion: "First 10,000 API calls free",
-      volumeDiscount: "Volume discount starts at 50K calls",
+      volumeDiscount: "No minimum commitment required",
       features: [
-        "Up to 100K API calls/month",
-        "Basic fraud detection",
-        "Email support",
-        "Standard reporting",
-        "Basic API access",
-        "Community support"
+        "Full access to all fraud detection features",
+        "Complete ML model suite",
+        "Real-time API access",
+        "Advanced reporting dashboard",
+        "Email & community support",
+        "Standard SLA",
+        "Single region deployment"
       ],
       pricingTiers: [
         "First 10K calls: Free",
-        "10K-50K calls: $0.002/call",
-        "50K-100K calls: $0.0018/call"
+        "10K-100K calls: $0.002/call",
+        "100K+ calls: Volume discount available"
       ],
-      buttonText: "Start Free Trial",
+      buttonText: "Start Now",
       highlighted: false,
       isPromo: true
     },
     {
-      name: "Business",
-      basePrice: "$0.001",
-      price: "$0.0008",
-      period: "per API call with annual plan",
-      description: "Ideal for growing companies with higher volume needs",
-      promotion: "Save 20% with annual commitment",
-      savings: "Save up to $2,400/year",
-      volumeDiscount: "Automatic volume discounts",
+      name: "Growth",
+      basePrice: "$0.002",
+      price: "$0.001",
+      period: "per API call",
+      description: "Ideal for businesses with predictable volume",
+      promotion: "50% savings with minimum commitment",
+      savings: "Save up to $10,000/year",
+      volumeDiscount: "$1,000 monthly minimum",
       features: [
-        "Up to 1M API calls/month",
-        "Advanced fraud detection",
+        "Full access to all fraud detection features",
+        "Complete ML model suite",
+        "Real-time API access",
+        "Advanced reporting dashboard",
         "Priority support",
-        "Advanced reporting",
-        "Enhanced API access",
-        "Custom rules engine",
-        "Dedicated account manager"
+        "Enhanced SLA",
+        "Multi-region deployment"
       ],
       pricingTiers: [
-        "First 100K calls: $0.001/call",
-        "100K-500K calls: $0.0009/call",
-        "500K-1M calls: $0.0008/call"
+        "Minimum $1,000/month commitment",
+        "All calls at $0.001 each",
+        "Unused credits roll over 90 days"
       ],
-      buttonText: "Start Free Trial",
+      buttonText: "Get Started",
       highlighted: true,
       isPromo: true,
       bestValue: true
@@ -62,22 +63,22 @@ export const PricingPlans = () => {
       name: "Enterprise",
       price: "Custom",
       period: "volume-based pricing",
-      description: "Tailored solutions for large organizations",
-      volumeDiscount: "Custom volume pricing",
+      description: "Custom pricing for high-volume users",
+      volumeDiscount: "Custom volume commitment",
       features: [
-        "Unlimited API calls",
-        "Custom ML models",
+        "Full access to all fraud detection features",
+        "Complete ML model suite",
+        "Real-time API access",
+        "Advanced reporting dashboard",
         "24/7 dedicated support",
-        "Multi-region deployment",
-        "SLA guarantee",
-        "Custom reporting",
-        "Advanced security features",
-        "On-premise deployment option"
+        "Custom SLA guarantees",
+        "Global deployment options",
+        "Custom contract terms"
       ],
       pricingTiers: [
         "Volume-based custom pricing",
-        "Bulk purchase discounts",
-        "Multi-year agreements available"
+        "Annual commitment options",
+        "Custom payment terms available"
       ],
       buttonText: "Contact Sales",
       highlighted: false,
