@@ -7,18 +7,37 @@ import { Badge } from "@/components/ui/badge";
 export const PricingPlans = () => {
   const plans = [
     {
-      name: "Pay As You Go",
+      name: "Developer",
+      price: "$0.002",
+      period: "per API call",
+      description: "Perfect for startups and small businesses",
+      promotion: "First 10,000 API calls free",
+      features: [
+        "Up to 100K API calls/month",
+        "Basic fraud detection",
+        "Email support",
+        "Standard reporting",
+        "Basic API access",
+        "Community support"
+      ],
+      buttonText: "Start Free Trial",
+      highlighted: false,
+      isPromo: true
+    },
+    {
+      name: "Business",
       price: "$0.001",
       period: "per API call",
-      description: "Perfect for businesses of any size with flexible usage needs",
-      promotion: "First 1000 API calls free for new users",
+      description: "Ideal for growing companies with higher volume needs",
+      promotion: "20% discount for annual commitment",
       features: [
-        "No minimum commitment",
-        "Real-time fraud detection",
-        "Email support",
-        "Basic reporting",
-        "Standard API access",
-        "Pay only for what you use"
+        "Up to 1M API calls/month",
+        "Advanced fraud detection",
+        "Priority support",
+        "Advanced reporting",
+        "Enhanced API access",
+        "Custom rules engine",
+        "Dedicated account manager"
       ],
       buttonText: "Start Free Trial",
       highlighted: true,
@@ -27,15 +46,17 @@ export const PricingPlans = () => {
     {
       name: "Enterprise",
       price: "Custom",
-      period: "contact sales",
-      description: "Tailored solutions for large organizations with specific needs",
+      period: "volume-based pricing",
+      description: "Tailored solutions for large organizations",
       features: [
-        "Volume discounts",
+        "Unlimited API calls",
         "Custom ML models",
         "24/7 dedicated support",
         "Multi-region deployment",
         "SLA guarantee",
-        "Custom reporting"
+        "Custom reporting",
+        "Advanced security features",
+        "On-premise deployment option"
       ],
       buttonText: "Contact Sales",
       highlighted: false,
@@ -48,14 +69,14 @@ export const PricingPlans = () => {
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">
-            Simple, Transparent Pricing
+            Flexible Pricing for Every Scale
           </h2>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-            Only pay for what you use, with no hidden fees
+            Start free and scale as you grow, with predictable pricing and no hidden fees
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {plans.map((plan, index) => (
             <div
               key={index}
