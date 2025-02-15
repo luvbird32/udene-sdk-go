@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Bell } from "lucide-react";
@@ -44,27 +45,52 @@ export const NotificationBell = () => {
   const unreadCount = notifications.filter(n => !n.is_read).length;
 
   useEffect(() => {
-    const channel = supabase
-      .channel('notification_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'user_notifications',
-        },
-        (payload) => {
-          const notification = payload.new as Notification;
-          toast({
-            title: notification.title,
-            description: notification.message,
-          });
-        }
-      )
-      .subscribe();
+    let channel;
+    try {
+      channel = supabase
+        .channel('notification_changes')
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'user_notifications',
+          },
+          (payload) => {
+            const notification = payload.new as Notification;
+            toast({
+              title: notification.title,
+              description: notification.message,
+            });
+          }
+        )
+        .subscribe((status) => {
+          if (status === 'SUBSCRIBED') {
+            console.log('Successfully subscribed to notifications');
+          } else if (status === 'CLOSED') {
+            console.log('Notification subscription closed');
+          } else if (status === 'CHANNEL_ERROR') {
+            console.error('Error in notification channel');
+            toast({
+              title: "Notification Error",
+              description: "Unable to connect to notification service",
+              variant: "destructive",
+            });
+          }
+        });
+    } catch (error) {
+      console.error('Error setting up notification subscription:', error);
+      toast({
+        title: "Notification Error",
+        description: "Unable to set up notification service",
+        variant: "destructive",
+      });
+    }
 
     return () => {
-      supabase.removeChannel(channel);
+      if (channel) {
+        supabase.removeChannel(channel);
+      }
     };
   }, [toast]);
 
