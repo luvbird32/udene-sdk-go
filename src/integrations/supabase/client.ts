@@ -9,6 +9,9 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables');
 }
 
+// Ensure WebSocket URL uses secure protocol
+const wsUrl = supabaseUrl.replace('http://', 'wss://').replace('https://', 'wss://');
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
@@ -27,9 +30,6 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     params: {
       eventsPerSecond: 10,
     },
-    transport: {
-      wsUrl: supabaseUrl.replace('http', 'wss').replace('https', 'wss')
-    }
   },
 });
 
