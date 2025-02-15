@@ -1,42 +1,43 @@
-import { ShieldCheck, UserCheck, Clock, Activity, LineChart, Bell } from "lucide-react";
+
+import { ShieldCheck, UserCheck, Clock, Activity, LineChart, Bell, Lock, AlertTriangle } from "lucide-react";
 
 export const UseCases = () => {
   const useCases = [
     {
       icon: ShieldCheck,
-      title: "Free Trial Protection",
-      description: "Stop users from abusing your free trial system with our industry-leading pattern detection and cross-platform tracking",
-      metrics: ["99.9% prevention rate", "35ms response time"]
+      title: "Comprehensive Risk Management",
+      description: "Enterprise-grade risk mitigation with real-time monitoring and automated response systems for maximum security",
+      metrics: ["99.9% prevention rate", "Real-time protection"]
     },
     {
-      icon: Activity,
-      title: "Account Protection",
-      description: "Prevent account takeovers and unauthorized access with real-time behavioral monitoring and risk assessment",
-      metrics: ["35ms response time", "99.9% accuracy"]
+      icon: Lock,
+      title: "Compliance Automation",
+      description: "Automated compliance monitoring and reporting systems ensuring adherence to global regulatory standards",
+      metrics: ["Multi-regulatory compliance", "Automated reporting"]
     },
     {
       icon: UserCheck,
-      title: "Identity Verification",
-      description: "Advanced identity validation that stops fraudsters while maintaining a smooth experience for legitimate users",
-      metrics: ["2-factor verification", "Behavioral analysis"]
+      title: "Advanced Identity Verification",
+      description: "Enhanced identity validation with multi-factor authentication and behavioral analysis for fraud prevention",
+      metrics: ["Multi-factor verification", "Behavioral analysis"]
     },
     {
-      icon: Clock,
-      title: "Real-time Prevention",
-      description: "Stop exploitation attempts instantly with automated response systems and continuous monitoring",
-      metrics: ["24/7 protection", "Instant blocking"]
+      icon: AlertTriangle,
+      title: "Proactive Risk Detection",
+      description: "AI-powered risk detection systems identifying and preventing threats before they impact your business",
+      metrics: ["Early warning system", "AI-powered analysis"]
     },
     {
       icon: LineChart,
-      title: "Revenue Protection",
-      description: "Protect your bottom line from fraud and abuse with comprehensive financial loss prevention",
-      metrics: ["$10M+ saved", "ROI tracking"]
+      title: "Risk Analytics & Reporting",
+      description: "Comprehensive risk analytics and compliance reporting for informed decision-making and regulatory requirements",
+      metrics: ["Real-time analytics", "Compliance reporting"]
     },
     {
       icon: Bell,
-      title: "Early Warning System",
-      description: "Detect and respond to new fraud patterns before they can impact your business at scale",
-      metrics: ["Proactive alerts", "Pattern learning"]
+      title: "Compliance Monitoring",
+      description: "24/7 automated compliance monitoring with instant alerts and detailed audit trails for regulatory adherence",
+      metrics: ["Continuous monitoring", "Audit trail generation"]
     }
   ];
 
@@ -45,11 +46,11 @@ export const UseCases = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="bg-black/40 backdrop-blur-sm p-8 md:p-16 rounded-xl max-w-5xl mx-auto text-center border border-white/5 mb-16 transform transition-all duration-500 hover:border-primary/20">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
-            <span className="text-white">Real Solutions for </span>
-            <span className="text-[#22c55e]">Real Threats</span>
+            <span className="text-white">Enterprise-Grade </span>
+            <span className="text-[#22c55e]">Risk Management & Compliance</span>
           </h2>
           <p className="text-xl text-white max-w-3xl mx-auto">
-            Protect your business from sophisticated fraud attempts and system exploitation
+            Comprehensive protection against threats with automated compliance monitoring
           </p>
         </div>
 
