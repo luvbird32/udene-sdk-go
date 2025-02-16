@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { Features } from "@/components/landing/Features";
@@ -24,44 +25,46 @@ const Landing = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-black">
+      <Header />
       <MatrixBackground>
-        <Header />
         <HeroSection />
       </MatrixBackground>
       
-      <div id="why-mission-objective">
-        <WhyMissionObjective />
-      </div>
-      <div id="services">
-        <ServicesSection />
-      </div>
-      <div id="features">
-        <Features />
-      </div>
-      <div id="how-it-works">
-        <HowItWorks />
-      </div>
-      <div id="industries">
-        <Industries />
-      </div>
-      <div id="testimonials">
-        <Testimonials />
-      </div>
-      <div id="use-cases">
-        <UseCases />
-      </div>
-      <div id="compliance">
-        <Compliance />
-      </div>
-      <div id="terms">
-        <Terms />
-      </div>
-      <div id="pricing">
-        <PricingPlans />
-      </div>
-      <div id="about">
-        <Footer />
+      <div className="bg-gradient-to-b from-black via-black/95 to-black">
+        <div id="why-mission-objective">
+          <WhyMissionObjective />
+        </div>
+        <div id="services">
+          <ServicesSection />
+        </div>
+        <div id="features">
+          <Features />
+        </div>
+        <div id="how-it-works">
+          <HowItWorks />
+        </div>
+        <div id="industries">
+          <Industries />
+        </div>
+        <div id="testimonials">
+          <Testimonials />
+        </div>
+        <div id="use-cases">
+          <UseCases />
+        </div>
+        <div id="compliance">
+          <Compliance />
+        </div>
+        <div id="terms">
+          <Terms />
+        </div>
+        <div id="pricing">
+          <PricingPlans />
+        </div>
+        <div id="about">
+          <Footer />
+        </div>
       </div>
     </div>
   );
