@@ -49,31 +49,33 @@ export const Header = () => {
             </button>
 
             <div className="hidden lg:flex items-center space-x-6">
-              <NavigationMenuList className="hidden lg:flex">
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-gray-300 hover:text-white">
-                    Solutions
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="grid w-[400px] gap-3 p-4 bg-black/95">
-                      <div 
-                        className="block p-3 space-y-1 hover:bg-green-500/10 rounded-lg cursor-pointer"
-                        onClick={() => navigate('/features')}
-                      >
-                        <div className="font-medium text-green-400">Fraud Detection</div>
-                        <p className="text-sm text-gray-400">Real-time transaction monitoring</p>
+              <NavigationMenu>
+                <NavigationMenuList>
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger className="text-gray-300 hover:text-white">
+                      Solutions
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <div className="grid w-[400px] gap-3 p-4 bg-black/95">
+                        <div 
+                          className="block p-3 space-y-1 hover:bg-green-500/10 rounded-lg cursor-pointer"
+                          onClick={() => navigate('/features')}
+                        >
+                          <div className="font-medium text-green-400">Fraud Detection</div>
+                          <p className="text-sm text-gray-400">Real-time transaction monitoring</p>
+                        </div>
+                        <div 
+                          className="block p-3 space-y-1 hover:bg-green-500/10 rounded-lg cursor-pointer"
+                          onClick={() => navigate('/features')}
+                        >
+                          <div className="font-medium text-green-400">Risk Assessment</div>
+                          <p className="text-sm text-gray-400">Advanced risk scoring system</p>
+                        </div>
                       </div>
-                      <div 
-                        className="block p-3 space-y-1 hover:bg-green-500/10 rounded-lg cursor-pointer"
-                        onClick={() => navigate('/features')}
-                      >
-                        <div className="font-medium text-green-400">Risk Assessment</div>
-                        <p className="text-sm text-gray-400">Advanced risk scoring system</p>
-                      </div>
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenuList>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
 
               <nav className="hidden lg:flex items-center space-x-6">
                 <button className="text-gray-300 hover:text-white">Pricing</button>
