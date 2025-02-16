@@ -27,11 +27,6 @@ export const HeroSection = () => {
     <section className="relative z-10 min-h-[85vh] flex items-center justify-center px-4 py-16 md:py-32">
       <div className="w-full max-w-6xl mx-auto">
         <div className="text-center space-y-8">
-          <div className="inline-flex items-center px-4 py-2 bg-green-500/10 rounded-full border border-green-500/20 mb-4">
-            <Star className="w-4 h-4 text-green-400 mr-2" />
-            <span className="text-sm text-green-400">Trusted by Fortune 500 companies</span>
-          </div>
-
           <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-bold text-white leading-tight">
             AI-Powered Fraud Protection for{" "}
             <span className="bg-gradient-to-r from-green-400 to-green-500 text-transparent bg-clip-text">
