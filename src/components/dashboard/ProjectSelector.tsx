@@ -77,7 +77,7 @@ export const ProjectSelector = () => {
         title: serviceType,
         type: "service",
         description: `Service: ${serviceType}`,
-        path: `/dashboard/services/${service.id}`,
+        path: `/services/${service.id}`, // Updated path to match router configuration
       });
     }
   });
@@ -95,6 +95,7 @@ export const ProjectSelector = () => {
   }, []);
 
   const handleSearchResultClick = (result: SearchResult) => {
+    console.log("Handling search result click:", result); // Debug log
     switch (result.type) {
       case "project":
         const project = projects?.find(p => p.id === result.id);
@@ -108,6 +109,7 @@ export const ProjectSelector = () => {
         break;
       case "service":
         if (result.path) {
+          console.log("Navigating to:", result.path); // Debug log
           navigate(result.path);
           toast({
             title: "Navigation",
@@ -215,7 +217,10 @@ export const ProjectSelector = () => {
                       {resultsOfType.map((result) => (
                         <CommandItem
                           key={`${result.type}-${result.id}`}
-                          onSelect={() => handleSearchResultClick(result)}
+                          onSelect={() => {
+                            console.log("Command item selected:", result); // Debug log
+                            handleSearchResultClick(result);
+                          }}
                           className="flex items-center justify-between p-2 cursor-pointer hover:bg-accent"
                         >
                           <div>
