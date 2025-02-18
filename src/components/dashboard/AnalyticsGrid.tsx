@@ -1,3 +1,4 @@
+
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { TrendAnalysis } from "@/components/client-dashboard/analytics/TrendAnalysis";
 import { GeographicDistribution } from "@/components/client-dashboard/analytics/GeographicDistribution";
@@ -19,7 +20,7 @@ import { MonitoringSection } from "./MonitoringSection";
 
 export const AnalyticsGrid = () => {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-3xl mx-auto">
       <ErrorBoundary>
         <AnalyticsSection />
       </ErrorBoundary>
@@ -32,7 +33,7 @@ export const AnalyticsGrid = () => {
         <MonitoringSection />
       </ErrorBoundary>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="space-y-6">
         <ErrorBoundary>
           <TransactionHistory />
         </ErrorBoundary>
