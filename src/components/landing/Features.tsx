@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 
 export const Features = () => {
   return (
-    <section className="relative z-10 py-16 px-4 bg-[hsl(222,47%,11%)]">
+    <section className="relative z-10 py-16 px-4">
       <div className="container mx-auto">
         <div className="bg-black/40 backdrop-blur-sm p-6 md:p-10 rounded-xl max-w-4xl mx-auto text-center border border-white/5 mb-10">
           <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-secondary/10 p-3 rounded-full border border-secondary/20">
@@ -93,3 +93,4 @@ const FeatureCard = ({ icon, title, description }: FeatureCardProps) => {
     </Card>
   );
 };
+
