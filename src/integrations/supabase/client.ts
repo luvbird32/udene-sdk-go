@@ -11,16 +11,18 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    autoRefreshToken: true,
     persistSession: true,
+    autoRefreshToken: true,
     detectSessionInUrl: true,
+    storage: localStorage,
+    storageKey: 'sb-auth-token',
     flowType: 'pkce'
   },
   global: {
     headers: {
       'X-Client-Info': 'supabase-js-web'
     },
-  },
+  }
 });
 
 // Add error handling for auth state changes
@@ -30,25 +32,30 @@ supabase.auth.onAuthStateChange((event, session) => {
   if (event === 'SIGNED_IN') {
     console.log('User signed in:', session?.user?.id);
   } else if (event === 'SIGNED_OUT') {
-    console.log('User signed out');
-    // Clear any stored tokens
+    // Clear ALL auth data
+    localStorage.removeItem('sb-auth-token');
     localStorage.removeItem('supabase.auth.token');
+    sessionStorage.clear();
   } else if (event === 'TOKEN_REFRESHED') {
     console.log('Token refreshed');
+  } else if (event === 'INITIAL_SESSION') {
+    console.log('Initial session loaded');
   }
 });
 
 // Add health check function
 export const checkSupabaseHealth = async () => {
   try {
-    const { data: { user }, error } = await supabase.auth.getUser();
-    if (error) {
-      console.error('Supabase health check failed:', error);
-      throw error;
-    }
-    return !!user;
+    const { data: { session } } = await supabase.auth.getSession();
+    console.log('Health check session:', session ? 'Active' : 'None');
+    return !!session;
   } catch (error) {
     console.error('Supabase health check failed:', error);
     return false;
   }
 };
+
+// Initialize session check
+checkSupabaseHealth().then(isHealthy => {
+  console.log('Initial health check:', isHealthy ? 'OK' : 'Failed');
+});
