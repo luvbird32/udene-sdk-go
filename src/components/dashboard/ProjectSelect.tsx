@@ -26,13 +26,19 @@ export const ProjectSelect = ({
       value={currentProject?.id} 
       onValueChange={handleProjectChange}
     >
-      <SelectTrigger className="w-[200px]">
+      <SelectTrigger className="w-[200px] bg-background border-input">
         <SelectValue placeholder="Select project" />
       </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="all">All Projects</SelectItem>
+      <SelectContent className="bg-popover border border-border shadow-md">
+        <SelectItem value="all" className="hover:bg-accent hover:text-accent-foreground">
+          All Projects
+        </SelectItem>
         {projects?.map((project) => (
-          <SelectItem key={project.id} value={project.id}>
+          <SelectItem 
+            key={project.id} 
+            value={project.id}
+            className="hover:bg-accent hover:text-accent-foreground"
+          >
             {project.name}
           </SelectItem>
         ))}
