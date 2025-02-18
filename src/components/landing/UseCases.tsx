@@ -54,23 +54,23 @@ export const UseCases = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {useCases.map((useCase, index) => (
             <div
               key={index}
-              className="glass-card p-8 rounded-xl transition-all duration-300 hover:scale-105 hover:border-primary/30 backdrop-blur-lg border border-primary/20"
+              className="glass-card p-6 rounded-xl transition-all duration-300 hover:scale-105 hover:border-primary/30 backdrop-blur-lg border border-primary/20"
             >
-              <useCase.icon className="w-12 h-12 text-primary mb-6" />
-              <h3 className="text-2xl font-semibold text-white mb-4">
+              <useCase.icon className="w-8 h-8 text-primary mb-4" />
+              <h3 className="text-xl font-semibold text-white mb-3">
                 {useCase.title}
               </h3>
-              <p className="text-gray-300 mb-6 leading-relaxed">
+              <p className="text-gray-300 text-sm mb-4 leading-relaxed">
                 {useCase.description}
               </p>
-              <div className="border-t border-primary/20 pt-4">
-                <div className="grid grid-cols-1 gap-2">
+              <div className="border-t border-primary/20 pt-3">
+                <div className="grid grid-cols-1 gap-1.5">
                   {useCase.metrics.map((metric, idx) => (
-                    <div key={idx} className="text-primary text-sm font-medium">
+                    <div key={idx} className="text-primary text-xs font-medium">
                       ✓ {metric}
                     </div>
                   ))}
@@ -83,3 +83,4 @@ export const UseCases = () => {
     </section>
   );
 };
+
