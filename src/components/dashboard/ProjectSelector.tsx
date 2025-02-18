@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -66,16 +67,16 @@ export const ProjectSelector = () => {
 
   // Add filtered services
   services?.forEach((service) => {
+    const serviceType = service.service_type || "";
     if (
       searchQuery &&
-      (service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (service.description?.toLowerCase() || "").includes(searchQuery.toLowerCase()))
+      serviceType.toLowerCase().includes(searchQuery.toLowerCase())
     ) {
       searchResults.push({
         id: service.id,
-        title: service.name,
+        title: serviceType,
         type: "service",
-        description: service.description,
+        description: `Service: ${serviceType}`,
         path: `/dashboard/services/${service.id}`,
       });
     }
