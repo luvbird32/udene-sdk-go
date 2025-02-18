@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -18,6 +19,23 @@ export const ClientSettingsForm = () => {
     notification_preferences: {
       email: true,
       sms: false,
+      push: false,
+      categories: {
+        security: true,
+        fraud: true,
+        system: true,
+        account: true
+      },
+      severity_levels: {
+        low: true,
+        medium: true,
+        high: true
+      },
+      quiet_hours: {
+        enabled: false,
+        start: "22:00",
+        end: "07:00"
+      }
     },
     risk_threshold: 75,
     contact_email: '',
