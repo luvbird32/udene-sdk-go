@@ -25,6 +25,13 @@ export const HeroSection = () => {
 
   return (
     <section className="relative z-10 min-h-[90vh] flex items-center justify-center px-4 py-16 md:py-32 overflow-hidden">
+      {/* Background image with overlay */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10"
+        style={{
+          backgroundImage: 'url("/lovable-uploads/photo-1487058792275-0ad4aaf24ca7.jpeg")'
+        }}
+      />
       {/* Background gradient effects */}
       <div className="absolute inset-0 bg-gradient-to-b from-black via-black/95 to-black pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-green-500/20 via-transparent to-transparent blur-2xl opacity-30" />
@@ -122,3 +129,4 @@ export const HeroSection = () => {
     </section>
   );
 };
+
