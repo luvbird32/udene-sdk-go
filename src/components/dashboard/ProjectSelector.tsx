@@ -1,26 +1,15 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Plus, Search, ChevronRight } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useState, useRef, useEffect } from "react";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useProject } from "@/contexts/ProjectContext";
 import { useNavigate } from "react-router-dom";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-
-// Define search result types for better organization
-interface SearchResult {
-  id: string;
-  title: string;
-  type: 'project' | 'service' | 'product';
-  description?: string;
-  path?: string;
-}
+import { SearchInput } from "./SearchInput";
+import { ProjectDialog } from "./ProjectDialog";
+import { ProjectSelect } from "./ProjectSelect";
+import { SearchResult } from "./types";
 
 export const ProjectSelector = () => {
   const { toast } = useToast();
@@ -34,7 +23,6 @@ export const ProjectSelector = () => {
   const { data: currentUser } = useCurrentUser();
   const { currentProject, setCurrentProject, projects, isLoading } = useProject();
 
-  // Query for services and products
   const { data: services } = useQuery({
     queryKey: ["services"],
     queryFn: async () => {
@@ -46,10 +34,8 @@ export const ProjectSelector = () => {
     },
   });
 
-  // Filter projects, services, and products based on search query
   const searchResults: SearchResult[] = [];
 
-  // Add filtered projects
   projects?.forEach((project) => {
     if (
       searchQuery &&
@@ -65,7 +51,6 @@ export const ProjectSelector = () => {
     }
   });
 
-  // Add filtered services
   services?.forEach((service) => {
     const serviceType = service.service_type || "";
     if (
@@ -77,12 +62,11 @@ export const ProjectSelector = () => {
         title: serviceType,
         type: "service",
         description: `Service: ${serviceType}`,
-        path: `/services/${service.id}`, // Updated path to match router configuration
+        path: `/services/${service.id}`,
       });
     }
   });
 
-  // Handle clicking outside of search results
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -95,7 +79,7 @@ export const ProjectSelector = () => {
   }, []);
 
   const handleSearchResultClick = (result: SearchResult) => {
-    console.log("Handling search result click:", result); // Debug log
+    console.log("Handling search result click:", result);
     switch (result.type) {
       case "project":
         const project = projects?.find(p => p.id === result.id);
@@ -109,7 +93,7 @@ export const ProjectSelector = () => {
         break;
       case "service":
         if (result.path) {
-          console.log("Navigating to:", result.path); // Debug log
+          console.log("Navigating to:", result.path);
           navigate(result.path);
           toast({
             title: "Navigation",
@@ -185,125 +169,30 @@ export const ProjectSelector = () => {
 
   return (
     <div className="flex items-center gap-4 mb-6">
-      {/* Search Input with Results Dropdown */}
-      <div className="relative flex-1" ref={searchRef}>
-        <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-          <Search className="h-4 w-4 text-gray-400" />
-        </div>
-        <Input
-          type="text"
-          placeholder="Search products and services..."
-          value={searchQuery}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setShowSearchResults(true);
-          }}
-          onFocus={() => setShowSearchResults(true)}
-          className="pl-10 w-full"
-        />
-        
-        {/* Search Results Dropdown */}
-        {showSearchResults && searchQuery && (
-          <div className="absolute mt-2 w-full bg-popover text-popover-foreground shadow-md rounded-md border z-50">
-            <Command>
-              <CommandList>
-                <CommandEmpty>No results found.</CommandEmpty>
-                {["project", "service", "product"].map((type) => {
-                  const resultsOfType = searchResults.filter(r => r.type === type);
-                  if (resultsOfType.length === 0) return null;
-
-                  return (
-                    <CommandGroup key={type} heading={type.charAt(0).toUpperCase() + type.slice(1) + 's'}>
-                      {resultsOfType.map((result) => (
-                        <CommandItem
-                          key={`${result.type}-${result.id}`}
-                          onSelect={() => {
-                            console.log("Command item selected:", result); // Debug log
-                            handleSearchResultClick(result);
-                          }}
-                          className="flex items-center justify-between p-2 cursor-pointer hover:bg-accent"
-                        >
-                          <div>
-                            <div className="font-medium">{result.title}</div>
-                            {result.description && (
-                              <div className="text-sm text-muted-foreground">{result.description}</div>
-                            )}
-                          </div>
-                          <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  );
-                })}
-              </CommandList>
-            </Command>
-          </div>
-        )}
-      </div>
-
-      {/* Project Selector */}
-      <Select 
-        disabled={isLoading} 
-        value={currentProject?.id} 
-        onValueChange={handleProjectChange}
-      >
-        <SelectTrigger className="w-[200px]">
-          <SelectValue placeholder="Select project" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">All Projects</SelectItem>
-          {projects?.map((project) => (
-            <SelectItem key={project.id} value={project.id}>
-              {project.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-
-      {/* Add Project Button/Dialog */}
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger asChild>
-          <Button variant="outline" size="icon">
-            <Plus className="h-4 w-4" />
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Create New Project</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="name" className="text-sm font-medium">
-                Project Name
-              </label>
-              <Input
-                id="name"
-                value={newProjectName}
-                onChange={(e) => setNewProjectName(e.target.value)}
-                placeholder="Enter project name"
-              />
-            </div>
-            <div>
-              <label htmlFor="description" className="text-sm font-medium">
-                Description (optional)
-              </label>
-              <Input
-                id="description"
-                value={newProjectDescription}
-                onChange={(e) => setNewProjectDescription(e.target.value)}
-                placeholder="Enter project description"
-              />
-            </div>
-            <Button
-              className="w-full"
-              onClick={handleCreateProject}
-              disabled={!newProjectName.trim()}
-            >
-              Create Project
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <SearchInput
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        showSearchResults={showSearchResults}
+        setShowSearchResults={setShowSearchResults}
+        searchResults={searchResults}
+        handleSearchResultClick={handleSearchResultClick}
+        searchRef={searchRef}
+      />
+      <ProjectSelect
+        isLoading={isLoading}
+        currentProject={currentProject}
+        projects={projects}
+        handleProjectChange={handleProjectChange}
+      />
+      <ProjectDialog
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        newProjectName={newProjectName}
+        setNewProjectName={setNewProjectName}
+        newProjectDescription={newProjectDescription}
+        setNewProjectDescription={setNewProjectDescription}
+        handleCreateProject={handleCreateProject}
+      />
     </div>
   );
 };
