@@ -1,3 +1,4 @@
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -111,6 +112,44 @@ export const useApiCredits = () => {
         if (!data) {
           console.log('No credits found, initializing...');
           return await initializeCredits.mutateAsync(user.id);
+        }
+
+        // Check if trial has expired
+        if (data.is_trial && new Date(data.trial_end_date) <= new Date()) {
+          console.log('Trial has expired, updating status...');
+          const { error: updateError } = await supabase
+            .from('api_credits')
+            .update({ 
+              is_trial: false,
+              total_credits: 0,
+              used_credits: 0
+            })
+            .eq('id', data.id);
+
+          if (updateError) {
+            console.error('Error updating expired trial:', updateError);
+            throw updateError;
+          }
+
+          // Fetch the updated credits
+          const { data: updatedCredits, error: fetchError } = await supabase
+            .from('api_credits')
+            .select('*')
+            .eq('id', data.id)
+            .single();
+
+          if (fetchError) {
+            console.error('Error fetching updated credits:', fetchError);
+            throw fetchError;
+          }
+
+          toast({
+            title: "Trial Expired",
+            description: "Your trial period has ended. Please upgrade your plan to continue using our services.",
+            variant: "destructive"
+          });
+
+          return updatedCredits;
         }
 
         console.log('Credits fetched successfully:', data);
