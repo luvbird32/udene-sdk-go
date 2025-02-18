@@ -9,7 +9,7 @@ interface MetricsOverviewProps {
 
 export const MetricsOverview = ({ metrics }: MetricsOverviewProps) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 gap-4 max-w-3xl mx-auto">
       <MetricCard
         title="ROI on Fraud Prevention"
         value={`$${metrics.roi.toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
