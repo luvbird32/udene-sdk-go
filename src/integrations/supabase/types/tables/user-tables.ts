@@ -1,3 +1,4 @@
+
 import { Json } from '../database';
 
 export interface UserActivitiesTable {
@@ -37,6 +38,8 @@ export interface UserNotificationsTable {
     title: string;
     message: string;
     type: string;
+    severity: 'low' | 'medium' | 'high';
+    category: 'security' | 'fraud' | 'system' | 'account';
     is_read: boolean | null;
     created_at: string | null;
     updated_at: string | null;
@@ -47,6 +50,8 @@ export interface UserNotificationsTable {
     title: string;
     message: string;
     type: string;
+    severity: 'low' | 'medium' | 'high';
+    category: 'security' | 'fraud' | 'system' | 'account';
     is_read?: boolean | null;
     created_at?: string | null;
     updated_at?: string | null;
@@ -57,6 +62,8 @@ export interface UserNotificationsTable {
     title?: string;
     message?: string;
     type?: string;
+    severity?: 'low' | 'medium' | 'high';
+    category?: 'security' | 'fraud' | 'system' | 'account';
     is_read?: boolean | null;
     created_at?: string | null;
     updated_at?: string | null;

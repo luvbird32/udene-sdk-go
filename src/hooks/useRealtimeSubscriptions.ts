@@ -1,4 +1,5 @@
 
+
 import { useEffect } from 'react';
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -38,15 +39,42 @@ export const useRealtimeSubscriptions = () => {
                   }
                 }
               });
+
+              // Check user notification preferences before showing toast
+              const { data: { user } } = await supabase.auth.getUser();
+              if (user) {
+                const { data: preferences } = await supabase
+                  .from('profiles')
+                  .select('settings')
+                  .eq('id', user.id)
+                  .single();
+
+                const notificationPrefs = preferences?.settings?.notification_preferences;
+                const currentHour = new Date().getHours();
+                const quietHoursEnabled = notificationPrefs?.quiet_hours?.enabled;
+                const quietStart = parseInt(notificationPrefs?.quiet_hours?.start?.split(':')[0] || '0');
+                const quietEnd = parseInt(notificationPrefs?.quiet_hours?.end?.split(':')[0] || '0');
+                
+                const isQuietHours = quietHoursEnabled && 
+                  ((quietStart <= quietEnd && currentHour >= quietStart && currentHour < quietEnd) ||
+                   (quietStart > quietEnd && (currentHour >= quietStart || currentHour < quietEnd)));
+
+                const shouldNotify = 
+                  notificationPrefs?.severity_levels?.[payload.new.severity] &&
+                  notificationPrefs?.categories?.fraud &&
+                  !isQuietHours;
+
+                if (shouldNotify) {
+                  toast({
+                    title: "New Fraud Alert",
+                    description: payload.new.description,
+                    variant: "destructive",
+                  });
+                }
+              }
             } catch (error) {
               console.error('Failed to deliver webhook:', error);
             }
-
-            toast({
-              title: "New Fraud Alert",
-              description: payload.new.description,
-              variant: "destructive",
-            });
           }
         )
         .subscribe((status) => {
@@ -88,6 +116,25 @@ export const useRealtimeSubscriptions = () => {
                   }
                 }
               });
+
+              // Check notification preferences for transactions
+              const { data: { user } } = await supabase.auth.getUser();
+              if (user && payload.new.risk_score > 0.7) { // High-risk transactions
+                const { data: preferences } = await supabase
+                  .from('profiles')
+                  .select('settings')
+                  .eq('id', user.id)
+                  .single();
+
+                const notificationPrefs = preferences?.settings?.notification_preferences;
+                if (notificationPrefs?.categories?.security && notificationPrefs?.severity_levels?.high) {
+                  toast({
+                    title: "High Risk Transaction Detected",
+                    description: `Transaction ${payload.new.id} has a high risk score of ${payload.new.risk_score}`,
+                    variant: "destructive",
+                  });
+                }
+              }
             } catch (error) {
               console.error('Failed to deliver webhook:', error);
             }
