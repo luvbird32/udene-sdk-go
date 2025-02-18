@@ -11,28 +11,22 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    persistSession: true,
     autoRefreshToken: true,
+    persistSession: true,
     detectSessionInUrl: true,
-    flowType: 'pkce',
-    storage: localStorage,
-    storageKey: 'supabase.auth.token',
+    flowType: 'pkce'
   },
   global: {
     headers: {
-      'X-Client-Info': 'supabase-js-web',
-    },
-  },
-  realtime: {
-    params: {
-      eventsPerSecond: 10,
+      'X-Client-Info': 'supabase-js-web'
     },
   },
 });
 
 // Add error handling for auth state changes
 supabase.auth.onAuthStateChange((event, session) => {
-  console.log('Auth state changed:', event);
+  console.log('Auth state changed:', event, session ? 'Has session' : 'No session');
+  
   if (event === 'SIGNED_IN') {
     console.log('User signed in:', session?.user?.id);
   } else if (event === 'SIGNED_OUT') {
