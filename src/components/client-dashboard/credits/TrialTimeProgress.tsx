@@ -48,7 +48,10 @@ export const TrialTimeProgress = ({ trialStartDate, trialEndDate }: TrialTimePro
       <Progress value={progress} className="h-2" />
       
       {isNearingEnd && (
-        <Alert variant="warning" className="bg-yellow-500/10 text-yellow-500 border-yellow-500/20">
+        <Alert 
+          variant="default"
+          className="border-yellow-500/50 bg-yellow-500/10 text-yellow-600 dark:text-yellow-400"
+        >
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
             Your trial will end in {daysRemaining} {daysRemaining === 1 ? 'day' : 'days'}. 
