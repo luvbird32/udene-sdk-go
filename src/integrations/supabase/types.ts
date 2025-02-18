@@ -2716,6 +2716,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      update_expired_trials: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       update_visitor_analytics: {
         Args: {
           p_user_id: string
