@@ -1,59 +1,29 @@
-/* Refined Animations */
-@keyframes fall {
-  0% { transform: translateY(-100%); opacity: 1; }
-  100% { transform: translateY(1000%); opacity: 0; }
-}
 
-.animate-fall {
-  animation: fall linear infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
-}
-
-.glow {
-  @apply relative;
-}
-
-.glow::after {
-  content: '';
-  @apply absolute inset-0 rounded-lg;
-  background: radial-gradient(circle at center, rgba(74, 222, 128, 0.1) 0%, transparent 70%);
-  filter: blur(20px);
-  z-index: -1;
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-gradient {
+  animation: gradient 8s ease infinite;
 }
 
 .animate-fade-in {
-  animation: fade-in 0.5s ease-out forwards;
+  animation: fade-in 1s ease-out forwards;
 }
 
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.animate-spin-slow {
-  animation: spin-slow 3s linear infinite;
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-.animate-shimmer {
-  background: linear-gradient(90deg, 
-    rgba(255,255,255,0.03) 25%, 
-    rgba(255,255,255,0.08) 50%, 
-    rgba(255,255,255,0.03) 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2s infinite;
+.bg-300\% {
+  background-size: 300% 100%;
 }

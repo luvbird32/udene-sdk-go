@@ -24,25 +24,32 @@ export const HeroSection = () => {
   };
 
   return (
-    <section className="relative z-10 min-h-[85vh] flex items-center justify-center px-4 py-16 md:py-32">
-      <div className="w-full max-w-6xl mx-auto">
-        <div className="text-center space-y-8">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-bold text-white leading-tight">
-            Protect Your Digital Assets with{" "}
-            <span className="bg-gradient-to-r from-green-400 to-green-500 text-transparent bg-clip-text">
-              Next-Gen AI Security
+    <section className="relative z-10 min-h-[90vh] flex items-center justify-center px-4 py-16 md:py-32 overflow-hidden">
+      {/* Background gradient effects */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-black/95 to-black pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-green-500/20 via-transparent to-transparent blur-2xl opacity-30" />
+      
+      <div className="w-full max-w-7xl mx-auto relative">
+        <div className="text-center space-y-8 animate-fade-in">
+          {/* Main heading with enhanced typography and gradient */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-bold text-white leading-[1.1] tracking-tight">
+            Next Generation
+            <br />
+            <span className="bg-gradient-to-r from-green-400 via-green-500 to-green-400 text-transparent bg-clip-text bg-300% animate-gradient">
+              AI-Powered Security Platform
             </span>
           </h1>
           
-          <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Experience enterprise-grade protection powered by advanced AI. Safeguard your business 
-            from emerging threats with real-time monitoring and intelligent risk assessment.
+          <p className="text-lg sm:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed font-medium">
+            Enterprise-grade protection powered by advanced neural networks.
+            Detect and prevent threats in real-time with our intelligent system.
           </p>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
+          {/* CTA buttons with enhanced styling */}
+          <div className="flex flex-col sm:flex-row justify-center gap-4 pt-8">
             <Button 
               size="lg"
-              className="bg-green-500 hover:bg-green-600 text-white px-8 h-12 text-base"
+              className="bg-green-500 hover:bg-green-600 text-white px-8 h-14 text-lg font-medium transition-all duration-300 hover:scale-105"
               onClick={handleStartTrial}
             >
               Start free trial <ArrowRight className="ml-2 h-5 w-5" />
@@ -50,64 +57,65 @@ export const HeroSection = () => {
             <Button 
               size="lg"
               variant="outline"
-              className="border-green-500/30 text-green-400 hover:bg-green-500/10 h-12 text-base"
+              className="border-green-500/30 text-green-400 hover:bg-green-500/10 h-14 text-lg font-medium transition-all duration-300"
               onClick={() => navigate('/documentation')}
             >
               <Code className="mr-2 h-5 w-5" /> View documentation
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-16">
-            <div className="p-6 rounded-lg bg-black/40 backdrop-blur-sm border border-green-500/10 hover:border-green-500/20 transition-all">
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="p-2 bg-green-500/10 rounded-lg">
-                  <Shield className="h-6 w-6 text-green-400" />
+          {/* Feature cards with glass morphism effect */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-24">
+            {[
+              {
+                icon: Shield,
+                title: "Neural Network Defense",
+                description: "Advanced AI models process 1M+ threat signals per second"
+              },
+              {
+                icon: Zap,
+                title: "Real-Time Protection",
+                description: "35ms average response time to security threats"
+              },
+              {
+                icon: Database,
+                title: "Enterprise Scale",
+                description: "Handle 100M+ daily security checks effortlessly"
+              }
+            ].map((feature, index) => (
+              <div 
+                key={index}
+                className="group p-8 rounded-xl bg-black/40 backdrop-blur-sm border border-white/5 hover:border-green-500/20 transition-all duration-500"
+              >
+                <div className="flex items-center space-x-4 mb-4">
+                  <div className="p-3 bg-green-500/10 rounded-lg group-hover:scale-110 transition-transform duration-500">
+                    <feature.icon className="h-6 w-6 text-green-400" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-white group-hover:text-green-400 transition-colors duration-300">
+                    {feature.title}
+                  </h3>
                 </div>
-                <h3 className="text-lg font-semibold text-white">Intelligent Protection</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  {feature.description}
+                </p>
               </div>
-              <p className="text-gray-400 text-sm">
-                Neural networks trained on billions of data points detect threats in milliseconds.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-lg bg-black/40 backdrop-blur-sm border border-green-500/10 hover:border-green-500/20 transition-all">
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="p-2 bg-green-500/10 rounded-lg">
-                  <Zap className="h-6 w-6 text-green-400" />
-                </div>
-                <h3 className="text-lg font-semibold text-white">Real-Time Response</h3>
-              </div>
-              <p className="text-gray-400 text-sm">
-                Automated threat response with 35ms average detection and prevention time.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-lg bg-black/40 backdrop-blur-sm border border-green-500/10 hover:border-green-500/20 transition-all">
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="p-2 bg-green-500/10 rounded-lg">
-                  <Database className="h-6 w-6 text-green-400" />
-                </div>
-                <h3 className="text-lg font-semibold text-white">Scalable Security</h3>
-              </div>
-              <p className="text-gray-400 text-sm">
-                Infrastructure that scales with your business, handling millions of checks daily.
-              </p>
-            </div>
+            ))}
           </div>
 
-          <div className="pt-16 flex flex-wrap items-center justify-center gap-8">
-            <div className="flex items-center space-x-2">
-              <Shield className="w-5 h-5 text-green-400" />
-              <span className="text-sm text-gray-400">SOC 2 Type II</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Lock className="w-5 h-5 text-green-400" />
-              <span className="text-sm text-gray-400">GDPR Compliant</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Database className="w-5 h-5 text-green-400" />
-              <span className="text-sm text-gray-400">99.99% Uptime</span>
-            </div>
+          {/* Trust indicators with refined styling */}
+          <div className="pt-24 flex flex-wrap items-center justify-center gap-12">
+            {[
+              { icon: Shield, text: "SOC 2 Type II Certified" },
+              { icon: Lock, text: "GDPR & CCPA Compliant" },
+              { icon: Database, text: "99.99% Uptime SLA" }
+            ].map((item, index) => (
+              <div key={index} className="flex items-center space-x-3 group">
+                <div className="p-2 bg-green-500/5 rounded-lg group-hover:scale-110 transition-transform duration-300">
+                  <item.icon className="w-5 h-5 text-green-400" />
+                </div>
+                <span className="text-sm text-gray-400 font-medium">{item.text}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
