@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 
 export const Industries = () => {
   return (
-    <section className="relative z-10 py-16 bg-[hsl(222,47%,11%)]">
+    <section className="relative z-10 py-16">
       <div className="container mx-auto px-4">
         <div className="bg-black/40 backdrop-blur-sm p-6 md:p-10 rounded-xl max-w-4xl mx-auto text-center border border-white/5 mb-10">
           <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#22C55E]/10 p-3 rounded-full border border-[#22C55E]/20">
@@ -105,3 +105,4 @@ const IndustryCard = ({ icon, title, description }: IndustryCardProps) => {
     </Card>
   );
 };
+
