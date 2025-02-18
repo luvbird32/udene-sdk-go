@@ -42,7 +42,7 @@ export const SearchInput = ({
       />
       
       {showSearchResults && searchQuery && (
-        <div className="absolute mt-2 w-full bg-popover text-popover-foreground shadow-md rounded-md border z-50">
+        <div className="absolute mt-2 w-full bg-secondary text-secondary-foreground shadow-md rounded-md border z-50">
           <Command>
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
@@ -59,7 +59,7 @@ export const SearchInput = ({
                           console.log("Command item selected:", result);
                           handleSearchResultClick(result);
                         }}
-                        className="flex items-center justify-between p-2 cursor-pointer hover:bg-accent"
+                        className="flex items-center justify-between p-2 cursor-pointer hover:bg-muted/50 hover:text-foreground"
                       >
                         <div>
                           <div className="font-medium">{result.title}</div>
