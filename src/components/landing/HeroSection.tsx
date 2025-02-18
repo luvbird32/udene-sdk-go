@@ -28,16 +28,15 @@ export const HeroSection = () => {
       <div className="w-full max-w-6xl mx-auto">
         <div className="text-center space-y-8">
           <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-bold text-white leading-tight">
-            AI-Powered Fraud Protection for{" "}
+            Protect Your Digital Assets with{" "}
             <span className="bg-gradient-to-r from-green-400 to-green-500 text-transparent bg-clip-text">
-              Modern Business
+              Next-Gen AI Security
             </span>
           </h1>
           
           <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Stop fraud before it happens with real-time AI monitoring, behavioral analysis, 
-            and smart risk assessment. Protect your revenue and customers with enterprise-grade security 
-            that scales with your business.
+            Experience enterprise-grade protection powered by advanced AI. Safeguard your business 
+            from emerging threats with real-time monitoring and intelligent risk assessment.
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
@@ -62,24 +61,24 @@ export const HeroSection = () => {
             <div className="p-6 rounded-lg bg-black/40 backdrop-blur-sm border border-green-500/10 hover:border-green-500/20 transition-all">
               <div className="flex items-center space-x-4 mb-4">
                 <div className="p-2 bg-green-500/10 rounded-lg">
-                  <Zap className="h-6 w-6 text-green-400" />
+                  <Shield className="h-6 w-6 text-green-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-white">Real-Time Protection</h3>
+                <h3 className="text-lg font-semibold text-white">Intelligent Protection</h3>
               </div>
               <p className="text-gray-400 text-sm">
-                Detect and prevent fraud in milliseconds with our AI-powered system. 35ms average response time.
+                Neural networks trained on billions of data points detect threats in milliseconds.
               </p>
             </div>
 
             <div className="p-6 rounded-lg bg-black/40 backdrop-blur-sm border border-green-500/10 hover:border-green-500/20 transition-all">
               <div className="flex items-center space-x-4 mb-4">
                 <div className="p-2 bg-green-500/10 rounded-lg">
-                  <Lock className="h-6 w-6 text-green-400" />
+                  <Zap className="h-6 w-6 text-green-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-white">99.9% Accuracy</h3>
+                <h3 className="text-lg font-semibold text-white">Real-Time Response</h3>
               </div>
               <p className="text-gray-400 text-sm">
-                Industry-leading fraud prevention rate with continuous AI learning and adaptation.
+                Automated threat response with 35ms average detection and prevention time.
               </p>
             </div>
 
@@ -88,18 +87,18 @@ export const HeroSection = () => {
                 <div className="p-2 bg-green-500/10 rounded-lg">
                   <Database className="h-6 w-6 text-green-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-white">Enterprise Scale</h3>
+                <h3 className="text-lg font-semibold text-white">Scalable Security</h3>
               </div>
               <p className="text-gray-400 text-sm">
-                Built for high-volume businesses, processing millions of transactions daily.
+                Infrastructure that scales with your business, handling millions of checks daily.
               </p>
             </div>
           </div>
 
-          <div className="pt-16 flex items-center justify-center space-x-8">
+          <div className="pt-16 flex flex-wrap items-center justify-center gap-8">
             <div className="flex items-center space-x-2">
               <Shield className="w-5 h-5 text-green-400" />
-              <span className="text-sm text-gray-400">SOC 2 Type II Certified</span>
+              <span className="text-sm text-gray-400">SOC 2 Type II</span>
             </div>
             <div className="flex items-center space-x-2">
               <Lock className="w-5 h-5 text-green-400" />
@@ -107,7 +106,7 @@ export const HeroSection = () => {
             </div>
             <div className="flex items-center space-x-2">
               <Database className="w-5 h-5 text-green-400" />
-              <span className="text-sm text-gray-400">99.99% Uptime SLA</span>
+              <span className="text-sm text-gray-400">99.99% Uptime</span>
             </div>
           </div>
         </div>

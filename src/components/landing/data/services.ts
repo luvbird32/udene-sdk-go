@@ -1,115 +1,126 @@
+
 import { Shield, Activity, Bot, Lock, Mail, CreditCard, Gift, UserCheck } from "lucide-react";
 import type { Service } from "../types/services";
 
 export const services: Service[] = [
   {
     icon: Shield,
-    title: "Stream Protection & Content Moderation",
-    description: "Comprehensive content moderation and stream protection with AI-powered analysis and community-driven reporting.",
+    title: "Content Protection & Moderation",
+    description: "AI-powered content analysis and moderation system to maintain platform integrity.",
     features: [
-      "Trust Score System for Content Creators",
-      "Real-time Stream Monitoring",
-      "Community-driven Reporting System",
-      "Automated Content Moderation",
-      "Fake Account Prevention",
-      "Device Fingerprinting",
-      "IP Analysis and Restrictions",
-      "Community Moderation Tools"
+      "Advanced Content Pattern Analysis",
+      "Multi-Level Verification System",
+      "Auto-Moderation Rules Engine",
+      "Community Management Tools",
+      "Content Risk Scoring",
+      "Real-Time Moderation Queue",
+      "Custom Moderation Workflows",
+      "Automated Content Classification"
     ]
   },
   {
     icon: Bot,
-    title: "Bot & AI Protection",
-    description: "Advanced detection and prevention of automated threats and shadow AI usage.",
+    title: "AI & Bot Defense",
+    description: "Advanced system to detect and prevent automated threats and malicious AI usage.",
     features: [
-      "Bot Detection",
-      "Shadow AI Detection",
-      "Behavioral Analysis",
-      "Pattern Recognition",
-      "Real-time Monitoring",
-      "AI Pattern Detection",
-      "LLM Usage Monitoring",
-      "Prompt Injection Prevention"
+      "Machine Learning Detection",
+      "Behavioral Analysis Engine",
+      "Traffic Pattern Recognition",
+      "Bot Mitigation Rules",
+      "Custom Challenge Systems",
+      "Browser Fingerprinting",
+      "Rate Limiting Controls",
+      "Automated Response Actions"
     ]
   },
   {
     icon: UserCheck,
-    title: "Identity Verification",
-    description: "Multi-factor identity verification system with advanced biometric authentication.",
+    title: "Identity Intelligence",
+    description: "Comprehensive identity verification and fraud prevention system.",
     features: [
+      "Multi-Factor Authentication",
       "Document Verification",
       "Biometric Authentication",
-      "Identity Scoring",
-      "Fraud Prevention",
-      "Real-time Verification",
-      "Face Matching Technology",
-      "Document Authenticity Check"
+      "Identity Risk Scoring",
+      "KYC/AML Compliance",
+      "Device Trust Scoring",
+      "Location Intelligence",
+      "Identity Graph Analysis"
     ]
   },
   {
     icon: Lock,
-    title: "Security & API Protection",
-    description: "Robust security monitoring system with API protection and comprehensive threat detection.",
+    title: "API Security Suite",
+    description: "Enterprise-grade API security and monitoring system.",
     features: [
-      "API Security & Rate Limiting",
-      "Device Fingerprinting",
-      "IP Address Monitoring",
-      "Email Change Verification",
-      "Dependency Checks",
-      "Real-time Alerts",
-      "Access Control"
+      "API Authentication",
+      "Rate Limiting & Quotas",
+      "Request Validation",
+      "Schema Enforcement",
+      "Traffic Monitoring",
+      "Vulnerability Detection",
+      "Access Control",
+      "API Usage Analytics"
     ]
   },
   {
     icon: Activity,
-    title: "Fraud Prevention",
-    description: "Comprehensive fraud prevention suite protecting against various types of fraudulent activities.",
+    title: "Transaction Guard",
+    description: "Real-time transaction monitoring and fraud prevention.",
     features: [
-      "Account Takeover Protection",
-      "Transaction Monitoring",
-      "Romance Scam Detection",
-      "Affiliate Fraud Protection",
-      "Trial Abuse Prevention",
-      "Promo Code Protection"
+      "Payment Fraud Detection",
+      "Transaction Risk Analysis",
+      "Behavior Pattern Matching",
+      "Velocity Checks",
+      "Amount Pattern Analysis",
+      "Cross-Transaction Correlation",
+      "Merchant Risk Scoring",
+      "Chargeback Prevention"
     ]
   },
   {
     icon: Mail,
-    title: "Email Security",
-    description: "Advanced email security and phishing protection system.",
+    title: "Communication Security",
+    description: "Comprehensive email and communication channel protection.",
     features: [
+      "Phishing Prevention",
+      "DMARC Implementation",
       "Email Authentication",
-      "Phishing Detection",
-      "Domain Monitoring",
-      "DMARC Enforcement",
-      "Spoofing Prevention",
-      "Email Pattern Analysis"
+      "Domain Protection",
+      "Spam Prevention",
+      "Content Filtering",
+      "Link Protection",
+      "Attachment Scanning"
     ]
   },
   {
     icon: Gift,
-    title: "Reward Program Protection",
-    description: "Prevent fraud and abuse in your loyalty and rewards programs.",
+    title: "Loyalty Protection",
+    description: "Advanced fraud prevention for rewards and loyalty programs.",
     features: [
-      "Real-time monitoring of reward transactions",
-      "Detection of suspicious point accumulation",
-      "Prevention of reward program abuse",
-      "Automated risk scoring",
-      "Velocity checks",
-      "Pattern analysis"
+      "Points Fraud Detection",
+      "Account Takeover Prevention",
+      "Reward Usage Analysis",
+      "Multi-Account Detection",
+      "Promotion Abuse Prevention",
+      "Velocity Monitoring",
+      "Risk-Based Authentication",
+      "Transaction Verification"
     ]
   },
   {
     icon: CreditCard,
-    title: "Payment Protection",
-    description: "Detect and prevent fraudulent payment transactions with real-time monitoring.",
+    title: "Payment Security",
+    description: "End-to-end payment protection and fraud prevention system.",
     features: [
-      "Real-time transaction monitoring",
-      "Risk scoring and analysis",
-      "Automated fraud detection",
-      "Payment pattern analysis",
-      "Behavioral analysis",
-      "Velocity checks"
+      "3D Secure Integration",
+      "Card Verification",
+      "Fraud Scoring Engine",
+      "Payment Gateway Security",
+      "PCI DSS Compliance",
+      "Tokenization",
+      "Secure Payment Flow",
+      "Transaction Monitoring"
     ]
   }
 ];
