@@ -26,6 +26,19 @@ export const CompetitiveAnalysis = () => {
           udene: true,
           competitor1: true,
           competitor2: true
+        },
+        {
+          name: "Adaptive Learning System",
+          udene: true,
+          competitor1: false,
+          competitor2: false,
+          highlight: true
+        },
+        {
+          name: "Predictive Analytics",
+          udene: true,
+          competitor1: false,
+          competitor2: true
         }
       ]
     },
@@ -49,6 +62,19 @@ export const CompetitiveAnalysis = () => {
           name: "Cross-Platform Protection",
           udene: true,
           competitor1: false,
+          competitor2: true
+        },
+        {
+          name: "Zero-Day Threat Detection",
+          udene: true,
+          competitor1: false,
+          competitor2: false,
+          highlight: true
+        },
+        {
+          name: "Multi-Factor Authentication",
+          udene: true,
+          competitor1: true,
           competitor2: true
         }
       ]
@@ -74,6 +100,19 @@ export const CompetitiveAnalysis = () => {
           udene: true,
           competitor1: true,
           competitor2: true
+        },
+        {
+          name: "Auto-scaling Capability",
+          udene: true,
+          competitor1: false,
+          competitor2: true
+        },
+        {
+          name: "99.99% Uptime SLA",
+          udene: true,
+          competitor1: false,
+          competitor2: false,
+          highlight: true
         }
       ]
     },
@@ -94,6 +133,103 @@ export const CompetitiveAnalysis = () => {
         },
         {
           name: "Dedicated Success Manager",
+          udene: true,
+          competitor1: false,
+          competitor2: false,
+          highlight: true
+        },
+        {
+          name: "SDK Support",
+          udene: true,
+          competitor1: true,
+          competitor2: true
+        }
+      ]
+    },
+    {
+      category: "Compliance & Certification",
+      features: [
+        {
+          name: "SOC 2 Type II",
+          udene: true,
+          competitor1: true,
+          competitor2: true
+        },
+        {
+          name: "GDPR Compliance",
+          udene: true,
+          competitor1: true,
+          competitor2: true
+        },
+        {
+          name: "ISO 27001",
+          udene: true,
+          competitor1: false,
+          competitor2: true
+        },
+        {
+          name: "HIPAA Compliance",
+          udene: true,
+          competitor1: false,
+          competitor2: false,
+          highlight: true
+        }
+      ]
+    },
+    {
+      category: "Advanced Features",
+      features: [
+        {
+          name: "Romance Scam Detection",
+          udene: true,
+          competitor1: false,
+          competitor2: false,
+          highlight: true
+        },
+        {
+          name: "Trial Abuse Prevention",
+          udene: true,
+          competitor1: false,
+          competitor2: true
+        },
+        {
+          name: "Reward Program Protection",
+          udene: true,
+          competitor1: true,
+          competitor2: false
+        },
+        {
+          name: "BEC Attack Prevention",
+          udene: true,
+          competitor1: false,
+          competitor2: false,
+          highlight: true
+        }
+      ]
+    },
+    {
+      category: "Analytics & Reporting",
+      features: [
+        {
+          name: "Custom Report Builder",
+          udene: true,
+          competitor1: false,
+          competitor2: true
+        },
+        {
+          name: "Real-time Dashboard",
+          udene: true,
+          competitor1: true,
+          competitor2: true
+        },
+        {
+          name: "Risk Score Analytics",
+          udene: true,
+          competitor1: true,
+          competitor2: false
+        },
+        {
+          name: "ML Model Insights",
           udene: true,
           competitor1: false,
           competitor2: false,
@@ -128,10 +264,10 @@ export const CompetitiveAnalysis = () => {
                     Udene Platform
                   </TableHead>
                   <TableHead className="text-center text-gray-400">
-                    Competitor A
+                    Legacy Provider
                   </TableHead>
                   <TableHead className="text-center text-gray-400">
-                    Competitor B
+                    Traditional Solution
                   </TableHead>
                 </TableRow>
               </TableHeader>
