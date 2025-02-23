@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useParams, useNavigate } from "react-router-dom";
@@ -23,18 +24,17 @@ export default function BlogPost() {
   const { data: post, isLoading } = useQuery({
     queryKey: ["blog-post", slug],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('blog_posts')
-        .select(`
-          *,
-          author:author_id(username)
-        `)
-        .eq('slug', slug)
-        .eq('status', 'published')
-        .single();
-      
-      if (error) throw error;
-      return data as BlogPost;
+      // For now, return a mock post
+      return {
+        id: "1",
+        title: "Blog post not found",
+        content: "This blog post is under construction.",
+        published_at: new Date().toISOString(),
+        featured_image: "/lovable-uploads/photo-1487058792275-0ad4aaf24ca7.jpeg",
+        author: {
+          username: "Udene Team"
+        }
+      } as BlogPost;
     }
   });
 
@@ -79,4 +79,4 @@ export default function BlogPost() {
       </article>
     </div>
   );
-}
+};
