@@ -42,20 +42,20 @@ const Landing = () => {
         <div id="features">
           <Features />
         </div>
-        <div id="competitive-analysis">
-          <CompetitiveAnalysis />
-        </div>
         <div id="how-it-works">
           <HowItWorks />
+        </div>
+        <div id="competitive-analysis">
+          <CompetitiveAnalysis />
         </div>
         <div id="industries">
           <Industries />
         </div>
-        <div id="testimonials">
-          <Testimonials />
-        </div>
         <div id="use-cases">
           <UseCases />
+        </div>
+        <div id="testimonials">
+          <Testimonials />
         </div>
         <div id="compliance">
           <Compliance />
