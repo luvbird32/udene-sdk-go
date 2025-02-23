@@ -14,6 +14,7 @@ import { Testimonials } from "@/components/landing/Testimonials";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { WhyMissionObjective } from "@/components/landing/WhyMissionObjective";
 import { ServicesSection } from "@/components/landing/ServicesSection";
+import { CompetitiveAnalysis } from "@/components/landing/CompetitiveAnalysis";
 import { useEffect } from "react";
 
 const Landing = () => {
@@ -40,6 +41,9 @@ const Landing = () => {
         </div>
         <div id="features">
           <Features />
+        </div>
+        <div id="competitive-analysis">
+          <CompetitiveAnalysis />
         </div>
         <div id="how-it-works">
           <HowItWorks />
