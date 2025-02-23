@@ -10,6 +10,7 @@ import { SearchInput } from "./SearchInput";
 import { ProjectDialog } from "./ProjectDialog";
 import { ProjectSelect } from "./ProjectSelect";
 import { SearchResult } from "./types";
+import { WelcomeGuide } from "./WelcomeGuide";
 
 export const ProjectSelector = () => {
   const { toast } = useToast();
@@ -169,6 +170,7 @@ export const ProjectSelector = () => {
 
   return (
     <div className="space-y-4 mb-6">
+      <WelcomeGuide />
       <div className="flex items-center gap-4">
         <ProjectSelect
           isLoading={isLoading}
