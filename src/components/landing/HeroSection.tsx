@@ -1,4 +1,3 @@
-
 import { ArrowRight, Code, Shield, Star, Lock, Zap, Database, Clock, CheckCircle2, Fingerprint } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -67,23 +66,28 @@ export const HeroSection = () => {
             ))}
           </div>
 
-          {/* CTA buttons with enhanced styling */}
-          <div className="flex flex-col sm:flex-row justify-center gap-4 pt-8">
-            <Button 
-              size="lg"
-              className="bg-secondary hover:bg-secondary/90 text-white px-8 h-14 text-lg font-medium transition-all duration-300 hover:scale-105"
-              onClick={handleStartTrial}
-            >
-              <Lock className="mr-2 h-5 w-5" /> Start Protecting Your Business Instantly <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button 
-              size="lg"
-              variant="outline"
-              className="border-secondary/30 text-secondary hover:bg-secondary/10 h-14 text-lg font-medium transition-all duration-300"
-              onClick={() => navigate('/documentation')}
-            >
-              <Code className="mr-2 h-5 w-5" /> View documentation
-            </Button>
+          {/* CTA buttons with trial info */}
+          <div className="flex flex-col items-center gap-6 pt-8">
+            <div className="flex flex-col sm:flex-row justify-center gap-4 w-full">
+              <Button 
+                size="lg"
+                className="bg-secondary hover:bg-secondary/90 text-white px-8 h-14 text-lg font-medium transition-all duration-300 hover:scale-105"
+                onClick={handleStartTrial}
+              >
+                <Lock className="mr-2 h-5 w-5" /> Start Your Free Trial <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+              <Button 
+                size="lg"
+                variant="outline"
+                className="border-secondary/30 text-secondary hover:bg-secondary/10 h-14 text-lg font-medium transition-all duration-300"
+                onClick={() => navigate('/documentation')}
+              >
+                <Code className="mr-2 h-5 w-5" /> View documentation
+              </Button>
+            </div>
+            <p className="text-gray-400 text-sm">
+              Try free for 7 days. No credit card required. Cancel anytime.
+            </p>
           </div>
 
           {/* Feature cards with glass morphism effect */}
