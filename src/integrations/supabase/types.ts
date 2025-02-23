@@ -2781,6 +2781,13 @@ export type Database = {
         }
         Returns: string
       }
+      invoke_webhook: {
+        Args: {
+          event_type: string
+          payload: Json
+        }
+        Returns: undefined
+      }
       is_device_blocked: {
         Args: {
           device_fp: string
