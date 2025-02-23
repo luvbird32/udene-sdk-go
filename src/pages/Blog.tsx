@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
@@ -6,7 +5,7 @@ import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { ErrorState } from "@/components/ui/states/ErrorState";
 import { Home } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/shared/ui/Button";
 
 interface BlogPost {
   id: string;
@@ -18,106 +17,24 @@ interface BlogPost {
   meta_description: string;
 }
 
-const BLOG_ARTICLES = [
-  {
-    id: "1",
-    title: "Streamlining Fraud Detection: How AI is Revolutionizing Business Security",
-    slug: "ai-fraud-detection-revolution",
-    excerpt: "Discover how artificial intelligence is transforming the landscape of fraud detection and prevention in modern businesses.",
-    published_at: "2024-02-23",
-    featured_image: "/lovable-uploads/photo-1487058792275-0ad4aaf24ca7.jpeg", // Code on monitor
-    meta_description: "Learn about AI's role in modern fraud detection and how it's helping businesses stay secure."
-  },
-  {
-    id: "2",
-    title: "7-Day Free Trial: Experience Udene's Powerful Security Without Commitment",
-    slug: "free-trial-security-solution",
-    excerpt: "Try our enterprise-grade security solution risk-free. No credit card required. See how Udene can protect your business.",
-    published_at: "2024-02-22",
-    featured_image: "/lovable-uploads/photo-1486312338219-ce68d2c6f44d.jpeg", // Person using MacBook
-    meta_description: "Start your free trial of Udene's security solution today."
-  },
-  {
-    id: "3",
-    title: "Case Study: How Udene Protected E-commerce Giant from Sophisticated Fraud Attempt",
-    slug: "ecommerce-fraud-prevention-case-study",
-    excerpt: "Read how our AI-powered system detected and prevented a complex fraud scheme, saving millions in potential losses.",
-    published_at: "2024-02-21",
-    featured_image: "/lovable-uploads/photo-1581091226825-a6a2a5aee158.jpeg", // Woman using laptop
-    meta_description: "Real-world case study of Udene's fraud prevention capabilities."
-  },
-  {
-    id: "4",
-    title: "Beyond the Lock: Multi-Layered Security Strategies for Modern Businesses",
-    slug: "multi-layer-security-strategy",
-    excerpt: "Understanding the importance of comprehensive security measures and how to implement them effectively.",
-    published_at: "2024-02-20",
-    featured_image: "/lovable-uploads/photo-1487058792275-0ad4aaf24ca7.jpeg", // Code on monitor
-    meta_description: "Learn about implementing multi-layered security strategies."
-  },
-  {
-    id: "5",
-    title: "The Future of Fraud Prevention: Emerging Technologies and Trends",
-    slug: "future-fraud-prevention-trends",
-    excerpt: "Explore upcoming trends in fraud prevention and how businesses can prepare for future security challenges.",
-    published_at: "2024-02-19",
-    featured_image: "/lovable-uploads/photo-1518770660439-4636190af475.jpeg", // Circuit board
-    meta_description: "Stay ahead of fraud prevention trends and emerging technologies."
-  },
-  {
-    id: "6",
-    title: "Udene's Integrations: Seamless Security for Your Existing Systems",
-    slug: "security-system-integrations",
-    excerpt: "Learn how Udene seamlessly integrates with your existing business systems for enhanced security.",
-    published_at: "2024-02-18",
-    featured_image: "/lovable-uploads/photo-1488590528505-98d2b5aba04b.jpeg", // Gray laptop
-    meta_description: "Discover Udene's integration capabilities with existing systems."
-  },
-  {
-    id: "7",
-    title: "Data Security Best Practices: Protecting Your Business from Cyber Threats",
-    slug: "data-security-best-practices",
-    excerpt: "Essential security practices every business should implement to protect sensitive data.",
-    published_at: "2024-02-17",
-    featured_image: "/lovable-uploads/photo-1487058792275-0ad4aaf24ca7.jpeg", // Code on monitor
-    meta_description: "Learn key data security best practices for your business."
-  },
-  {
-    id: "8",
-    title: "Real-World Examples of Fraud and How Udene Can Help",
-    slug: "fraud-examples-prevention",
-    excerpt: "Examining common fraud scenarios and how advanced security measures can prevent them.",
-    published_at: "2024-02-16",
-    featured_image: "/lovable-uploads/photo-1486312338219-ce68d2c6f44d.jpeg", // Person using MacBook
-    meta_description: "Understanding real-world fraud scenarios and prevention methods."
-  },
-  {
-    id: "9",
-    title: "Choosing the Right Security Solution: A Guide for Small Businesses",
-    slug: "security-solution-guide-smb",
-    excerpt: "A comprehensive guide helping small businesses select the perfect security solution for their needs.",
-    published_at: "2024-02-15",
-    featured_image: "/lovable-uploads/photo-1581091226825-a6a2a5aee158.jpeg", // Woman using laptop
-    meta_description: "Guide for small businesses choosing security solutions."
-  },
-  {
-    id: "10",
-    title: "The Cost of Inaction: Why Investing in Fraud Prevention is Crucial",
-    slug: "investing-fraud-prevention-importance",
-    excerpt: "Understanding the financial impact of fraud and why prevention is better than cure.",
-    published_at: "2024-02-14",
-    featured_image: "/lovable-uploads/photo-1488590528505-98d2b5aba04b.jpeg", // Gray laptop
-    meta_description: "Learn about the importance of investing in fraud prevention."
-  }
-];
-
 export default function Blog() {
   const { data: posts, isLoading, error } = useQuery({
     queryKey: ["blog-posts"],
     queryFn: async () => {
       console.log("Fetching blog posts...");
-      // For now, return our static BLOG_ARTICLES
-      return BLOG_ARTICLES as BlogPost[];
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('status', 'published')
+        .order('published_at', { ascending: false });
+      
+      if (error) {
+        console.error("Error fetching blog posts:", error);
+        throw error;
+      }
+      
+      console.log("Fetched blog posts:", data);
+      return data as BlogPost[];
     },
     retry: 1
   });
