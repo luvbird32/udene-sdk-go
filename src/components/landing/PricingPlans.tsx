@@ -7,58 +7,54 @@ import { Badge } from "@/components/ui/badge";
 export const PricingPlans = () => {
   const plans = [
     {
-      name: "Free Tier",
-      basePrice: "$0",
-      price: "$0",
-      period: "forever",
-      description: "Perfect for testing and evaluating our security features",
-      promotion: "No credit card required",
-      volumeDiscount: "Upgrade anytime",
+      name: "Pay As You Go",
+      price: "$0.002",
+      period: "per API call",
+      description: "Perfect for getting started with full access to all features",
+      promotion: "First 10,000 API calls free",
+      volumeDiscount: "No minimum commitment required",
       features: [
-        "Basic fraud detection",
-        "Up to 1,000 API calls/month",
-        "Community support",
-        "Basic reporting dashboard",
-        "Email support",
+        "Full access to all fraud detection features",
+        "Complete ML model suite",
+        "Real-time API access",
+        "Advanced reporting dashboard",
+        "Email & community support",
         "Standard SLA",
         "Single region deployment"
       ],
       pricingTiers: [
-        "1,000 free API calls per month",
-        "Basic fraud detection features",
-        "Community support access"
+        "First 10K calls: Free",
+        "10K-100K calls: $0.002/call",
+        "100K+ calls: Volume discount available"
       ],
-      buttonText: "Start Free",
+      buttonText: "Start Now",
       highlighted: false,
-      isPromo: false
+      isPromo: true
     },
     {
-      name: "Pro",
-      basePrice: "$99",
-      price: "$79",
-      period: "per month",
-      description: "For growing businesses needing advanced security",
-      promotion: "Save 20% - Limited Time",
-      savings: "Save $240/year",
-      volumeDiscount: "Volume discounts available",
+      name: "Growth",
+      basePrice: "$0.002",
+      price: "$0.001",
+      period: "per API call",
+      description: "Ideal for businesses with predictable volume",
+      promotion: "50% savings with minimum commitment",
+      savings: "Save up to $10,000/year",
+      volumeDiscount: "$1,000 monthly minimum",
       features: [
-        "Advanced fraud detection",
-        "Unlimited API calls",
+        "Full access to all fraud detection features",
+        "Complete ML model suite",
+        "Real-time API access",
+        "Advanced reporting dashboard",
         "Priority support",
-        "Advanced reporting & analytics",
-        "Custom rules engine",
-        "4-hour SLA response",
-        "Multi-region deployment",
-        "Custom integrations",
-        "Dedicated account manager"
+        "Enhanced SLA",
+        "Multi-region deployment"
       ],
       pricingTiers: [
-        "Unlimited API calls",
-        "Advanced ML models",
-        "Priority support queue",
-        "Custom rule creation"
+        "Minimum $1,000/month commitment",
+        "All calls at $0.001 each",
+        "Unused credits roll over 90 days"
       ],
-      buttonText: "Start Pro Trial",
+      buttonText: "Get Started",
       highlighted: true,
       isPromo: true,
       bestValue: true
@@ -66,28 +62,23 @@ export const PricingPlans = () => {
     {
       name: "Enterprise",
       price: "Custom",
-      period: "custom contract",
-      description: "For large organizations requiring maximum security",
-      volumeDiscount: "Custom volume pricing",
+      period: "volume-based pricing",
+      description: "Custom pricing for high-volume users",
+      volumeDiscount: "Custom volume commitment",
       features: [
-        "Custom ML model training",
-        "Unlimited API calls",
+        "Full access to all fraud detection features",
+        "Complete ML model suite",
+        "Real-time API access",
+        "Advanced reporting dashboard",
         "24/7 dedicated support",
         "Custom SLA guarantees",
         "Global deployment options",
-        "Custom contract terms",
-        "On-premise deployment option",
-        "Custom security features",
-        "Dedicated security team",
-        "Annual security audit",
-        "Custom reporting",
-        "API customization"
+        "Custom contract terms"
       ],
       pricingTiers: [
-        "Custom pricing based on volume",
-        "Dedicated infrastructure",
-        "Enterprise SLA available",
-        "Custom features development"
+        "Volume-based custom pricing",
+        "Annual commitment options",
+        "Custom payment terms available"
       ],
       buttonText: "Contact Sales",
       highlighted: false,
@@ -100,10 +91,10 @@ export const PricingPlans = () => {
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">
-            Simple, Transparent Pricing
+            Flexible Pricing for Every Scale
           </h2>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-            Choose the perfect plan for your security needs
+            Start free and scale as you grow, with predictable pricing and volume discounts
           </p>
         </div>
 
@@ -118,7 +109,7 @@ export const PricingPlans = () => {
               {plan.bestValue && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                   <Badge variant="secondary" className="bg-secondary text-white px-4 py-1">
-                    Most Popular
+                    Best Value
                   </Badge>
                 </div>
               )}
@@ -139,7 +130,7 @@ export const PricingPlans = () => {
                 {plan.basePrice && (
                   <div className="text-sm text-gray-400 mt-1">
                     <span className="line-through">{plan.basePrice}</span>
-                    <span className="ml-2">per month</span>
+                    <span className="ml-2">per API call</span>
                   </div>
                 )}
               </div>
@@ -165,7 +156,7 @@ export const PricingPlans = () => {
                 </div>
               )}
               <div className="mb-4 bg-black/20 rounded-lg p-3">
-                <p className="text-sm font-semibold text-gray-200 mb-2">Plan Details:</p>
+                <p className="text-sm font-semibold text-gray-200 mb-2">Volume Pricing:</p>
                 <ul className="space-y-1">
                   {plan.pricingTiers?.map((tier, idx) => (
                     <li key={idx} className="text-xs text-gray-300 flex items-center">
