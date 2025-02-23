@@ -16,6 +16,7 @@ export const useRealtimeSubscriptions = () => {
 
     const setupChannels = async () => {
       try {
+        // Set up fraud alerts channel
         fraudAlertsChannel = supabase
           .channel('fraud_alerts')
           .on(
@@ -89,6 +90,7 @@ export const useRealtimeSubscriptions = () => {
             }
           });
 
+        // Set up transactions channel
         transactionsChannel = supabase
           .channel('transactions')
           .on(
@@ -162,7 +164,6 @@ export const useRealtimeSubscriptions = () => {
           description: `Unable to connect to ${service} service. Retrying... (Attempt ${connectionAttempts}/${maxRetries})`,
           variant: "destructive",
         });
-        // Retry connection after delay
         setTimeout(setupChannels, 2000 * connectionAttempts);
       } else {
         toast({
