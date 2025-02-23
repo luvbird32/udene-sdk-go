@@ -1,5 +1,5 @@
 
-import { Shield, Target, Sparkles, Users } from "lucide-react";
+import { Shield, Target, Sparkles, Users, CheckCircle2 } from "lucide-react";
 
 export const WhyMissionObjective = () => {
   return (
@@ -53,24 +53,31 @@ export const WhyMissionObjective = () => {
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 text-white">
               Our <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">Objectives</span>
             </h2>
-            <div className="space-y-6 text-base text-white/80 max-w-3xl mx-auto">
-              <p>
-                We're committed to three simple goals:
+            <div className="space-y-8 text-left max-w-3xl mx-auto">
+              <p className="text-xl text-white/80 mb-8 text-center">
+                We're committed to delivering:
               </p>
-              <ul className="space-y-4">
-                <li className="flex items-center justify-center space-x-2">
-                  <span className="inline-block w-2 h-2 bg-primary rounded-full"></span>
-                  <span>Keep our pricing affordable so businesses of all sizes can protect themselves</span>
-                </li>
-                <li className="flex items-center justify-center space-x-2">
-                  <span className="inline-block w-2 h-2 bg-primary rounded-full"></span>
-                  <span>Maintain a user-friendly interface that doesn't require a technical degree to understand</span>
-                </li>
-                <li className="flex items-center justify-center space-x-2">
-                  <span className="inline-block w-2 h-2 bg-primary rounded-full"></span>
-                  <span>Deliver enterprise-level protection without the enterprise-level complexity</span>
-                </li>
-              </ul>
+              <div className="flex items-start space-x-4">
+                <CheckCircle2 className="w-6 h-6 text-[#22c55e] flex-shrink-0 mt-1" />
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-2">Affordable Protection</h3>
+                  <p className="text-white/80">High-quality fraud prevention at a price that works for businesses of all sizes.</p>
+                </div>
+              </div>
+              <div className="flex items-start space-x-4">
+                <CheckCircle2 className="w-6 h-6 text-[#22c55e] flex-shrink-0 mt-1" />
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-2">Ease of Use</h3>
+                  <p className="text-white/80">A streamlined, intuitive experience—no technical expertise required.</p>
+                </div>
+              </div>
+              <div className="flex items-start space-x-4">
+                <CheckCircle2 className="w-6 h-6 text-[#22c55e] flex-shrink-0 mt-1" />
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-2">Enterprise-Level Security</h3>
+                  <p className="text-white/80">Advanced protection without enterprise-level complexity.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
