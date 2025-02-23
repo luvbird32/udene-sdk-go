@@ -6,6 +6,73 @@ import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { LoadingState } from "@/components/ui/states/LoadingState";
+import { ErrorState } from "@/components/ui/states/ErrorState";
+
+// Fallback data for development/loading scenarios
+const fallbackPlans = [
+  {
+    id: "pay-as-you-go",
+    name: "Pay As You Go",
+    price: 0.002,
+    period: "per API call",
+    description: "Start with zero commitment and scale as you grow",
+    promotion: "First 10,000 API calls free",
+    volume_discount: "Pay only for what you use",
+    is_highlighted: false,
+    is_promo: true,
+    is_best_value: false,
+    features: [
+      "Real-time fraud detection",
+      "Basic analytics dashboard",
+      "Email support",
+      "Standard API access",
+      "Community forum access"
+    ]
+  },
+  {
+    id: "growth",
+    name: "Growth",
+    price: 0.001,
+    base_price: 0.002,
+    period: "per API call",
+    description: "Perfect for scaling businesses with consistent volume",
+    promotion: "50% off standard rate",
+    savings: "Save up to 50% on API calls",
+    volume_discount: "$1,000 monthly minimum",
+    is_highlighted: true,
+    is_promo: true,
+    is_best_value: true,
+    features: [
+      "All Pay As You Go features",
+      "Advanced fraud detection",
+      "Priority email & chat support",
+      "Advanced analytics",
+      "Custom rules engine",
+      "Dedicated account manager"
+    ]
+  },
+  {
+    id: "enterprise",
+    name: "Enterprise",
+    price: null,
+    period: "annual contract",
+    description: "Tailored solutions for large-scale operations",
+    volume_discount: "Volume-based custom pricing",
+    is_highlighted: false,
+    is_promo: false,
+    is_best_value: false,
+    features: [
+      "All Growth features",
+      "Custom ML model training",
+      "24/7 phone support",
+      "Custom integration support",
+      "On-premise deployment option",
+      "SLA guarantees",
+      "Dedicated security team"
+    ]
+  }
+];
 
 interface PricingPlan {
   id: string;
@@ -30,60 +97,67 @@ export const PricingPlans = () => {
   const { data: plans, isLoading, error } = useQuery({
     queryKey: ['pricing-plans'],
     queryFn: async () => {
-      // Fetch pricing plans
-      const { data: plansData, error: plansError } = await supabase
-        .from('pricing_plans')
-        .select(`
-          *,
-          pricing_features (feature),
-          pricing_tiers (tier_description)
-        `);
+      try {
+        console.log('Fetching pricing plans...');
+        const { data: plansData, error: plansError } = await supabase
+          .from('pricing_plans')
+          .select(`
+            *,
+            pricing_features (feature),
+            pricing_tiers (tier_description)
+          `);
 
-      if (plansError) {
-        console.error('Error fetching pricing plans:', plansError);
-        toast({
-          title: "Error loading pricing plans",
-          description: "Please try again later",
-          variant: "destructive",
-        });
-        throw plansError;
+        if (plansError) {
+          console.error('Error fetching pricing plans:', plansError);
+          throw plansError;
+        }
+
+        if (!plansData || plansData.length === 0) {
+          console.log('No pricing plans found in database, using fallback data');
+          return fallbackPlans;
+        }
+
+        // Transform the data to match our component's needs
+        return plansData.map((plan: any) => ({
+          ...plan,
+          features: plan.pricing_features?.map((f: any) => f.feature) || [],
+          pricing_tiers: plan.pricing_tiers?.map((t: any) => t.tier_description) || [],
+          price: plan.price?.toString() ?? "Custom",
+          base_price: plan.base_price?.toString(),
+        }));
+      } catch (error) {
+        console.error('Error in pricing plans query:', error);
+        // In development, fall back to static data
+        if (import.meta.env.DEV) {
+          console.log('Using fallback pricing plans in development');
+          return fallbackPlans;
+        }
+        throw error;
       }
-
-      // Transform the data to match our component's needs
-      return plansData.map((plan: any) => ({
-        ...plan,
-        features: plan.pricing_features?.map((f: any) => f.feature) || [],
-        pricing_tiers: plan.pricing_tiers?.map((t: any) => t.tier_description) || [],
-        price: plan.price?.toString() ?? "Custom",
-        base_price: plan.base_price?.toString(),
-      }));
     },
+    retry: 2,
+    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
   });
 
   if (isLoading) {
     return (
       <section className="py-16 relative z-10 bg-black/40">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-white animate-pulse">Loading pricing plans...</h2>
-          </div>
-        </div>
+        <LoadingState message="Loading pricing plans..." />
       </section>
     );
   }
 
-  if (error || !plans) {
+  if (error) {
+    console.error('Pricing plans error:', error);
     return (
       <section className="py-16 relative z-10 bg-black/40">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-white">Unable to load pricing plans</h2>
-            <p className="text-gray-300 mt-4">Please try again later</p>
-          </div>
-        </div>
+        <ErrorState error={error as Error} />
       </section>
     );
   }
+
+  // Use fallback plans if no data is available
+  const displayPlans = plans || fallbackPlans;
 
   return (
     <section className="py-16 relative z-10 bg-black/40">
@@ -98,7 +172,7 @@ export const PricingPlans = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {plans.map((plan, index) => (
+          {displayPlans.map((plan) => (
             <div
               key={plan.id}
               className={`glass-card p-8 rounded-xl transition-all duration-300 hover:scale-105 relative ${
