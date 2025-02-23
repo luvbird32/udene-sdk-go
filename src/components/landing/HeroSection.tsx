@@ -74,7 +74,7 @@ export const HeroSection = () => {
               className="bg-secondary hover:bg-secondary/90 text-white px-8 h-14 text-lg font-medium transition-all duration-300 hover:scale-105"
               onClick={handleStartTrial}
             >
-              🔐 Start Protecting Your Business Instantly <ArrowRight className="ml-2 h-5 w-5" />
+              <Lock className="mr-2 h-5 w-5" /> Start Protecting Your Business Instantly <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button 
               size="lg"
