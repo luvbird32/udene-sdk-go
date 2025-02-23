@@ -1,9 +1,16 @@
 
-import { ChartBar } from "lucide-react";
+import { ChartBar, ChevronDown, ChevronUp } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { ServiceCardProps } from "../types/services";
 
 export const ServiceCard = ({ service }: ServiceCardProps) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const initialFeaturesToShow = 3; // Show first 3 features by default
+
+  const visibleFeatures = isExpanded ? service.features : service.features.slice(0, initialFeaturesToShow);
+
   return (
     <Card 
       className="group relative overflow-hidden p-8 bg-black/40 backdrop-blur-sm border border-white/5 hover:border-primary/20 transition-all duration-500"
@@ -26,7 +33,7 @@ export const ServiceCard = ({ service }: ServiceCardProps) => {
         <div className="space-y-2">
           <h4 className="text-lg font-semibold text-white/90">Key Features:</h4>
           <ul className="grid grid-cols-1 gap-2">
-            {service.features.map((feature, featureIndex) => (
+            {visibleFeatures.map((feature, featureIndex) => (
               <li 
                 key={featureIndex}
                 className="flex items-center text-gray-300 group-hover:text-gray-200"
@@ -36,6 +43,27 @@ export const ServiceCard = ({ service }: ServiceCardProps) => {
               </li>
             ))}
           </ul>
+          
+          {service.features.length > initialFeaturesToShow && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="w-full mt-4 text-primary hover:text-primary/90 gap-2"
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
+              {isExpanded ? (
+                <>
+                  View Less
+                  <ChevronUp className="w-4 h-4" />
+                </>
+              ) : (
+                <>
+                  View More Features
+                  <ChevronDown className="w-4 h-4" />
+                </>
+              )}
+            </Button>
+          )}
         </div>
       </div>
     </Card>
