@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Info, BookOpen, ArrowRight, CheckCircle, HelpCircle } from "lucide-react";
 
@@ -44,8 +44,8 @@ export const WelcomeGuide = () => {
   const CurrentIcon = steps[currentStep].icon;
 
   return (
-    <Card className="p-6 mb-6 bg-gradient-to-r from-secondary/10 via-secondary/5 to-transparent border-secondary/20">
-      <div className="space-y-6">
+    <Card>
+      <CardContent className="p-6 space-y-6 bg-gradient-to-r from-secondary/10 via-secondary/5 to-transparent border-secondary/20">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
             <h2 className="text-2xl font-semibold text-foreground">
@@ -98,7 +98,7 @@ export const WelcomeGuide = () => {
             </Button>
           </div>
         </div>
-      </div>
+      </CardContent>
     </Card>
   );
 };
