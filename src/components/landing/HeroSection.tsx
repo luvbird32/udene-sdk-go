@@ -50,8 +50,8 @@ export const HeroSection = () => {
           </h1>
           
           <p className="text-lg sm:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed font-medium">
-            Enterprise-grade protection powered by neural networks.
-            Detect and prevent threats in real-time with our intelligent system.
+            Detects & prevent fraud 3x faster & cheaper than traditional solutions. 
+            No complex setup, No expensive contract, Just real-time protection.
           </p>
 
           {/* CTA buttons with enhanced styling */}
