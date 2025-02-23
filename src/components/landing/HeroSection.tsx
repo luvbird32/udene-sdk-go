@@ -43,7 +43,7 @@ export const HeroSection = () => {
             Fastest Security
             <br />
             <span className="bg-gradient-to-r from-secondary via-secondary/90 to-secondary/80 text-transparent bg-clip-text bg-300% animate-gradient">
-              For Protecting Businesses Against Consumer Fraud & Product Exploitation
+              Against Fraud & Product Exploitation
             </span>
           </h1>
           
