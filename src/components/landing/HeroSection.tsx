@@ -1,3 +1,4 @@
+
 import { ArrowRight, Code, Shield, Star, Lock, Zap, Database, Clock, CheckCircle2, Fingerprint } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -39,10 +40,10 @@ export const HeroSection = () => {
         <div className="text-center space-y-8 animate-fade-in">
           {/* Main heading with enhanced typography and gradient */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-bold text-white leading-[1.1] tracking-tight">
-            Next-Gen
+            Fastest Security
             <br />
             <span className="bg-gradient-to-r from-secondary via-secondary/90 to-secondary/80 text-transparent bg-clip-text bg-300% animate-gradient">
-              AI-Powered Fraud Protection
+              For Protecting Businesses Against Consumer Fraud & Product Exploitation
             </span>
           </h1>
           
