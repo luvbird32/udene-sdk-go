@@ -1294,6 +1294,86 @@ export type Database = {
         }
         Relationships: []
       }
+      pricing_features: {
+        Row: {
+          created_at: string | null
+          feature: string
+          id: string
+          plan_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          feature: string
+          id?: string
+          plan_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          feature?: string
+          id?: string
+          plan_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pricing_features_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "pricing_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pricing_plans: {
+        Row: {
+          base_price: number | null
+          created_at: string | null
+          description: string | null
+          id: string
+          is_best_value: boolean | null
+          is_highlighted: boolean | null
+          is_promo: boolean | null
+          name: string
+          period: string | null
+          price: number | null
+          promotion: string | null
+          savings: string | null
+          updated_at: string | null
+          volume_discount: string | null
+        }
+        Insert: {
+          base_price?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_best_value?: boolean | null
+          is_highlighted?: boolean | null
+          is_promo?: boolean | null
+          name: string
+          period?: string | null
+          price?: number | null
+          promotion?: string | null
+          savings?: string | null
+          updated_at?: string | null
+          volume_discount?: string | null
+        }
+        Update: {
+          base_price?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_best_value?: boolean | null
+          is_highlighted?: boolean | null
+          is_promo?: boolean | null
+          name?: string
+          period?: string | null
+          price?: number | null
+          promotion?: string | null
+          savings?: string | null
+          updated_at?: string | null
+          volume_discount?: string | null
+        }
+        Relationships: []
+      }
       product_security_programs: {
         Row: {
           audit_frequency: string | null
