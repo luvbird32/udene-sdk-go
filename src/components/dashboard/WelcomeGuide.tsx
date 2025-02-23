@@ -41,6 +41,8 @@ export const WelcomeGuide = () => {
     return null;
   }
 
+  const CurrentIcon = steps[currentStep].icon;
+
   return (
     <Card className="p-6 mb-6 bg-gradient-to-r from-secondary/10 via-secondary/5 to-transparent border-secondary/20">
       <div className="space-y-6">
@@ -57,9 +59,7 @@ export const WelcomeGuide = () => {
             <span className="text-sm text-muted-foreground">
               {currentStep + 1} of {steps.length}
             </span>
-            {steps[currentStep].icon && (
-              <steps[currentStep].icon className="h-5 w-5 text-secondary" />
-            )}
+            <CurrentIcon className="h-5 w-5 text-secondary" />
           </div>
         </div>
 
