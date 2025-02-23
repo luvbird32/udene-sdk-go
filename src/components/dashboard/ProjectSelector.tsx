@@ -168,7 +168,25 @@ export const ProjectSelector = () => {
   };
 
   return (
-    <div className="flex items-center gap-4 mb-6">
+    <div className="space-y-4 mb-6">
+      <div className="flex items-center gap-4">
+        <ProjectSelect
+          isLoading={isLoading}
+          currentProject={currentProject}
+          projects={projects}
+          handleProjectChange={handleProjectChange}
+        />
+        <ProjectDialog
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          newProjectName={newProjectName}
+          setNewProjectName={setNewProjectName}
+          newProjectDescription={newProjectDescription}
+          setNewProjectDescription={setNewProjectDescription}
+          handleCreateProject={handleCreateProject}
+        />
+      </div>
+      
       <SearchInput
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -178,21 +196,7 @@ export const ProjectSelector = () => {
         handleSearchResultClick={handleSearchResultClick}
         searchRef={searchRef}
       />
-      <ProjectSelect
-        isLoading={isLoading}
-        currentProject={currentProject}
-        projects={projects}
-        handleProjectChange={handleProjectChange}
-      />
-      <ProjectDialog
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        newProjectName={newProjectName}
-        setNewProjectName={setNewProjectName}
-        newProjectDescription={newProjectDescription}
-        setNewProjectDescription={setNewProjectDescription}
-        handleCreateProject={handleCreateProject}
-      />
     </div>
   );
 };
+
