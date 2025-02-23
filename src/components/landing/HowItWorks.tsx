@@ -8,21 +8,21 @@ export const HowItWorks = () => {
       title: "Detect",
       description: "Our advanced system scans transactions in real-time, flagging suspicious activity.",
       icon: Search,
-      gradient: "from-blue-500 to-blue-600"
+      gradient: "from-secondary to-secondary/80"
     },
     {
       id: 2,
       title: "Prevent",
       description: "AI-powered algorithms automatically block fraud before it happens.",
       icon: ShieldCheck,
-      gradient: "from-green-500 to-green-600"
+      gradient: "from-secondary to-secondary/80"
     },
     {
       id: 3,
       title: "Protect",
       description: "Your business stays secure, giving you peace of mind.",
       icon: Lock,
-      gradient: "from-purple-500 to-purple-600"
+      gradient: "from-secondary to-secondary/80"
     }
   ];
 
@@ -35,16 +35,14 @@ export const HowItWorks = () => {
           </h2>
         </div>
 
-        <div className="grid gap-8 md:gap-12 lg:grid-cols-3 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {steps.map((step) => (
             <div
               key={step.id}
-              className="relative bg-black/40 backdrop-blur-sm p-8 rounded-xl border border-white/5 
-                       transform transition-all duration-500 hover:border-secondary/20"
+              className="glass-card p-6 rounded-xl transition-all duration-300 hover:scale-105 hover:border-primary/30 backdrop-blur-lg border border-primary/20"
             >
               {/* Step Number */}
-              <div className="absolute -top-4 left-8 bg-secondary/10 px-4 py-1 rounded-full 
-                          border border-secondary/20">
+              <div className="bg-secondary/10 px-4 py-1 rounded-full border border-secondary/20 w-fit mb-6">
                 <span className="text-secondary font-medium">Step {step.id}</span>
               </div>
 
