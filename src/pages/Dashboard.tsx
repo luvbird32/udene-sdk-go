@@ -1,3 +1,4 @@
+
 /**
  * Main Dashboard Page Component
  * 
@@ -28,13 +29,25 @@ import { DashboardTabs } from "@/components/client-dashboard/tabs/DashboardTabs"
 import { DashboardTabContent } from "@/components/client-dashboard/tabs/DashboardTabContent";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ProjectSelector } from "@/components/dashboard/ProjectSelector";
+import { WelcomeGuide } from "@/components/dashboard/WelcomeGuide";
+import { useState, useEffect } from "react";
 
 const Dashboard = () => {
   const { toast } = useToast();
+  const [showWelcome, setShowWelcome] = useState(false);
   
   // Initialize session timeout and realtime subscription hooks
   useSessionTimeout();
   useRealtimeSubscriptions();
+
+  useEffect(() => {
+    // Check if this is the first visit
+    const hasSeenWelcome = localStorage.getItem("hasSeenWelcome");
+    if (!hasSeenWelcome) {
+      setShowWelcome(true);
+      localStorage.setItem("hasSeenWelcome", "true");
+    }
+  }, []);
 
   // Fetch dashboard metrics with automatic refetching every 3 seconds
   const { data: metrics, isLoading: metricsLoading, error: metricsError } = useQuery({
@@ -103,6 +116,7 @@ const Dashboard = () => {
         <TooltipProvider>
           <DashboardHeader />
           <ProjectSelector />
+          {showWelcome && <WelcomeGuide />}
           <Tabs defaultValue="dashboard" className="space-y-6">
             <DashboardTabs />
             <DashboardTabContent 
