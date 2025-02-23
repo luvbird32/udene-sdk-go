@@ -5,7 +5,7 @@ import { useProject } from "@/contexts/ProjectContext";
 import { useProjectCreation } from "../hooks/useProjectCreation";
 
 export const ProjectSelection = () => {
-  const { currentProject, projects, isLoading } = useProject();
+  const { currentProject, projects, isLoading, setCurrentProject } = useProject();
   const {
     isOpen,
     setIsOpen,
