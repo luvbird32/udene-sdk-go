@@ -17,15 +17,15 @@ export const MetricCard = ({ title, value, icon: Icon, description, details }: M
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Card className="p-4">
+    <Card className="p-6 h-full">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-        <div className="flex items-start justify-between">
-          <div>
+        <div className="flex items-start justify-between space-x-4">
+          <div className="space-y-3">
             <p className="text-sm font-medium text-muted-foreground">{title}</p>
-            <h3 className="text-2xl font-bold mt-2 text-foreground">{value}</h3>
-            <p className="text-sm text-muted-foreground mt-2">{description}</p>
+            <h3 className="text-2xl md:text-3xl font-bold text-foreground">{value}</h3>
+            <p className="text-sm text-muted-foreground">{description}</p>
           </div>
-          <Icon className="h-5 w-5 text-muted-foreground" />
+          <Icon className="h-6 w-6 text-muted-foreground shrink-0" />
         </div>
 
         {details && (
@@ -34,7 +34,7 @@ export const MetricCard = ({ title, value, icon: Icon, description, details }: M
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="w-full mt-4 flex items-center justify-center gap-2"
+                className="w-full mt-6 flex items-center justify-center gap-2"
               >
                 {isOpen ? (
                   <>
