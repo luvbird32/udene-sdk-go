@@ -34,7 +34,7 @@ export const HeroSection = () => {
       />
       {/* Background gradient effects */}
       <div className="absolute inset-0 bg-gradient-to-b from-black via-black/95 to-black pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent blur-2xl opacity-30" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-secondary/20 via-transparent to-transparent blur-2xl opacity-30" />
       
       <div className="w-full max-w-7xl mx-auto relative">
         <div className="text-center space-y-8 animate-fade-in">
@@ -42,7 +42,7 @@ export const HeroSection = () => {
           <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-bold text-white leading-[1.1] tracking-tight">
             The Fastest
             <br />
-            <span className="bg-gradient-to-r from-primary via-primary/90 to-primary/80 text-transparent bg-clip-text bg-300% animate-gradient">
+            <span className="bg-gradient-to-r from-secondary via-secondary/90 to-secondary/80 text-transparent bg-clip-text bg-300% animate-gradient">
               AI-Powered Security
             </span>
             <br />
@@ -58,7 +58,7 @@ export const HeroSection = () => {
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-8">
             <Button 
               size="lg"
-              className="bg-primary hover:bg-primary/90 text-white px-8 h-14 text-lg font-medium transition-all duration-300 hover:scale-105"
+              className="bg-secondary hover:bg-secondary/90 text-white px-8 h-14 text-lg font-medium transition-all duration-300 hover:scale-105"
               onClick={handleStartTrial}
             >
               Start free trial <ArrowRight className="ml-2 h-5 w-5" />
@@ -66,7 +66,7 @@ export const HeroSection = () => {
             <Button 
               size="lg"
               variant="outline"
-              className="border-primary/30 text-primary hover:bg-primary/10 h-14 text-lg font-medium transition-all duration-300"
+              className="border-secondary/30 text-secondary hover:bg-secondary/10 h-14 text-lg font-medium transition-all duration-300"
               onClick={() => navigate('/documentation')}
             >
               <Code className="mr-2 h-5 w-5" /> View documentation
@@ -94,13 +94,13 @@ export const HeroSection = () => {
             ].map((feature, index) => (
               <div 
                 key={index}
-                className="group p-8 rounded-xl bg-black/40 backdrop-blur-sm border border-white/5 hover:border-primary/20 transition-all duration-500"
+                className="group p-8 rounded-xl bg-black/40 backdrop-blur-sm border border-white/5 hover:border-secondary/20 transition-all duration-500"
               >
                 <div className="flex items-center space-x-4 mb-4">
-                  <div className="p-3 bg-primary/10 rounded-lg group-hover:scale-110 transition-transform duration-500">
-                    <feature.icon className="h-6 w-6 text-primary" />
+                  <div className="p-3 bg-secondary/10 rounded-lg group-hover:scale-110 transition-transform duration-500">
+                    <feature.icon className="h-6 w-6 text-secondary" />
                   </div>
-                  <h3 className="text-lg font-semibold text-white group-hover:text-primary transition-colors duration-300">
+                  <h3 className="text-lg font-semibold text-white group-hover:text-secondary transition-colors duration-300">
                     {feature.title}
                   </h3>
                 </div>
@@ -119,8 +119,8 @@ export const HeroSection = () => {
               { icon: Star, text: "99.99% Uptime SLA" }
             ].map((item, index) => (
               <div key={index} className="flex items-center space-x-3 group">
-                <div className="p-2 bg-primary/5 rounded-lg group-hover:scale-110 transition-transform duration-300">
-                  <item.icon className="w-5 h-5 text-primary" />
+                <div className="p-2 bg-secondary/5 rounded-lg group-hover:scale-110 transition-transform duration-300">
+                  <item.icon className="w-5 h-5 text-secondary" />
                 </div>
                 <span className="text-sm text-gray-400 font-medium">{item.text}</span>
               </div>
