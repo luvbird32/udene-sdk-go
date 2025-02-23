@@ -1,5 +1,5 @@
 
-import { ArrowRight, Code, Shield, Star, Lock, Zap, Database } from "lucide-react";
+import { ArrowRight, Code, Shield, Star, Lock, Zap, Database, Clock, CheckCircle2, Fingerprint } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -40,19 +40,32 @@ export const HeroSection = () => {
         <div className="text-center space-y-8 animate-fade-in">
           {/* Main heading with enhanced typography and gradient */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-bold text-white leading-[1.1] tracking-tight">
-            The Fastest
+            Next-Gen
             <br />
             <span className="bg-gradient-to-r from-secondary via-secondary/90 to-secondary/80 text-transparent bg-clip-text bg-300% animate-gradient">
-              AI-Powered Security
+              AI-Powered Fraud Protection
             </span>
-            <br />
-            For SMBs & Enterprises
           </h1>
           
           <p className="text-lg sm:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed font-medium">
-            Detects & prevent fraud 3x faster & cheaper than traditional solutions. 
-            No complex setup, No expensive contract, Just real-time protection.
+            Stop bots, payment fraud, and account abuse before they impact your revenue. 
+            Udene detects threats 3× faster than traditional solutions, protecting your business 
+            in real-time with enterprise-grade security that's easy to use and affordable.
           </p>
+
+          {/* Key benefits with icons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-6">
+            {[
+              { icon: Clock, text: "Blocks fraud in 35ms" },
+              { icon: Shield, text: "Prevents revenue loss from abuse" },
+              { icon: Zap, text: "Works instantly—no complex setup" }
+            ].map((benefit, index) => (
+              <div key={index} className="flex items-center space-x-2 text-gray-300">
+                <benefit.icon className="w-5 h-5 text-secondary" />
+                <span className="text-sm font-medium">{benefit.text}</span>
+              </div>
+            ))}
+          </div>
 
           {/* CTA buttons with enhanced styling */}
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-8">
@@ -61,7 +74,7 @@ export const HeroSection = () => {
               className="bg-secondary hover:bg-secondary/90 text-white px-8 h-14 text-lg font-medium transition-all duration-300 hover:scale-105"
               onClick={handleStartTrial}
             >
-              Start free trial <ArrowRight className="ml-2 h-5 w-5" />
+              🔐 Start Protecting Your Business Instantly <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button 
               size="lg"
@@ -78,18 +91,18 @@ export const HeroSection = () => {
             {[
               {
                 icon: Shield,
-                title: "AI-Powered Defense",
-                description: "Process 1M+ threats/second with advanced neural networks"
+                title: "Real-Time Protection",
+                description: "Blocks fraud in 35ms with AI-powered behavioral analysis"
               },
               {
-                icon: Zap,
-                title: "Real-Time Protection",
-                description: "Instant threat detection and automated response"
+                icon: Fingerprint,
+                title: "Full-Spectrum Defense",
+                description: "Covers bots, payments, identity, APIs, and content abuse"
               },
               {
                 icon: Database,
                 title: "Enterprise Scale",
-                description: "Secure infrastructure for businesses of all sizes"
+                description: "Enterprise security at SMB-friendly pricing"
               }
             ].map((feature, index) => (
               <div 
@@ -114,8 +127,8 @@ export const HeroSection = () => {
           {/* Trust indicators */}
           <div className="pt-24 flex flex-wrap items-center justify-center gap-12">
             {[
-              { icon: Shield, text: "SOC 2 Type II Certified" },
-              { icon: Lock, text: "GDPR & CCPA Compliant" },
+              { icon: Shield, text: "SOC 2 Type II & ISO 27001 Certified" },
+              { icon: Lock, text: "GDPR, CCPA, PCI DSS Compliant" },
               { icon: Star, text: "99.99% Uptime SLA" }
             ].map((item, index) => (
               <div key={index} className="flex items-center space-x-3 group">
