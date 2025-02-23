@@ -174,93 +174,106 @@ export default function BlogPost() {
         <article className="lg:col-span-8 prose prose-lg max-w-none">
           {/* Featured Image */}
           {post?.featured_image && (
-            <img
-              src={post.featured_image}
-              alt={post.title}
-              className="w-full h-[400px] object-cover rounded-lg mb-8"
-            />
+            <div className="relative h-[500px] mb-12 rounded-xl overflow-hidden shadow-2xl">
+              <img
+                src={post.featured_image}
+                alt={post.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
+                <h1 className="text-5xl font-bold mb-4 leading-tight">{post?.title}</h1>
+                <div className="flex items-center text-white/90">
+                  <span>By {post?.author?.username}</span>
+                  <span className="mx-2">•</span>
+                  <time>{format(new Date(post?.published_at || ''), 'MMMM d, yyyy')}</time>
+                </div>
+              </div>
+            </div>
           )}
 
-          {/* Article Header */}
-          <div className="bg-gray-50 p-6 rounded-lg mb-8">
-            <h1 className="text-4xl font-bold mb-4">{post?.title}</h1>
-            <div className="flex items-center text-muted-foreground">
-              <span>By {post?.author?.username}</span>
-              <span className="mx-2">•</span>
-              <time>{format(new Date(post?.published_at || ''), 'MMMM d, yyyy')}</time>
-            </div>
-          </div>
-
           {/* Quick Links */}
-          <div className="bg-blue-50 p-6 rounded-lg mb-8">
-            <h2 className="text-xl font-semibold mb-4">In This Article:</h2>
-            <ul className="list-none space-y-2">
-              <li>
-                <a href="#ai-ml" className="text-blue-600 hover:text-blue-800">
-                  1. AI and Machine Learning
-                </a>
-              </li>
-              <li>
-                <a href="#behavioral-biometrics" className="text-blue-600 hover:text-blue-800">
-                  2. Behavioral Biometrics
-                </a>
-              </li>
-              <li>
-                <a href="#blockchain" className="text-blue-600 hover:text-blue-800">
-                  3. Blockchain Technology
-                </a>
-              </li>
-              <li>
-                <a href="#authentication" className="text-blue-600 hover:text-blue-800">
-                  4. Advanced Authentication
-                </a>
-              </li>
-              <li>
-                <a href="#real-time" className="text-blue-600 hover:text-blue-800">
-                  5. Real-time Detection
-                </a>
-              </li>
-            </ul>
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100/50 p-8 rounded-xl mb-12 border border-blue-100">
+            <h2 className="text-2xl font-bold text-blue-900 mb-6">In This Article</h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              <a href="#ai-ml" className="flex items-center p-4 bg-white rounded-lg hover:shadow-md transition-shadow">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3 text-blue-600 font-semibold">1</div>
+                <span className="text-blue-900 font-medium">AI and Machine Learning</span>
+              </a>
+              <a href="#behavioral-biometrics" className="flex items-center p-4 bg-white rounded-lg hover:shadow-md transition-shadow">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3 text-blue-600 font-semibold">2</div>
+                <span className="text-blue-900 font-medium">Behavioral Biometrics</span>
+              </a>
+              <a href="#blockchain" className="flex items-center p-4 bg-white rounded-lg hover:shadow-md transition-shadow">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3 text-blue-600 font-semibold">3</div>
+                <span className="text-blue-900 font-medium">Blockchain Technology</span>
+              </a>
+              <a href="#authentication" className="flex items-center p-4 bg-white rounded-lg hover:shadow-md transition-shadow">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3 text-blue-600 font-semibold">4</div>
+                <span className="text-blue-900 font-medium">Advanced Authentication</span>
+              </a>
+              <a href="#real-time" className="flex items-center p-4 bg-white rounded-lg hover:shadow-md transition-shadow md:col-span-2">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3 text-blue-600 font-semibold">5</div>
+                <span className="text-blue-900 font-medium">Real-time Detection</span>
+              </a>
+            </div>
           </div>
 
           {/* Article Content */}
           <div 
-            className="prose-h2:text-2xl prose-h2:font-semibold prose-h2:mt-8 prose-h2:mb-4 
-                       prose-p:text-gray-600 prose-p:leading-relaxed 
-                       prose-ul:list-disc prose-ul:pl-6 prose-ul:my-4 
-                       prose-li:text-gray-600 prose-ol:list-decimal prose-ol:pl-6"
+            className="prose-h2:text-3xl prose-h2:font-bold prose-h2:mt-12 prose-h2:mb-6 
+                       prose-p:text-lg prose-p:leading-relaxed prose-p:text-gray-700
+                       prose-ul:list-none prose-ul:pl-0 prose-ul:my-6 
+                       prose-li:text-gray-700 prose-li:mb-3 prose-li:pl-8 prose-li:relative
+                       before:prose-li:content-['•'] before:prose-li:text-blue-500 before:prose-li:absolute before:prose-li:left-0 before:prose-li:top-0
+                       prose-ol:list-none prose-ol:pl-0 prose-ol:counter-reset-[item]
+                       [&_ol_li]:pl-10 [&_ol_li]:relative [&_ol_li]:counter-increment-[item]
+                       before:[&_ol_li]:content-[counter(item)] before:[&_ol_li]:absolute before:[&_ol_li]:left-0 before:[&_ol_li]:top-0
+                       before:[&_ol_li]:flex before:[&_ol_li]:items-center before:[&_ol_li]:justify-center
+                       before:[&_ol_li]:w-6 before:[&_ol_li]:h-6 before:[&_ol_li]:bg-blue-100
+                       before:[&_ol_li]:rounded-full before:[&_ol_li]:text-blue-600 before:[&_ol_li]:text-sm before:[&_ol_li]:font-semibold"
             dangerouslySetInnerHTML={{ __html: post?.content || '' }} 
           />
 
           {/* CTA Sections */}
-          <div className="my-12 space-y-6">
-            <div className="bg-blue-50 p-8 rounded-lg text-center">
-              <h3 className="text-2xl font-bold mb-4">Ready to Secure Your Business?</h3>
-              <p className="text-gray-600 mb-6">Start your free trial today and experience enterprise-grade security.</p>
-              <Button className="bg-blue-600 hover:bg-blue-700">
-                <Shield className="mr-2 h-5 w-5" />
+          <div className="my-16 space-y-8">
+            <div className="bg-gradient-to-br from-blue-600 to-blue-700 p-12 rounded-2xl text-center text-white shadow-xl">
+              <h3 className="text-3xl font-bold mb-4">Ready to Secure Your Business?</h3>
+              <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">Start your free trial today and experience enterprise-grade security with our cutting-edge fraud prevention system.</p>
+              <Button className="bg-white text-blue-600 hover:bg-blue-50 text-lg px-8 py-6 h-auto">
+                <Shield className="mr-3 h-6 w-6" />
                 Start Free Trial
               </Button>
             </div>
 
-            <div className="bg-gray-50 p-8 rounded-lg text-center">
-              <h3 className="text-2xl font-bold mb-4">Need More Information?</h3>
-              <p className="text-gray-600 mb-6">Schedule a demo with our security experts.</p>
-              <Button variant="outline">
-                <ExternalLink className="mr-2 h-5 w-5" />
-                Request Demo
-              </Button>
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="bg-gray-50 p-8 rounded-xl border border-gray-200">
+                <h3 className="text-2xl font-bold mb-4">Need More Information?</h3>
+                <p className="text-gray-600 mb-6">Schedule a personalized demo with our security experts.</p>
+                <Button variant="outline" className="w-full">
+                  <ExternalLink className="mr-2 h-5 w-5" />
+                  Request Demo
+                </Button>
+              </div>
+              
+              <div className="bg-gray-50 p-8 rounded-xl border border-gray-200">
+                <h3 className="text-2xl font-bold mb-4">Have Questions?</h3>
+                <p className="text-gray-600 mb-6">Our security experts are here to help you find the right solution.</p>
+                <Button variant="outline" className="w-full">
+                  Contact Us
+                </Button>
+              </div>
             </div>
           </div>
         </article>
 
         {/* Sidebar */}
-        <aside className="lg:col-span-4 space-y-6">
+        <aside className="lg:col-span-4 space-y-8">
           {/* Author Card */}
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-2">About the Author</h3>
-            <p className="text-gray-600 mb-4">
-              The Udene Security Team brings years of experience in cybersecurity and fraud prevention.
+          <Card className="p-8 bg-gradient-to-br from-gray-50 to-gray-100">
+            <h3 className="text-xl font-bold mb-4">About the Author</h3>
+            <p className="text-gray-600 mb-6 leading-relaxed">
+              The Udene Security Team brings years of experience in cybersecurity and fraud prevention. Our experts continuously research and develop cutting-edge solutions to protect businesses worldwide.
             </p>
             <Button variant="outline" className="w-full">
               View More Articles
@@ -269,22 +282,22 @@ export default function BlogPost() {
 
           {/* Recommended Articles */}
           <div>
-            <h3 className="text-xl font-semibold mb-4">Recommended Reading</h3>
-            <div className="space-y-4">
+            <h3 className="text-xl font-bold mb-6">Recommended Reading</h3>
+            <div className="space-y-6">
               {RELATED_ARTICLES.map((article) => (
                 <Link to={`/blog/${article.slug}`} key={article.id}>
-                  <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+                  <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border-gray-100">
                     <img 
                       src={article.featured_image} 
                       alt={article.title}
-                      className="w-full h-32 object-cover"
+                      className="w-full h-48 object-cover"
                     />
-                    <div className="p-4">
-                      <h4 className="font-semibold mb-2">{article.title}</h4>
-                      <p className="text-sm text-gray-600">{article.excerpt}</p>
-                      <div className="flex items-center mt-2 text-blue-600">
-                        Read More
-                        <ArrowRight className="ml-1 h-4 w-4" />
+                    <div className="p-6">
+                      <h4 className="font-bold text-lg mb-3 text-gray-900">{article.title}</h4>
+                      <p className="text-gray-600 mb-4 line-clamp-2">{article.excerpt}</p>
+                      <div className="flex items-center text-blue-600 font-medium">
+                        Read Article
+                        <ArrowRight className="ml-2 h-4 w-4" />
                       </div>
                     </div>
                   </Card>
@@ -292,13 +305,6 @@ export default function BlogPost() {
               ))}
             </div>
           </div>
-
-          {/* Quick Contact */}
-          <Card className="p-6 bg-gray-50">
-            <h3 className="text-lg font-semibold mb-4">Have Questions?</h3>
-            <p className="text-gray-600 mb-4">Our security experts are here to help you implement the right fraud prevention strategy.</p>
-            <Button className="w-full">Contact Us</Button>
-          </Card>
         </aside>
       </div>
     </div>
