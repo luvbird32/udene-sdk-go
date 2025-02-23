@@ -1,4 +1,3 @@
-
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Check, Minus, Star, ChevronDown, ChevronUp } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -7,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 export const CompetitiveAnalysis = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const initialCategoriesToShow = 3; // Show first 3 categories by default
+  const initialCategoriesToShow = 3;
 
   const features = [
     {
@@ -251,13 +250,14 @@ export const CompetitiveAnalysis = () => {
       <div className="container mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Why Choose{" "}
-            <span className="bg-gradient-to-r from-primary to-primary-light text-transparent bg-clip-text">
+            Why Businesses Choose{" "}
+            <span className="bg-gradient-to-r from-[#22c55e] to-[#22c55e]/90 text-transparent bg-clip-text">
               Udene
             </span>
+            {" "}Over Traditional Security Solutions
           </h2>
           <p className="text-gray-300 max-w-2xl mx-auto">
-            See how we compare to traditional security solutions and why leading enterprises trust our platform
+            See how we compare to legacy providers and why leading enterprises trust our platform
           </p>
         </div>
 
