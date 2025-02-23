@@ -1,9 +1,14 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Check, Minus, Star } from "lucide-react";
+import { Check, Minus, Star, ChevronDown, ChevronUp } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export const CompetitiveAnalysis = () => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const initialCategoriesToShow = 3; // Show first 3 categories by default
+
   const features = [
     {
       category: "ML & AI Capabilities",
@@ -239,6 +244,8 @@ export const CompetitiveAnalysis = () => {
     }
   ];
 
+  const visibleFeatures = isExpanded ? features : features.slice(0, initialCategoriesToShow);
+
   return (
     <section className="py-16 px-4">
       <div className="container mx-auto">
@@ -272,7 +279,7 @@ export const CompetitiveAnalysis = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {features.map((category, idx) => (
+                {visibleFeatures.map((category, idx) => (
                   <>
                     <TableRow key={`category-${idx}`} className="bg-black/20">
                       <TableCell 
@@ -322,6 +329,27 @@ export const CompetitiveAnalysis = () => {
                 ))}
               </TableBody>
             </Table>
+          </div>
+
+          {/* View More/Less Button */}
+          <div className="flex justify-center py-4 border-t border-white/5">
+            <Button
+              variant="ghost"
+              className="text-primary hover:text-primary/90 gap-2"
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
+              {isExpanded ? (
+                <>
+                  View Less
+                  <ChevronUp className="w-4 h-4" />
+                </>
+              ) : (
+                <>
+                  View More Features
+                  <ChevronDown className="w-4 h-4" />
+                </>
+              )}
+            </Button>
           </div>
         </Card>
       </div>
