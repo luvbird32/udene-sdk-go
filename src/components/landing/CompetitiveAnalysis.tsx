@@ -1,3 +1,4 @@
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Check, Minus, Star, ChevronDown, ChevronUp } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -246,17 +247,20 @@ export const CompetitiveAnalysis = () => {
   const visibleFeatures = isExpanded ? features : features.slice(0, initialCategoriesToShow);
 
   return (
-    <section className="py-16 px-4">
-      <div className="container mx-auto">
+    <section className="py-16 px-4 relative">
+      {/* Add a subtle gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent pointer-events-none" />
+      
+      <div className="container mx-auto relative z-10">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
             Why Businesses Choose{" "}
-            <span className="bg-gradient-to-r from-[#22c55e] to-[#22c55e]/90 text-transparent bg-clip-text">
+            <span className="bg-gradient-to-r from-[#22c55e] to-[#22c55e] text-transparent bg-clip-text">
               Udene
             </span>
             {" "}Over Traditional Security Solutions
           </h2>
-          <p className="text-gray-300 max-w-2xl mx-auto">
+          <p className="text-gray-200 max-w-2xl mx-auto">
             See how we compare to legacy providers and why leading enterprises trust our platform
           </p>
         </div>
