@@ -1374,6 +1374,44 @@ export type Database = {
         }
         Relationships: []
       }
+      pricing_tiers: {
+        Row: {
+          api_calls_max: number | null
+          api_calls_min: number | null
+          created_at: string | null
+          id: string
+          plan_id: string | null
+          price_per_call: number | null
+          tier_description: string
+        }
+        Insert: {
+          api_calls_max?: number | null
+          api_calls_min?: number | null
+          created_at?: string | null
+          id?: string
+          plan_id?: string | null
+          price_per_call?: number | null
+          tier_description: string
+        }
+        Update: {
+          api_calls_max?: number | null
+          api_calls_min?: number | null
+          created_at?: string | null
+          id?: string
+          plan_id?: string | null
+          price_per_call?: number | null
+          tier_description?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pricing_tiers_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "pricing_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_security_programs: {
         Row: {
           audit_frequency: string | null
