@@ -3,6 +3,7 @@ import { ProjectSelect } from "../ProjectSelect";
 import { ProjectDialog } from "../ProjectDialog";
 import { useProject } from "@/contexts/ProjectContext";
 import { useProjectCreation } from "../hooks/useProjectCreation";
+import { ContactDialog } from "@/components/feedback/ContactDialog";
 
 export const ProjectSelection = () => {
   const { currentProject, projects, isLoading, setCurrentProject } = useProject();
@@ -38,7 +39,7 @@ export const ProjectSelection = () => {
         setNewProjectDescription={setNewProjectDescription}
         handleCreateProject={handleCreateProject}
       />
+      <ContactDialog type="trial" />
     </div>
   );
 };
-
