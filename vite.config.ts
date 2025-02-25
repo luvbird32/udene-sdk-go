@@ -6,7 +6,7 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: "localhost",
+    host: true,
     port: 8080,
     cors: {
       origin: '*',
@@ -16,7 +16,8 @@ export default defineConfig({
     },
     allowedHosts: [
       'localhost',
-      '*.lovableproject.com'
+      '*.lovableproject.com',
+      '93cd0ad5-a304-45e0-bed8-a08742db3f9f.lovableproject.com'
     ]
   },
   build: {
