@@ -2,13 +2,13 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
 
+const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type",
 };
-
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
 interface ContactRequest {
   name: string;
@@ -32,7 +32,7 @@ const handler = async (req: Request): Promise<Response> => {
     // First, try to send email to support team
     console.log("Sending email to support team...");
     const supportEmailResponse = await resend.emails.send({
-      from: "Lovable Support <onboarding@resend.dev>",
+      from: "Udene Support <onboarding@resend.dev>",
       to: [to],
       subject: `New ${type === "trial" ? "Trial Support" : "Upgrade"} Request from ${name}`,
       html: `
@@ -50,7 +50,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Then, send confirmation email to user
     console.log("Sending confirmation email to user...");
     const userEmailResponse = await resend.emails.send({
-      from: "Lovable Support <onboarding@resend.dev>",
+      from: "Udene Support <onboarding@resend.dev>",
       to: [email],
       subject: "We received your message!",
       html: `
@@ -59,7 +59,7 @@ const handler = async (req: Request): Promise<Response> => {
         <p>Your message:</p>
         <p>${message}</p>
         <br>
-        <p>Best regards,<br>The Lovable Team</p>
+        <p>Best regards,<br>The Udene Team</p>
       `,
     });
 
