@@ -6,7 +6,7 @@ import { CreditWarnings } from "./CreditWarnings";
 import { TrialTimeProgress } from "./TrialTimeProgress";
 import { useApiCredits } from "./useApiCredits";
 import { useDeviceBlock } from "@/hooks/useDeviceBlock";
-import { differenceInDays } from "date-fns"; // Add this import
+import { differenceInDays } from "date-fns";
 import { ContactDialog } from "@/components/feedback/ContactDialog";
 
 export const ApiCreditsCard = () => {
@@ -26,7 +26,13 @@ export const ApiCreditsCard = () => {
   }
 
   if (error || !credits || isDeviceBlocked) {
-    return null;
+    return (
+      <Card className="p-6">
+        <div className="flex justify-end">
+          <ContactDialog type="trial" />
+        </div>
+      </Card>
+    );
   }
 
   const daysRemaining = credits.trial_end_date ? 
@@ -61,11 +67,7 @@ export const ApiCreditsCard = () => {
       />
 
       <div className="flex gap-4 pt-2">
-        {credits.is_trial ? (
-          <ContactDialog type="trial" />
-        ) : (
-          <ContactDialog type="upgrade" />
-        )}
+        <ContactDialog type={credits.is_trial ? "trial" : "upgrade"} />
       </div>
     </Card>
   );
