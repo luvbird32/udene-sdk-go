@@ -6,8 +6,7 @@ import { CreditWarnings } from "./CreditWarnings";
 import { TrialTimeProgress } from "./TrialTimeProgress";
 import { useApiCredits } from "./useApiCredits";
 import { useDeviceBlock } from "@/hooks/useDeviceBlock";
-import { Button } from "@/components/ui/button";
-import { ExternalLink } from "lucide-react";
+import { differenceInDays } from "date-fns"; // Add this import
 import { ContactDialog } from "@/components/feedback/ContactDialog";
 
 export const ApiCreditsCard = () => {
