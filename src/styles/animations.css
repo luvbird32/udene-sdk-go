@@ -16,6 +16,20 @@
   }
 }
 
+@keyframes fall {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(1000%);
+    opacity: 0;
+  }
+}
+
 .animate-gradient {
   animation: gradient 8s ease infinite;
 }
@@ -24,6 +38,11 @@
   animation: fade-in 1s ease-out forwards;
 }
 
+.animate-fall {
+  animation: fall 10s linear infinite;
+}
+
 .bg-300\% {
   background-size: 300% 100%;
 }
+

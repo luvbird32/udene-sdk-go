@@ -1,3 +1,4 @@
+
 import { ReactNode } from 'react';
 
 interface MatrixBackgroundProps {
@@ -8,7 +9,7 @@ export const MatrixBackground = ({ children }: MatrixBackgroundProps) => {
   return (
     <div className="relative">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-black to-green-950/20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black to-green-950/20 animate-gradient bg-300%" />
         <div className="absolute inset-0">
           {Array.from({ length: 50 }).map((_, i) => (
             <div
