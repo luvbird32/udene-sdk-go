@@ -4,11 +4,11 @@ import { CreditUsageProgress } from "./CreditUsageProgress";
 import { TrialStatus } from "./TrialStatus";
 import { CreditWarnings } from "./CreditWarnings";
 import { TrialTimeProgress } from "./TrialTimeProgress";
-import { differenceInDays } from "date-fns";
 import { useApiCredits } from "./useApiCredits";
 import { useDeviceBlock } from "@/hooks/useDeviceBlock";
 import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
+import { ContactDialog } from "@/components/feedback/ContactDialog";
 
 export const ApiCreditsCard = () => {
   const { credits, isLoading, error } = useApiCredits();
@@ -61,14 +61,13 @@ export const ApiCreditsCard = () => {
         daysRemaining={daysRemaining}
       />
 
-      {(isLowCredits || isTrialExpiring) && (
-        <div className="pt-2">
-          <Button className="w-full" variant="secondary">
-            <ExternalLink className="mr-2 h-4 w-4" />
-            Upgrade Plan
-          </Button>
-        </div>
-      )}
+      <div className="flex gap-4 pt-2">
+        {credits.is_trial ? (
+          <ContactDialog type="trial" />
+        ) : (
+          <ContactDialog type="upgrade" />
+        )}
+      </div>
     </Card>
   );
 };
