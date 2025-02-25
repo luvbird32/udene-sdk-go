@@ -15,6 +15,18 @@ export default defineConfig({
       credentials: true
     }
   },
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+      },
+      output: {
+        manualChunks: undefined,
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -26,4 +38,3 @@ export default defineConfig({
     }
   }
 });
-
