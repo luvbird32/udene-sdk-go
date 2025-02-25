@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ContactDialogProps {
   type: "trial" | "upgrade";
@@ -24,6 +25,7 @@ export const ContactDialog = ({ type }: ContactDialogProps) => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [open, setOpen] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,34 +33,33 @@ export const ContactDialog = ({ type }: ContactDialogProps) => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      console.log("Calling contact function...");
+      const { data, error } = await supabase.functions.invoke("contact", {
+        body: {
           name,
           email,
           message,
           type,
           to: "vicani388@gmail.com"
-        }),
+        },
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to send message");
-      }
+      if (error) throw error;
+
+      console.log("Contact function response:", data);
 
       toast({
         title: "Message sent successfully",
         description: "We'll get back to you as soon as possible.",
       });
 
-      // Reset form
+      // Reset form and close dialog
       setName("");
       setEmail("");
       setMessage("");
+      setOpen(false);
     } catch (error) {
+      console.error("Error in contact form:", error);
       toast({
         title: "Error sending message",
         description: "Please try again later or contact support directly.",
@@ -75,7 +76,7 @@ export const ContactDialog = ({ type }: ContactDialogProps) => {
     : "Ready to upgrade? Let us help you choose the right plan.";
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="gap-2">
           <MessageSquare className="h-4 w-4" />

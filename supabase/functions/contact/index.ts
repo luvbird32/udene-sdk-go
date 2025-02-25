@@ -25,10 +25,13 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    console.log("Received contact request");
     const { name, email, message, type, to }: ContactRequest = await req.json();
+    console.log("Request data:", { name, email, message, type, to });
 
-    // Send email to support team
-    const emailResponse = await resend.emails.send({
+    // First, try to send email to support team
+    console.log("Sending email to support team...");
+    const supportEmailResponse = await resend.emails.send({
       from: "Lovable Support <onboarding@resend.dev>",
       to: [to],
       subject: `New ${type === "trial" ? "Trial Support" : "Upgrade"} Request from ${name}`,
@@ -42,8 +45,11 @@ const handler = async (req: Request): Promise<Response> => {
       `,
     });
 
-    // Send confirmation email to user
-    await resend.emails.send({
+    console.log("Support email sent:", supportEmailResponse);
+
+    // Then, send confirmation email to user
+    console.log("Sending confirmation email to user...");
+    const userEmailResponse = await resend.emails.send({
       from: "Lovable Support <onboarding@resend.dev>",
       to: [email],
       subject: "We received your message!",
@@ -57,16 +63,21 @@ const handler = async (req: Request): Promise<Response> => {
       `,
     });
 
-    console.log("Emails sent successfully:", emailResponse);
+    console.log("User confirmation email sent:", userEmailResponse);
 
-    return new Response(JSON.stringify({ success: true }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 200,
-    });
+    return new Response(
+      JSON.stringify({ success: true, id: supportEmailResponse.id }),
+      {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      }
+    );
   } catch (error) {
     console.error("Error in contact function:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({
+        error: error.message || "An error occurred while sending emails",
+      }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },
