@@ -25,12 +25,17 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    console.log("Received contact request");
+    console.log("Starting contact request handler...");
     const { name, email, message, type, to }: ContactRequest = await req.json();
-    console.log("Request data:", { name, email, message, type, to });
+    console.log("Parsed request data:", { name, email, message, type, to });
+
+    if (!to || !email) {
+      console.error("Missing required email addresses:", { to, email });
+      throw new Error("Missing required email addresses");
+    }
 
     // First, try to send email to support team
-    console.log("Sending email to support team...");
+    console.log(`Attempting to send support email to: ${to}`);
     const supportEmailResponse = await resend.emails.send({
       from: "Udene Support <onboarding@resend.dev>",
       to: [to],
@@ -43,12 +48,15 @@ const handler = async (req: Request): Promise<Response> => {
         <p><strong>Message:</strong></p>
         <p>${message}</p>
       `,
+    }).catch(error => {
+      console.error("Error sending support email:", error);
+      throw error;
     });
 
-    console.log("Support email sent:", supportEmailResponse);
+    console.log("Support email response:", supportEmailResponse);
 
     // Then, send confirmation email to user
-    console.log("Sending confirmation email to user...");
+    console.log(`Attempting to send confirmation email to: ${email}`);
     const userEmailResponse = await resend.emails.send({
       from: "Udene Support <onboarding@resend.dev>",
       to: [email],
@@ -61,12 +69,19 @@ const handler = async (req: Request): Promise<Response> => {
         <br>
         <p>Best regards,<br>The Udene Team</p>
       `,
+    }).catch(error => {
+      console.error("Error sending confirmation email:", error);
+      throw error;
     });
 
-    console.log("User confirmation email sent:", userEmailResponse);
+    console.log("User confirmation email response:", userEmailResponse);
 
     return new Response(
-      JSON.stringify({ success: true, id: supportEmailResponse.id }),
+      JSON.stringify({
+        success: true,
+        supportEmailId: supportEmailResponse.id,
+        userEmailId: userEmailResponse.id
+      }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,
@@ -77,6 +92,7 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(
       JSON.stringify({
         error: error.message || "An error occurred while sending emails",
+        details: error
       }),
       {
         status: 500,
