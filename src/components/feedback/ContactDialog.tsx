@@ -20,6 +20,8 @@ interface ContactDialogProps {
   type: "trial" | "upgrade";
 }
 
+const SUPPORT_EMAIL = "vicani388@gmail.com";
+
 export const ContactDialog = ({ type }: ContactDialogProps) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -33,18 +35,28 @@ export const ContactDialog = ({ type }: ContactDialogProps) => {
     setIsSubmitting(true);
 
     try {
-      console.log("Calling contact function...");
+      console.log("Submitting contact form with data:", {
+        name,
+        email,
+        message,
+        type,
+        to: SUPPORT_EMAIL
+      });
+
       const { data, error } = await supabase.functions.invoke("contact", {
         body: {
           name,
           email,
           message,
           type,
-          to: "vicani388@gmail.com"
+          to: SUPPORT_EMAIL
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error from contact function:", error);
+        throw error;
+      }
 
       console.log("Contact function response:", data);
 
