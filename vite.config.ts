@@ -19,6 +19,8 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     chunkSizeWarningLimit: 1000,
+    minify: 'terser', // Use terser for better minification
+    sourcemap: false, // Disable sourcemaps in production
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'index.html'),
@@ -32,6 +34,9 @@ export default defineConfig({
         }
       },
     },
+    target: 'es2015', // Target more modern browsers for smaller bundle size
+    cssCodeSplit: true, // Enable CSS code splitting
+    reportCompressedSize: false, // Disable compressed size reporting for faster builds
   },
   resolve: {
     alias: {
