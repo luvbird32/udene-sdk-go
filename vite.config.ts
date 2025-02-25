@@ -13,14 +13,18 @@ export default defineConfig({
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
       credentials: true
-    }
+    },
+    allowedHosts: [
+      'localhost',
+      '*.lovableproject.com'
+    ]
   },
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
     chunkSizeWarningLimit: 1000,
-    minify: 'terser', // Use terser for better minification
-    sourcemap: false, // Disable sourcemaps in production
+    minify: 'terser',
+    sourcemap: false,
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'index.html'),
@@ -34,9 +38,9 @@ export default defineConfig({
         }
       },
     },
-    target: 'es2015', // Target more modern browsers for smaller bundle size
-    cssCodeSplit: true, // Enable CSS code splitting
-    reportCompressedSize: false, // Disable compressed size reporting for faster builds
+    target: 'es2015',
+    cssCodeSplit: true,
+    reportCompressedSize: false,
   },
   resolve: {
     alias: {
