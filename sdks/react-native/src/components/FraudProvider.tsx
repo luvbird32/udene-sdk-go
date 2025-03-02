@@ -3,51 +3,51 @@ import React, { createContext, useContext, ReactNode } from 'react';
 import { FraudClient } from '../services/FraudClient';
 import { FraudContextType } from '../types';
 
-// Create the fraud detection context
-const FraudContext = createContext<FraudContextType | null>(null);
+// Create the fraud context
+const FraudContext = createContext<FraudContextType | undefined>(undefined);
 
-// Provider props interface
+// Props for the FraudProvider component
 interface FraudProviderProps {
+  children: ReactNode;
   apiKey: string;
   baseUrl?: string;
-  children: ReactNode;
   testID?: string;
 }
 
 /**
- * FraudProvider component that initializes the fraud detection SDK
- * and provides context for all fraud detection features
+ * FraudProvider component that wraps the application and provides
+ * fraud detection functionality through context
  */
 export const FraudProvider: React.FC<FraudProviderProps> = ({
+  children,
   apiKey,
   baseUrl,
-  children,
-  testID,
+  testID
 }) => {
-  // Initialize the fraud client with the API key and optional base URL
-  const client = new FraudClient(apiKey, baseUrl);
+  // Initialize the FraudClient with the provided API key
+  const fraudClient = new FraudClient(apiKey, baseUrl);
 
-  // Create the context value with all available fraud detection methods
+  // Define the context value with necessary functions
   const contextValue: FraudContextType = {
-    trackInteraction: client.trackInteraction.bind(client),
-    getMetrics: client.getMetrics.bind(client),
+    trackInteraction: (data) => fraudClient.trackInteraction(data),
+    getMetrics: () => fraudClient.getMetrics()
   };
 
   return (
-    <FraudContext.Provider value={contextValue} testID={testID}>
-      {children}
+    <FraudContext.Provider value={contextValue}>
+      <div testID={testID}>{children}</div>
     </FraudContext.Provider>
   );
 };
 
 /**
  * Custom hook to access fraud detection functionality
- * Must be used within a FraudProvider component
+ * Must be used within a FraudProvider
  */
 export const useFraud = (): FraudContextType => {
   const context = useContext(FraudContext);
   
-  if (!context) {
+  if (context === undefined) {
     throw new Error('useFraud must be used within a FraudProvider');
   }
   

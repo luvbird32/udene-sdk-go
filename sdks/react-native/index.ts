@@ -1,17 +1,15 @@
 
 /**
  * @udene/react-native-sdk
- * A powerful fraud detection and security monitoring SDK for React Native applications.
- * 
- * @packageDocumentation
+ * Fraud detection and security monitoring for React Native applications
  */
 
-// Export components
+// Export components and hooks
 export { FraudProvider, useFraud } from './src/components/FraudProvider';
 
 // Export types
 export type { 
   InteractionData,
   MetricsResponse,
-  FraudContextType 
+  FraudContextType
 } from './src/types';
