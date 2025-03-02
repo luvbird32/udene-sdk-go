@@ -1,18 +1,54 @@
+
 {
-  "name": "@fraud/react-native-sdk",
+  "name": "@udene/react-native-sdk",
   "version": "1.0.0",
-  "description": "Fraud Detection SDK for React Native",
-  "main": "index.ts",
-  "types": "index.ts",
+  "description": "Fraud Detection SDK for React Native applications",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "test": "jest",
+    "lint": "eslint src --ext .ts,.tsx"
   },
+  "keywords": [
+    "fraud",
+    "security",
+    "detection",
+    "react-native",
+    "udene"
+  ],
+  "author": "Udene Security Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/udene/react-native-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/udene/react-native-sdk/issues"
+  },
+  "homepage": "https://udene.net/docs/sdk/react-native",
   "peerDependencies": {
     "react-native": ">=0.60.0",
-    "axios": ">=1.0.0"
+    "axios": ">=1.0.0",
+    "react": ">=16.8.0"
   },
   "devDependencies": {
     "@types/react-native": "^0.72.0",
-    "typescript": "^5.0.0"
+    "@typescript-eslint/eslint-plugin": "^5.59.0",
+    "@typescript-eslint/parser": "^5.59.0",
+    "eslint": "^8.38.0",
+    "jest": "^29.5.0",
+    "typescript": "^5.0.0",
+    "react": "^18.2.0",
+    "react-native": "^0.71.0"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
   }
 }
