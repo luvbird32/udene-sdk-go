@@ -2,7 +2,7 @@
 {
   "name": "@udene/react-native-sdk",
   "version": "1.0.0",
-  "description": "Fraud Detection SDK for React Native applications",
+  "description": "Fraud detection and security monitoring for React Native applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
