@@ -4,20 +4,28 @@ import { View } from 'react-native';
 import { FraudClient } from '../services/FraudClient';
 import { FraudContextType } from '../types';
 
-// Create the fraud context
+/**
+ * Create the fraud context to provide fraud detection functionality throughout the app
+ * This context will hold all the fraud detection related methods and state
+ */
 const FraudContext = createContext<FraudContextType | undefined>(undefined);
 
-// Props for the FraudProvider component
+/**
+ * Props for the FraudProvider component
+ */
 interface FraudProviderProps {
-  children: ReactNode;
-  apiKey: string;
-  baseUrl?: string;
-  testID?: string;
+  children: ReactNode;      // Child components that will have access to fraud detection
+  apiKey: string;           // API key for authenticating with the fraud detection service
+  baseUrl?: string;         // Optional custom API endpoint URL
+  testID?: string;          // Optional test identifier for automated testing
 }
 
 /**
  * FraudProvider component that wraps the application and provides
  * fraud detection functionality through context
+ * 
+ * This component should be placed near the root of your component tree
+ * to make fraud detection available throughout your application.
  */
 export const FraudProvider: React.FC<FraudProviderProps> = ({
   children,
@@ -43,7 +51,10 @@ export const FraudProvider: React.FC<FraudProviderProps> = ({
 
 /**
  * Custom hook to access fraud detection functionality
- * Must be used within a FraudProvider
+ * Must be used within a FraudProvider component higher in the component tree
+ * 
+ * @returns FraudContextType - Object containing fraud detection methods
+ * @throws Error if used outside of a FraudProvider
  */
 export const useFraud = (): FraudContextType => {
   const context = useContext(FraudContext);
