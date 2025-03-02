@@ -13,6 +13,6 @@
     "lib": ["es2018"],
     "moduleResolution": "node"
   },
-  "include": ["*.ts", "*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "index.ts"],
   "exclude": ["node_modules", "dist", "**/__tests__/*"]
 }
