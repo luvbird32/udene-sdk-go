@@ -1,7 +1,8 @@
 
-# Source code
+# Source code but allow declarations
 *.ts
 !*.d.ts
+!dist/**/*
 
 # Config files
 tsconfig.json
