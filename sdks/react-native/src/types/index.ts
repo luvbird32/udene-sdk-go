@@ -1,45 +1,54 @@
 
 /**
- * User interaction data for fraud tracking
+ * Common types used throughout the SDK
+ */
+
+/**
+ * Data structure for tracking user interactions
  */
 export interface InteractionData {
-  /** The type of action performed */
+  /**
+   * Type of action performed by the user
+   */
   action: string;
   
-  /** Optional user identifier */
-  userId?: string;
-  
-  /** Optional session identifier */
-  sessionId?: string;
-  
-  /** Additional data related to the interaction */
+  /**
+   * Additional data related to the interaction
+   */
   metadata?: Record<string, any>;
 }
 
 /**
- * Response structure for fraud metrics
+ * Response format for risk metrics
  */
 export interface MetricsResponse {
-  /** Risk score between 0 and 1 */
+  /**
+   * Risk score from 0-100 where higher means more risky
+   */
   riskScore: number;
   
-  /** Number of active users */
-  activeUsers: number;
+  /**
+   * Factors contributing to the risk assessment
+   */
+  riskFactors?: string[];
   
-  /** Number of fraud alerts */
-  alertCount: number;
-  
-  /** Timestamp of last update */
-  lastUpdated?: string;
+  /**
+   * Timestamp when metrics were calculated
+   */
+  timestamp: string;
 }
 
 /**
- * Context type for fraud detection features
+ * Context type provided by the FraudProvider
  */
 export interface FraudContextType {
-  /** Track user interactions for fraud analysis */
+  /**
+   * Tracks user interaction for fraud analysis
+   */
   trackInteraction: (data: InteractionData) => Promise<any>;
   
-  /** Get current fraud metrics */
+  /**
+   * Retrieves current risk metrics
+   */
   getMetrics: () => Promise<MetricsResponse>;
 }
