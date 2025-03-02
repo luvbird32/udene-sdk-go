@@ -1,5 +1,6 @@
 
 import React, { createContext, useContext, ReactNode } from 'react';
+import { View } from 'react-native';
 import { FraudClient } from '../services/FraudClient';
 import { FraudContextType } from '../types';
 
@@ -35,7 +36,7 @@ export const FraudProvider: React.FC<FraudProviderProps> = ({
 
   return (
     <FraudContext.Provider value={contextValue}>
-      <div testID={testID}>{children}</div>
+      <View testID={testID}>{children}</View>
     </FraudContext.Provider>
   );
 };
