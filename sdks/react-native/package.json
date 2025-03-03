@@ -16,7 +16,8 @@
     "security",
     "detection",
     "react-native",
-    "udene"
+    "udene",
+    "hybrid"
   ],
   "author": "Udene Security Team",
   "license": "MIT",

@@ -1,6 +1,21 @@
 
+/**
+ * FraudClient.ts
+ * 
+ * Client for interacting with the Udene fraud detection API
+ * Enhanced to support the hybrid model approach with both
+ * local processing and server-side analysis.
+ */
+
 import axios, { AxiosInstance } from 'axios';
-import { InteractionData, MetricsResponse } from '../types';
+import { 
+  InteractionData, 
+  MetricsResponse, 
+  TransactionData, 
+  DeviceInfo, 
+  NetworkInfo,
+  RiskAssessment 
+} from '../types';
 
 /**
  * Client for interacting with the Udene fraud detection API
@@ -25,7 +40,8 @@ export class FraudClient {
       headers: {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
-        'X-Client-SDK': 'react-native'
+        'X-Client-SDK': 'react-native',
+        'X-Hybrid-Mode': 'enabled'
       }
     });
   }
@@ -60,6 +76,74 @@ export class FraudClient {
     } catch (error) {
       console.error('Error getting metrics:', error);
       throw error;
+    }
+  }
+  
+  /**
+   * Send transaction data to server for comprehensive analysis
+   * Used by the hybrid detection engine when local analysis requires verification
+   * 
+   * @param data Transaction and context data for analysis
+   * @returns Server-side risk assessment
+   */
+  public async analyzeTransaction(data: {
+    transaction: TransactionData;
+    deviceFingerprint: string | null;
+    deviceInfo: DeviceInfo;
+    networkInfo: NetworkInfo;
+    localAssessment?: RiskAssessment;
+  }): Promise<RiskAssessment> {
+    try {
+      const response = await this.api.post('/analyze-transaction', {
+        ...data,
+        sdk_version: '1.0.0',
+        analysis_mode: 'hybrid'
+      });
+      
+      return response.data;
+    } catch (error) {
+      console.error('Error analyzing transaction:', error);
+      throw error;
+    }
+  }
+  
+  /**
+   * Fetch latest detection models for local use
+   * Gets updated fraud patterns and detection algorithms
+   * 
+   * @returns Latest model data for updating local detection
+   */
+  public async getDetectionModels(): Promise<any> {
+    try {
+      const response = await this.api.get('/detection-models', {
+        params: {
+          platform: 'react-native',
+          version: '1.0.0'
+        }
+      });
+      
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching detection models:', error);
+      throw error;
+    }
+  }
+  
+  /**
+   * Submit telemetry data for model improvement
+   * Only sends anonymized data when enabled by user
+   * 
+   * @param telemetryData Anonymous usage data to improve models
+   */
+  public async submitTelemetry(telemetryData: any): Promise<void> {
+    try {
+      await this.api.post('/telemetry', {
+        data: telemetryData,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      // Silently fail telemetry - shouldn't impact main functionality
+      console.warn('Failed to submit telemetry:', error);
     }
   }
 }
