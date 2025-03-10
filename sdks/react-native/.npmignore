@@ -19,11 +19,13 @@ dist/*.test.*
 dist/tests/
 *.tsbuildinfo
 
-# Explicitly exclude ALL ist directories and files
+# Explicitly exclude ALL ist directories and files (using multiple patterns for compatibility)
 ist/
+ist
+**/ist
 **/ist/**
-**/*ist*/**
-**/*/ist/*
+**/*.ist
+**/*.ist.*
 
 # Misc
 .DS_Store

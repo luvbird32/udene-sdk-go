@@ -28,9 +28,10 @@
   "exclude": [
     "node_modules", 
     "dist", 
-    "**/__tests__/*", 
-    "ist", 
-    "**/ist/**", 
-    "**/*ist*/**"
+    "**/__tests__/*",
+    "ist",
+    "**/*.ist",
+    "**/ist",
+    "**/ist/**"
   ]
 }

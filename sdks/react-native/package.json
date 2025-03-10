@@ -6,8 +6,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "clean": "rimraf dist ist **/ist/**",
-    "prebuild": "rimraf dist ist **/ist/**",
+    "clean": "rimraf dist && rimraf ist && rimraf src/**/*.ist",
+    "prebuild": "npm run clean",
     "build": "tsc --project tsconfig.json",
     "prepublishOnly": "npm run clean && npm run build",
     "test": "jest",
