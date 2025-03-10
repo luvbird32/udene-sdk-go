@@ -17,6 +17,7 @@ node_modules/
 dist/*.test.*
 dist/tests/
 *.tsbuildinfo
+ist/
 
 # Misc
 .DS_Store
