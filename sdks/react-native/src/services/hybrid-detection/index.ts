@@ -1,7 +1,7 @@
 
 /**
  * Main entry point for the hybrid detection engine
- * Exports the HybridDetectionEngine class and related utilities
+ * Exports all components of the hybrid detection system
  */
 
 export { HybridDetectionEngine } from './HybridDetectionEngine';
