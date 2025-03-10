@@ -8,10 +8,18 @@ import { useApiCredits } from "./useApiCredits";
 import { useDeviceBlock } from "@/hooks/useDeviceBlock";
 import { differenceInDays } from "date-fns";
 
+/**
+ * ApiCreditsCard Component
+ * 
+ * Displays the current API credit usage and trial status for the user.
+ * Shows credit usage progress, trial time remaining (if applicable),
+ * and warnings for low credits or expiring trials.
+ */
 export const ApiCreditsCard = () => {
   const { credits, isLoading, error } = useApiCredits();
   const { data: isDeviceBlocked } = useDeviceBlock();
 
+  // Show loading state while fetching data
   if (isLoading) {
     return (
       <Card className="p-6">
@@ -24,6 +32,7 @@ export const ApiCreditsCard = () => {
     );
   }
 
+  // Show error state if data couldn't be loaded or device is blocked
   if (error || !credits || isDeviceBlocked) {
     return (
       <Card className="p-6">
@@ -34,9 +43,11 @@ export const ApiCreditsCard = () => {
     );
   }
 
+  // Calculate days remaining in trial (if applicable)
   const daysRemaining = credits.trial_end_date ? 
     differenceInDays(new Date(credits.trial_end_date), new Date()) : 0;
 
+  // Determine warning states
   const isLowCredits = (credits.total_credits - credits.used_credits) < (credits.total_credits * 0.1);
   const isTrialExpiring = credits.is_trial && daysRemaining <= 2;
 

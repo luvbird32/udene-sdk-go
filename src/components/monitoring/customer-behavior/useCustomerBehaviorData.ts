@@ -1,9 +1,15 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import type { CustomerPattern } from "./types";
 import type { DatabaseTransaction } from "@/types/transactions";
 
+/**
+ * Custom hook to fetch and analyze customer behavior data
+ * This hook processes transaction data to identify patterns in customer behavior
+ * @returns Query result with customer behavior patterns
+ */
 export const useCustomerBehaviorData = () => {
   const { toast } = useToast();
 
@@ -19,6 +25,7 @@ export const useCustomerBehaviorData = () => {
 
       if (error) throw error;
 
+      // Store patterns by customer ID
       const customerPatterns: Record<string, any> = {};
       
       // First pass: Initialize customer data
@@ -69,11 +76,13 @@ export const useCustomerBehaviorData = () => {
         customerPatterns[customerId].totalAmount += decryptedAmount;
       }
 
+      // Calculate metrics for each customer
       const patterns = Object.entries(customerPatterns).map(([customerId, data]: [string, any]) => {
         const transactions = data.transactions;
         const deviceCount = data.devices.size;
         const locationCount = data.locations.size;
         
+        // Calculate transaction velocity (transactions per hour)
         const timeRange = transactions.length > 1 
           ? (new Date(transactions[transactions.length - 1].timestamp).getTime() - 
              new Date(transactions[0].timestamp).getTime()) / (1000 * 60 * 60)
@@ -94,8 +103,9 @@ export const useCustomerBehaviorData = () => {
         };
       });
 
+      // Sort by velocity (highest first) to prioritize high-activity customers
       return patterns.sort((a, b) => b.velocity - a.velocity);
     },
-    refetchInterval: 30000,
+    refetchInterval: 30000, // Refresh data every 30 seconds
   });
 };
