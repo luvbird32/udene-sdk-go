@@ -18,9 +18,12 @@ node_modules/
 dist/*.test.*
 dist/tests/
 *.tsbuildinfo
-# Completely excluding any "ist" directories or files
+
+# Explicitly exclude ALL ist directories and files
 ist/
 **/ist/**
+**/*ist*/**
+**/*/ist/*
 
 # Misc
 .DS_Store

@@ -25,5 +25,12 @@
     "downlevelIteration": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/__tests__/*", "ist", "**/ist/**"]
+  "exclude": [
+    "node_modules", 
+    "dist", 
+    "**/__tests__/*", 
+    "ist", 
+    "**/ist/**", 
+    "**/*ist*/**"
+  ]
 }
