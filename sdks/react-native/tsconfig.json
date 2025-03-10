@@ -1,8 +1,9 @@
+
 {
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
-    "target": "es6",
+    "target": "es5",
     "module": "commonjs",
     "declaration": true,
     "strict": true,
@@ -14,10 +15,12 @@
       "es6",
       "dom"
     ],
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
     "paths": {
       "*": ["src/*"]
     }
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "ist"]
+  "exclude": ["node_modules", "dist", "**/__tests__/*"]
 }

@@ -1,24 +1,21 @@
 
-# Source code but allow declarations
-*.ts
-!*.d.ts
-!dist/**/*
-
-# Config files
+# Source code
+src/
 tsconfig.json
 .eslintrc.js
-.prettierrc
 jest.config.js
 
-# Tests
-__tests__
-coverage
+# Development files
+__tests__/
+coverage/
+node_modules/
+.github/
+.vscode/
+.idea/
 
-# Development
-node_modules
-.github
-.vscode
-.idea
+# Build process
+dist/*.test.*
+*.tsbuildinfo
 
 # Misc
 .DS_Store

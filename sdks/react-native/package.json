@@ -5,8 +5,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "clean": "node -e \"const fs=require('fs');['dist','ist'].forEach(d=>{try{fs.rmSync(d,{recursive:true,force:true})}catch(e){}});\"",
-    "build": "tsc --outDir dist --project tsconfig.json",
+    "clean": "rimraf dist",
+    "build": "tsc",
     "prepublishOnly": "npm run clean && npm run build",
     "test": "jest",
     "lint": "eslint src --ext .ts,.tsx"
