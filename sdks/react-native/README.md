@@ -54,6 +54,17 @@ function YourComponent() {
 - Device fingerprinting
 - Secure API communication
 
+## Development
+
+To build the SDK locally:
+
+```bash
+npm install
+npm run build
+```
+
+Make sure to run `npm run clean` before rebuilding to ensure a fresh build.
+
 ## Documentation
 
 For full documentation, visit [https://udene.net/docs/sdk/react-native](https://udene.net/docs/sdk/react-native)
