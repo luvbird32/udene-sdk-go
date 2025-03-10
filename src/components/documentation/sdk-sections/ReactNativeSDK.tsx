@@ -10,6 +10,8 @@ export const ReactNativeSDK = () => {
 npm install @udene/react-native-sdk axios
 
 // Initialize in your app
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
 import { FraudProvider, useFraud } from '@udene/react-native-sdk';
 
 // Wrap your app with the provider
