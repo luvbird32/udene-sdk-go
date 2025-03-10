@@ -1,37 +1,25 @@
 
 {
   "name": "@udene/react-native-sdk",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Fraud detection and security monitoring for React Native applications",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "clean": "rimraf dist",
     "build": "rimraf dist && tsc --project tsconfig.json",
-    "prepublishOnly": "npm run build",
-    "test": "jest",
-    "lint": "eslint src --ext .ts,.tsx"
+    "test": "jest"
   },
   "keywords": [
     "fraud",
     "security",
     "detection",
     "react-native",
-    "udene",
-    "hybrid"
+    "udene"
   ],
   "author": "Udene Security Team",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/udene/react-native-sdk.git"
-  },
-  "bugs": {
-    "url": "https://github.com/udene/react-native-sdk/issues"
-  },
-  "homepage": "https://udene.net/docs/sdk/react-native",
   "peerDependencies": {
-    "axios": ">=1.0.0",
     "react": ">=16.8.0",
     "react-native": ">=0.60.0"
   },
@@ -45,13 +33,5 @@
     "react-native": "^0.71.0",
     "rimraf": "^6.0.1",
     "typescript": "^5.0.0"
-  },
-  "files": [
-    "dist",
-    "LICENSE",
-    "README.md"
-  ],
-  "publishConfig": {
-    "access": "public"
   }
 }

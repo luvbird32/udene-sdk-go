@@ -14,14 +14,6 @@ node_modules/
 .vscode/
 .idea/
 
-# Build process
-dist/*.test.*
-dist/tests/
-*.tsbuildinfo
-# Completely excluding any "ist" directories or files
-ist/
-**/ist/**
-
 # Misc
 .DS_Store
 *.log
