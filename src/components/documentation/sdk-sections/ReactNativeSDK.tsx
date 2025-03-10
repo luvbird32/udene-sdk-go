@@ -1,11 +1,12 @@
+
 import { CodeBlock } from "../code-block/CodeBlock";
 
 export const ReactNativeSDK = () => {
   const rnCode = `// Install the SDK
-npm install @fraud/react-native
+npm install @udene/react-native-sdk axios
 
 // Initialize in your app
-import { FraudProvider, useFraud } from '@fraud/react-native';
+import { FraudProvider, useFraud } from '@udene/react-native-sdk';
 
 // Wrap your app with the provider
 export default function App() {
