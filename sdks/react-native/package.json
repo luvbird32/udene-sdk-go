@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "clean": "rimraf dist",
+    "clean": "rimraf dist ist",
     "build": "tsc",
     "prepublishOnly": "npm run clean && npm run build",
     "test": "jest",
