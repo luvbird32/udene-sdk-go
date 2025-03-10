@@ -6,10 +6,9 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "clean": "rimraf dist",
-    "prebuild": "rimraf ist",
-    "build": "tsc --project tsconfig.json",
-    "prepublishOnly": "npm run clean && npm run build",
+    "clean": "rimraf dist ist",
+    "build": "rimraf dist ist && tsc --project tsconfig.json",
+    "prepublishOnly": "npm run build",
     "test": "jest",
     "lint": "eslint src --ext .ts,.tsx"
   },
