@@ -1,6 +1,10 @@
 
 import { CodeBlock } from "../code-block/CodeBlock";
 
+/**
+ * ReactNativeSDK component displays code examples and usage instructions 
+ * for implementing the Udene React Native SDK in mobile applications.
+ */
 export const ReactNativeSDK = () => {
   const rnCode = `// Install the SDK
 npm install @udene/react-native-sdk axios
