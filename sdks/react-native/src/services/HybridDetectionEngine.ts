@@ -129,7 +129,8 @@ export class HybridDetectionEngine {
       riskFactors.push('vpn_detected');
     }
     
-    if (networkInfo.ipRiskScore > 50) {
+    // Fix: Add null check for ipRiskScore
+    if (networkInfo.ipRiskScore !== undefined && networkInfo.ipRiskScore > 50) {
       riskScore += 10;
       riskFactors.push('suspicious_ip');
     }
@@ -140,10 +141,11 @@ export class HybridDetectionEngine {
     }
     
     // Determine if we need cloud verification
+    // Fix: Add null check for ipRiskScore
     const requiresRemoteVerification = 
       riskScore > 30 || 
       transaction.amount > 500 ||
-      networkInfo.ipRiskScore > 70;
+      (networkInfo.ipRiskScore !== undefined && networkInfo.ipRiskScore > 70);
       
     return {
       riskScore,
@@ -159,8 +161,11 @@ export class HybridDetectionEngine {
    * Combines signals from both sources for comprehensive risk analysis
    */
   private mergeAssessments(local: RiskAssessment, cloud: RiskAssessment): RiskAssessment {
-    // Give precedence to cloud assessment but incorporate local signals
-    const mergedFactors = [...new Set([...local.riskFactors, ...cloud.riskFactors])];
+    // Fix: Use Array.from to ensure compatibility with ES5 target
+    const localFactors = local.riskFactors || [];
+    const cloudFactors = cloud.riskFactors || [];
+    const allFactors = [...localFactors, ...cloudFactors];
+    const mergedFactors = Array.from(new Set(allFactors));
     
     return {
       // Use cloud score but adjust slightly based on local assessment

@@ -13,13 +13,16 @@
     "jsx": "react-native",
     "lib": [
       "es6",
-      "dom"
+      "dom",
+      "es2015.collection",
+      "es2015.iterable" 
     ],
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "paths": {
       "*": ["src/*"]
-    }
+    },
+    "downlevelIteration": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/__tests__/*", "ist"]
