@@ -1,39 +1,29 @@
+
 import { CodeBlock } from "../code-block/CodeBlock";
 
 export const ReactNativeSDK = () => {
-  const rnCode = `// Install the SDK
-npm install @fraud/react-native
+  const rnCode = `// React Native SDK is under development
+// Basic usage will be similar to:
 
-// Initialize in your app
-import { FraudProvider, useFraud } from '@fraud/react-native';
+import { FraudClient } from '@fraud/react-native-sdk';
 
-// Wrap your app with the provider
-export default function App() {
-  return (
-    <FraudProvider apiKey="your_api_key">
-      <YourApp />
-    </FraudProvider>
-  );
-}
+// Initialize the client
+const client = new FraudClient({
+  apiKey: 'your_api_key'
+});
 
-// Use the hook in your components
-function YourComponent() {
-  const { trackInteraction, getMetrics } = useFraud();
+// Track interactions
+client.trackInteraction({
+  action: 'view_product',
+  metadata: { productId: '123' }
+});
 
-  useEffect(() => {
-    // Example: Track user interaction
-    trackInteraction({
-      action: 'view_product',
-      metadata: { productId: '123' }
-    });
-  }, []);
-
-  return <View>...</View>;
-}`;
+// Get metrics
+const metrics = await client.getMetrics();`;
 
   return (
     <div className="space-y-4">
-      <h4 className="text-lg font-semibold">React Native</h4>
+      <h4 className="text-lg font-semibold">React Native (Under Development)</h4>
       <CodeBlock code={rnCode} language="javascript" />
     </div>
   );
