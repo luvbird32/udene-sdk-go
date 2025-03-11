@@ -1,10 +1,9 @@
-
 {
   "name": "@fraud/react-native-sdk",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Fraud Detection SDK for React Native",
-  "private": true,
   "main": "index.ts",
+  "types": "index.ts",
   "scripts": {
     "build": "tsc"
   },
