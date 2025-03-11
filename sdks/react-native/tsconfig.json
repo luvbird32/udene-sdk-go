@@ -1,29 +1,22 @@
 
 {
   "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src",
     "target": "es5",
     "module": "commonjs",
     "declaration": true,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
     "jsx": "react-native",
     "lib": [
       "es6",
       "dom",
       "es2015.collection",
-      "es2015.iterable" 
+      "es2015.iterable"
     ],
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "paths": {
-      "*": ["src/*"]
-    },
-    "downlevelIteration": true
+    "resolveJsonModule": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/__tests__/*", "ist", "**/ist/**"]
+  "exclude": ["node_modules", "**/__tests__/*"]
 }
