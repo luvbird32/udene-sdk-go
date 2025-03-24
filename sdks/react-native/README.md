@@ -1,14 +1,14 @@
 
-# @fraud/react-native-sdk
+# @udene/react-native-sdk
 
 A comprehensive fraud detection and security package for React Native applications.
 
 ## Installation
 
 ```sh
-npm install @fraud/react-native-sdk
+npm install @udene/react-native-sdk
 # or
-yarn add @fraud/react-native-sdk
+yarn add @udene/react-native-sdk
 ```
 
 ## Usage
@@ -16,7 +16,7 @@ yarn add @fraud/react-native-sdk
 ### Basic Usage with Provider
 
 ```jsx
-import { FraudProvider, useFraud } from '@fraud/react-native-sdk';
+import { FraudProvider, useFraud } from '@udene/react-native-sdk';
 
 // Wrap your app with the provider
 export default function App() {
@@ -46,7 +46,7 @@ function YourComponent() {
 ### Direct Client Usage
 
 ```jsx
-import { UdeneClient } from '@fraud/react-native-sdk';
+import { UdeneClient } from '@udene/react-native-sdk';
 
 // Initialize the client
 const client = new UdeneClient({
