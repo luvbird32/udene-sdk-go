@@ -1,12 +1,31 @@
+
 {
   "name": "@fraud/react-native-sdk",
   "version": "1.0.0",
   "description": "Fraud Detection SDK for React Native",
-  "main": "index.ts",
-  "types": "index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "prepare": "npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fraud-detection/react-native-sdk.git"
+  },
+  "keywords": [
+    "react-native",
+    "fraud",
+    "detection",
+    "security"
+  ],
+  "author": "Fraud Detection Team",
+  "license": "MIT",
   "peerDependencies": {
     "react-native": ">=0.60.0",
     "axios": ">=1.0.0"

@@ -1,3 +1,4 @@
+
 import { CodeBlock } from "../code-block/CodeBlock";
 
 export const JavaScriptSDK = () => {
@@ -20,11 +21,23 @@ await client.trackInteraction({
         ipAddress: '192.168.1.1',
         deviceId: 'device_456'
     }
+});
+
+// Example: Analyze a transaction
+const result = await client.analyzeTransaction({
+    amount: 1000,
+    currency: 'USD',
+    userId: 'user_123',
+    paymentMethod: 'credit_card'
 });`;
 
   return (
     <div className="space-y-4">
       <h4 className="text-lg font-semibold">JavaScript</h4>
+      <p className="text-sm text-muted-foreground">
+        Our JavaScript SDK works in both browser and Node.js environments, providing a consistent API 
+        for fraud detection across your entire stack.
+      </p>
       <CodeBlock code={jsCode} language="javascript" />
     </div>
   );

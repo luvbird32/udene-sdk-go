@@ -1,0 +1,36 @@
+
+{
+  "name": "@udene/sdk",
+  "version": "1.0.0",
+  "description": "Udene Fraud Detection SDK for JavaScript",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/udene/javascript-sdk.git"
+  },
+  "keywords": [
+    "fraud",
+    "detection",
+    "security",
+    "udene"
+  ],
+  "author": "Udene Team",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.8"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^18.0.0"
+  }
+}
