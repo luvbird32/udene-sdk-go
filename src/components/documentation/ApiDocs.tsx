@@ -1,3 +1,4 @@
+
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -9,6 +10,7 @@ import { SwiftSDK } from "./sdk-sections/SwiftSDK";
 import { KotlinSDK } from "./sdk-sections/KotlinSDK";
 import { RubySDK } from "./sdk-sections/RubySDK";
 import { GoSDK } from "./sdk-sections/GoSDK";
+import { JavaSDK } from "./sdk-sections/JavaSDK";
 import { QuickStartSection } from "./sections/QuickStartSection";
 import { AuthenticationSection } from "./sections/AuthenticationSection";
 import { EndpointsSection } from "./sections/EndpointsSection";
@@ -72,6 +74,7 @@ export const ApiDocs = () => {
               <div className="space-y-8">
                 <JavaScriptSDK />
                 <ReactNativeSDK />
+                <JavaSDK />
                 <PythonSDK />
                 <SwiftSDK />
                 <KotlinSDK />
