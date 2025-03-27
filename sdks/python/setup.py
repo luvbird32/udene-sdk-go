@@ -1,4 +1,3 @@
-
 from setuptools import setup, find_packages
 
 setup(
@@ -9,15 +8,14 @@ setup(
         "requests>=2.25.0",
     ],
     author="Udene Team",
-    author_email="support@udene.net",
-    description="Udene Fraud Detection SDK for Python",
-    long_description=open("README.md").read(),
-    long_description_content_type="text/markdown",
-    url="https://github.com/udene/python-sdk",
+    author_email="support@udene.com",
+    description="Python SDK for Udene API",
+    keywords="udene, sdk, api",
+    url="https://github.com/udene/udene-python",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.7",
+    python_requires=">=3.6",
 )
