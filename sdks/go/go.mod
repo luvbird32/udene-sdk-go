@@ -1,10 +1,3 @@
-// Old import
-
-import "github.com/luvbird32/udene/sdks/go"
-
-// New import
-
-import "github.com/udene/udene-sdk-go"
 
 module github.com/udene/udene-sdk-go
 
