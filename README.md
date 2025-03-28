@@ -6,7 +6,7 @@ The official Go SDK for Udene Fraud Detection API.
 ## Installation
 
 ```bash
-go get github.com/udene/udene-sdk-go
+go get github.com/YOUR_USERNAME/udene-sdk-go
 ```
 
 ## Usage
@@ -16,7 +16,7 @@ package main
 
 import (
     "fmt"
-    "github.com/udene/udene-sdk-go"
+    "github.com/YOUR_USERNAME/udene-sdk-go"
 )
 
 func main() {

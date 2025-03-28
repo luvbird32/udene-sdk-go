@@ -1,5 +1,5 @@
 
-module github.com/udene/udene-sdk-go
+module github.com/YOUR_USERNAME/udene-sdk-go
 
 go 1.18
 
