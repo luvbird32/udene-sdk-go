@@ -1,0 +1,70 @@
+name: Publish JavaScript SDK
+
+on:
+  push:
+    tags:
+      - 'js-v*.*.*'  # Will trigger on tags like js-v1.0.0, js-v1.2.3, etc.
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./sdks/javascript
+
+      - name: Lint
+        run: npm run lint
+        working-directory: ./sdks/javascript
+        if: ${{ false }}  # Disabled until lint script is added
+
+      - name: Test
+        run: npm test
+        working-directory: ./sdks/javascript
+        if: ${{ false }}  # Disabled until test script is added
+
+      - name: Build
+        run: npm run build
+        working-directory: ./sdks/javascript
+
+      - name: Extract version from tag
+        id: extract_version
+        run: echo "VERSION=${GITHUB_REF_NAME#js-v}" >> $GITHUB_OUTPUT
+
+      - name: Update package version
+        run: npm version ${{ steps.extract_version.outputs.VERSION }} --no-git-tag-version
+        working-directory: ./sdks/javascript
+
+      - name: Publish to NPM
+        run: npm publish --access public
+        working-directory: ./sdks/javascript
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: JavaScript SDK v${{ steps.extract_version.outputs.VERSION }}
+          body: |
+            Release of JavaScript SDK version ${{ steps.extract_version.outputs.VERSION }}
+            
+            ## Changes
+            <!-- Add release notes here -->
+            
+            ## Installation
+            ```bash
+            npm install @udene/sdk
+            # or
+            yarn add @udene/sdk
+            ```
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,39 @@
+{
+    "name": "@udene/react-native-sdk",
+    "version": "1.0.0",
+    "description": "Udene Fraud Detection SDK for React Native",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist",
+        "LICENSE",
+        "README.md"
+    ],
+    "scripts": {
+        "clean": "rimraf dist ist",
+        "build": "tsc",
+        "prepublishOnly": "npm run clean && npm run build"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/udene/react-native-sdk.git"
+    },
+    "keywords": [
+        "react-native",
+        "fraud",
+        "detection",
+        "security",
+        "udene"
+    ],
+    "author": "Udene Team",
+    "license": "MIT",
+    "peerDependencies": {
+        "axios": ">=1.0.0",
+        "react-native": ">=0.60.0"
+    },
+    "devDependencies": {
+        "@types/react-native": "^0.72.0",
+        "rimraf": "^3.0.2",
+        "typescript": "^4.0.0"
+    }
+}
