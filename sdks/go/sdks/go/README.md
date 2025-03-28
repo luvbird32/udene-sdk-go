@@ -1,61 +1,29 @@
+# Fraud Detection API
 
-# Udene Go SDK
+## Overview
+A comprehensive fraud detection and security platform with real-time monitoring, AI-powered threat detection, and advanced analytics.
 
-The official Go SDK for Udene Fraud Detection API.
+## Core Features
+- Neural Network-Based Detection
+- Security Monitoring
+- Fraud Prevention
+- Stream Protection & Content Moderation
+  - Trust Score System for Content Creators
+  - Real-time Stream Monitoring
+  - Community-driven Reporting System
+  - Automated Content Moderation
+  - Fake Account Prevention
 
-## Installation
+## Documentation Structure
+- [Core Features](docs/features/README.md)
+- [Technical Implementation](docs/technical/README.md)
+- [Getting Started](docs/getting-started/README.md)
+- [Support & Resources](docs/support/README.md)
 
-```bash
-go get github.com/udene/udene-sdk-go
-```
-
-## Usage
-
-```go
-package main
-
-import (
-    "fmt"
-    "github.com/udene/udene-sdk-go"
-)
-
-func main() {
-    client := udene.NewClient("your_api_key")
-
-    // Get fraud metrics
-    metrics, err := client.GetMetrics()
-    if err != nil {
-        if rateErr, ok := err.(*udene.RateLimitError); ok {
-            fmt.Printf("Rate limit exceeded. Retry after: %d seconds\n", rateErr.RetryAfter)
-            return
-        }
-        fmt.Printf("Error: %v\n", err)
-        return
-    }
-    fmt.Printf("Current risk score: %f\n", metrics.RiskScore)
-
-    // Track user interaction
-    interaction := &udene.InteractionData{
-        UserID: "user_123",
-        Action: "login",
-        Metadata: map[string]interface{}{
-            "ipAddress": "192.168.1.1",
-            "deviceId":  "device_456",
-        },
-    }
-
-    err = client.TrackInteraction(interaction)
-    if err != nil {
-        fmt.Printf("Error: %v\n", err)
-        return
-    }
-}
-```
-
-## Documentation
-
-For complete documentation, visit [https://docs.udene.net](https://docs.udene.net)
+## Quick Links
+- [API Status](https://status.fraud-api.com)
+- [Documentation](https://docs.fraud-api.com)
+- [Support Portal](https://support.fraud-api.com)
 
 ## License
-
-MIT
+MIT License - see LICENSE file for details
