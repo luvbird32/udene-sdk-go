@@ -1,5 +1,12 @@
+// Old import
 
-module github.com/udene/udene-sdk-go
+import "github.com/luvbird32/udene/sdks/go"
+
+// New import
+
+import "github.com/luvbird32/udene-sdk-go"
+
+module github.com/luvbird32/udene-sdk-go
 
 go 1.18
 
