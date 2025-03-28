@@ -1,3 +1,7 @@
+# For example, to publish JavaScript SDK v1.0.1:
+git tag js-v1.0.1
+git push origin js-v1.0.1
+& "C:\Program Files\Git\cmd\git.exe" push origin js-v1.0.1
 name: Publish Python SDK
 
 on:
