@@ -1,28 +1,29 @@
-
-// swift-tools-version:5.3
+// swift-tools-version:6.0
 import PackageDescription
 
 let package = Package(
     name: "UdeneSDK",
     platforms: [
-        .iOS(.v13),
-        .macOS(.v10_15)
+        .macOS(.v10_15),
+        .iOS(.v13)
     ],
     products: [
         .library(
             name: "UdeneSDK",
             targets: ["UdeneSDK"]),
     ],
-    dependencies: [],
+    dependencies: [
+        // Dependencies go here
+    ],
     targets: [
         .target(
             name: "UdeneSDK",
-            dependencies: []),
+            dependencies: [],
+            path: "Sources/UdeneSDK"),
         .testTarget(
             name: "UdeneSDKTests",
-            dependencies: ["UdeneSDK"]),
+            dependencies: ["UdeneSDK"],
+            path: "Tests/UdeneSDKTests"),
     ],
     swiftLanguageVersions: [.v5]
 )
-
-// Version: "1.0.2"
