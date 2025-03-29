@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'UdeneSDK'
-  s.version          = '1.0.1'
+  s.version          = '1.0.2'
   s.summary          = 'The official iOS SDK for Udene Fraud Detection API'
   s.description      = <<-DESC
   UdeneSDK provides a Swift interface for interacting with the Udene Fraud Detection API.

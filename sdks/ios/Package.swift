@@ -21,5 +21,8 @@ let package = Package(
         .testTarget(
             name: "UdeneSDKTests",
             dependencies: ["UdeneSDK"]),
-    ]
+    ],
+    swiftLanguageVersions: [.v5]
 )
+
+// Version: "1.0.2"

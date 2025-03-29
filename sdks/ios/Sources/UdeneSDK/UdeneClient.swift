@@ -145,7 +145,7 @@ public class UdeneClient {
         request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue(userAgent, forHTTPHeaderField: "User-Agent")
-        request.addValue("1.0.0", forHTTPHeaderField: "X-Client-Version")
+        request.addValue("1.0.2", forHTTPHeaderField: "X-Client-Version")
         request.addValue("ios", forHTTPHeaderField: "X-SDK-Type")
     }
     

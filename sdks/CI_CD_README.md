@@ -13,6 +13,7 @@ Before using these workflows, you need to set up the following secrets in your G
 - `NPM_TOKEN`: For publishing JavaScript and React Native SDKs to npm
 - `PYPI_API_TOKEN`: For publishing the Python SDK to PyPI
 - `RUBYGEMS_API_KEY`: For publishing the Ruby SDK to RubyGems
+- `COCOAPODS_TRUNK_TOKEN`: For publishing the iOS SDK to CocoaPods
 
 ## Tag Formats
 
@@ -22,6 +23,7 @@ Each SDK has a specific tag format that triggers its publishing workflow:
 - React Native SDK: `rn-v*.*.*` (e.g., `rn-v1.0.1`)
 - Python SDK: `py-v*.*.*` (e.g., `py-v1.0.1`)
 - Ruby SDK: `rb-v*.*.*` (e.g., `rb-v1.0.1`)
+- iOS SDK: `ios-v*.*.*` (e.g., `ios-v1.0.1`)
 
 ## Publishing Process
 
@@ -46,6 +48,10 @@ git push origin py-v1.0.1
 # For Ruby SDK
 git tag rb-v1.0.1
 git push origin rb-v1.0.1
+
+# For iOS SDK
+git tag ios-v1.0.1
+git push origin ios-v1.0.1
 ```
 
 3. The GitHub Actions workflow will automatically:
@@ -63,6 +69,7 @@ The workflow files are located in each SDK's directory under `.github/workflows/
 - React Native: `/sdks/react-native/.github/workflows/publish.yml`
 - Python: `/sdks/python/.github/workflows/publish.yml`
 - Ruby: `/sdks/ruby/.github/workflows/publish.yml`
+- iOS: `/sdks/ios/.github/workflows/publish.yml`
 
 ## Customizing Release Notes
 
