@@ -1,7 +1,7 @@
 
-# Udene iOS SDK
+# Udene Swift SDK
 
-The official Swift SDK for Udene Fraud Detection API.
+The official Swift SDK for Udene Fraud Detection API. Now with cross-platform support for iOS, macOS, Windows, and Linux.
 
 ## Installation
 
@@ -21,11 +21,24 @@ pod install
 
 ### Swift Package Manager
 
-To integrate UdeneSDK into your Xcode project using Swift Package Manager, add it to your `Package.swift`:
+To integrate UdeneSDK using Swift Package Manager (works on all supported platforms), add it to your `Package.swift`:
 
 ```swift
 dependencies: [
     .package(url: "https://github.com/luvbird32/udene-sdk-go.git", from: "1.0.2")
+]
+```
+
+For the target dependencies:
+
+```swift
+targets: [
+    .target(
+        name: "YourTarget",
+        dependencies: [
+            .product(name: "UdeneSDK", package: "udene-sdk-go")
+        ]
+    )
 ]
 ```
 
@@ -76,26 +89,67 @@ client.trackInteraction(
 }
 ```
 
+## Cross-Platform Support
+
+UdeneSDK now supports multiple platforms:
+
+- **iOS/macOS**: Full support through Swift Package Manager or CocoaPods
+- **Windows**: Support through Swift Package Manager
+- **Linux**: Support through Swift Package Manager (where Swift is available)
+
+### Requirements
+
+- Swift 5.7 or later
+- iOS 13.0+ / macOS 10.15+ for Apple platforms
+
+### Installation on Windows/Linux
+
+To use UdeneSDK on Windows or Linux:
+
+1. Make sure you have Swift 5.7 or later installed
+2. Add the package to your `Package.swift`:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/luvbird32/udene-sdk-go.git", from: "1.0.2")
+]
+```
+
+3. Import the package in your code:
+
+```swift
+import UdeneSDK
+```
+
+4. Build your project:
+
+```bash
+swift build
+```
+
 ## Documentation
 
 For complete documentation, visit [https://docs.udene.net](https://docs.udene.net)
 
 ## Publishing
 
-To publish a new version of the iOS SDK:
+To publish a new version of the Swift SDK:
 
 1. Make your code changes
-2. Update the version in `UdeneSDK.podspec` and the version comment in `Package.swift`
-3. Create and push a tag with the format `ios-v{version}` (e.g., `ios-v1.0.1`):
+2. Update the version in:
+   - `UdeneSDK.podspec` for CocoaPods
+   - The version constant in `UdeneClient.swift` (`kUdeneSDKVersion`)
+   - The version comment in `Package.swift` if needed
+3. Create and push a tag with the format `swift-v{version}` (e.g., `swift-v1.0.3`):
 
 ```bash
-git tag ios-v1.0.1
-git push origin ios-v1.0.1
+git tag swift-v1.0.3
+git push origin swift-v1.0.3
 ```
 
 This will trigger the GitHub Actions workflow that will:
-- Build and test the SDK
-- Create an XCFramework
+- Build and test the SDK on multiple platforms
+- Create an XCFramework for Apple platforms
 - Publish to CocoaPods
 - Create a GitHub release with the XCFramework attached
 
@@ -103,6 +157,7 @@ This will trigger the GitHub Actions workflow that will:
 
 - You need a CocoaPods account and must be added as an owner of the UdeneSDK pod
 - The `COCOAPODS_TRUNK_TOKEN` secret must be set in the GitHub repository
+- For cross-platform testing, ensure your CI environment has Swift 5.7+ installed
 
 ## License
 

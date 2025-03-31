@@ -1,0 +1,128 @@
+client:
+  name: basic
+  file-system: device-agnostic
+tools: {}
+targets:
+  "PackageStructure": ["<PackageStructure>"]
+  "UdeneSDK-x86_64-unknown-windows-msvc-debug.module": ["<UdeneSDK-x86_64-unknown-windows-msvc-debug.module>"]
+  "UdeneSDKPackageTests-x86_64-unknown-windows-msvc-debug.module": ["<UdeneSDKPackageTests-x86_64-unknown-windows-msvc-debug.module>"]
+  "UdeneSDKPackageTests-x86_64-unknown-windows-msvc-debug.test": ["<UdeneSDKPackageTests-x86_64-unknown-windows-msvc-debug.test>"]
+  "UdeneSDKTests-x86_64-unknown-windows-msvc-debug.module": ["<UdeneSDKTests-x86_64-unknown-windows-msvc-debug.module>"]
+  "main": ["<UdeneSDK-x86_64-unknown-windows-msvc-debug.module>"]
+  "test": ["<UdeneSDK-x86_64-unknown-windows-msvc-debug.module>","<UdeneSDKPackageTests-x86_64-unknown-windows-msvc-debug.test>","<UdeneSDKTests-x86_64-unknown-windows-msvc-debug.module>"]
+default: "main"
+nodes:
+  "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Sources\\UdeneSDK/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+  "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Tests\\UdeneSDKTests/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+commands:
+  "<UdeneSDK-x86_64-unknown-windows-msvc-debug.module>":
+    tool: phony
+    inputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\Activity.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\InteractionResponse.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\Metrics.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneClient.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneError.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules\\UdeneSDK.swiftmodule"]
+    outputs: ["<UdeneSDK-x86_64-unknown-windows-msvc-debug.module>"]
+
+  "<UdeneSDKPackageTests-x86_64-unknown-windows-msvc-debug.module>":
+    tool: phony
+    inputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.build\\LinuxMain.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules\\UdeneSDKPackageTests.swiftmodule"]
+    outputs: ["<UdeneSDKPackageTests-x86_64-unknown-windows-msvc-debug.module>"]
+
+  "<UdeneSDKPackageTests-x86_64-unknown-windows-msvc-debug.test>":
+    tool: phony
+    inputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.xctest"]
+    outputs: ["<UdeneSDKPackageTests-x86_64-unknown-windows-msvc-debug.test>"]
+
+  "<UdeneSDKTests-x86_64-unknown-windows-msvc-debug.module>":
+    tool: phony
+    inputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\UdeneClientTests.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\XCTestManifests.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules\\UdeneSDKTests.swiftmodule"]
+    outputs: ["<UdeneSDKTests-x86_64-unknown-windows-msvc-debug.module>"]
+
+  "C.UdeneSDK-x86_64-unknown-windows-msvc-debug.module":
+    tool: shell
+    inputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Sources\\UdeneSDK\\Models\\Activity.swift","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Sources\\UdeneSDK\\Models\\InteractionResponse.swift","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Sources\\UdeneSDK\\Models\\Metrics.swift","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Sources\\UdeneSDK\\UdeneClient.swift","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Sources\\UdeneSDK\\UdeneError.swift","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\swift-version--3448BF7BDFDE6977.txt","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\sources"]
+    outputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\Activity.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\InteractionResponse.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\Metrics.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneClient.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneError.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules\\UdeneSDK.swiftmodule"]
+    description: "Compiling Swift Module 'UdeneSDK' (5 sources)"
+    args: ["C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Toolchains\\6.0.3+Asserts\\usr\\bin\\swiftc.exe","-module-name","UdeneSDK","-emit-dependencies","-emit-module","-emit-module-path","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules\\UdeneSDK.swiftmodule","-output-file-map","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\output-file-map.json","-parse-as-library","-incremental","-c","@C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\sources","-I","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules","-target","x86_64-unknown-windows-msvc","-enable-batch-mode","-index-store-path","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\index\\store","-Onone","-enable-testing","-j4","-DSWIFT_PACKAGE","-DDEBUG","-module-cache-path","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\ModuleCache","-parseable-output","-parse-as-library","-color-diagnostics","-swift-version","5","-sdk","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\SDKs\\Windows.sdk\\","-libc","MD","-I","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\XCTest-development\\usr\\lib\\swift\\windows","-I","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\XCTest-development\\usr\\lib\\swift\\windows\\x86_64","-L","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\XCTest-development\\usr\\lib\\swift\\windows\\x86_64","-I","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\Testing-development\\usr\\lib\\swift\\windows","-L","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\Testing-development\\usr\\lib\\swift\\windows\\x86_64","-use-ld=lld","-g","-use-ld=lld","-Xcc","-D_MT","-Xcc","-D_DLL","-Xcc","-Xclang","-Xcc","--dependent-lib=msvcrt","-Xcc","-gdwarf"]
+
+  "C.UdeneSDKPackageTests-x86_64-unknown-windows-msvc-debug.module":
+    tool: shell
+    inputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Tests\\LinuxMain.swift","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\swift-version--3448BF7BDFDE6977.txt","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules\\UdeneSDKTests.swiftmodule","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.build\\sources"]
+    outputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.build\\LinuxMain.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules\\UdeneSDKPackageTests.swiftmodule"]
+    description: "Compiling Swift Module 'UdeneSDKPackageTests' (1 sources)"
+    args: ["C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Toolchains\\6.0.3+Asserts\\usr\\bin\\swiftc.exe","-module-name","UdeneSDKPackageTests","-emit-dependencies","-emit-module","-emit-module-path","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules\\UdeneSDKPackageTests.swiftmodule","-output-file-map","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.build\\output-file-map.json","-incremental","-c","@C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.build\\sources","-I","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules","-target","x86_64-unknown-windows-msvc","-enable-batch-mode","-index-store-path","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\index\\store","-Onone","-enable-testing","-j4","-DSWIFT_PACKAGE","-DDEBUG","-module-cache-path","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\ModuleCache","-parseable-output","-color-diagnostics","-swift-version","5","-sdk","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\SDKs\\Windows.sdk\\","-libc","MD","-I","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\XCTest-development\\usr\\lib\\swift\\windows","-I","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\XCTest-development\\usr\\lib\\swift\\windows\\x86_64","-L","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\XCTest-development\\usr\\lib\\swift\\windows\\x86_64","-I","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\Testing-development\\usr\\lib\\swift\\windows","-L","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\Testing-development\\usr\\lib\\swift\\windows\\x86_64","-use-ld=lld","-g","-use-ld=lld","-Xcc","-D_MT","-Xcc","-D_DLL","-Xcc","-Xclang","-Xcc","--dependent-lib=msvcrt","-Xcc","-gdwarf"]
+
+  "C.UdeneSDKPackageTests-x86_64-unknown-windows-msvc-debug.test":
+    tool: shell
+    inputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\Activity.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\InteractionResponse.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\Metrics.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneClient.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneError.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneSDK.swiftmodule.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.build\\LinuxMain.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.build\\UdeneSDKPackageTests.swiftmodule.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\UdeneClientTests.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\UdeneSDKTests.swiftmodule.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\XCTestManifests.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.product\\Objects.LinkFileList"]
+    outputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.xctest"]
+    description: "Linking C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.xctest"
+    args: ["C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Toolchains\\6.0.3+Asserts\\usr\\bin\\swiftc.exe","-L","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug","-o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.xctest","-module-name","UdeneSDKPackageTests","-emit-executable","@C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.product\\Objects.LinkFileList","-target","x86_64-unknown-windows-msvc","-sdk","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\SDKs\\Windows.sdk\\","-libc","MD","-I","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\XCTest-development\\usr\\lib\\swift\\windows","-I","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\XCTest-development\\usr\\lib\\swift\\windows\\x86_64","-L","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\XCTest-development\\usr\\lib\\swift\\windows\\x86_64","-I","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\Testing-development\\usr\\lib\\swift\\windows","-L","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\Testing-development\\usr\\lib\\swift\\windows\\x86_64","-use-ld=lld","-g","-use-ld=lld","-Xlinker","-debug:dwarf"]
+
+  "C.UdeneSDKTests-x86_64-unknown-windows-msvc-debug.module":
+    tool: shell
+    inputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Tests\\UdeneSDKTests\\UdeneClientTests.swift","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Tests\\UdeneSDKTests\\XCTestManifests.swift","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\swift-version--3448BF7BDFDE6977.txt","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules\\UdeneSDK.swiftmodule","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\sources"]
+    outputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\UdeneClientTests.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\XCTestManifests.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules\\UdeneSDKTests.swiftmodule"]
+    description: "Compiling Swift Module 'UdeneSDKTests' (2 sources)"
+    args: ["C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Toolchains\\6.0.3+Asserts\\usr\\bin\\swiftc.exe","-module-name","UdeneSDKTests","-emit-dependencies","-emit-module","-emit-module-path","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules\\UdeneSDKTests.swiftmodule","-output-file-map","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\output-file-map.json","-parse-as-library","-incremental","-c","@C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\sources","-I","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules","-target","x86_64-unknown-windows-msvc","-enable-batch-mode","-index-store-path","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\index\\store","-Onone","-enable-testing","-j4","-DSWIFT_PACKAGE","-DDEBUG","-module-cache-path","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\ModuleCache","-parseable-output","-parse-as-library","-color-diagnostics","-swift-version","5","-sdk","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\SDKs\\Windows.sdk\\","-libc","MD","-I","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\XCTest-development\\usr\\lib\\swift\\windows","-I","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\XCTest-development\\usr\\lib\\swift\\windows\\x86_64","-L","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\XCTest-development\\usr\\lib\\swift\\windows\\x86_64","-I","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\Testing-development\\usr\\lib\\swift\\windows","-L","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Platforms\\6.0.3\\Windows.platform\\Developer\\Library\\Testing-development\\usr\\lib\\swift\\windows\\x86_64","-use-ld=lld","-g","-use-ld=lld","-Xcc","-D_MT","-Xcc","-D_DLL","-Xcc","-Xclang","-Xcc","--dependent-lib=msvcrt","-Xcc","-gdwarf"]
+
+  "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneSDK.swiftmodule.o":
+    tool: shell
+    inputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules\\UdeneSDK.swiftmodule"]
+    outputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneSDK.swiftmodule.o"]
+    description: "Wrapping AST for UdeneSDK for debugging"
+    args: ["C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Toolchains\\6.0.3+Asserts\\usr\\bin\\swiftc.exe","-modulewrap","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules\\UdeneSDK.swiftmodule","-o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneSDK.swiftmodule.o","-target","x86_64-unknown-windows-msvc"]
+
+  "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Sources\\UdeneSDK\\Models\\Activity.swift","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Sources\\UdeneSDK\\Models\\InteractionResponse.swift","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Sources\\UdeneSDK\\Models\\Metrics.swift","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Sources\\UdeneSDK\\UdeneClient.swift","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Sources\\UdeneSDK\\UdeneError.swift"]
+    outputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\sources"]
+    description: "Write auxiliary file C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\sources"
+
+  "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.build\\UdeneSDKPackageTests.swiftmodule.o":
+    tool: shell
+    inputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules\\UdeneSDKPackageTests.swiftmodule"]
+    outputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.build\\UdeneSDKPackageTests.swiftmodule.o"]
+    description: "Wrapping AST for UdeneSDKPackageTests for debugging"
+    args: ["C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Toolchains\\6.0.3+Asserts\\usr\\bin\\swiftc.exe","-modulewrap","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules\\UdeneSDKPackageTests.swiftmodule","-o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.build\\UdeneSDKPackageTests.swiftmodule.o","-target","x86_64-unknown-windows-msvc"]
+
+  "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.build\\sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Tests\\LinuxMain.swift"]
+    outputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.build\\sources"]
+    description: "Write auxiliary file C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.build\\sources"
+
+  "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.product\\Objects.LinkFileList":
+    tool: write-auxiliary-file
+    inputs: ["<link-file-list>","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\Activity.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\InteractionResponse.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\Metrics.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneClient.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneError.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneSDK.swiftmodule.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.build\\LinuxMain.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.build\\UdeneSDKPackageTests.swiftmodule.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\UdeneClientTests.swift.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\UdeneSDKTests.swiftmodule.o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\XCTestManifests.swift.o"]
+    outputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.product\\Objects.LinkFileList"]
+    description: "Write auxiliary file C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKPackageTests.product\\Objects.LinkFileList"
+
+  "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\UdeneSDKTests.swiftmodule.o":
+    tool: shell
+    inputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules\\UdeneSDKTests.swiftmodule"]
+    outputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\UdeneSDKTests.swiftmodule.o"]
+    description: "Wrapping AST for UdeneSDKTests for debugging"
+    args: ["C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Toolchains\\6.0.3+Asserts\\usr\\bin\\swiftc.exe","-modulewrap","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\Modules\\UdeneSDKTests.swiftmodule","-o","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\UdeneSDKTests.swiftmodule.o","-target","x86_64-unknown-windows-msvc"]
+
+  "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Tests\\UdeneSDKTests\\UdeneClientTests.swift","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Tests\\UdeneSDKTests\\XCTestManifests.swift"]
+    outputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\sources"]
+    description: "Write auxiliary file C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDKTests.build\\sources"
+
+  "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\swift-version--3448BF7BDFDE6977.txt":
+    tool: write-auxiliary-file
+    inputs: ["<swift-get-version>","C:\\Users\\victo\\AppData\\Local\\Programs\\Swift\\Toolchains\\6.0.3+Asserts\\usr\\bin\\swiftc.exe"]
+    outputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\swift-version--3448BF7BDFDE6977.txt"]
+    always-out-of-date: "true"
+    description: "Write auxiliary file C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\swift-version--3448BF7BDFDE6977.txt"
+
+  "PackageStructure":
+    tool: package-structure-tool
+    inputs: ["C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Sources\\UdeneSDK/","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Tests\\UdeneSDKTests/","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Package.swift","C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Package.resolved"]
+    outputs: ["<PackageStructure>"]
+    description: "Planning build"
+    allow-missing-inputs: true
+

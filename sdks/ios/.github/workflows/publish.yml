@@ -1,9 +1,9 @@
-name: Publish iOS SDK
+name: Publish Swift SDK
 
 on:
   push:
     tags:
-      - 'ios-v*.*.*'  # Will trigger on tags like ios-v1.0.0, ios-v1.2.3, etc.
+      - 'swift-v*.*.*'  # Will trigger on tags like swift-v1.0.0, swift-v1.2.3, etc.
 
 jobs:
   publish:
@@ -15,11 +15,11 @@ jobs:
       - name: Setup Swift
         uses: fwal/setup-swift@v1
         with:
-          swift-version: '5.3'
+          swift-version: '5.7'
 
       - name: Extract version from tag
         id: extract_version
-        run: echo "VERSION=${GITHUB_REF_NAME#ios-v}" >> $GITHUB_OUTPUT
+        run: echo "VERSION=${GITHUB_REF_NAME#swift-v}" >> $GITHUB_OUTPUT
 
       - name: Update version in Package.swift
         run: |
@@ -82,25 +82,34 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          name: iOS SDK v${{ steps.extract_version.outputs.VERSION }}
+          name: Swift SDK v${{ steps.extract_version.outputs.VERSION }}
           body: |
-            Release of iOS SDK version ${{ steps.extract_version.outputs.VERSION }}
-            
+            Release of Swift SDK version ${{ steps.extract_version.outputs.VERSION }}
+
             ## Changes
             <!-- Add release notes here -->
-            
+
             ## Installation
-            
-            ### Swift Package Manager
+
+            ### Swift Package Manager (All Platforms)
             ```swift
             dependencies: [
-                .package(url: "https://github.com/udene/ios-sdk.git", from: "${{ steps.extract_version.outputs.VERSION }}")
+                .package(url: "https://github.com/luvbird32/udene-sdk-go.git", from: "${{ steps.extract_version.outputs.VERSION }}")
             ]
             ```
-            
-            ### CocoaPods
+
+            ### CocoaPods (iOS/macOS)
             ```ruby
             pod 'UdeneSDK', '~> ${{ steps.extract_version.outputs.VERSION }}'
+            ```
+
+            ### Windows/Linux
+            ```bash
+            # Add to your Package.swift dependencies
+            .package(url: "https://github.com/luvbird32/udene-sdk-go.git", from: "${{ steps.extract_version.outputs.VERSION }}")
+
+            # Then build your project
+            swift build
             ```
           files: |
             ./sdks/ios/build/xcframeworks/UdeneSDK.xcframework.zip
@@ -114,7 +123,7 @@ jobs:
           # Update the source URL in the podspec
           sed -i '' "s|https://github.com/udene/ios-sdk.git|${REPO_URL}|g" UdeneSDK.podspec
           # Update the tag format in the podspec
-          sed -i '' "s|:tag => \"v#{s.version}\"|:tag => \"ios-v#{s.version}\"|g" UdeneSDK.podspec
+          sed -i '' "s|:tag => \"v#{s.version}\"|:tag => \"swift-v#{s.version}\"|g" UdeneSDK.podspec
           # Show the updated podspec
           cat UdeneSDK.podspec
         working-directory: ./sdks/ios

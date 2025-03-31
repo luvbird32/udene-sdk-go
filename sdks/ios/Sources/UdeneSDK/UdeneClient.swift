@@ -1,5 +1,14 @@
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+#if canImport(UIKit)
+import UIKit
+#endif
+
+/// SDK Version
+private let kUdeneSDKVersion = "1.0.2"
 
 /// Client for interacting with the Udene Fraud Detection API
 public class UdeneClient {
@@ -34,8 +43,15 @@ public class UdeneClient {
         self.baseURL = url
         self.session = session
         
-        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
-        self.userAgent = "UdeneSDK/\(version) iOS/\(UIDevice.current.systemVersion)"
+        var appVersion = kUdeneSDKVersion
+        #if os(iOS)
+            if let bundleVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+                appVersion = bundleVersion
+            }
+            self.userAgent = "UdeneSDK/\(kUdeneSDKVersion) iOS/\(UIDevice.current.systemVersion) App/\(appVersion)"
+        #else
+            self.userAgent = "UdeneSDK/\(kUdeneSDKVersion) Swift/5.7"
+        #endif
     }
     
     /// Gets fraud metrics
@@ -145,7 +161,7 @@ public class UdeneClient {
         request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue(userAgent, forHTTPHeaderField: "User-Agent")
-        request.addValue("1.0.2", forHTTPHeaderField: "X-Client-Version")
+        request.addValue(kUdeneSDKVersion, forHTTPHeaderField: "X-Client-Version")
         request.addValue("ios", forHTTPHeaderField: "X-SDK-Type")
     }
     

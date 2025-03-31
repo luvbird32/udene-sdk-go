@@ -1,0 +1,12 @@
+{
+  "": {
+    "dependencies": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\release\\UdeneSDKPackageTests.build\\UdeneSDKPackageTests.d",
+    "object": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\release\\UdeneSDKPackageTests.build\\UdeneSDKPackageTests.o",
+    "swift-dependencies": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\release\\UdeneSDKPackageTests.build\\master.swiftdeps"
+  },
+  "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Tests\\LinuxMain.swift": {
+    "object": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\release\\UdeneSDKPackageTests.build\\LinuxMain.swift.o",
+    "swiftmodule": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\release\\UdeneSDKPackageTests.build\\LinuxMain~partial.swiftmodule",
+    "swift-dependencies": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\release\\UdeneSDKPackageTests.build\\LinuxMain.swiftdeps"
+  }
+}

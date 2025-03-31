@@ -23,7 +23,7 @@ Each SDK has a specific tag format that triggers its publishing workflow:
 - React Native SDK: `rn-v*.*.*` (e.g., `rn-v1.0.1`)
 - Python SDK: `py-v*.*.*` (e.g., `py-v1.0.1`)
 - Ruby SDK: `rb-v*.*.*` (e.g., `rb-v1.0.1`)
-- iOS SDK: `ios-v*.*.*` (e.g., `ios-v1.0.1`)
+- Swift SDK: `swift-v*.*.*` (e.g., `swift-v1.0.3`) (formerly iOS SDK)
 
 ## Publishing Process
 
@@ -49,9 +49,9 @@ git push origin py-v1.0.1
 git tag rb-v1.0.1
 git push origin rb-v1.0.1
 
-# For iOS SDK
-git tag ios-v1.0.1
-git push origin ios-v1.0.1
+# For Swift SDK
+git tag swift-v1.0.3
+git push origin swift-v1.0.3
 ```
 
 3. The GitHub Actions workflow will automatically:
@@ -69,7 +69,7 @@ The workflow files are located in each SDK's directory under `.github/workflows/
 - React Native: `/sdks/react-native/.github/workflows/publish.yml`
 - Python: `/sdks/python/.github/workflows/publish.yml`
 - Ruby: `/sdks/ruby/.github/workflows/publish.yml`
-- iOS: `/sdks/ios/.github/workflows/publish.yml`
+- Swift: `/sdks/ios/.github/workflows/publish.yml`
 
 ## Customizing Release Notes
 

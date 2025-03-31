@@ -1,0 +1,35 @@
+{
+  "": {
+    "swift-dependencies": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\master.swiftdeps"
+  },
+  "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Sources\\UdeneSDK\\Models\\Activity.swift": {
+    "dependencies": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\Activity.d",
+    "object": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\Activity.swift.o",
+    "swiftmodule": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\Activity~partial.swiftmodule",
+    "swift-dependencies": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\Activity.swiftdeps"
+  },
+  "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Sources\\UdeneSDK\\Models\\InteractionResponse.swift": {
+    "dependencies": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\InteractionResponse.d",
+    "object": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\InteractionResponse.swift.o",
+    "swiftmodule": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\InteractionResponse~partial.swiftmodule",
+    "swift-dependencies": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\InteractionResponse.swiftdeps"
+  },
+  "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Sources\\UdeneSDK\\Models\\Metrics.swift": {
+    "dependencies": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\Metrics.d",
+    "object": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\Metrics.swift.o",
+    "swiftmodule": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\Metrics~partial.swiftmodule",
+    "swift-dependencies": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\Metrics.swiftdeps"
+  },
+  "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Sources\\UdeneSDK\\UdeneClient.swift": {
+    "dependencies": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneClient.d",
+    "object": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneClient.swift.o",
+    "swiftmodule": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneClient~partial.swiftmodule",
+    "swift-dependencies": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneClient.swiftdeps"
+  },
+  "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\Sources\\UdeneSDK\\UdeneError.swift": {
+    "dependencies": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneError.d",
+    "object": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneError.swift.o",
+    "swiftmodule": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneError~partial.swiftmodule",
+    "swift-dependencies": "C:\\Users\\victo\\udene\\udene\\sdks\\ios\\.build\\x86_64-unknown-windows-msvc\\debug\\UdeneSDK.build\\UdeneError.swiftdeps"
+  }
+}
