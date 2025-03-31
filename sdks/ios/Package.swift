@@ -1,4 +1,5 @@
 // swift-tools-version:5.7
+// UdeneSDK v1.0.3 - Cross-platform Swift SDK
 import PackageDescription
 
 let package = Package(
@@ -6,6 +7,7 @@ let package = Package(
     platforms: [
         .macOS(.v10_15),
         .iOS(.v13)
+        // Windows and Linux are supported without version constraints
     ],
     products: [
         .library(

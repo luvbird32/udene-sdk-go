@@ -8,10 +8,60 @@ import UIKit
 #endif
 
 /// SDK Version
-private let kUdeneSDKVersion = "1.0.2"
+public let kUdeneSDKVersion = "1.0.3"
 
 /// Client for interacting with the Udene Fraud Detection API
 public class UdeneClient {
+    /// The SDK version
+    public static var sdkVersion: String {
+        return kUdeneSDKVersion
+    }
+
+    /// Determines if the code is running on an Apple platform
+    public static func isApplePlatform() -> Bool {
+        #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
+        return true
+        #else
+        return false
+        #endif
+    }
+
+    /// Determines if the code is running on Windows
+    public static func isWindowsPlatform() -> Bool {
+        #if os(Windows)
+        return true
+        #else
+        return false
+        #endif
+    }
+
+    /// Determines if the code is running on Linux
+    public static func isLinuxPlatform() -> Bool {
+        #if os(Linux)
+        return true
+        #else
+        return false
+        #endif
+    }
+
+    /// Returns the current platform name
+    public static func platformName() -> String {
+        #if os(iOS)
+        return "iOS"
+        #elseif os(macOS)
+        return "macOS"
+        #elseif os(tvOS)
+        return "tvOS"
+        #elseif os(watchOS)
+        return "watchOS"
+        #elseif os(Windows)
+        return "Windows"
+        #elseif os(Linux)
+        return "Linux"
+        #else
+        return "Unknown"
+        #endif
+    }
     /// API Key for authentication
     private let apiKey: String
     
@@ -49,6 +99,12 @@ public class UdeneClient {
                 appVersion = bundleVersion
             }
             self.userAgent = "UdeneSDK/\(kUdeneSDKVersion) iOS/\(UIDevice.current.systemVersion) App/\(appVersion)"
+        #elseif os(macOS)
+            self.userAgent = "UdeneSDK/\(kUdeneSDKVersion) macOS Swift/5.7"
+        #elseif os(Windows)
+            self.userAgent = "UdeneSDK/\(kUdeneSDKVersion) Windows Swift/5.7"
+        #elseif os(Linux)
+            self.userAgent = "UdeneSDK/\(kUdeneSDKVersion) Linux Swift/5.7"
         #else
             self.userAgent = "UdeneSDK/\(kUdeneSDKVersion) Swift/5.7"
         #endif
@@ -162,7 +218,7 @@ public class UdeneClient {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue(userAgent, forHTTPHeaderField: "User-Agent")
         request.addValue(kUdeneSDKVersion, forHTTPHeaderField: "X-Client-Version")
-        request.addValue("ios", forHTTPHeaderField: "X-SDK-Type")
+        request.addValue(UdeneClient.platformName().lowercased(), forHTTPHeaderField: "X-SDK-Type")
     }
     
     private func handleResponse<T: Decodable>(

@@ -6,7 +6,39 @@ on:
       - 'swift-v*.*.*'  # Will trigger on tags like swift-v1.0.0, swift-v1.2.3, etc.
 
 jobs:
+  test-matrix:
+    name: Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        include:
+          - os: macos-latest
+            swift-setup: fwal/setup-swift@v1
+          - os: ubuntu-latest
+            swift-setup: swift-actions/setup-swift@v1
+          - os: windows-latest
+            swift-setup: compnerd/swift-build@v1
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Swift
+        uses: ${{ matrix.swift-setup }}
+        with:
+          swift-version: '5.7'
+
+      - name: Build and Test
+        run: |
+          cd sdks/ios
+          swift build
+          swift test
+        shell: ${{ matrix.os == 'windows-latest' && 'cmd' || 'bash' }}
+
   publish:
+    needs: test-matrix
     runs-on: macos-latest
     steps:
       - name: Checkout code

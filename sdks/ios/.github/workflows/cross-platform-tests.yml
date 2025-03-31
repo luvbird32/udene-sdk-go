@@ -1,0 +1,68 @@
+name: Cross-Platform Tests
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'sdks/ios/**'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'sdks/ios/**'
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  test-macos:
+    name: Test on macOS
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Swift
+        uses: fwal/setup-swift@v1
+        with:
+          swift-version: '5.7'
+
+      - name: Build and Test
+        run: |
+          cd sdks/ios
+          swift build
+          swift test
+
+  test-linux:
+    name: Test on Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Swift
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: '5.7'
+
+      - name: Build and Test
+        run: |
+          cd sdks/ios
+          swift build
+          swift test
+
+  test-windows:
+    name: Test on Windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Swift
+        uses: compnerd/swift-build@v1
+        with:
+          swift-version: '5.7'
+
+      - name: Build and Test
+        shell: cmd
+        run: |
+          cd sdks\ios
+          swift build
+          swift test
