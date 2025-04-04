@@ -22,7 +22,7 @@ let package = Package(
             name: "UdeneSDK",
             dependencies: [],
             path: "Sources/UdeneSDK",
-            exclude: []),
+            exclude: ["main.swift"]),
         .testTarget(
             name: "UdeneSDKTests",
             dependencies: ["UdeneSDK"],
