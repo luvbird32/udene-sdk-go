@@ -1,0 +1,24 @@
+{
+  "object" : {
+    "artifacts" : [
+
+    ],
+    "dependencies" : [
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "ios",
+          "kind" : "fileSystem",
+          "location" : "C:\\Users\\victo\\udene\\udene\\sdks\\ios",
+          "name" : "UdeneSDK"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "C:\\Users\\victo\\udene\\udene\\sdks\\ios"
+        },
+        "subpath" : "ios"
+      }
+    ]
+  },
+  "version" : 6
+}
