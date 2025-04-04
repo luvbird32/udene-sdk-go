@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'UdeneSDK'
-  s.version          = '1.0.2'
+  s.version          = '1.0.5'
   s.summary          = 'The official Swift SDK for Udene Fraud Detection API'
   s.description      = <<-DESC
   UdeneSDK provides a Swift interface for interacting with the Udene Fraud Detection API.
@@ -8,28 +8,35 @@ Pod::Spec.new do |s|
   to help protect your application from fraudulent behavior.
                        DESC
 
-  s.homepage         = 'https://github.com/luvbird32/udene-sdk-go'
-  s.license          = { :type => 'MIT', :file => 'sdks/ios/LICENSE' }
+  s.homepage         = 'https://github.com/luvbird32/udene'
+  s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Udene' => 'support@udene.net' }
-  s.source           = { :git => 'https://github.com/luvbird32/udene-sdk-go.git', :tag => "swift-v#{s.version}" }
+  s.source           = { :git => 'https://github.com/luvbird32/udene.git', :tag => "swift-v#{s.version}" }
 
   s.ios.deployment_target = '13.0'
   s.osx.deployment_target = '10.15'
   s.swift_version = '5.7'
 
-  s.source_files = 'sdks/ios/Sources/UdeneSDK/**/*'
+  s.source_files = 'Sources/UdeneSDK/**/*'
 
   s.frameworks = 'Foundation'
 
+  # Exclude test files
+  s.exclude_files = 'Tests/**/*'
+
+  # Add platform-specific frameworks
+  s.ios.frameworks = 'UIKit'
+
   # Specify the Swift tools version
   s.prepare_command = <<-CMD
-    echo "// swift-tools-version:5.3" > sdks/ios/Package.swift
-    echo "import PackageDescription" >> sdks/ios/Package.swift
-    echo "let package = Package(" >> sdks/ios/Package.swift
-    echo "    name: \\"UdeneSDK\\"," >> sdks/ios/Package.swift
-    echo "    platforms: [.iOS(.v13), .macOS(.v10_15)]," >> sdks/ios/Package.swift
-    echo "    products: [.library(name: \\"UdeneSDK\\", targets: [\\"UdeneSDK\\"])]," >> sdks/ios/Package.swift
-    echo "    targets: [.target(name: \\"UdeneSDK\\", dependencies: [])]" >> sdks/ios/Package.swift
-    echo ")" >> sdks/ios/Package.swift
+    echo "// swift-tools-version:5.7" > Package.swift
+    echo "// UdeneSDK v1.0.5 - Cross-platform Swift SDK" >> Package.swift
+    echo "import PackageDescription" >> Package.swift
+    echo "let package = Package(" >> Package.swift
+    echo "    name: \\"UdeneSDK\\"," >> Package.swift
+    echo "    platforms: [.iOS(.v13), .macOS(.v10_15)]," >> Package.swift
+    echo "    products: [.library(name: \\"UdeneSDK\\", targets: [\\"UdeneSDK\\"])]," >> Package.swift
+    echo "    targets: [.target(name: \\"UdeneSDK\\", dependencies: [], path: \\"Sources/UdeneSDK\\")]" >> Package.swift
+    echo ")" >> Package.swift
   CMD
 end

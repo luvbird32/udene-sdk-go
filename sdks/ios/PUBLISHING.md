@@ -30,8 +30,8 @@ Update the version in the following files:
 Create a tag with the format `ios-v{version}` and push it to GitHub:
 
 ```bash
-git tag ios-v1.0.2
-git push origin ios-v1.0.2
+git tag ios-v1.0.5
+git push origin ios-v1.0.5
 ```
 
 ### 4. Monitor the GitHub Actions Workflow

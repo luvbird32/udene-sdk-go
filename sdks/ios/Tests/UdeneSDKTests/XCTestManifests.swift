@@ -5,14 +5,7 @@ public func allTests() -> [XCTestCaseEntry] {
     return [
         testCase(UdeneClientTests.allTests),
         testCase(PlatformTests.allTests),
-    ]
-}
-#endifimport XCTest
-
-#if !canImport(ObjectiveC)
-public func allTests() -> [XCTestCaseEntry] {
-    return [
-        testCase(UdeneClientTests.allTests),
+        testCase(WindowsTests.allTests),
     ]
 }
 #endif

@@ -126,7 +126,7 @@ jobs:
             ### Swift Package Manager (All Platforms)
             ```swift
             dependencies: [
-                .package(url: "https://github.com/luvbird32/udene-sdk-go.git", from: "${{ steps.extract_version.outputs.VERSION }}")
+                .package(url: "https://github.com/luvbird32/udene.git", from: "${{ steps.extract_version.outputs.VERSION }}")
             ]
             ```
 
@@ -138,7 +138,7 @@ jobs:
             ### Windows/Linux
             ```bash
             # Add to your Package.swift dependencies
-            .package(url: "https://github.com/luvbird32/udene-sdk-go.git", from: "${{ steps.extract_version.outputs.VERSION }}")
+            .package(url: "https://github.com/luvbird32/udene.git", from: "${{ steps.extract_version.outputs.VERSION }}")
 
             # Then build your project
             swift build

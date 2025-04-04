@@ -8,7 +8,7 @@ import UIKit
 #endif
 
 /// SDK Version
-public let kUdeneSDKVersion = "1.0.3"
+public let kUdeneSDKVersion = "1.0.5"
 
 /// Client for interacting with the Udene Fraud Detection API
 public class UdeneClient {
@@ -62,18 +62,19 @@ public class UdeneClient {
         return "Unknown"
         #endif
     }
+
     /// API Key for authentication
     private let apiKey: String
-    
+
     /// Base URL for API requests
     private let baseURL: URL
-    
+
     /// URLSession for network requests
     private let session: URLSession
-    
+
     /// User-Agent string for requests
     private let userAgent: String
-    
+
     /// Initializes a new UdeneClient
     /// - Parameters:
     ///   - apiKey: Your Udene API key
@@ -81,18 +82,18 @@ public class UdeneClient {
     ///   - session: Optional custom URLSession
     public init(
         apiKey: String,
-        baseURLString: String = "https://udene.net/v1",
+        baseURLString: String = "https://api.udene.net/v1",
         session: URLSession = .shared
     ) {
         self.apiKey = apiKey
-        
+
         guard let url = URL(string: baseURLString) else {
             fatalError("Invalid base URL: \(baseURLString)")
         }
-        
+
         self.baseURL = url
         self.session = session
-        
+
         var appVersion = kUdeneSDKVersion
         #if os(iOS)
             if let bundleVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
@@ -109,32 +110,32 @@ public class UdeneClient {
             self.userAgent = "UdeneSDK/\(kUdeneSDKVersion) Swift/5.7"
         #endif
     }
-    
+
     /// Gets fraud metrics
     /// - Parameter completion: Completion handler with Result
     public func getMetrics(completion: @escaping (Result<Metrics, UdeneError>) -> Void) {
         let url = baseURL.appendingPathComponent("metrics")
         var request = URLRequest(url: url)
-        
+
         addHeaders(to: &request)
-        
+
         let task = session.dataTask(with: request) { data, response, error in
             if let error = error {
                 completion(.failure(.networkError(error)))
                 return
             }
-            
+
             guard let httpResponse = response as? HTTPURLResponse else {
                 completion(.failure(.invalidResponse))
                 return
             }
-            
+
             self.handleResponse(data: data, response: httpResponse, completion: completion)
         }
-        
+
         task.resume()
     }
-    
+
     /// Tracks a user interaction
     /// - Parameters:
     ///   - userId: User identifier
@@ -150,69 +151,139 @@ public class UdeneClient {
         let url = baseURL.appendingPathComponent("track")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        
+
         addHeaders(to: &request)
-        
+
         var body: [String: Any] = [
             "userId": userId,
             "action": action
         ]
-        
+
         if let metadata = metadata {
             body["metadata"] = metadata
         }
-        
+
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: body)
         } catch {
             completion(.failure(.encodingError(error)))
             return
         }
-        
+
         let task = session.dataTask(with: request) { data, response, error in
             if let error = error {
                 completion(.failure(.networkError(error)))
                 return
             }
-            
+
             guard let httpResponse = response as? HTTPURLResponse else {
                 completion(.failure(.invalidResponse))
                 return
             }
-            
+
             self.handleResponse(data: data, response: httpResponse, completion: completion)
         }
-        
+
         task.resume()
     }
-    
+
     /// Gets activity data
-    /// - Parameter completion: Completion handler with Result
-    public func getActivity(completion: @escaping (Result<Activity, UdeneError>) -> Void) {
-        let url = baseURL.appendingPathComponent("activity")
+    /// - Parameters:
+    ///   - page: Page number (optional)
+    ///   - perPage: Items per page (optional)
+    ///   - completion: Completion handler with Result
+    public func getActivity(
+        page: Int? = nil,
+        perPage: Int? = nil,
+        completion: @escaping (Result<Activity, UdeneError>) -> Void
+    ) {
+        var components = URLComponents(url: baseURL.appendingPathComponent("activity"), resolvingAgainstBaseURL: true)
+
+        var queryItems: [URLQueryItem] = []
+        if let page = page {
+            queryItems.append(URLQueryItem(name: "page", value: "\(page)"))
+        }
+        if let perPage = perPage {
+            queryItems.append(URLQueryItem(name: "per_page", value: "\(perPage)"))
+        }
+
+        if !queryItems.isEmpty {
+            components?.queryItems = queryItems
+        }
+
+        guard let url = components?.url else {
+            completion(.failure(.invalidResponse))
+            return
+        }
+
         var request = URLRequest(url: url)
-        
+
         addHeaders(to: &request)
-        
+
         let task = session.dataTask(with: request) { data, response, error in
             if let error = error {
                 completion(.failure(.networkError(error)))
                 return
             }
-            
+
             guard let httpResponse = response as? HTTPURLResponse else {
                 completion(.failure(.invalidResponse))
                 return
             }
-            
+
             self.handleResponse(data: data, response: httpResponse, completion: completion)
         }
-        
+
         task.resume()
     }
-    
+
+    /// Analyzes user behavior for fraud detection
+    /// - Parameters:
+    ///   - userId: User identifier
+    ///   - events: Array of behavior events
+    ///   - completion: Completion handler with Result
+    public func analyzeBehavior(
+        userId: String,
+        events: [[String: Any]],
+        completion: @escaping (Result<InteractionResponse, UdeneError>) -> Void
+    ) {
+        let url = baseURL.appendingPathComponent("analyze")
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+
+        addHeaders(to: &request)
+
+        let body: [String: Any] = [
+            "userId": userId,
+            "events": events
+        ]
+
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        } catch {
+            completion(.failure(.encodingError(error)))
+            return
+        }
+
+        let task = session.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(.networkError(error)))
+                return
+            }
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(.failure(.invalidResponse))
+                return
+            }
+
+            self.handleResponse(data: data, response: httpResponse, completion: completion)
+        }
+
+        task.resume()
+    }
+
     // MARK: - Private helpers
-    
+
     private func addHeaders(to request: inout URLRequest) {
         request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -220,7 +291,7 @@ public class UdeneClient {
         request.addValue(kUdeneSDKVersion, forHTTPHeaderField: "X-Client-Version")
         request.addValue(UdeneClient.platformName().lowercased(), forHTTPHeaderField: "X-SDK-Type")
     }
-    
+
     private func handleResponse<T: Decodable>(
         data: Data?,
         response: HTTPURLResponse,
@@ -232,30 +303,34 @@ public class UdeneClient {
                 completion(.failure(.noData))
                 return
             }
-            
+
             do {
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                decoder.dateDecodingStrategy = .formatted(dateFormatter)
+
                 let result = try decoder.decode(T.self, from: data)
                 completion(.success(result))
             } catch {
                 completion(.failure(.decodingError(error)))
             }
-            
+
         case 401:
             completion(.failure(.unauthorized))
-            
+
         case 429:
             let retryAfter = response.value(forHTTPHeaderField: "Retry-After")
                 .flatMap { Int($0) } ?? 60
             completion(.failure(.rateLimit(retryAfter: retryAfter)))
-            
+
         case 400...499:
             completion(.failure(.clientError(statusCode: response.statusCode)))
-            
+
         case 500...599:
             completion(.failure(.serverError(statusCode: response.statusCode)))
-            
+
         default:
             completion(.failure(.unknown))
         }

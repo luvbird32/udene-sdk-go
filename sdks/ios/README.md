@@ -10,7 +10,7 @@ The official Swift SDK for Udene Fraud Detection API. Now with cross-platform su
 To integrate UdeneSDK into your Xcode project using CocoaPods, add it to your `Podfile`:
 
 ```ruby
-pod 'UdeneSDK', '~> 1.0.2'
+pod 'UdeneSDK', '~> 1.0.5'
 ```
 
 Then run:

@@ -1,5 +1,5 @@
 // swift-tools-version:5.7
-// UdeneSDK v1.0.3 - Cross-platform Swift SDK
+// UdeneSDK v1.0.5 - Cross-platform Swift SDK
 import PackageDescription
 
 let package = Package(
@@ -21,7 +21,8 @@ let package = Package(
         .target(
             name: "UdeneSDK",
             dependencies: [],
-            path: "Sources/UdeneSDK"),
+            path: "Sources/UdeneSDK",
+            exclude: []),
         .testTarget(
             name: "UdeneSDKTests",
             dependencies: ["UdeneSDK"],

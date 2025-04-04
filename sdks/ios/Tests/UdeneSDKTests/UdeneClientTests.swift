@@ -14,7 +14,7 @@ final class UdeneClientTests: XCTestCase {
 
     func testSDKVersion() {
         XCTAssertEqual(UdeneClient.sdkVersion, kUdeneSDKVersion)
-        XCTAssertEqual(UdeneClient.sdkVersion, "1.0.3")
+        XCTAssertEqual(UdeneClient.sdkVersion, "1.0.5")
     }
 
     func testPlatformDetection() {
