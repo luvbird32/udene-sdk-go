@@ -14,6 +14,21 @@ A comprehensive fraud detection and security platform with real-time monitoring,
   - Automated Content Moderation
   - Fake Account Prevention
 
+## SDKs
+We provide SDKs for multiple platforms to make integration with our API easier:
+
+- [JavaScript](sdks/javascript/README.md) - For web applications
+- [React Native](sdks/react-native/README.md) - For mobile applications
+- [Python](sdks/python/README.md) - For server-side applications
+- [Swift](sdks/ios/README.md) - For iOS, macOS, Windows, and Linux
+- [Android (Kotlin)](sdks/android/README.md) - For Android applications
+- [Ruby](sdks/ruby/README.md) - For server-side applications
+- [Go](sdks/go/README.md) - For server-side applications
+
+### Publishing SDKs
+- [Swift SDK Publishing Guide](docs/swift-sdk-publishing.md)
+- [Swift SDK Windows Publishing Guide](docs/swift-sdk-windows-publishing.md)
+
 ## Documentation Structure
 - [Core Features](docs/features/README.md)
 - [Technical Implementation](docs/technical/README.md)
